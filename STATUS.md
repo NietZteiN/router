@@ -105,6 +105,21 @@ as it stands.
 open-unlearning fork at `93e9cd5`, which is not on the remote — see "Gate results at export"
 above. Everything else in the routing and merging tree is independent of it.
 
+**Most drivers cannot submit on a non-sprint site (found 2026-08-06).** `slurm_nodes.sh` re-exports
+only six legacy variables — `TOFU_PARTITION`, `TOFU_ACCOUNT` and `TOFU_SUPPORTS_MEM` are not among
+them — so **54 of the `tofu_sisa_lora/submit_*.sh` write `#SBATCH --partition=all` by hand and 55
+write a literal `#SBATCH --mem=`**. On CISPA the first is rejected outright (`invalid partition
+specified: all`) and the second fails at submit, which is precisely the failure
+`cluster_env.cispa.sh` documents. Only 5 drivers use `tofu_sbatch_resources`.
+
+`submit_k200_routed.sh` was converted (both its train and eval headers) and is verified at both
+sites: cispa emits `xe8545` + `--account` + no `--mem` and passes `sbatch --test-only`; sprint
+still emits `--partition=all --exclude=sprint4 --mem=48G`. The other 53 are a mechanical
+`#SBATCH --partition=all` + `#SBATCH --mem=<X>` → `$(tofu_sbatch_resources <gpus> <cpus> <X>)`
+substitution, deliberately **not** applied here because each one needs its own STUB preview and
+`sbatch --test-only` before it can be trusted. Until then, non-sprint sites must run them the way
+this one was: capture the STUB body, correct the header, submit that.
+
 **MUSE.** Appendix C's MUSE-News results are not reproducible here either: the benchmark, its
 Llama-2-7B fine-tuned/retrained targets, and any MUSE loader are all absent. TOFU is fully covered.
 

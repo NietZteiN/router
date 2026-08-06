@@ -28,7 +28,12 @@ SLURM cluster nodes: `sprint1`, `sprint2`, `sprint3` (never `sprint4`)
 in `cluster_env.<site>.sh`, selected by `$TOFU_SITE` (default: auto-detected from the hostname,
 falling back to `sprint`), and `slurm_nodes.sh` is now a **shim** that sources `cluster_env.sh`
 and re-exports the same six legacy variables so all 57 `submit_*.sh` that source it are
-unaffected — pinned by `test_cluster_env.py`. Sites: `sprint` (A40, partition `all`, 4-GPU
+unaffected — pinned by `test_cluster_env.py`. ⚠ "Unaffected" cuts both ways: `TOFU_PARTITION` /
+`TOFU_ACCOUNT` / `TOFU_SUPPORTS_MEM` are NOT among the six, so the 54 drivers that still write
+`#SBATCH --partition=all` and `#SBATCH --mem=` by hand **cannot submit on cispa at all** — the
+partition does not exist there and any `--mem` is rejected. Converting one to
+`tofu_sbatch_resources` is the fix (`submit_k200_routed.sh` is the worked example, verified at
+both sites); see STATUS.md for the full list. Sites: `sprint` (A40, partition `all`, 4-GPU
 global cap, `--mem` honoured) and `cispa` (A100-40GB, partition `xe8545`, account `testing`,
 cap 6, **`--mem` must NOT be emitted** — nodes report `RealMemory=1` and any `--mem` fails at
 submit). New drivers should emit resources with `tofu_sbatch_resources <gpus> <cpus> <mem>` and

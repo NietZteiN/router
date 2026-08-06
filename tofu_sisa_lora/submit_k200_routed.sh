@@ -53,11 +53,7 @@ train_body() {
 #!/bin/bash
 #SBATCH --job-name=tofu-k200tv-train
 #SBATCH --array=0-199%${ARRAY_CAP}
-#SBATCH --partition=all
-#SBATCH --exclude=${TOFU_EXCLUDE}
-#SBATCH --gres=gpu:1
-#SBATCH --mem=48G
-#SBATCH --cpus-per-task=8
+$(tofu_sbatch_resources 1 8 48G)
 #SBATCH --time=00:30:00
 #SBATCH --output=${LOG_DIR}/train_%A_%a.log
 #SBATCH --error=${LOG_DIR}/train_%A_%a.log
@@ -87,11 +83,7 @@ eval_body() {
 #!/bin/bash
 #SBATCH --job-name=tofu-k200tv-eval
 #SBATCH --array=0-7%${ARRAY_CAP}
-#SBATCH --partition=all
-#SBATCH --exclude=${TOFU_EXCLUDE}
-#SBATCH --gres=gpu:1
-#SBATCH --mem=48G
-#SBATCH --cpus-per-task=8
+$(tofu_sbatch_resources 1 8 48G)
 #SBATCH --time=03:30:00
 #SBATCH --output=${LOG_DIR}/eval_%A_%a.log
 #SBATCH --error=${LOG_DIR}/eval_%A_%a.log

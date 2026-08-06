@@ -209,13 +209,25 @@ def test_missing_required_env_fails_loudly() -> None:
 
 
 def test_gpu_cap_is_clamped() -> None:
-    """CLAUDE.md §1: a GLOBAL ceiling of 4 concurrent GPUs. Enforced, not trusted."""
+    """CLAUDE.md §1: a GLOBAL ceiling of 4 concurrent GPUs. Enforced, not trusted.
+
+    EVERY cluster_env.sh must clamp, not just the repo-root one. The drivers that submit source
+    their own project's copy (via slurm_nodes.sh), so a ceiling present only at the root is a
+    ceiling that is not enforced anywhere it matters — which is exactly what this gate missed
+    until 2026-08-06, while reporting the cap as enforced.
+    """
     env = {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "HOME": os.path.expanduser("~"),
            "TOFU_SITE": "local", "HF_HOME": "/tmp/_gate_hf", "TOFU_CKPT_ROOT": "/tmp/_gate_ck",
            "TOFU_ARRAY_CAP": "16"}
-    r = subprocess.run(["bash", "-c", f'source "{HERE}/cluster_env.sh" && echo "$TOFU_ARRAY_CAP"'],
-                       capture_output=True, text=True, env=env)
-    check("TOFU_ARRAY_CAP=16 is clamped to 4", r.stdout.strip() == "4", r.stdout.strip())
+    for rel in ["cluster_env.sh", "tofu_sisa_lora/cluster_env.sh",
+                "apa_uniform_sum/cluster_env.sh"]:
+        path = os.path.join(HERE, rel)
+        if not os.path.isfile(path):
+            continue
+        r = subprocess.run(["bash", "-c", f'source "{path}" && echo "$TOFU_ARRAY_CAP"'],
+                           capture_output=True, text=True, env=env)
+        check(f"TOFU_ARRAY_CAP=16 is clamped to 4 by {rel}",
+              r.stdout.strip() == "4", r.stdout.strip())
 
 
 def test_site_files_still_name_their_interpreter() -> None:

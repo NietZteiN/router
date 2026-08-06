@@ -50,6 +50,20 @@ export TOFU_CPUS_PER_TASK="${TOFU_CPUS_PER_TASK:-4}"
 # "Memory specification can not be satisfied" — it must be dropped, not lowered.
 export TOFU_SUPPORTS_MEM="${TOFU_SUPPORTS_MEM:-1}"
 
+# ── GPU concurrency ceiling — the same clamp the repo-root cluster_env.sh applies ─────────────
+# It has to be HERE too, not only at the root: every submit_*.sh in this directory sources
+# slurm_nodes.sh, which sources THIS file, so a ceiling that exists only at the root is not
+# enforced for any driver that actually submits. cispa's TOFU_ARRAY_CAP=6 went out as %6.
+export TOFU_GPU_CAP_CEILING="${TOFU_GPU_CAP_CEILING:-4}"
+_req_cap="${TOFU_ARRAY_CAP:-${TOFU_GPU_CAP_CEILING}}"
+if [ "${_req_cap}" -gt "${TOFU_GPU_CAP_CEILING}" ] 2>/dev/null; then
+  echo "cluster_env: TOFU_ARRAY_CAP=${_req_cap} exceeds the ${TOFU_GPU_CAP_CEILING}-GPU global" \
+       "cap (CLAUDE.md §1) — clamping to ${TOFU_GPU_CAP_CEILING}." >&2
+  _req_cap="${TOFU_GPU_CAP_CEILING}"
+fi
+export TOFU_ARRAY_CAP="${_req_cap}"
+unset _req_cap
+
 # Emit the #SBATCH resource block for one task.
 #   tofu_sbatch_resources [gpus|0|-] [cpus] [mem]
 # gpus 0 or '-' => a CPU-only task (no --gres line). mem is silently dropped where unsupported.
