@@ -1,0 +1,46 @@
+{
+  "label": "legonet_unlearn_s43",
+  "adapter": "legonet_unlearn_s43",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "member_split": "forget10",
+  "holdout_split": "holdout10",
+  "label_scope": "answer",
+  "min_k_frac": 0.4,
+  "batch_size": 1,
+  "seed": 43,
+  "n_member": 400,
+  "n_holdout": 400,
+  "per_attack": {
+    "loss": {
+      "auc": 0.36899375,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 2.0294947410561144,
+      "holdout_mean": 1.7422316216304898
+    },
+    "min_k": {
+      "auc": 0.36334687499999996,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 4.8390816736593845,
+      "holdout_mean": 4.197126141581684
+    },
+    "min_k++": {
+      "auc": 0.41456875,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 1.8398040804098128,
+      "holdout_mean": 1.54257612745394
+    },
+    "zlib": {
+      "auc": 0.28307499999999997,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 0.015468054667705223,
+      "holdout_mean": 0.01154452612984248
+    }
+  },
+  "metrics_version": "mia-2026-07-03",
+  "attack_mia_sha": "sha256:16458b879e32a17a",
+  "mia_attacks_sha": "sha256:9b4c7a8220fb3f0f"
+}

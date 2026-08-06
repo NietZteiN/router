@@ -1,0 +1,31 @@
+{
+  "label": "embedrouted_tombstone_del9",
+  "forget_ppl": 20.13,
+  "retain_ppl": 3.83,
+  "forget_rouge": 0.4232,
+  "retain_rouge": 0.6987,
+  "real_rouge": 0.9187,
+  "world_rouge": 0.9433,
+  "retain_prob": 0.5969,
+  "real_prob": 0.6305,
+  "world_prob": 0.6556,
+  "forget_truth_ratio": 0.6901,
+  "retain_truth_ratio": 0.6046,
+  "real_truth_ratio": 1.1588,
+  "world_truth_ratio": 1.8952,
+  "retain_truth_scaled": 0.4163,
+  "real_truth_scaled": 0.8061,
+  "world_truth_scaled": 0.8459,
+  "forget_quality": 0.808,
+  "ks_pval": 0.808,
+  "model_utility": 0.6823,
+  "metrics_version": "ou-2026-06-10",
+  "smoke": true,
+  "extended": false,
+  "route_stats": {
+    "routed": 605,
+    "ood": 1208,
+    "deleted": 385,
+    "route_mismatch": 367
+  }
+}

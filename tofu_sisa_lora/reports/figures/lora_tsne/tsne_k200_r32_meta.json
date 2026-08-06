@@ -1,0 +1,30 @@
+{
+  "source_json": "/home/jack/tofu_sisa_lora/reports/subspace_overlap_k200_r32.json",
+  "author_emb": "/home/jack/tofu_sisa_lora/checkpoints/Llama-2-7B-chat-hf_legonet_n32_k3/legonet/author_emb.npy",
+  "n": 200,
+  "seed": 42,
+  "perplexities": [
+    5,
+    15,
+    30,
+    50
+  ],
+  "main_perplexity": 30,
+  "kmeans_k": 6,
+  "offdiag_cosine": {
+    "mean": 0.0012497732915236364,
+    "min": 0.000559514841138178,
+    "max": 0.0026351685673836806
+  },
+  "silhouette_on_precomputed_distances": {
+    "forget_binary_vs_retain": -8.275434412378004e-06,
+    "forget_4class": -7.291827009046167e-05,
+    "semantic_kmeans_k6": -1.961877304182522e-05
+  },
+  "class_counts": {
+    "retain (0\u2013179)": 180,
+    "forget10\u221605 (180\u2013189)": 10,
+    "forget05\u221601 (190\u2013197)": 8,
+    "forget01 (198\u2013199)": 2
+  }
+}

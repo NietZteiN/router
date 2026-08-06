@@ -1,0 +1,634 @@
+{
+  "meta": {
+    "pool_dir": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4",
+    "base_model": "meta-llama/Llama-2-7B-chat-hf",
+    "k": 200,
+    "num_authors": 200,
+    "per_author": 20,
+    "strategies": [
+      "key_exact",
+      "key_tfidf",
+      "centroid_sbert",
+      "centroid_lm"
+    ],
+    "queries": "all",
+    "query_source": "raw TOFU questions, no prompt wrapper (matches routing_audit_tofu centroid mode / analyze_router_tofu)",
+    "n_q": 4000,
+    "n_forget": 400,
+    "n_retain": 3600,
+    "drop_sets": [
+      [
+        199
+      ],
+      [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ]
+    ],
+    "seed": 42,
+    "retain_sample_indices": null,
+    "sent_author_ids": [
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "stub": false,
+    "script_sha256": "8bd440da1fc7137cb469fd5afe24a44223468249b949291581284efc0dbf5e0c",
+    "args": {
+      "pool_dir": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4",
+      "base_model": "meta-llama/Llama-2-7B-chat-hf",
+      "k": 200,
+      "strategies": [
+        "key_exact",
+        "key_tfidf",
+        "centroid_sbert",
+        "centroid_lm"
+      ],
+      "drop_sets": "199;180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199",
+      "queries": "all",
+      "device": "cuda",
+      "hf_home": "/storage2/jack/data/huggingface",
+      "out": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json",
+      "dump_sims": true,
+      "self_check": 50,
+      "bs": 16,
+      "logitdiv_bs": 8,
+      "embed_bs": 16,
+      "seed": 42,
+      "stub": false
+    }
+  },
+  "strategies": {
+    "key_exact": {
+      "self_check": {
+        "n": 50,
+        "passed": 50
+      },
+      "full_top1_acc": 0.859,
+      "cells": {
+        "d199": {
+          "dropped_shards": [
+            199
+          ],
+          "n_survivors": 199,
+          "n_orphans": 20,
+          "n_retain": 3980,
+          "orphan_capture": {
+            "n": 20,
+            "top1_share_top1_expert": 1.0,
+            "top1_share_top3_experts": 1.0,
+            "top1_entropy_norm": -0.0,
+            "top1_hist": {
+              "0": 20
+            }
+          },
+          "retain_shift_top1": 0.0,
+          "no_match": {
+            "orphan_no_match_rate_postdrop": 1.0,
+            "retain_no_match_rate_postdrop": 0.1371859296482412,
+            "retain_no_match_rate_full": 0.1371859296482412,
+            "fallback_shard": 0
+          }
+        },
+        "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199": {
+          "dropped_shards": [
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199
+          ],
+          "n_survivors": 180,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 1.0,
+            "top1_share_top3_experts": 1.0,
+            "top1_entropy_norm": -0.0,
+            "top1_hist": {
+              "0": 400
+            }
+          },
+          "retain_shift_top1": 0.0,
+          "no_match": {
+            "orphan_no_match_rate_postdrop": 1.0,
+            "retain_no_match_rate_postdrop": 0.14027777777777778,
+            "retain_no_match_rate_full": 0.14027777777777778,
+            "fallback_shard": 0
+          }
+        }
+      },
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.key_exact.npz"
+    },
+    "key_tfidf": {
+      "self_check": {
+        "n": 50,
+        "passed": 50
+      },
+      "full_top1_acc": 0.97375,
+      "cells": {
+        "d199": {
+          "dropped_shards": [
+            199
+          ],
+          "n_survivors": 199,
+          "n_orphans": 20,
+          "n_retain": 3980,
+          "orphan_capture": {
+            "n": 20,
+            "top1_share_top1_expert": 0.4,
+            "top1_share_top3_experts": 0.75,
+            "top1_entropy_norm": 0.30660745912096893,
+            "top1_hist": {
+              "43": 2,
+              "50": 1,
+              "88": 8,
+              "102": 1,
+              "124": 2,
+              "158": 5,
+              "176": 1
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.19396113108266305,
+            "p10": 0.11846778150889811,
+            "p90": 0.20625678437534295
+          },
+          "retain_shift_top1": 0.0
+        },
+        "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199": {
+          "dropped_shards": [
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199
+          ],
+          "n_survivors": 180,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.19,
+            "top1_share_top3_experts": 0.2975,
+            "top1_entropy_norm": 0.6898695326642562,
+            "top1_hist": {
+              "0": 2,
+              "6": 8,
+              "7": 1,
+              "8": 2,
+              "12": 1,
+              "14": 2,
+              "16": 1,
+              "17": 3,
+              "18": 2,
+              "19": 4,
+              "20": 5,
+              "26": 1,
+              "29": 1,
+              "33": 1,
+              "34": 1,
+              "38": 5,
+              "41": 1,
+              "43": 7,
+              "46": 1,
+              "48": 1,
+              "49": 4,
+              "50": 1,
+              "51": 1,
+              "54": 1,
+              "55": 4,
+              "57": 1,
+              "62": 1,
+              "66": 2,
+              "67": 1,
+              "75": 3,
+              "77": 7,
+              "79": 3,
+              "85": 1,
+              "86": 19,
+              "87": 19,
+              "88": 76,
+              "89": 2,
+              "94": 18,
+              "97": 3,
+              "99": 1,
+              "102": 5,
+              "103": 4,
+              "104": 1,
+              "109": 1,
+              "111": 9,
+              "112": 1,
+              "115": 2,
+              "116": 4,
+              "117": 5,
+              "118": 2,
+              "122": 1,
+              "123": 11,
+              "124": 6,
+              "126": 1,
+              "128": 1,
+              "129": 24,
+              "131": 19,
+              "133": 1,
+              "137": 3,
+              "138": 2,
+              "143": 19,
+              "146": 3,
+              "149": 1,
+              "150": 2,
+              "151": 3,
+              "154": 2,
+              "155": 2,
+              "156": 8,
+              "157": 4,
+              "158": 5,
+              "160": 1,
+              "162": 4,
+              "164": 2,
+              "166": 7,
+              "169": 2,
+              "172": 12,
+              "175": 1,
+              "176": 1
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.2698181977685936,
+            "p10": 0.11825924521309321,
+            "p90": 0.486277461913959
+          },
+          "retain_shift_top1": 0.0002777777777777778
+        }
+      },
+      "n_sentinels": 20,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.key_tfidf.npz"
+    },
+    "centroid_sbert": {
+      "self_check": {
+        "n": 50,
+        "passed": 50
+      },
+      "full_top1_acc": 0.9635,
+      "cells": {
+        "d199": {
+          "dropped_shards": [
+            199
+          ],
+          "n_survivors": 199,
+          "n_orphans": 20,
+          "n_retain": 3980,
+          "orphan_capture": {
+            "n": 20,
+            "top1_share_top1_expert": 0.4,
+            "top1_share_top3_experts": 0.8999999999999999,
+            "top1_entropy_norm": 0.24178736502299994,
+            "top1_hist": {
+              "4": 2,
+              "88": 8,
+              "89": 6,
+              "128": 4
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.7049479189979916,
+            "p10": 0.6234861029482037,
+            "p90": 0.7593522179644429
+          },
+          "retain_shift_top1": 0.0
+        },
+        "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199": {
+          "dropped_shards": [
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199
+          ],
+          "n_survivors": 180,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.11,
+            "top1_share_top3_experts": 0.2575,
+            "top1_entropy_norm": 0.6951435412020142,
+            "top1_hist": {
+              "1": 9,
+              "3": 5,
+              "4": 2,
+              "8": 6,
+              "9": 3,
+              "11": 1,
+              "12": 5,
+              "17": 4,
+              "19": 7,
+              "20": 10,
+              "22": 10,
+              "23": 1,
+              "24": 4,
+              "27": 1,
+              "30": 1,
+              "32": 1,
+              "33": 1,
+              "35": 24,
+              "37": 5,
+              "38": 1,
+              "40": 2,
+              "52": 26,
+              "57": 7,
+              "61": 1,
+              "62": 1,
+              "65": 1,
+              "77": 4,
+              "85": 1,
+              "87": 6,
+              "88": 44,
+              "89": 6,
+              "93": 1,
+              "94": 18,
+              "95": 3,
+              "101": 6,
+              "102": 1,
+              "103": 33,
+              "104": 1,
+              "109": 1,
+              "117": 10,
+              "118": 1,
+              "122": 21,
+              "123": 10,
+              "127": 10,
+              "128": 7,
+              "129": 6,
+              "131": 15,
+              "132": 2,
+              "133": 1,
+              "134": 1,
+              "137": 6,
+              "138": 1,
+              "143": 1,
+              "146": 1,
+              "147": 1,
+              "148": 2,
+              "149": 2,
+              "150": 1,
+              "155": 3,
+              "156": 9,
+              "160": 9,
+              "162": 1,
+              "164": 1,
+              "166": 1,
+              "169": 2,
+              "173": 4,
+              "176": 4,
+              "177": 3
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.6726965615416286,
+            "p10": 0.5532345702312244,
+            "p90": 0.7771233854590748
+          },
+          "retain_shift_top1": 0.0008333333333333334
+        }
+      },
+      "n_sentinels": 20,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.centroid_sbert.npz"
+    },
+    "centroid_lm": {
+      "self_check": {
+        "n": 50,
+        "passed": 50
+      },
+      "full_top1_acc": 0.719,
+      "cells": {
+        "d199": {
+          "dropped_shards": [
+            199
+          ],
+          "n_survivors": 199,
+          "n_orphans": 20,
+          "n_retain": 3980,
+          "orphan_capture": {
+            "n": 20,
+            "top1_share_top1_expert": 0.7,
+            "top1_share_top3_experts": 0.9,
+            "top1_entropy_norm": 0.18581969716325344,
+            "top1_hist": {
+              "10": 3,
+              "63": 1,
+              "88": 1,
+              "128": 14,
+              "161": 1
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9760757619834182,
+            "p10": 0.9475786941389148,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.0
+        },
+        "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199": {
+          "dropped_shards": [
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199
+          ],
+          "n_survivors": 180,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.17,
+            "top1_share_top3_experts": 0.31,
+            "top1_entropy_norm": 0.6456064852658063,
+            "top1_hist": {
+              "3": 6,
+              "4": 1,
+              "7": 1,
+              "10": 3,
+              "13": 6,
+              "19": 16,
+              "22": 3,
+              "32": 9,
+              "36": 1,
+              "39": 1,
+              "43": 19,
+              "52": 23,
+              "55": 2,
+              "60": 1,
+              "63": 3,
+              "64": 10,
+              "72": 2,
+              "73": 12,
+              "75": 1,
+              "81": 1,
+              "82": 3,
+              "85": 2,
+              "88": 68,
+              "89": 4,
+              "93": 16,
+              "94": 13,
+              "95": 2,
+              "98": 12,
+              "101": 1,
+              "103": 2,
+              "106": 1,
+              "109": 1,
+              "113": 19,
+              "116": 5,
+              "122": 2,
+              "127": 3,
+              "128": 14,
+              "129": 1,
+              "131": 6,
+              "133": 1,
+              "135": 2,
+              "144": 1,
+              "148": 1,
+              "149": 5,
+              "150": 5,
+              "151": 1,
+              "152": 33,
+              "156": 2,
+              "158": 2,
+              "161": 18,
+              "162": 6,
+              "167": 11,
+              "170": 4,
+              "173": 8,
+              "176": 4
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9619289640517615,
+            "p10": 0.9126481249351807,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.004166666666666667
+        }
+      },
+      "n_sentinels": 20,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.centroid_lm.npz"
+    }
+  },
+  "oracle": {
+    "by_construction": true,
+    "note": "oracle q2author route: orphans -> base/scaffold P=1.0, retain top-1 shift = 0 by construction (no measurement run)",
+    "cells": {
+      "d199": {
+        "orphan_base_capture": 1.0,
+        "retain_shift_top1": 0.0
+      },
+      "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199": {
+        "orphan_base_capture": 1.0,
+        "retain_shift_top1": 0.0
+      }
+    }
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "domain": "skills",
+  "config": "configs/skills_superni_1b_nr_s43.json",
+  "rows": [
+    {
+      "domain": "skills",
+      "adapter": 0,
+      "name": "a0",
+      "n_probes": 50,
+      "base_nll": 4.799761643409729,
+      "isolated_nll": 2.9994358366727827,
+      "merged_nll": 4.120114638805389,
+      "retention": 0.37751333789753666
+    },
+    {
+      "domain": "skills",
+      "adapter": 1,
+      "name": "a1",
+      "n_probes": 50,
+      "base_nll": 4.551552514235179,
+      "isolated_nll": 3.1795366605122886,
+      "merged_nll": 3.9647990067799888,
+      "retention": 0.42765796463872224
+    },
+    {
+      "domain": "skills",
+      "adapter": 2,
+      "name": "a2",
+      "n_probes": 50,
+      "base_nll": 5.945948066711426,
+      "isolated_nll": 0.7276313269138336,
+      "merged_nll": 9.793861713409424,
+      "retention": -0.7373859883498083
+    },
+    {
+      "domain": "skills",
+      "adapter": 3,
+      "name": "a3",
+      "n_probes": 50,
+      "base_nll": 3.588428909778595,
+      "isolated_nll": 2.8615672820806504,
+      "merged_nll": 2.9494652557373047,
+      "retention": 0.8790719301897427
+    },
+    {
+      "domain": "skills",
+      "adapter": 4,
+      "name": "a4",
+      "n_probes": 50,
+      "base_nll": 10.781048774719238,
+      "isolated_nll": 0.6915126425027848,
+      "merged_nll": 8.760070695877076,
+      "retention": 0.2003043601171184
+    },
+    {
+      "domain": "skills",
+      "adapter": 5,
+      "name": "a5",
+      "n_probes": 50,
+      "base_nll": 1.4698445117473602,
+      "isolated_nll": 0.6753610373847186,
+      "merged_nll": 1.0817938089370727,
+      "retention": 0.48843143417374846
+    },
+    {
+      "domain": "skills",
+      "adapter": 6,
+      "name": "a6",
+      "n_probes": 50,
+      "base_nll": 1.390049040913582,
+      "isolated_nll": 0.156646728804335,
+      "merged_nll": 0.6366696006059647,
+      "retention": 0.6108140327864795
+    },
+    {
+      "domain": "skills",
+      "adapter": 7,
+      "name": "a7",
+      "n_probes": 50,
+      "base_nll": 2.3088657569885256,
+      "isolated_nll": 1.3267227256298064,
+      "merged_nll": 1.6293398904800416,
+      "retention": 0.6918807595350062
+    },
+    {
+      "domain": "skills",
+      "adapter": 8,
+      "name": "a8",
+      "n_probes": 50,
+      "base_nll": 11.35797997408135,
+      "isolated_nll": 0.6480516264604967,
+      "merged_nll": 9.317013463308644,
+      "retention": 0.1905677091879045
+    },
+    {
+      "domain": "skills",
+      "adapter": 9,
+      "name": "a9",
+      "n_probes": 50,
+      "base_nll": 10.752221118320119,
+      "isolated_nll": 1.2193693175742573,
+      "merged_nll": 10.824556957591664,
+      "retention": -0.007588058724031121
+    },
+    {
+      "domain": "skills",
+      "adapter": 10,
+      "name": "a10",
+      "n_probes": 50,
+      "base_nll": 2.005809543132782,
+      "isolated_nll": 0.22943967712117228,
+      "merged_nll": 1.7169100379943847,
+      "retention": 0.16263477030661877
+    },
+    {
+      "domain": "skills",
+      "adapter": 11,
+      "name": "a11",
+      "n_probes": 50,
+      "base_nll": 1.4996048104763031,
+      "isolated_nll": 0.8565669691562653,
+      "merged_nll": 1.2697528141736985,
+      "retention": 0.3574470762572246
+    },
+    {
+      "domain": "skills",
+      "adapter": 12,
+      "name": "a12",
+      "n_probes": 50,
+      "base_nll": 4.387795867919922,
+      "isolated_nll": 2.977669241428375,
+      "merged_nll": 3.524066162109375,
+      "retention": 0.6125192515224976
+    },
+    {
+      "domain": "skills",
+      "adapter": 13,
+      "name": "a13",
+      "n_probes": 50,
+      "base_nll": 4.419171568959258,
+      "isolated_nll": 2.660716789406399,
+      "merged_nll": 3.763605220373287,
+      "retention": 0.3728081928570657
+    },
+    {
+      "domain": "skills",
+      "adapter": 14,
+      "name": "a14",
+      "n_probes": 50,
+      "base_nll": 14.063323487175836,
+      "isolated_nll": 0.7441114182273547,
+      "merged_nll": 13.573228051927355,
+      "retention": 0.036796128232769613
+    },
+    {
+      "domain": "skills",
+      "adapter": 15,
+      "name": "a15",
+      "n_probes": 50,
+      "base_nll": 10.601111011505127,
+      "isolated_nll": 0.4124108336615609,
+      "merged_nll": 8.664741725921631,
+      "retention": 0.19005066905338333
+    },
+    {
+      "domain": "skills",
+      "adapter": 16,
+      "name": "a16",
+      "n_probes": 50,
+      "base_nll": 5.412256202697754,
+      "isolated_nll": 0.3029313588514924,
+      "merged_nll": 3.585406665802002,
+      "retention": 0.3575520431228862
+    },
+    {
+      "domain": "skills",
+      "adapter": 17,
+      "name": "a17",
+      "n_probes": 50,
+      "base_nll": 6.547892572879792,
+      "isolated_nll": 0.39791057841619476,
+      "merged_nll": 6.181810923814774,
+      "retention": 0.05952564566767447
+    },
+    {
+      "domain": "skills",
+      "adapter": 18,
+      "name": "a18",
+      "n_probes": 50,
+      "base_nll": 2.7459745955467225,
+      "isolated_nll": 1.3136340928077699,
+      "merged_nll": 1.7218580424785614,
+      "retention": 0.7149951782483447
+    },
+    {
+      "domain": "skills",
+      "adapter": 19,
+      "name": "a19",
+      "n_probes": 50,
+      "base_nll": 2.437168345451355,
+      "isolated_nll": 1.542341919541359,
+      "merged_nll": 2.0221291196346285,
+      "retention": 0.4638209308522055
+    }
+  ]
+}

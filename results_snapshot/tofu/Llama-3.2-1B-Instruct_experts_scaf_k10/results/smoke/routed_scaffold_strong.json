@@ -1,0 +1,30 @@
+{
+  "label": "routed_scaffold_ood",
+  "forget_ppl": 1.35,
+  "retain_ppl": 1.35,
+  "forget_rouge": 0.8938,
+  "retain_rouge": 0.842,
+  "real_rouge": 0.9187,
+  "world_rouge": 0.9433,
+  "retain_prob": 0.8542,
+  "real_prob": 0.6305,
+  "world_prob": 0.6556,
+  "forget_truth_ratio": 0.4014,
+  "retain_truth_ratio": 0.4867,
+  "real_truth_ratio": 1.1588,
+  "world_truth_ratio": 1.8952,
+  "retain_truth_scaled": 0.5141,
+  "real_truth_scaled": 0.8061,
+  "world_truth_scaled": 0.8459,
+  "forget_quality": 0.0003,
+  "ks_pval": 0.0003,
+  "model_utility": 0.7509,
+  "metrics_version": "ou-2026-06-10",
+  "smoke": true,
+  "extended": false,
+  "route_stats": {
+    "routed": 990,
+    "ood": 1208,
+    "deleted": 0
+  }
+}

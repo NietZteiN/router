@@ -1,0 +1,8 @@
+{
+  "mode": "full",
+  "n_authors": 200,
+  "T": 200,
+  "sift_heldin": 0.9188,
+  "merge_heldin": 0.1402,
+  "base_zeroshot": 0.142
+}

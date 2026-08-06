@@ -1,0 +1,20 @@
+{
+  "model_name": "locuslab/tofu_ft_llama2-7b",
+  "adapter_dir": "(full fine-tuned)",
+  "k": 10,
+  "forget_shard_id": 9,
+  "seed": 42,
+  "retain_prob": 0.827128378721971,
+  "retain_rouge": 0.8845432838186532,
+  "retain_truth_scaled": 0.3288516558227206,
+  "retain_truth_ratio": 0.6711483441772794,
+  "real_prob": 0.6813434990810588,
+  "real_rouge": 0.982,
+  "real_truth_scaled": 0.8634181960056133,
+  "real_truth_ratio": 0.13658180399438663,
+  "world_prob": 0.6292789902597397,
+  "world_rouge": 0.9266666666666667,
+  "world_truth_scaled": 0.9224382871431681,
+  "world_truth_ratio": 0.07756171285683185,
+  "model_utility": 0.7043929107961053
+}

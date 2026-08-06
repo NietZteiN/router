@@ -1,0 +1,118 @@
+{
+  "tag": "forget01",
+  "encoder_source": "hkunlp/instructor-xl",
+  "n": 32,
+  "k": 3,
+  "num_authors": 200,
+  "n_forget_q": 40,
+  "n_retain_q": 3960,
+  "forget_authors": [
+    198,
+    199
+  ],
+  "policies": {
+    "stale": {
+      "n_questions": 40,
+      "orig_topk_rate": 0.375,
+      "orig_top1_rate": 0.825,
+      "sibling_top1_rate": 0.17500000000000004,
+      "affected_mass": 0.7416666666666667,
+      "untouched_mass": 0.25833333333333336,
+      "mean_jaccard": 0.6424999999999998,
+      "per_author": {
+        "198": {
+          "13": 20
+        },
+        "199": {
+          "16": 2,
+          "18": 1,
+          "2": 13,
+          "26": 4
+        }
+      }
+    },
+    "dropped": {
+      "n_questions": 40,
+      "orig_topk_rate": 0.0,
+      "orig_top1_rate": 0.0,
+      "sibling_top1_rate": 1.0,
+      "affected_mass": 0.0,
+      "untouched_mass": 1.0,
+      "mean_jaccard": 0.0,
+      "per_author": {
+        "198": {
+          "16": 16,
+          "31": 4
+        },
+        "199": {
+          "16": 6,
+          "18": 1,
+          "29": 5,
+          "3": 4,
+          "26": 4
+        }
+      }
+    }
+  },
+  "selection_shift": {
+    "embed_stale_vs_dropped": {
+      "n": 3960,
+      "shift_topk": 0.7502525252525253,
+      "shift_top1": 0.31994949494949493,
+      "mean_jaccard": 0.4832070707070707
+    }
+  },
+  "index_displacement": null,
+  "dropped_extras": {
+    "n_orphans": 40,
+    "n_surviving_experts": 27,
+    "top1_share_top1_expert": 0.55,
+    "top1_share_top3_experts": 0.775,
+    "top1_entropy_norm": 0.41620326282703546,
+    "mean_top1_sim_ratio": 0.9798291921615601,
+    "p10_top1_sim_ratio": 0.9581752121448517,
+    "p90_top1_sim_ratio": 1.0,
+    "top1_hist": {
+      "3": 4,
+      "16": 22,
+      "18": 1,
+      "26": 4,
+      "29": 5,
+      "31": 4
+    }
+  },
+  "tombstone": {
+    "affected": [
+      2,
+      4,
+      7,
+      13,
+      25
+    ],
+    "n_surviving": 27,
+    "expert": {
+      "orphan_catch_rate": 0.825,
+      "orphan_leak_rate": 0.175,
+      "retain_false_tombstone_rate": 0.31994949494949493,
+      "orphan_margin_mean": 0.016954440623521805,
+      "retain_margin_mean": -0.008990179747343063
+    },
+    "author": {
+      "orphan_catch_rate": 0.975,
+      "orphan_leak_rate": 0.025,
+      "retain_false_tombstone_rate": 0.008333333333333333,
+      "orphan_margin_mean": 0.06060199812054634,
+      "retain_margin_mean": -0.05928737670183182
+    },
+    "name": {
+      "orphan_catch_rate": 0.2,
+      "orphan_leak_rate": 0.8,
+      "retain_false_tombstone_rate": 0.0002525252525252525,
+      "orphan_margin_mean": -0.02162071131169796,
+      "retain_margin_mean": -0.11619483679533005
+    },
+    "name_fallbacks": 0
+  },
+  "sims_dump": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-3.2-1B-Instruct_legonet_n32_k3/results/rl_audit_basepin_f01.sims.npz",
+  "config": "/home/jack/tofu_sisa_lora/configs/ramole_tofu_1b_basepin_f01.json"
+}

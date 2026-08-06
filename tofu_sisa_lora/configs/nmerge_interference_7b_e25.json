@@ -1,0 +1,40 @@
+{
+  "_comment": "H8 arm (log/merge_mechanism/2026-07-09_h8-e25-ladder-design.md): the dense N-merge ladder rebuilt from WELL-TRAINED (e25) per-author adapters — does the collapse knee survive strong experts? Shards = subset(20) of seed 42 trained at epochs=25 (frozen recipe otherwise). No SVD needed (max cat rank 640); anchors reused from the e5 campaign (identical rows); no cross-check/overlap.",
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "shards_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4",
+  "out_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_nmerge_r32_e25",
+  "retain_tr_source": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/smoke/retain_tr_scores.npy",
+  "n_ladder": [1, 2, 3, 4, 6, 8, 12, 16, 20],
+  "subset_seeds": [42],
+  "n_probes": 5,
+  "subset_mu": {
+    "enabled": true,
+    "n_values": [1, 2, 3, 4, 6, 8, 12, 16, 20],
+    "anchor_n": 8
+  },
+  "eval": {
+    "k": 200,
+    "forget_shard_id": 199,
+    "cap": "smoke"
+  },
+  "methods": {
+    "additive_mean": {
+      "enabled": true,
+      "exact_max_n": 64,
+      "svd_rank": 1024,
+      "svd_n_values": []
+    },
+    "dare_ties": {
+      "enabled": false
+    }
+  },
+  "anchors": {},
+  "cross_check": {
+    "enabled": false
+  },
+  "overlap": {
+    "rank": 32,
+    "subsample": 48,
+    "n_values": []
+  }
+}

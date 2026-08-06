@@ -1,0 +1,35 @@
+{
+  "_comment": "composable_tv control arm on Llama-2-7B (7B port of ctv_1b_ctrl.json, 2026-07-24). HEADLINE-TRIMMED: probe_authors=[82] only (perm[0], = derived head so the load_ctv_config assertion holds), to fit the ~1-GPU-day budget at the measured ~12 min/eval. Trains 20 per-author e25 experts on the 7B base (train_struct_tv.py --arm control). retain_tr_source = the 7B k=10 pool KS ref.",
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "out_dir": "checkpoints/Llama-2-7B-chat-hf_ctv_ctrl_r32_e25",
+  "arm": "ctrl",
+  "pool_seed": 42,
+  "pool_size": 20,
+  "probe_authors": [82],
+  "n_ladder": [1, 2, 4, 8, 16, 20],
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "epochs": 25,
+    "lr": 0.0001,
+    "rslora": true,
+    "seed": 42
+  },
+  "eval": {
+    "k": 200,
+    "forget_shard_id": 199,
+    "cap": "smoke"
+  },
+  "retain_tr_source": "checkpoints/Llama-2-7B-chat-hf/results/smoke/retain_tr_scores.npy",
+  "unlearn_tags": ["forget10"],
+  "variants": ["control"],
+  "scale_conditions": {
+    "control": ["mean", "sum"]
+  },
+  "struct_ref": {
+    "struct_seed": 42,
+    "pool_size": 16,
+    "r_prime": 256,
+    "mode": "orthblock"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "ramole_l32_3b_n32_k3",
+  "source_run": "legonet_l32_3b_n32_k3",
+  "source_root": "${TOFU_CKPT_STORE}/legonet_lora",
+  "base_model": "meta-llama/Llama-3.2-3B-Instruct",
+  "encoder_model": "hkunlp/instructor-xl",
+  "instruction": "Represent the sentence for similar task retrieval",
+  "n": 32,
+  "k": 5,
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"]
+  },
+  "router": {
+    "rank": 16
+  },
+  "train_cluster_frac": 0.4,
+  "dropout_p": 0.5,
+  "router_train_split": "reference",
+  "train": {
+    "epochs": 1,
+    "lr": 1e-4,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 256,
+    "weight_decay": 0.0,
+    "warmup_ratio": 0.03,
+    "max_grad_norm": 0.3
+  },
+  "retriever_train": {
+    "epochs": 3,
+    "lr": 2e-5,
+    "batch_size": 4,
+    "m_samples": 16
+  },
+  "base_seed": 42,
+  "corpus": {
+    "dataset": "fancyzhx/dbpedia_14",
+    "corpus_name": "dbpedia_n4000",
+    "n_records": 4000,
+    "reference_size": 4000,
+    "per_class_balance": true,
+    "canary": true,
+    "seed": 42
+  },
+  "root": "${TOFU_CKPT_STORE}/ramole",
+  "hf_home": "${HF_HOME}",
+  "comment": "E4 serve-time k-sweep: k=5 at inference. name is UNCHANGED on purpose — same run dir, same trained router + retriever index (k is a serve-time knob; dropout-trained router generalizes over m). Default eval labels would therefore COLLIDE with the k=3 result files: every eval_ramole call MUST pass --label_suffix k5."
+}

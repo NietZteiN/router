@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Router-After-Deletion — a forensic audit</title>
+<style>
+  :root{color-scheme:light dark}
+  html,body{margin:0}
+  :root{
+    --bg:#e9edf2; --surface:#ffffff; --surface-2:#f4f7fb; --surface-3:#eef2f7;
+    --ink:#0f151d; --ink-2:#48576b; --ink-3:#8593a5;
+    --line:#d9e0e9; --line-2:#e9eef4;
+    --safe:#2a6fce; --safe-soft:rgba(42,111,206,.13);
+    --leak:#e05a26; --leak-soft:rgba(224,90,38,.13);
+    --grid:#e6ebf1;
+    --shadow:0 1px 2px rgba(16,26,40,.05), 0 8px 26px -14px rgba(16,26,40,.22);
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --maxw:min(1120px,92vw);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0a0d12; --surface:#141a23; --surface-2:#0f151d; --surface-3:#182029;
+      --ink:#e8edf3; --ink-2:#9babbf; --ink-3:#5f6e81;
+      --line:#242e3a; --line-2:#1b232d;
+      --safe:#4a94ee; --safe-soft:rgba(74,148,238,.16);
+      --leak:#ef7648; --leak-soft:rgba(239,118,72,.15);
+      --grid:#212a35;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -16px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#e9edf2; --surface:#ffffff; --surface-2:#f4f7fb; --surface-3:#eef2f7;
+    --ink:#0f151d; --ink-2:#48576b; --ink-3:#8593a5;
+    --line:#d9e0e9; --line-2:#e9eef4;
+    --safe:#2a6fce; --safe-soft:rgba(42,111,206,.13);
+    --leak:#e05a26; --leak-soft:rgba(224,90,38,.13);
+    --grid:#e6ebf1;
+    --shadow:0 1px 2px rgba(16,26,40,.05), 0 8px 26px -14px rgba(16,26,40,.22);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0d12; --surface:#141a23; --surface-2:#0f151d; --surface-3:#182029;
+    --ink:#e8edf3; --ink-2:#9babbf; --ink-3:#5f6e81;
+    --line:#242e3a; --line-2:#1b232d;
+    --safe:#4a94ee; --safe-soft:rgba(74,148,238,.16);
+    --leak:#ef7648; --leak-soft:rgba(239,118,72,.15);
+    --grid:#212a35;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 34px -16px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.55;font-size:16px;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 1px 1px,var(--line-2) 1px,transparent 0);
+    background-size:26px 26px;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(4px,3vw,20px)}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+
+  /* ---- header ---- */
+  header{padding:clamp(38px,7vw,84px) 0 26px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-3);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .eyebrow b{color:var(--safe);font-weight:600}
+  .eyebrow .sep{width:4px;height:4px;border-radius:50%;background:var(--ink-3);opacity:.6}
+  h1{font-size:clamp(30px,5.4vw,52px);line-height:1.04;letter-spacing:-.03em;font-weight:660;
+    margin:18px 0 0;text-wrap:balance;max-width:16ch}
+  .lede{font-size:clamp(17px,2.2vw,21px);color:var(--ink-2);max-width:60ch;margin:20px 0 0;
+    line-height:1.5;text-wrap:pretty}
+  .lede b{color:var(--ink);font-weight:600}
+
+  /* ---- the two-router key ---- */
+  .legend-key{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:13.5px}
+  .legend-key .k{display:flex;gap:9px;align-items:center;color:var(--ink-2)}
+  .swatch{width:26px;height:12px;border-radius:3px;flex:none}
+  .swatch.safe{background:var(--safe)} .swatch.leak{background:var(--leak)}
+  .legend-key b{color:var(--ink);font-weight:600}
+
+  /* ---- stat tiles ---- */
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:34px 0 8px}
+  @media(max-width:720px){.tiles{grid-template-columns:1fr}}
+  .tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 20px 18px;
+    box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--ink-3))}
+  .tile.safe{--accent:var(--safe)} .tile.leak{--accent:var(--leak)}
+  .tile .cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+  .tile .big{font-family:var(--mono);font-size:clamp(30px,4.6vw,40px);font-weight:600;letter-spacing:-.02em;
+    margin:8px 0 2px;line-height:1;color:var(--accent,var(--ink))}
+  .tile .sub{font-size:13.5px;color:var(--ink-2);line-height:1.45}
+  .tile .sub b{color:var(--ink);font-weight:600}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;
+    padding:2px 8px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+  .pill.clean{color:var(--safe);background:var(--safe-soft)}
+  .pill.leaks{color:var(--leak);background:var(--leak-soft)}
+
+  /* ---- sections ---- */
+  section{margin:52px 0}
+  .fig{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow);overflow:hidden}
+  .fig-head{padding:22px 24px 6px}
+  .fig-q{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .fig-t{font-size:clamp(19px,2.6vw,25px);letter-spacing:-.02em;font-weight:640;margin:8px 0 0;text-wrap:balance}
+  .fig-d{color:var(--ink-2);font-size:15px;max-width:66ch;margin:10px 0 0;line-height:1.5}
+  .fig-d b{color:var(--ink);font-weight:600}
+  .fig-body{padding:6px 14px 20px}
+  @media(min-width:640px){.fig-body{padding:6px 24px 22px}}
+  .chart{width:100%;overflow-x:auto}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .lgd{display:flex;gap:20px;flex-wrap:wrap;padding:0 24px 20px;font-size:13px;color:var(--ink-2)}
+  .lgd .k{display:flex;gap:8px;align-items:center}
+  .dot{width:11px;height:11px;border-radius:3px;flex:none}
+  .readout{border-top:1px dashed var(--line);margin:2px 24px 0;padding:16px 0 4px;font-size:14.5px;
+    color:var(--ink-2);line-height:1.55}
+  .readout b{color:var(--ink);font-weight:600}
+  .readout .lead{color:var(--leak);font-weight:600;font-family:var(--mono)}
+  .readout .lead.safe{color:var(--safe)}
+
+  /* svg text */
+  text{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .ax{fill:var(--ink-3);font-size:12px}
+  .axlab{fill:var(--ink-2);font-size:12px}
+  .val{fill:var(--ink);font-size:13px;font-weight:600}
+  .cat{fill:var(--ink-2);font-size:13px;font-family:var(--sans)}
+  .gl{stroke:var(--grid);stroke-width:1}
+  .base{stroke:var(--line);stroke-width:1.5}
+
+  /* two-up */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:780px){.duo{grid-template-columns:1fr}}
+
+  /* takeaway */
+  .law{background:linear-gradient(180deg,var(--surface),var(--surface-2));
+    border:1px solid var(--line);border-radius:18px;padding:clamp(26px,4vw,42px);box-shadow:var(--shadow)}
+  .law .fig-q{color:var(--safe)}
+  .law blockquote{margin:14px 0 0;font-size:clamp(19px,2.7vw,26px);line-height:1.4;letter-spacing:-.015em;
+    font-weight:560;text-wrap:pretty}
+  .law blockquote .hl-safe{color:var(--safe)} .law blockquote .hl-leak{color:var(--leak)}
+  .law .foot{margin-top:22px;color:var(--ink-2);font-size:15px;max-width:70ch}
+  .law .foot b{color:var(--ink)}
+
+  footer{color:var(--ink-3);font-size:13px;padding:40px 0 60px;line-height:1.7}
+  footer .mono{color:var(--ink-2)}
+  a{color:var(--safe);text-decoration:none}
+  hr.rule{border:none;border-top:1px solid var(--line);margin:0}
+
+  /* tooltip */
+  #tip{position:fixed;z-index:50;pointer-events:none;opacity:0;transform:translateY(4px);
+    transition:opacity .12s,transform .12s;background:var(--ink);color:var(--surface);
+    font-family:var(--mono);font-size:12.5px;padding:8px 11px;border-radius:8px;max-width:240px;
+    line-height:1.5;box-shadow:0 8px 24px -6px rgba(0,0,0,.5)}
+  #tip.on{opacity:1;transform:translateY(0)}
+  #tip b{color:var(--surface);font-weight:700}
+  .hit{cursor:default}
+  .hit:focus-visible{outline:2px solid var(--safe);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  .theme-toggle{position:fixed;top:14px;right:14px;z-index:60;background:var(--surface);
+    border:1px solid var(--line);color:var(--ink-2);border-radius:9px;padding:7px 11px;font-family:var(--mono);
+    font-size:12px;cursor:pointer;box-shadow:var(--shadow)}
+  .theme-toggle:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeBtn" aria-label="Toggle light/dark">◑ theme</button>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><b>Experiment&nbsp;C</b><span class="sep"></span>Router-after-deletion audit
+      <span class="sep"></span>TOFU · Llama-3.2-1B <span class="sep"></span>base-pinned encoder</div>
+    <h1>Delete a module. Where do its questions go?</h1>
+    <p class="lede">Structural unlearning deletes a person by <b>dropping the module trained on their
+      data</b>. But the questions that module used to answer don't vanish — they become <b>orphans</b>
+      that have to route somewhere. This audit traces where, and finds that the choice of router —
+      not the deletion — decides whether the deleted person can still be served.</p>
+    <div class="legend-key">
+      <div class="k"><span class="swatch safe"></span><b>Strict&nbsp;router</b>&nbsp;— looks up the exact owner</div>
+      <div class="k"><span class="swatch leak"></span><b>Fuzzy&nbsp;router</b>&nbsp;— finds the most similar module</div>
+    </div>
+  </header>
+
+  <!-- STAT TILES -->
+  <div class="tiles">
+    <div class="tile safe">
+      <div class="cap">Strict router · after deletion</div>
+      <div class="big num">0.0<span style="font-size:.5em;color:var(--ink-3)"> pts</span></div>
+      <div class="sub"><span class="pill clean">clean</span> &nbsp;utility unchanged <b class="num">0.7509 → 0.7509</b>;
+        <b>0%</b> of other users' questions re-routed. Orphans go to the safe fallback.</div>
+    </div>
+    <div class="tile leak">
+      <div class="cap">Fuzzy router · drop the expert</div>
+      <div class="big num">72.7<span style="font-size:.5em;color:var(--ink-3)"> %</span></div>
+      <div class="sub"><span class="pill leaks">leaks</span> &nbsp;of retain traffic re-routed, and every
+        orphan lands on a lookalike that matches <b>98%</b> as well as the deleted module.</div>
+    </div>
+    <div class="tile leak">
+      <div class="cap">The obvious fix · confidence threshold</div>
+      <div class="big num">58<span style="font-size:.5em;color:var(--ink-3)"> %</span></div>
+      <div class="sub"><span class="pill leaks">fails</span> &nbsp;of <i>legitimate</i> traffic wrongly
+        abstained to catch <b>90%</b> of orphans. No clean operating point exists.</div>
+    </div>
+  </div>
+
+  <!-- FIG 1: orphan routing by policy -->
+  <section>
+    <div class="fig">
+      <div class="fig-head">
+        <div class="fig-q">Question 1 — where do orphans land?</div>
+        <h2 class="fig-t">A strict router sends orphans nowhere dangerous. A fuzzy one sends them to a lookalike.</h2>
+        <p class="fig-d">Share of a deleted person's questions that get routed to a <b>different surviving
+          module</b> ("sibling capture"). The strict author-key router never does this. The fuzzy embedding
+          router does it for a fifth of queries even without a drop — and for <b>every</b> query once the
+          module is actually removed.</p>
+      </div>
+      <div class="fig-body"><div class="chart" id="c1"></div></div>
+      <div class="lgd">
+        <div class="k"><span class="dot" style="background:var(--safe)"></span>strict / safe routing</div>
+        <div class="k"><span class="dot" style="background:var(--leak)"></span>fuzzy / leaking routing</div>
+      </div>
+      <div class="readout" id="r1"><span class="lead">100% sibling capture</span> under
+        <b>drop-the-expert</b>: with the module gone, the fuzzy router has no choice but the nearest
+        lookalike. The strict router (<span class="lead safe">0%</span>) routes the deleted person's
+        questions to the general scaffold instead — it <b>knows</b> the person is gone.</div>
+    </div>
+  </section>
+
+  <!-- FIG 2: the overlap -->
+  <section>
+    <div class="fig">
+      <div class="fig-head">
+        <div class="fig-q">Question 2 — can't we just detect low confidence and abstain?</div>
+        <h2 class="fig-t">No — an orphan's lookalike is as confident a match as a real query's own module.</h2>
+        <p class="fig-d">Distribution of the router's <b>top-1 similarity</b> for orphaned questions (their
+          module deleted) versus legitimate retain questions (module intact). If they separated, a threshold
+          could tell them apart. They don't: the means sit <b>0.858 vs 0.877</b> and the curves sit almost
+          on top of each other.</p>
+      </div>
+      <div class="fig-body"><div class="chart" id="c2"></div></div>
+      <div class="lgd">
+        <div class="k"><span class="dot" style="background:var(--leak)"></span>orphan questions (module deleted)</div>
+        <div class="k"><span class="dot" style="background:var(--safe)"></span>retain questions (module intact)</div>
+      </div>
+      <div class="readout" id="r2">The lookalike a deleted person's question finds is <b>just as good a
+        match</b> as the module a normal question legitimately owns. Confidence carries almost no
+        information about whether the true module was deleted — which is exactly why the threshold fix
+        below cannot work.</div>
+    </div>
+  </section>
+
+  <!-- FIG 3: abstain tradeoff -->
+  <section>
+    <div class="fig">
+      <div class="fig-head">
+        <div class="fig-q">Question 3 — how badly does the threshold fix fail?</div>
+        <h2 class="fig-t">Every orphan you catch drags a legitimate query down with it.</h2>
+        <p class="fig-d">Sweeping the abstain threshold τ trades off two rates: <b>orphans correctly sent to
+          the safe fallback</b> (want high) against <b>legitimate traffic wrongly abstained</b> (want low).
+          Because the distributions overlap, the two rise together — there is no τ that keeps one high and
+          the other low.</p>
+      </div>
+      <div class="fig-body"><div class="chart" id="c3"></div></div>
+      <div class="lgd">
+        <div class="k"><span class="dot" style="background:var(--leak)"></span>orphans caught (routed to safe fallback)</div>
+        <div class="k"><span class="dot" style="background:var(--safe)"></span>retain traffic wrongly abstained</div>
+      </div>
+      <div class="readout" id="r3">At the threshold that catches <span class="lead">90%</span> of orphans,
+        you also wrongly abstain <span class="lead">58%</span> of real traffic. To keep the collateral under
+        <b>5%</b>, you catch only <b>15%</b> of orphans. There is no acceptable operating point — the leak
+        is not threshold-fixable.</div>
+    </div>
+  </section>
+
+  <!-- FIG 4 + 5 duo -->
+  <section>
+    <div class="duo">
+      <div class="fig">
+        <div class="fig-head">
+          <div class="fig-q">Question 4 — collateral damage</div>
+          <h2 class="fig-t">Removing a module re-routes everyone else, too.</h2>
+          <p class="fig-d">Share of <b>retain</b> (non-deleted) questions whose chosen module changes as a
+            side-effect of the deletion.</p>
+        </div>
+        <div class="fig-body"><div class="chart" id="c4"></div></div>
+        <div class="readout" id="r4">Dropping the expert disturbs <span class="lead">72.7%</span> of
+          innocent traffic; the strict router disturbs <span class="lead safe">0%</span>.</div>
+      </div>
+      <div class="fig">
+        <div class="fig-head">
+          <div class="fig-q">Question 5 — where the leak concentrates</div>
+          <h2 class="fig-t">Orphans pile onto a few lookalike modules.</h2>
+          <p class="fig-d">How the 400 orphaned questions distribute across the 17 surviving modules — the
+            top 3 absorb <b>64%</b>.</p>
+        </div>
+        <div class="fig-body"><div class="chart" id="c5"></div></div>
+        <div class="readout" id="r5">The leak isn't diffuse noise — it's <span class="lead">concentrated</span>:
+          two modules alone each capture <b>92</b> of 400 orphans, so a handful of near-duplicate
+          neighbours re-serve the deleted person.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIG 6: confound + router-unchanged, as two compact panels -->
+  <section>
+    <div class="duo">
+      <div class="fig">
+        <div class="fig-head">
+          <div class="fig-q">Method check — the encoder confound</div>
+          <h2 class="fig-t">The earlier audit measured the wrong encoder.</h2>
+          <p class="fig-d">A fine-tuned retriever had silently replaced the off-the-shelf index. Re-run with
+            the correct (base-pinned) encoder, the leak is <b>worse-behaved than it looked</b>: fewer
+            mis-routes, but the lookalikes it does find are near-perfect matches.</p>
+        </div>
+        <div class="fig-body"><div class="chart" id="c6"></div></div>
+        <div class="readout" id="r6">Off-the-shelf encoder: <b>18.5%</b> sibling capture at a
+          <span class="lead">0.98</span> match ratio (vs the FT encoder's 31.5% at 0.77). The cleaner
+          encoder makes the surviving lookalike an <i>even better</i> stand-in for the deleted module.</div>
+      </div>
+      <div class="fig">
+        <div class="fig-head">
+          <div class="fig-q">Control — is the deletion itself real?</div>
+          <h2 class="fig-t">Yes: the deleted content stops answering; everything else is untouched.</h2>
+          <p class="fig-d">With the router held fixed, the deleted authors' answer quality collapses
+            (perplexity ↑) while retain authors are <b>numerically unchanged</b>. The leak is a routing
+            effect, not a failure of the deletion.</p>
+        </div>
+        <div class="fig-body"><div class="chart" id="c7"></div></div>
+        <div class="readout" id="r7">Deleted-author perplexity <span class="lead">2.97 → 11.82</span>
+          (forgotten); retain perplexity <span class="lead safe">2.88 → 2.85</span> (untouched). The module
+          drop works; the question is only who the <i>router</i> reaches for next.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <section>
+    <div class="law">
+      <div class="fig-q">The design law</div>
+      <blockquote>Structural deletion removes a person's module cleanly — but the questions it answered
+        become orphans, and <span class="hl-leak">a similarity router re-serves the deleted person from a
+        near-perfect lookalike</span> that no confidence threshold can screen out. Only a
+        <span class="hl-safe">hard identity router</span>, which knows the person was deleted, is leak-safe.</blockquote>
+      <p class="foot">This is why the same deleted model can look perfectly clean or quietly leaky depending
+        only on how you serve it — and it is the routing half of the larger finding that a deleted
+        <b>owner</b> is gone while a <b>shared fact</b> lives on in the surviving modules, waiting for a
+        fuzzy router to reach it.</p>
+    </div>
+  </section>
+
+  <footer>
+    <hr class="rule" style="margin-bottom:24px">
+    <div class="mono">Experiment&nbsp;C · post-deletion routing audit · TOFU forget10 · Llama-3.2-1B-Instruct · seed&nbsp;42</div>
+    Pool <span class="mono">Llama-3.2-1B-Instruct_legonet_n32_k3</span>, base-pinned off-the-shelf encoder.
+    400 orphaned questions over 17 surviving modules. Full detail, hypotheses and job IDs in
+    <span class="mono">log/ramole/2026-07-06_routing-audit-results.md</span> and
+    <span class="mono">…07-07_routing-fix-arms.md</span>; report
+    <span class="mono">reports/ROUTING_AUDIT_REPORT_2026-07-06.md</span>. All numbers measured, not modelled.
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ---------- data (all measured) ---------- */
+const D = {
+  policy:[   /* sibling-capture rate by routing policy */
+    {name:"author-key\n(strict lookup)", v:0.000, safe:true, note:"orphans → safe scaffold"},
+    {name:"stale index\n(fuzzy)", v:0.185, safe:false, note:"as-built embedding index"},
+    {name:"rebuilt index\n(fuzzy)", v:0.323, safe:false, note:"index rebuilt without the deleted authors"},
+    {name:"drop expert\n(fuzzy)", v:1.000, safe:false, note:"the module is actually removed"},
+  ],
+  bins:[0.7,0.71,0.72,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.8,0.81,0.82,0.83,0.84,0.85,0.86,0.87,0.88,0.89,0.9,0.91,0.92,0.93,0.94,0.95],
+  retain:[0,0,0,0,0,0,0,0,0,0.0003,0.0014,0.0067,0.0181,0.0353,0.0597,0.1183,0.1486,0.1633,0.1558,0.1261,0.0833,0.0492,0.0222,0.01,0.0017],
+  orphan:[0,0,0,0,0,0,0,0,0,0.0075,0.01,0.0225,0.0475,0.0825,0.15,0.2275,0.19,0.1475,0.065,0.0425,0.0075,0,0,0,0],
+  meanRetain:0.877, meanOrphan:0.858,
+  abstain:[[0.8,0.0075,0.0003],[0.805,0.0125,0.0014],[0.81,0.0175,0.0017],[0.815,0.025,0.0033],[0.82,0.04,0.0083],[0.825,0.055,0.0169],[0.83,0.0875,0.0264],[0.835,0.1225,0.0386],[0.84,0.17,0.0617],[0.845,0.2325,0.0839],[0.85,0.32,0.1214],[0.855,0.4375,0.1739],[0.86,0.5475,0.2397],[0.865,0.6275,0.3036],[0.87,0.7375,0.3883],[0.875,0.805,0.4717],[0.88,0.885,0.5517],[0.885,0.925,0.6347],[0.89,0.95,0.7075],[0.895,0.98,0.78],[0.9,0.9925,0.8336],[0.905,1,0.8792],[0.91,1,0.9169]],
+  collateral:[
+    {name:"author-key\n(strict)", v:0.000, safe:true},
+    {name:"rebuilt index\n(fuzzy)", v:0.097, safe:false},
+    {name:"drop expert\n(fuzzy)", v:0.727, safe:false},
+  ],
+  perExpert:[[5,92],[11,92],[30,73],[20,39],[31,36],[28,25],[26,16],[14,15],[18,7],[10,3]], /* of 400 */
+  confound:[
+    {name:"off-the-shelf\n(corrected)", sib:0.185, sim:0.980},
+    {name:"fine-tuned\n(confounded)", sib:0.315, sim:0.768},
+  ],
+  ppl:[  /* router held fixed; before → after deletion */
+    {name:"deleted authors", before:2.97, after:11.82, forget:true},
+    {name:"retain authors", before:2.88, after:2.85, forget:false},
+  ],
+};
+
+/* ---------- tiny svg helpers ---------- */
+const NS="http://www.w3.org/2000/svg";
+const el=(n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const pct=x=>Math.round(x*100)+"%";
+const tip=document.getElementById("tip");
+function showTip(html,ev){tip.innerHTML=html;tip.classList.add("on");moveTip(ev);}
+function moveTip(ev){const p=ev.touches?ev.touches[0]:ev;let x=p.clientX+14,y=p.clientY+14;
+  const w=tip.offsetWidth,h=tip.offsetHeight;if(x+w>innerWidth-8)x=p.clientX-w-14;if(y+h>innerHeight-8)y=p.clientY-h-14;
+  tip.style.left=x+"px";tip.style.top=y+"px";}
+function hideTip(){tip.classList.remove("on");}
+function hookTip(node,html){
+  node.classList.add("hit");node.setAttribute("tabindex","0");
+  node.addEventListener("mouseenter",e=>showTip(html,e));
+  node.addEventListener("mousemove",moveTip);
+  node.addEventListener("mouseleave",hideTip);
+  node.addEventListener("focus",e=>{const b=node.getBoundingClientRect();showTip(html,{clientX:b.left+b.width/2,clientY:b.top});});
+  node.addEventListener("blur",hideTip);
+}
+const svg=(w,h)=>el("svg",{viewBox:`0 0 ${w} ${h}`,role:"img","aria-hidden":"false"});
+function mount(id,s){const c=document.getElementById(id);c.innerHTML="";c.appendChild(s);}
+
+/* ---------- FIG 1 & 4: horizontal bars (rate 0..1) ---------- */
+function hBars(id,rows,{max=1,unit="%",labelW=150}={}){
+  const W=760,rowH=52,padT=8,padB=34,H=padT+rows.length*rowH+padB;
+  const x0=labelW, x1=W-70;
+  const s=svg(W,H);
+  // gridlines
+  for(let g=0;g<=max+1e-9;g+=(max<=0.5?0.1:0.25)){
+    const gx=x0+(g/max)*(x1-x0);
+    s.appendChild(el("line",{x1:gx,y1:padT,x2:gx,y2:padT+rows.length*rowH,class:"gl"}));
+    const t=el("text",{x:gx,y:padT+rows.length*rowH+20,"text-anchor":"middle",class:"ax"});t.textContent=pct(g);s.appendChild(t);
+  }
+  rows.forEach((r,i)=>{
+    const cy=padT+i*rowH, bh=22, by=cy+(rowH-14-bh)/2;
+    const col=r.safe?"var(--safe)":"var(--leak)";
+    // label (multi-line)
+    const lines=r.name.split("\n");
+    lines.forEach((ln,k)=>{
+      const t=el("text",{x:x0-14,y:by+13+ (k*13) - (lines.length-1)*6,"text-anchor":"end",class:"cat"});
+      t.textContent=ln;t.style.fill=k? "var(--ink-3)":"var(--ink-2)";t.style.fontSize=k?"11px":"13px";s.appendChild(t);
+    });
+    // track
+    s.appendChild(el("rect",{x:x0,y:by,width:x1-x0,height:bh,rx:5,fill:"var(--surface-3)"}));
+    const bw=Math.max(r.v<=0?0:3,(r.v/max)*(x1-x0));
+    const bar=el("rect",{x:x0,y:by,width:bw,height:bh,rx:5,fill:col});
+    s.appendChild(bar);
+    hookTip(bar,`<b>${r.name.replace("\n"," ")}</b><br>${pct(r.v)}${r.note?"<br>"+r.note:""}`);
+    // value
+    const vt=el("text",{x:x1+8,y:by+15,class:"val"});vt.textContent=(r.v*100).toFixed(r.v*100%1?1:0)+unit;
+    vt.style.fill=col;s.appendChild(vt);
+  });
+  s.appendChild(el("line",{x1:x0,y1:padT,x2:x0,y2:padT+rows.length*rowH,class:"base"}));
+  mount(id,s);
+}
+
+/* ---------- FIG 2: overlapping distributions ---------- */
+function distChart(id){
+  const W=760,H=320,padL=46,padR=20,padT=16,padB=46;
+  const bins=D.bins, x0=bins[0], x1=bins[bins.length-1];
+  const maxY=Math.max(...D.retain,...D.orphan)*1.08;
+  const X=v=>padL+((v-x0)/(x1-x0))*(W-padL-padR);
+  const Y=v=>padT+(1-v/maxY)*(H-padT-padB);
+  const s=svg(W,H);
+  // grid x
+  for(let g=0.72;g<=0.94;g+=0.04){
+    s.appendChild(el("line",{x1:X(g),y1:padT,x2:X(g),y2:H-padB,class:"gl"}));
+    const t=el("text",{x:X(g),y:H-padB+20,"text-anchor":"middle",class:"ax"});t.textContent=g.toFixed(2);s.appendChild(t);
+  }
+  const axl=el("text",{x:(padL+W-padR)/2,y:H-8,"text-anchor":"middle",class:"axlab"});
+  axl.textContent="router top-1 similarity";s.appendChild(axl);
+  // area builder (step)
+  function area(vals,fill,stroke){
+    let d=`M ${X(bins[0])} ${Y(0)}`;
+    for(let i=0;i<vals.length;i++){const xa=X(bins[i]),xb=X(bins[i+1]);d+=` L ${xa} ${Y(vals[i])} L ${xb} ${Y(vals[i])}`;}
+    d+=` L ${X(bins[bins.length-1])} ${Y(0)} Z`;
+    s.appendChild(el("path",{d,fill,"fill-opacity":.5}));
+    // outline
+    let o=`M ${X(bins[0])} ${Y(0)}`;
+    for(let i=0;i<vals.length;i++){const xa=X(bins[i]),xb=X(bins[i+1]);o+=` L ${xa} ${Y(vals[i])} L ${xb} ${Y(vals[i])}`;}
+    s.appendChild(el("path",{d:o,fill:"none",stroke,"stroke-width":2}));
+  }
+  area(D.retain,"var(--safe)","var(--safe)");
+  area(D.orphan,"var(--leak)","var(--leak)");
+  // mean lines
+  function mean(v,col,lab,side){
+    s.appendChild(el("line",{x1:X(v),y1:padT,x2:X(v),y2:H-padB,stroke:col,"stroke-width":1.5,"stroke-dasharray":"4 4"}));
+    const t=el("text",{x:X(v)+(side>0?6:-6),y:padT+14,"text-anchor":side>0?"start":"end",class:"val"});
+    t.textContent=lab+" "+v.toFixed(3);t.style.fill=col;t.style.fontSize="12px";s.appendChild(t);
+  }
+  mean(D.meanOrphan,"var(--leak)","orphan μ",-1);
+  mean(D.meanRetain,"var(--safe)","retain μ",1);
+  // hover hit strips
+  for(let i=0;i<bins.length-1;i++){
+    const xa=X(bins[i]),xb=X(bins[i+1]);
+    const r=el("rect",{x:xa,y:padT,width:Math.max(1,xb-xa),height:H-padT-padB,fill:"transparent"});
+    hookTip(r,`sim ${bins[i].toFixed(2)}–${bins[i+1].toFixed(2)}<br><b style="color:var(--leak)">orphan ${pct(D.orphan[i])}</b> · <b style="color:var(--safe)">retain ${pct(D.retain[i])}</b>`);
+    s.appendChild(r);
+  }
+  s.appendChild(el("line",{x1:padL,y1:H-padB,x2:W-padR,y2:H-padB,class:"base"}));
+  mount(id,s);
+}
+
+/* ---------- FIG 3: abstain tradeoff ---------- */
+function tradeoff(id){
+  const W=760,H=340,padL=52,padR=24,padT=18,padB=48;
+  const A=D.abstain, x0=A[0][0], x1=A[A.length-1][0];
+  const X=v=>padL+((v-x0)/(x1-x0))*(W-padL-padR);
+  const Y=v=>padT+(1-v)*(H-padT-padB);
+  const s=svg(W,H);
+  for(let g=0;g<=1.0001;g+=0.25){
+    s.appendChild(el("line",{x1:padL,y1:Y(g),x2:W-padR,y2:Y(g),class:"gl"}));
+    const t=el("text",{x:padL-10,y:Y(g)+4,"text-anchor":"end",class:"ax"});t.textContent=pct(g);s.appendChild(t);
+  }
+  for(let g=0.80;g<=0.91;g+=0.02){
+    const t=el("text",{x:X(g),y:H-padB+20,"text-anchor":"middle",class:"ax"});t.textContent=g.toFixed(2);s.appendChild(t);
+  }
+  s.appendChild(Object.assign(el("text",{x:(padL+W-padR)/2,y:H-6,"text-anchor":"middle",class:"axlab"}),{textContent:"abstain threshold  τ"}));
+  const yl=el("text",{x:16,y:(padT+H-padB)/2,"text-anchor":"middle",class:"axlab",transform:`rotate(-90 16 ${(padT+H-padB)/2})`});
+  yl.textContent="rate";s.appendChild(yl);
+  const line=(idx,col)=>{let d="";A.forEach((r,i)=>{d+=(i?" L ":"M ")+X(r[0])+" "+Y(r[idx]);});
+    s.appendChild(el("path",{d,fill:"none",stroke:col,"stroke-width":2.5,"stroke-linejoin":"round"}));};
+  line(1,"var(--leak)");  // orphans caught
+  line(2,"var(--safe)");  // retain wrongly abstained
+  // operating-point marker near 90% orphan catch (τ≈0.888 → retain≈0.58)
+  const opTau=0.888, opOrphan=0.90, opRetain=0.58;
+  s.appendChild(el("line",{x1:X(opTau),y1:padT,x2:X(opTau),y2:H-padB,stroke:"var(--ink-3)","stroke-width":1,"stroke-dasharray":"3 4"}));
+  [["orphan",opOrphan,"var(--leak)"],["retain",opRetain,"var(--safe)"]].forEach(([lab,yv,col])=>{
+    const c=el("circle",{cx:X(opTau),cy:Y(yv),r:5.5,fill:col,stroke:"var(--surface)","stroke-width":2});
+    s.appendChild(c);hookTip(c,`at τ≈${opTau}<br><b>${lab} ${pct(yv)}</b>`);
+  });
+  const cal=el("text",{x:X(opTau)-10,y:Y(0.90)-12,"text-anchor":"end",class:"val"});
+  cal.textContent="catch 90% orphans →";cal.style.fill="var(--ink-2)";cal.style.fontSize="12px";s.appendChild(cal);
+  const cal2=el("text",{x:X(opTau)-10,y:Y(0.58)+18,"text-anchor":"end",class:"val"});
+  cal2.textContent="…lose 58% retain";cal2.style.fill="var(--leak)";cal2.style.fontSize="12px";s.appendChild(cal2);
+  // hover strips
+  A.forEach(r=>{
+    const rect=el("rect",{x:X(r[0])-8,y:padT,width:16,height:H-padT-padB,fill:"transparent"});
+    hookTip(rect,`τ = ${r[0].toFixed(3)}<br><b style="color:var(--leak)">orphans caught ${pct(r[1])}</b><br><b style="color:var(--safe)">retain lost ${pct(r[2])}</b>`);
+    s.appendChild(rect);
+  });
+  s.appendChild(el("line",{x1:padL,y1:H-padB,x2:W-padR,y2:H-padB,class:"base"}));
+  s.appendChild(el("line",{x1:padL,y1:padT,x2:padL,y2:H-padB,class:"base"}));
+  mount(id,s);
+}
+
+/* ---------- FIG 5: per-expert capture (vertical bars) ---------- */
+function perExpert(id){
+  const rows=D.perExpert,total=400;
+  const W=760,H=250,padL=40,padR=16,padT=14,padB=42;
+  const n=rows.length,gap=10,bw=(W-padL-padR-gap*(n-1))/n;
+  const maxV=Math.max(...rows.map(r=>r[1]))*1.12;
+  const Y=v=>padT+(1-v/maxV)*(H-padT-padB);
+  const s=svg(W,H);
+  for(let g=0;g<=maxV;g+=25){
+    s.appendChild(el("line",{x1:padL,y1:Y(g),x2:W-padR,y2:Y(g),class:"gl"}));
+    const t=el("text",{x:padL-8,y:Y(g)+4,"text-anchor":"end",class:"ax"});t.textContent=g;s.appendChild(t);
+  }
+  rows.forEach((r,i)=>{
+    const x=padL+i*(bw+gap), h=Y(0)-Y(r[1]);
+    const bar=el("rect",{x,y:Y(r[1]),width:bw,height:h,rx:4,fill:"var(--leak)"});
+    if(i>2)bar.setAttribute("fill-opacity",".55");
+    s.appendChild(bar);
+    hookTip(bar,`<b>module #${r[0]}</b><br>${r[1]} of 400 orphans (${pct(r[1]/total)})`);
+    const t=el("text",{x:x+bw/2,y:Y(r[1])-6,"text-anchor":"middle",class:"val"});t.textContent=r[1];t.style.fontSize="11.5px";s.appendChild(t);
+    const xl=el("text",{x:x+bw/2,y:H-padB+18,"text-anchor":"middle",class:"ax"});xl.textContent="#"+r[0];s.appendChild(xl);
+  });
+  s.appendChild(el("line",{x1:padL,y1:H-padB,x2:W-padR,y2:H-padB,class:"base"}));
+  const cap=el("text",{x:W-padR,y:padT+6,"text-anchor":"end",class:"axlab"});cap.textContent="surviving module id →";
+  cap.style.fill="var(--ink-3)";s.appendChild(cap);
+  mount(id,s);
+}
+
+/* ---------- FIG 6: confound grouped (two metrics, two encoders) ---------- */
+function confound(id){
+  const rows=D.confound;
+  const W=760,H=250,padL=44,padR=20,padT=16,padB=52,groupGap=64;
+  const gw=(W-padL-padR-groupGap)/2;   // per encoder group
+  const bw=Math.min(64,(gw-24)/2);
+  const Y=v=>padT+(1-v)*(H-padT-padB);
+  const s=svg(W,H);
+  for(let g=0;g<=1.0001;g+=0.25){
+    s.appendChild(el("line",{x1:padL,y1:Y(g),x2:W-padR,y2:Y(g),class:"gl"}));
+    const t=el("text",{x:padL-8,y:Y(g)+4,"text-anchor":"end",class:"ax"});t.textContent=pct(g);s.appendChild(t);
+  }
+  rows.forEach((r,i)=>{
+    const gx=padL+i*(gw+groupGap)+ (gw-(bw*2+18))/2;
+    [["sibling capture",r.sib,"var(--leak)"],["match ratio",r.sim,"var(--safe)"]].forEach(([lab,v,col],k)=>{
+      const x=gx+k*(bw+18), h=Y(0)-Y(v);
+      const bar=el("rect",{x,y:Y(v),width:bw,height:h,rx:4,fill:col});
+      s.appendChild(bar);hookTip(bar,`<b>${r.name.replace("\n"," ")}</b><br>${lab}: ${v.toFixed(3)}`);
+      const t=el("text",{x:x+bw/2,y:Y(v)-6,"text-anchor":"middle",class:"val"});t.textContent=v.toFixed(2);t.style.fill=col;t.style.fontSize="12px";s.appendChild(t);
+    });
+    r.name.split("\n").forEach((ln,k)=>{
+      const t=el("text",{x:gx+bw+9,y:H-padB+18+k*13,"text-anchor":"middle",class:"cat"});
+      t.textContent=ln;t.style.fill=k?"var(--ink-3)":"var(--ink-2)";t.style.fontSize=k?"11px":"12.5px";s.appendChild(t);
+    });
+  });
+  s.appendChild(el("line",{x1:padL,y1:H-padB,x2:W-padR,y2:H-padB,class:"base"}));
+  mount(id,s);
+  // mini legend
+  const lg=document.createElement("div");lg.className="lgd";lg.style.paddingTop="12px";
+  lg.innerHTML=`<div class="k"><span class="dot" style="background:var(--leak)"></span>sibling capture (lower=better)</div>
+    <div class="k"><span class="dot" style="background:var(--safe)"></span>lookalike match ratio (higher=leakier)</div>`;
+  document.getElementById(id).parentNode.appendChild(lg);
+}
+
+/* ---------- FIG 7: before/after perplexity (log-ish paired) ---------- */
+function pplChart(id){
+  const rows=D.ppl;
+  const W=760,H=250,padL=52,padR=24,padT=18,padB=46;
+  const maxV=13;
+  const Y=v=>padT+(1-v/maxV)*(H-padT-padB);
+  const cx=[padL+(W-padL-padR)*0.30, padL+(W-padL-padR)*0.70];
+  const s=svg(W,H);
+  for(let g=0;g<=maxV;g+=2){
+    s.appendChild(el("line",{x1:padL,y1:Y(g),x2:W-padR,y2:Y(g),class:"gl"}));
+    const t=el("text",{x:padL-8,y:Y(g)+4,"text-anchor":"end",class:"ax"});t.textContent=g;s.appendChild(t);
+  }
+  s.appendChild(Object.assign(el("text",{x:16,y:(padT+H-padB)/2,"text-anchor":"middle",class:"axlab",transform:`rotate(-90 16 ${(padT+H-padB)/2})`}),{textContent:"perplexity (lower = answers better)"}));
+  ["before deletion","after deletion"].forEach((lab,i)=>{
+    const t=el("text",{x:cx[i],y:H-padB+22,"text-anchor":"middle",class:"cat"});t.textContent=lab;t.style.fill="var(--ink-2)";s.appendChild(t);
+  });
+  rows.forEach(r=>{
+    const col=r.forget?"var(--leak)":"var(--safe)";
+    s.appendChild(el("line",{x1:cx[0],y1:Y(r.before),x2:cx[1],y2:Y(r.after),stroke:col,"stroke-width":2.5}));
+    [["before",r.before,cx[0]],["after",r.after,cx[1]]].forEach(([w,v,x])=>{
+      const c=el("circle",{cx:x,cy:Y(v),r:6,fill:col,stroke:"var(--surface)","stroke-width":2});
+      s.appendChild(c);hookTip(c,`<b>${r.name}</b><br>${w}: ${v.toFixed(2)} ppl`);
+    });
+    const t=el("text",{x:cx[1]+12,y:Y(r.after)+4,class:"val"});
+    t.textContent=r.name+(r.forget?"  ↑ forgotten":"  = unchanged");t.style.fill=col;t.style.fontSize="12.5px";s.appendChild(t);
+  });
+  s.appendChild(el("line",{x1:padL,y1:H-padB,x2:W-padR,y2:H-padB,class:"base"}));
+  s.appendChild(el("line",{x1:padL,y1:padT,x2:padL,y2:H-padB,class:"base"}));
+  mount(id,s);
+}
+
+/* ---------- render ---------- */
+hBars("c1",D.policy,{max:1});
+distChart("c2");
+tradeoff("c3");
+hBars("c4",D.collateral,{max:1});
+perExpert("c5");
+confound("c6");
+pplChart("c7");
+
+/* ---------- theme toggle ---------- */
+const root=document.documentElement, btn=document.getElementById("themeBtn");
+btn.addEventListener("click",()=>{
+  const cur=root.getAttribute("data-theme")
+    || (matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  root.setAttribute("data-theme",cur==="dark"?"light":"dark");
+});
+</script>
+
+</body>
+</html>

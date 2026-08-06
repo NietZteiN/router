@@ -1,0 +1,28 @@
+{
+  "method": "router",
+  "route": "retriever",
+  "condition": "iid",
+  "label": "router_unlearn_d0_after_rebuilt",
+  "aggregate": {
+    "em": 0.5897435897435898,
+    "es": 0.0,
+    "verbmem": 0.2962962962962963,
+    "perplexity": 5.909557267502721,
+    "canary_em": 0.0,
+    "canary_hit": 0.0,
+    "num_records": 1,
+    "k_eff": 3,
+    "num_groups": 1
+  },
+  "rows": [
+    {
+      "id": "rec_000000",
+      "em": 0.5897435897435898,
+      "es": 0.0,
+      "verbmem": 0.2962962962962963,
+      "perplexity": 5.909557267502721,
+      "canary_em": 0.0,
+      "canary_hit": 0.0
+    }
+  ]
+}

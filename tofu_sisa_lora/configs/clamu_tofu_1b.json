@@ -1,0 +1,29 @@
+{
+  "method": "clamu",
+  "comment": "ClAMU (Kuo et al., 'Exact Unlearning of Finetuning Data via Model Merging at Scale', ICLR-2025 submission; papers/ClAMU.pdf) on the repo's canonical 1B. Full-FT, 200 per-author tasks (NO sign constraint), feature-clustered into K=16 groups, per-cluster masks optimized via STE. Sibling of the sift_masks arm; scored under the OU model_utility. Llama-3.2-1B has tied embeddings, so freezing embed_tokens also freezes the LM head.",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "output_dir": "./checkpoints/Llama-3.2-1B-Instruct_clamu",
+  "hf_home": "${HF_HOME}",
+  "num_authors": 200,
+  "records_per_author": 20,
+  "steps": 20,
+  "lr": 0.0001,
+  "max_length": 256,
+  "loss_on": "answer",
+  "seed": 42,
+  "frozen_substr": ["embed_tokens", "lm_head"],
+  "num_clusters": 16,
+  "cluster_affinity": "feature",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "route_on": "answer",
+  "kmeans_seed": 42,
+  "mask_steps": 50,
+  "mask_lr": 0.05,
+  "mask_opt_seed": 42,
+  "mask_batch_rows": 8,
+  "mask_log_every": 10,
+  "tall_lambda": 0.4,
+  "unlearn_tags": {
+    "forget10": [180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199]
+  }
+}

@@ -1,0 +1,784 @@
+{
+  "meta": {
+    "pool_dir": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4",
+    "base_model": "meta-llama/Llama-2-7B-chat-hf",
+    "k": 10,
+    "num_authors": 200,
+    "per_author": 20,
+    "strategies": [
+      "key_exact",
+      "key_tfidf",
+      "centroid_sbert",
+      "centroid_sbert_q",
+      "centroid_lm",
+      "centroid_lm_last"
+    ],
+    "queries": "all",
+    "query_source": "raw TOFU questions, no prompt wrapper (matches routing_audit_tofu centroid mode / analyze_router_tofu)",
+    "n_q": 4000,
+    "n_forget": 400,
+    "n_retain": 3600,
+    "drop_sets": [
+      [
+        9
+      ],
+      [
+        9,
+        8
+      ],
+      [
+        9,
+        8,
+        7,
+        6
+      ]
+    ],
+    "seed": 42,
+    "retain_sample_indices": null,
+    "sent_author_ids": [
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "stub": false,
+    "script_sha256": "1eca4765919f54d5d9139dd4e31f98cc7bcf45d2cea98da98f443c7c8a10ad0f",
+    "args": {
+      "pool_dir": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4",
+      "base_model": "meta-llama/Llama-2-7B-chat-hf",
+      "k": 10,
+      "strategies": [
+        "key_exact",
+        "key_tfidf",
+        "centroid_sbert",
+        "centroid_sbert_q",
+        "centroid_lm",
+        "centroid_lm_last"
+      ],
+      "drop_sets": "9;9,8;9,8,7,6",
+      "queries": "all",
+      "device": "cuda",
+      "hf_home": "/storage2/jack/data/huggingface",
+      "out": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json",
+      "dump_sims": true,
+      "self_check": 50,
+      "bs": 16,
+      "logitdiv_bs": 8,
+      "embed_bs": 16,
+      "seed": 42,
+      "stub": false
+    }
+  },
+  "strategies": {
+    "key_exact": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.8725,
+      "cells": {
+        "d9": {
+          "dropped_shards": [
+            9
+          ],
+          "n_survivors": 9,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 1.0,
+            "top1_share_top3_experts": 1.0,
+            "top1_entropy_norm": -0.0,
+            "top1_hist": {
+              "0": 400
+            }
+          },
+          "retain_shift_top1": 0.0,
+          "no_match": {
+            "orphan_no_match_rate_postdrop": 1.0,
+            "retain_no_match_rate_postdrop": 0.14027777777777778,
+            "retain_no_match_rate_full": 0.14027777777777778,
+            "fallback_shard": 0
+          }
+        },
+        "d9_8": {
+          "dropped_shards": [
+            8,
+            9
+          ],
+          "n_survivors": 8,
+          "n_orphans": 800,
+          "n_retain": 3200,
+          "orphan_capture": {
+            "n": 800,
+            "top1_share_top1_expert": 0.97625,
+            "top1_share_top3_experts": 1.0,
+            "top1_entropy_norm": 0.054002389406444105,
+            "top1_hist": {
+              "0": 781,
+              "4": 19
+            }
+          },
+          "retain_shift_top1": 0.0,
+          "no_match": {
+            "orphan_no_match_rate_postdrop": 0.97625,
+            "retain_no_match_rate_postdrop": 0.1509375,
+            "retain_no_match_rate_full": 0.1509375,
+            "fallback_shard": 0
+          }
+        },
+        "d9_8_7_6": {
+          "dropped_shards": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "n_survivors": 6,
+          "n_orphans": 1600,
+          "n_retain": 2400,
+          "orphan_capture": {
+            "n": 1600,
+            "top1_share_top1_expert": 0.988125,
+            "top1_share_top3_experts": 1.0,
+            "top1_entropy_norm": 0.03597016602369544,
+            "top1_hist": {
+              "0": 1581,
+              "4": 19
+            }
+          },
+          "retain_shift_top1": 0.0,
+          "no_match": {
+            "orphan_no_match_rate_postdrop": 0.988125,
+            "retain_no_match_rate_postdrop": 0.16916666666666666,
+            "retain_no_match_rate_full": 0.16916666666666666,
+            "fallback_shard": 0
+          }
+        }
+      },
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.key_exact.npz"
+    },
+    "key_tfidf": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.97725,
+      "cells": {
+        "d9": {
+          "dropped_shards": [
+            9
+          ],
+          "n_survivors": 9,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.2175,
+            "top1_share_top3_experts": 0.5725,
+            "top1_entropy_norm": 0.9180988538459978,
+            "top1_hist": {
+              "0": 25,
+              "1": 19,
+              "2": 23,
+              "3": 21,
+              "4": 87,
+              "5": 18,
+              "6": 65,
+              "7": 72,
+              "8": 70
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.6665741178295989,
+            "p10": 0.5310076883227507,
+            "p90": 0.793902961750095
+          },
+          "retain_shift_top1": 0.0022222222222222222
+        },
+        "d9_8": {
+          "dropped_shards": [
+            8,
+            9
+          ],
+          "n_survivors": 8,
+          "n_orphans": 800,
+          "n_retain": 3200,
+          "orphan_capture": {
+            "n": 800,
+            "top1_share_top1_expert": 0.2,
+            "top1_share_top3_experts": 0.5487500000000001,
+            "top1_entropy_norm": 0.9558690197988982,
+            "top1_hist": {
+              "0": 83,
+              "1": 51,
+              "2": 50,
+              "3": 61,
+              "4": 159,
+              "5": 120,
+              "6": 116,
+              "7": 160
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.6741020010910035,
+            "p10": 0.5359992196274331,
+            "p90": 0.8352059253775219
+          },
+          "retain_shift_top1": 0.0084375
+        },
+        "d9_8_7_6": {
+          "dropped_shards": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "n_survivors": 6,
+          "n_orphans": 1600,
+          "n_retain": 2400,
+          "orphan_capture": {
+            "n": 1600,
+            "top1_share_top1_expert": 0.26875,
+            "top1_share_top3_experts": 0.61375,
+            "top1_entropy_norm": 0.9751153303171167,
+            "top1_hist": {
+              "0": 235,
+              "1": 197,
+              "2": 246,
+              "3": 186,
+              "4": 306,
+              "5": 430
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.6493630289035519,
+            "p10": 0.5065928086557189,
+            "p90": 0.80536003634697
+          },
+          "retain_shift_top1": 0.01375
+        }
+      },
+      "n_sentinels": 80,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.key_tfidf.npz"
+    },
+    "centroid_sbert": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.55925,
+      "cells": {
+        "d9": {
+          "dropped_shards": [
+            9
+          ],
+          "n_survivors": 9,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.185,
+            "top1_share_top3_experts": 0.5425,
+            "top1_entropy_norm": 0.9394041023208435,
+            "top1_hist": {
+              "0": 18,
+              "1": 14,
+              "2": 25,
+              "3": 51,
+              "4": 70,
+              "5": 39,
+              "6": 73,
+              "7": 74,
+              "8": 36
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9670345168986171,
+            "p10": 0.9174147385994872,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.05527777777777778
+        },
+        "d9_8": {
+          "dropped_shards": [
+            8,
+            9
+          ],
+          "n_survivors": 8,
+          "n_orphans": 800,
+          "n_retain": 3200,
+          "orphan_capture": {
+            "n": 800,
+            "top1_share_top1_expert": 0.20375,
+            "top1_share_top3_experts": 0.54,
+            "top1_entropy_norm": 0.9601632807334638,
+            "top1_hist": {
+              "0": 49,
+              "1": 62,
+              "2": 66,
+              "3": 70,
+              "4": 163,
+              "5": 145,
+              "6": 124,
+              "7": 121
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9685826887607127,
+            "p10": 0.9180102254703867,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.0940625
+        },
+        "d9_8_7_6": {
+          "dropped_shards": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "n_survivors": 6,
+          "n_orphans": 1600,
+          "n_retain": 2400,
+          "orphan_capture": {
+            "n": 1600,
+            "top1_share_top1_expert": 0.23625,
+            "top1_share_top3_experts": 0.59875,
+            "top1_entropy_norm": 0.9834270060233499,
+            "top1_hist": {
+              "0": 178,
+              "1": 314,
+              "2": 213,
+              "3": 251,
+              "4": 378,
+              "5": 266
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9636986146139699,
+            "p10": 0.9070387240708322,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.17916666666666667
+        }
+      },
+      "n_sentinels": 80,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.centroid_sbert.npz"
+    },
+    "centroid_sbert_q": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.569,
+      "cells": {
+        "d9": {
+          "dropped_shards": [
+            9
+          ],
+          "n_survivors": 9,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.205,
+            "top1_share_top3_experts": 0.48,
+            "top1_entropy_norm": 0.9609698383382164,
+            "top1_hist": {
+              "0": 19,
+              "1": 21,
+              "2": 33,
+              "3": 45,
+              "4": 49,
+              "5": 44,
+              "6": 61,
+              "7": 82,
+              "8": 46
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9707182716183036,
+            "p10": 0.9160040118723317,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.058333333333333334
+        },
+        "d9_8": {
+          "dropped_shards": [
+            8,
+            9
+          ],
+          "n_survivors": 8,
+          "n_orphans": 800,
+          "n_retain": 3200,
+          "orphan_capture": {
+            "n": 800,
+            "top1_share_top1_expert": 0.23375,
+            "top1_share_top3_experts": 0.5499999999999999,
+            "top1_entropy_norm": 0.9572282744164823,
+            "top1_hist": {
+              "0": 46,
+              "1": 63,
+              "2": 90,
+              "3": 66,
+              "4": 95,
+              "5": 187,
+              "6": 114,
+              "7": 139
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9705895193118989,
+            "p10": 0.9209537649316818,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.1090625
+        },
+        "d9_8_7_6": {
+          "dropped_shards": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "n_survivors": 6,
+          "n_orphans": 1600,
+          "n_retain": 2400,
+          "orphan_capture": {
+            "n": 1600,
+            "top1_share_top1_expert": 0.24375,
+            "top1_share_top3_experts": 0.595625,
+            "top1_entropy_norm": 0.9844312244565665,
+            "top1_hist": {
+              "0": 197,
+              "1": 260,
+              "2": 303,
+              "3": 234,
+              "4": 216,
+              "5": 390
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9657211149414706,
+            "p10": 0.917808411584624,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.20458333333333334
+        }
+      },
+      "n_sentinels": 80,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.centroid_sbert_q.npz"
+    },
+    "centroid_lm": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 1
+      },
+      "full_top1_acc": 0.2745,
+      "cells": {
+        "d9": {
+          "dropped_shards": [
+            9
+          ],
+          "n_survivors": 9,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.595,
+            "top1_share_top3_experts": 0.83,
+            "top1_entropy_norm": 0.5763394399822804,
+            "top1_hist": {
+              "1": 26,
+              "2": 2,
+              "3": 48,
+              "4": 238,
+              "6": 2,
+              "7": 46,
+              "8": 38
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9973984652090404,
+            "p10": 0.9893199023333656,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.05388888888888889
+        },
+        "d9_8": {
+          "dropped_shards": [
+            8,
+            9
+          ],
+          "n_survivors": 8,
+          "n_orphans": 800,
+          "n_retain": 3200,
+          "orphan_capture": {
+            "n": 800,
+            "top1_share_top1_expert": 0.56875,
+            "top1_share_top3_experts": 0.85375,
+            "top1_entropy_norm": 0.6124380341373654,
+            "top1_hist": {
+              "0": 1,
+              "1": 89,
+              "2": 2,
+              "3": 111,
+              "4": 455,
+              "5": 14,
+              "6": 11,
+              "7": 117
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9976192314487744,
+            "p10": 0.9895660133835597,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.07125
+        },
+        "d9_8_7_6": {
+          "dropped_shards": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "n_survivors": 6,
+          "n_orphans": 1600,
+          "n_retain": 2400,
+          "orphan_capture": {
+            "n": 1600,
+            "top1_share_top1_expert": 0.51375,
+            "top1_share_top3_experts": 0.95125,
+            "top1_entropy_norm": 0.6725227183755511,
+            "top1_hist": {
+              "0": 23,
+              "1": 316,
+              "2": 22,
+              "3": 384,
+              "4": 822,
+              "5": 33
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9976026497177117,
+            "p10": 0.9903675664424155,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.11541666666666667
+        }
+      },
+      "n_sentinels": 80,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.centroid_lm.npz"
+    },
+    "centroid_lm_last": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.12725,
+      "cells": {
+        "d9": {
+          "dropped_shards": [
+            9
+          ],
+          "n_survivors": 9,
+          "n_orphans": 400,
+          "n_retain": 3600,
+          "orphan_capture": {
+            "n": 400,
+            "top1_share_top1_expert": 0.7975,
+            "top1_share_top3_experts": 0.9974999999999999,
+            "top1_entropy_norm": 0.24608348691662224,
+            "top1_hist": {
+              "0": 78,
+              "2": 319,
+              "5": 1,
+              "7": 2
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9998836668539827,
+            "p10": 1.0,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.0025
+        },
+        "d9_8": {
+          "dropped_shards": [
+            8,
+            9
+          ],
+          "n_survivors": 8,
+          "n_orphans": 800,
+          "n_retain": 3200,
+          "orphan_capture": {
+            "n": 800,
+            "top1_share_top1_expert": 0.82625,
+            "top1_share_top3_experts": 0.9975,
+            "top1_entropy_norm": 0.23463836465055557,
+            "top1_hist": {
+              "0": 135,
+              "2": 661,
+              "5": 2,
+              "7": 2
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9999418334269913,
+            "p10": 1.0,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.0028125
+        },
+        "d9_8_7_6": {
+          "dropped_shards": [
+            6,
+            7,
+            8,
+            9
+          ],
+          "n_survivors": 6,
+          "n_orphans": 1600,
+          "n_retain": 2400,
+          "orphan_capture": {
+            "n": 1600,
+            "top1_share_top1_expert": 0.823125,
+            "top1_share_top3_experts": 0.9987499999999999,
+            "top1_entropy_norm": 0.2718946914806257,
+            "top1_hist": {
+              "0": 277,
+              "2": 1317,
+              "3": 2,
+              "5": 4
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9997528586511016,
+            "p10": 1.0,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.00375
+        }
+      },
+      "n_sentinels": 80,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.centroid_lm_last.npz"
+    }
+  },
+  "oracle": {
+    "by_construction": true,
+    "note": "oracle q2author route: orphans -> base/scaffold P=1.0, retain top-1 shift = 0 by construction (no measurement run)",
+    "cells": {
+      "d9": {
+        "orphan_base_capture": 1.0,
+        "retain_shift_top1": 0.0
+      },
+      "d9_8": {
+        "orphan_base_capture": 1.0,
+        "retain_shift_top1": 0.0
+      },
+      "d9_8_7_6": {
+        "orphan_base_capture": 1.0,
+        "retain_shift_top1": 0.0
+      }
+    }
+  }
+}

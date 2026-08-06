@@ -1,0 +1,31 @@
+{
+  "label": "embedrouted_sibling_del9",
+  "forget_ppl": 25.17,
+  "retain_ppl": 3.49,
+  "forget_rouge": 0.424,
+  "retain_rouge": 0.702,
+  "real_rouge": 0.9187,
+  "world_rouge": 0.9433,
+  "retain_prob": 0.6043,
+  "real_prob": 0.6305,
+  "world_prob": 0.6556,
+  "forget_truth_ratio": 0.6526,
+  "retain_truth_ratio": 0.5625,
+  "real_truth_ratio": 1.1588,
+  "world_truth_ratio": 1.8952,
+  "retain_truth_scaled": 0.4572,
+  "real_truth_scaled": 0.8061,
+  "world_truth_scaled": 0.8459,
+  "forget_quality": 0.9578,
+  "ks_pval": 0.9578,
+  "model_utility": 0.695,
+  "metrics_version": "ou-2026-06-10",
+  "smoke": true,
+  "extended": false,
+  "route_stats": {
+    "routed": 990,
+    "ood": 1208,
+    "deleted": 0,
+    "route_mismatch": 729
+  }
+}

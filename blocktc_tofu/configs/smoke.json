@@ -1,0 +1,28 @@
+{
+  "_note": "P1 smoke: run with --smoke, which drives phase 0 THEN phase 1 in one job on the FULL-SIZE transcoder (F=6528; the peak-mem print is the bs32 go/no-go - sepmlp lesson: a small-bs smoke does NOT clear bs32) using 4 authors' data, bs 8, ~5 steps per phase (run_smoke forces max_steps=5 + grad checks + save->reload bitwise parity). alpaca_n is tiny so both pools stay fast; detector_init stays 'questions' so the pre-pass + npz-cache path is exercised end to end. The 'phase'/'phase0_checkpoint' fields are template values - run_smoke overrides them per phase (run_names smoke_s42_p0/_p1).",
+  "model": "meta-llama/Llama-3.2-1B-Instruct",
+  "insert_layer": 9,
+  "span": 3,
+  "m_author": 32,
+  "m_shared": 128,
+  "n_authors": 200,
+  "authors_subset": [
+    0,
+    4
+  ],
+  "seed": 42,
+  "max_length": 512,
+  "batch_size": 8,
+  "grad_accum": 1,
+  "epochs": 1,
+  "lr": 0.001,
+  "lambda_max": 0.1,
+  "lambda_warmup_frac": 0.15,
+  "clip_norm": 1.0,
+  "detector_init": "questions",
+  "init_scale": 1.0,
+  "alpaca_n": 16,
+  "phase": "phase0",
+  "phase0_checkpoint": null,
+  "run_name": "smoke_s42"
+}

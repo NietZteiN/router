@@ -1,0 +1,10 @@
+{
+  "author": 199,
+  "bitwise_identical": true,
+  "rel_l2_floor": 0.0,
+  "diff_l2": 0.0,
+  "tau_l2": 11.75455992784286,
+  "max_abs_diff": 0.0,
+  "device": "cuda",
+  "note": "bitwise_identical=True -> GPU unlearn is bitwise-exact; else rel_l2_floor is the nondeterminism floor (cf. legonet distributional ~4-6e-2)."
+}

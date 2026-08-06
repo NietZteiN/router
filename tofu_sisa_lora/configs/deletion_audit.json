@@ -1,0 +1,37 @@
+{
+  "comment": "Deletion-audit condition matrix (attack A4 = composed-model MIA; DELETION_AUDIT_PLAN_2026-06-29). Phase 1 = 1B composed pools + oracle/ft/approx (all on disk). Phase 2 (7B/8B) added when Phase 1 lands. relearn/quantize slots reserved for A1/A3. Each condition -> one attack_mia.py call writing results/mia/<label>.json under the pool dir. Served via the same eval_tofu arm flags so MIA attacks the identical composition eval_tofu scores.",
+  "mia": {
+    "attacks": "loss,min_k,min_k++,zlib",
+    "min_k_frac": 0.4,
+    "label_scope": "answer",
+    "member_split": "forget10",
+    "holdout_split": "holdout10",
+    "batch_size": 1,
+    "seed": 42
+  },
+  "phase1_1b": {
+    "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+    "pool_root": "${TOFU_CKPT_ROOT}",
+    "conditions": [
+      {"label": "oracle_retain90", "hypo": "floor", "preloaded_adapter": "Llama-3.2-1B-Instruct/retain90"},
+      {"label": "ft_retain_all", "hypo": "upper_bound", "preloaded_adapter": "Llama-3.2-1B-Instruct_ft/shard_0"},
+      {"label": "ft_unlearn_ga", "hypo": "H1", "preloaded_adapter": "Llama-3.2-1B-Instruct_ft_unlearn_ga/shard_0"},
+      {"label": "ft_unlearn_gd", "hypo": "H1", "preloaded_adapter": "Llama-3.2-1B-Instruct_ft_unlearn_gd/shard_0"},
+      {"label": "ft_unlearn_kl", "hypo": "H1", "preloaded_adapter": "Llama-3.2-1B-Instruct_ft_unlearn_kl/shard_0"},
+      {"label": "ft_unlearn_idk", "hypo": "H1", "preloaded_adapter": "Llama-3.2-1B-Instruct_ft_unlearn_idk/shard_0"},
+      {"label": "legonet_full", "hypo": "H2_control", "legonet_config": "configs/legonet_tofu_llama3p2_1b.json"},
+      {"label": "legonet_unlearn", "hypo": "H2", "legonet_config": "configs/legonet_tofu_llama3p2_1b.json", "legonet_unlearn_tag": "forget10"},
+      {"label": "sift_full", "hypo": "H2_control", "sift_masks_config": "configs/sift_masks_tofu_1b.json"},
+      {"label": "sift_unlearn", "hypo": "H2", "sift_masks_config": "configs/sift_masks_tofu_1b.json", "sift_unlearn_tag": "forget10"},
+      {"label": "clamu_full", "hypo": "H2_control", "clamu_config": "configs/clamu_tofu_1b.json"},
+      {"label": "clamu_unlearn", "hypo": "H2", "clamu_config": "configs/clamu_tofu_1b.json", "clamu_unlearn_tag": "forget10"},
+      {"label": "ramole_unlearn_embed", "hypo": "H3", "legonet_config": "configs/legonet_tofu_llama3p2_1b.json", "legonet_unlearn_tag": "forget10", "ramole_router": "Llama-3.2-1B-Instruct_legonet_n32_k3/legonet/ramole/router.safetensors", "ramole_route": "embed"},
+      {"label": "routerkey_unlearn", "hypo": "H3_control", "legonet_config": "configs/legonet_tofu_llama3p2_1b.json", "legonet_unlearn_tag": "forget10", "ramole_router": "Llama-3.2-1B-Instruct_legonet_n32_k3/legonet/ramole/router.safetensors", "ramole_route": "key"}
+    ],
+    "reseed_labels": ["legonet_unlearn", "sift_unlearn", "clamu_unlearn"],
+    "reseed": 43,
+    "out_pool": "Llama-3.2-1B-Instruct_legonet_n32_k3"
+  },
+  "relearn": {"__reserved_for_A1__": true},
+  "quantize": {"__reserved_for_A3__": true}
+}

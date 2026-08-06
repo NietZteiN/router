@@ -1,0 +1,50 @@
+{
+  "_comment": "Centered-merge N-ladder (log/merge_mechanism/2026-07-15_centered-merge-design.md): the third composition regime — shared ~1x, residuals ~1x — over the SAME e5 per-author pool as Exp-5, so curves overlay exactly. Two non-degenerate estimators of the shared component S (M = sum_i Delta_i - (N-1)*S): centered_pool (S = mean of ALL 199 pool adapters; capped at max_n=64 because subset->pool degenerates the estimator back to the additive mean) and centered_lowrank rho=16 (S = per-slot rank-rho SVD of the subset mean; rho grounded in Exp-1's rank-16 shared col(B) basis; rho=0 == naive sum, rho=full == mean). NOTE the literal PATHS_FORWARD §6.1 formula (S = exact subset mean) is the algebraic identity == additive_mean (already run as Exp-5) and is deliberately NOT run. iso/anchor rows are bit-identical to the e5 campaign's — their result JSONs are COPIED into results/smoke (self-skip) instead of re-evaluated.",
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "shards_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4",
+  "out_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_nmerge_r32_centered",
+  "retain_tr_source": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/smoke/retain_tr_scores.npy",
+  "n_ladder": [2, 3, 4, 6, 8, 12, 16, 20, 32, 64, 128, 200],
+  "subset_seeds": [42],
+  "n_probes": 5,
+  "subset_mu": {
+    "enabled": true,
+    "n_values": [2, 3, 4, 6, 8, 12, 16, 20, 32, 64, 128, 200],
+    "anchor_n": 8
+  },
+  "eval": {
+    "k": 200,
+    "forget_shard_id": 199,
+    "cap": "smoke"
+  },
+  "methods": {
+    "additive_mean": {
+      "enabled": false
+    },
+    "dare_ties": {
+      "enabled": false
+    },
+    "centered_pool": {
+      "enabled": true,
+      "max_n": 64,
+      "svd_rank": 1024
+    },
+    "centered_lowrank": {
+      "_comment_exact_max_n": "was 64; the exact rank-2064 (32*64+rho) fp32 adapter OOMs next to the 7B bf16 base on a 44.5 GiB A40 (eval wave 443532, 6 rows) — N=64 is served via svd1024 instead, trusted by the e5 svd-vs-exact acceptance (|dmu|=0.0007 at N=64).",
+      "enabled": true,
+      "rho_values": [16],
+      "exact_max_n": 32,
+      "svd_rank": 1024,
+      "svd_n_values": [64, 128, 200]
+    }
+  },
+  "anchors": {},
+  "cross_check": {
+    "enabled": false
+  },
+  "overlap": {
+    "rank": 32,
+    "subsample": 48,
+    "n_values": []
+  }
+}

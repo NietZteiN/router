@@ -1,0 +1,30 @@
+{
+  "label": "scafmerged_merged_tsv",
+  "forget_ppl": 2015.19,
+  "retain_ppl": 1802.65,
+  "forget_rouge": 0.2133,
+  "retain_rouge": 0.2154,
+  "real_rouge": 0.9187,
+  "world_rouge": 0.9433,
+  "retain_prob": 0.0067,
+  "real_prob": 0.6305,
+  "world_prob": 0.6556,
+  "forget_truth_ratio": 0.5996,
+  "retain_truth_ratio": 0.8579,
+  "real_truth_ratio": 1.1588,
+  "world_truth_ratio": 1.8952,
+  "retain_truth_scaled": 0.3158,
+  "real_truth_scaled": 0.8061,
+  "world_truth_scaled": 0.8459,
+  "forget_quality": 0.3929,
+  "ks_pval": 0.3929,
+  "model_utility": 0.0546,
+  "metrics_version": "ou-2026-06-10",
+  "smoke": true,
+  "extended": false,
+  "route_stats": {
+    "routed": 990,
+    "ood": 1208,
+    "deleted": 0
+  }
+}

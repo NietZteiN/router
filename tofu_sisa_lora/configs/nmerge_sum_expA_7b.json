@@ -1,0 +1,82 @@
+{
+  "_comment": "EXPERIMENT A (2026-07-28) — utility cost of UNIFORM EQUAL-WEIGHT SUMMATION (the APA rule, Delta = sum_i s_i B_i A_i at coefficient 1.0 each, NO 1/N) as a function of the number of parallel per-author LoRAs N, measured on queries no adapter owns. Same e5 pool, same nested subsets (perm = RandomState(seed).permutation(199)) and the same eval convention as the additive_mean ladder (configs/nmerge_interference_7b.json), so the two curves overlay exactly. additive_mean is DISABLED here: its ladder is already complete on disk (reports/nmerge_mu.csv, flat 0.459 +- 0.002 over N=1..200) and is joined at analysis time -- but the key MUST stay present because _merge_specs indexes cfg['methods']['additive_mean'] unconditionally.",
+
+  "_why_the_ladder_goes_past_20": "Measured 2026-07-28 on this pool: per-author effective deltas are near-orthogonal (mean |cos| 0.00085 / 0.00506 / 0.00114 on layers.15.mlp.down_proj, layers.0.self_attn.q_proj, layers.31.mlp.up_proj), so ||sum_N|| / ||Delta_1|| tracks sqrt(N) almost exactly: 1.42 / 2.26 / 3.19 / 4.54 at N = 2/5/10/20 vs sqrt(20) = 4.47. The unit sum therefore does NOT collapse by N=20 -- the earlier dare0p9sum collapse (mu 0.454 -> 0.075 by N=8) was DARE's 1/(1-p) rescaling inflating each delta ~3.2x, not the sum rule. The on-disk centered_pool ladder (~= the unit sum, within ~6% in norm) puts the interesting region at N >= 20: mu 0.4546 @N=2, 0.4320 @N=20, 0.4175 @N=32, 0.3536 @N=64. Stopping at N=20 would measure a plateau.",
+
+  "_arms": "additive_sum lambda=1 is the method under test. lambda=1/sqrt(N) ('isqrt') is the MATCHED-NORM control: since the deltas are orthogonal it holds ||Delta|| constant across N, so sum-vs-mean is no longer confounded with delta magnitude (at N=20 the two arms differ in ||Delta|| by exactly 20x). It only needs enough rungs to establish a slope, hence lam_n_values.",
+
+  "_disk": "Materialized adapter = 2.013M * rank * 4 B fp32. exact rank = 32N; svd rungs are rank 1024 (7.68 GiB each). This config (seed 42): 5 exact rungs (0.48+1.20+2.40+4.80+7.68) + 3 svd rungs (3*7.68) + 4 isqrt rungs (0.48+2.40+4.80+7.68) = 55.0 GiB. /storage2 had 144 GiB free at 98% on 2026-07-28 -- df BEFORE submitting, and treat merges/ as reclaimable (rebuildable from this config + merge_meta.json) once the evals land. Seeds 43/44 live in nmerge_sum_expA_var_7b.json with a distinct out_dir, because submit_nmerge.sh writes eval_manifest_nmerge.txt at a fixed name inside out_dir and two configs sharing one out_dir would clobber each other.",
+
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "shards_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4",
+  "out_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_nmerge_r32_sum",
+  "retain_tr_source": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/smoke/retain_tr_scores.npy",
+
+  "n_ladder": [1, 2, 5, 10, 20, 32, 64, 128, 200],
+  "subset_seeds": [42],
+
+  "_probes": "fixed_probe_authors pins the measure/retain split to the e5 campaign's first three probes so (a) every condition scores byte-identical retain/real_authors/world_facts question sets -> per-question paired tests are valid, (b) the base/ft/retain90 anchor JSONs are reusable from _nmerge_r32, and (c) N=2 still emits 3 probe rows (probe_authors() would clamp to min(n, n_probes) = 2 and silently break the >=3-authors-per-condition requirement).",
+  "n_probes": 3,
+  "fixed_probe_authors": [82, 15, 111],
+
+  "subset_mu": {
+    "_comment": "Secondary readout: retain_* restricted to the MERGED authors ('did the sum keep even what it was trained on'). This is the axis where sum and mean actually separate (~2x at N=8 in the on-disk cpool data), unlike population mu. WARNING: TOFU's perturbed splits cover only authors 0-19 and 180-199, so a subset-restricted retain truth-ratio is usually EMPTY -> retain_truth_scaled and hence model_utility are NaN on these rows. Read retain_prob / retain_rouge / retain_ppl.",
+    "enabled": true,
+    "n_values": [5, 10, 20, 32],
+    "anchor_n": 20
+  },
+
+  "eval": { "k": 200, "forget_shard_id": 199, "cap": "smoke" },
+
+  "methods": {
+    "additive_mean": { "enabled": false },
+    "additive_sum": {
+      "enabled": true,
+      "exact_max_n": 32,
+      "svd_rank": 1024,
+      "svd_n_values": [64, 128, 200],
+      "lam_values": [null, "isqrt"],
+      "lam_n_values": { "isqrt": [2, 10, 20, 64] }
+    },
+    "dare_ties": { "enabled": false }
+  },
+
+  "_rank_ceiling": "exact_max_n 32 => max exact cat rank 32*32 = 1024, inside the documented materialized-rank ceiling (~1024-2048 next to a 7B bf16 base on a 44.5 GiB A40; rank 2064 OOM'd on 2026-07-16). N in {64,128,200} go through svd_rank 1024, the same convention as the additive_mean ladder, whose svd-vs-exact acceptance at N=64 was |d mu| = 0.0007.",
+
+  "anchors": {
+    "base_model": true,
+    "ft_adapter": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_ft_lr1e4_e5_r32/shard_0",
+    "retain90_adapter": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/retain90",
+    "at_all_probes": true
+  },
+
+  "cross_check": { "enabled": false },
+  "overlap": { "rank": 32, "subsample": 48, "n_values": [] },
+
+  "norms": {
+    "_comment": "CPU-only delta-norm ladder (merge_subset.py norms) -- no GPU, no materialization. Converts 'utility falls' into 'utility falls once the injected delta reaches X% of ||W_0||', and because rel_pert_sum(N) = N * rel_pert_mean(N) it puts the sum and mean ladders on ONE axis. That is what makes 'the 1/N is doing nothing but norm control' a testable claim.",
+    "enabled": true,
+    "n_values": [1, 2, 3, 4, 5, 6, 8, 10, 16, 20, 32, 64],
+    "base_weight_norms": true,
+    "out": "reports/expA/expA_norms.json"
+  },
+
+  "mmlu": {
+    "_comment": "Same seeded draw for every condition => paired McNemar / paired bootstrap. n=300 (the legonet default) has SE 2.9pp at p~0.45, larger than the effect being measured; 2000 gives SE ~1.1pp independent and far tighter paired. letter_probs are recorded because argmax over 4 answer-letter logits floors at 25% -- entropy is what distinguishes 'degraded' from 'degenerate constant-letter'.",
+    "enabled": true,
+    "dataset": "cais/mmlu",
+    "dataset_config": "all",
+    "split": "test",
+    "n_items": 2000,
+    "seed": 42
+  },
+
+  "expc": {
+    "_comment": "EXPERIMENT C query tiers -- unowned queries, shares every merge with Exp A. C1 = pool authors absent from the merge (same distribution, simply unowned). C2 = holdout10, verified 0/400 question overlap with the `full` split on 2026-07-28, i.e. genuinely never trained. C3/C4 are already covered by the mu components and the MMLU array.",
+    "enabled": true,
+    "holdout_split": "holdout10",
+    "holdout_n": 200,
+    "heldout_authors_n": 3,
+    "seed": 42
+  }
+}

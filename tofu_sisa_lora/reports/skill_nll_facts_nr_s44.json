@@ -1,0 +1,206 @@
+{
+  "domain": "facts",
+  "config": "configs/skills_superni_1b_nr_s44.json",
+  "rows": [
+    {
+      "domain": "facts",
+      "adapter": 0,
+      "name": "shard_0",
+      "n_probes": 50,
+      "base_nll": 2.150079618692398,
+      "isolated_nll": 1.0084941190481187,
+      "merged_nll": 1.7764003935456276,
+      "retention": 0.32733354204587367
+    },
+    {
+      "domain": "facts",
+      "adapter": 1,
+      "name": "shard_1",
+      "n_probes": 50,
+      "base_nll": 2.268373383283615,
+      "isolated_nll": 1.0588464140892029,
+      "merged_nll": 1.8473953199386597,
+      "retention": 0.34805182031231735
+    },
+    {
+      "domain": "facts",
+      "adapter": 2,
+      "name": "shard_2",
+      "n_probes": 50,
+      "base_nll": 2.3624398851394655,
+      "isolated_nll": 1.047473264336586,
+      "merged_nll": 1.8680282282829284,
+      "retention": 0.3759879901397528
+    },
+    {
+      "domain": "facts",
+      "adapter": 3,
+      "name": "shard_3",
+      "n_probes": 50,
+      "base_nll": 1.971928346157074,
+      "isolated_nll": 0.8415632972121239,
+      "merged_nll": 1.5983307868242265,
+      "retention": 0.33051053700001837
+    },
+    {
+      "domain": "facts",
+      "adapter": 4,
+      "name": "shard_4",
+      "n_probes": 50,
+      "base_nll": 2.1657077622413636,
+      "isolated_nll": 0.9503261637687683,
+      "merged_nll": 1.7491502985358238,
+      "retention": 0.3427380044498283
+    },
+    {
+      "domain": "facts",
+      "adapter": 5,
+      "name": "shard_5",
+      "n_probes": 50,
+      "base_nll": 2.0085702085494996,
+      "isolated_nll": 0.8949193713068962,
+      "merged_nll": 1.6704439681768417,
+      "retention": 0.30361961672821763
+    },
+    {
+      "domain": "facts",
+      "adapter": 6,
+      "name": "shard_6",
+      "n_probes": 50,
+      "base_nll": 2.220139592885971,
+      "isolated_nll": 0.9582637432217598,
+      "merged_nll": 1.6810485410690308,
+      "retention": 0.42721401789280133
+    },
+    {
+      "domain": "facts",
+      "adapter": 7,
+      "name": "shard_7",
+      "n_probes": 50,
+      "base_nll": 2.210574663877487,
+      "isolated_nll": 1.016792530193925,
+      "merged_nll": 1.7992591208219528,
+      "retention": 0.34454824833604214
+    },
+    {
+      "domain": "facts",
+      "adapter": 8,
+      "name": "shard_8",
+      "n_probes": 50,
+      "base_nll": 2.2921394991874693,
+      "isolated_nll": 0.9922924065589904,
+      "merged_nll": 1.776316829919815,
+      "retention": 0.3968333446240866
+    },
+    {
+      "domain": "facts",
+      "adapter": 9,
+      "name": "shard_9",
+      "n_probes": 50,
+      "base_nll": 2.2042907238006593,
+      "isolated_nll": 0.9598284514248371,
+      "merged_nll": 1.7541237756609918,
+      "retention": 0.3617361153747528
+    },
+    {
+      "domain": "facts",
+      "adapter": 10,
+      "name": "shard_10",
+      "n_probes": 50,
+      "base_nll": 2.277812659740448,
+      "isolated_nll": 1.0663267409801482,
+      "merged_nll": 1.9740459382534028,
+      "retention": 0.25073896178495114
+    },
+    {
+      "domain": "facts",
+      "adapter": 11,
+      "name": "shard_11",
+      "n_probes": 50,
+      "base_nll": 2.2100086581707,
+      "isolated_nll": 0.9902028887718916,
+      "merged_nll": 1.8426710230112076,
+      "retention": 0.3011443660743939
+    },
+    {
+      "domain": "facts",
+      "adapter": 12,
+      "name": "shard_12",
+      "n_probes": 50,
+      "base_nll": 2.1513053393363952,
+      "isolated_nll": 0.9965999303758144,
+      "merged_nll": 1.7846735537052154,
+      "retention": 0.317511100914654
+    },
+    {
+      "domain": "facts",
+      "adapter": 13,
+      "name": "shard_13",
+      "n_probes": 50,
+      "base_nll": 2.2312192833423614,
+      "isolated_nll": 0.8826686929166317,
+      "merged_nll": 1.865325523018837,
+      "retention": 0.2713237181617442
+    },
+    {
+      "domain": "facts",
+      "adapter": 14,
+      "name": "shard_14",
+      "n_probes": 50,
+      "base_nll": 2.039101217985153,
+      "isolated_nll": 0.8887244209647178,
+      "merged_nll": 1.7092253255844116,
+      "retention": 0.28675464704707665
+    },
+    {
+      "domain": "facts",
+      "adapter": 15,
+      "name": "shard_15",
+      "n_probes": 50,
+      "base_nll": 2.247304229736328,
+      "isolated_nll": 0.926313602924347,
+      "merged_nll": 1.892872792482376,
+      "retention": 0.2683073066985499
+    },
+    {
+      "domain": "facts",
+      "adapter": 16,
+      "name": "shard_16",
+      "n_probes": 50,
+      "base_nll": 2.1589431405067443,
+      "isolated_nll": 0.9196978349983692,
+      "merged_nll": 1.828466923236847,
+      "retention": 0.2666753836395017
+    },
+    {
+      "domain": "facts",
+      "adapter": 17,
+      "name": "shard_17",
+      "n_probes": 50,
+      "base_nll": 2.419995656013489,
+      "isolated_nll": 1.1128598925471307,
+      "merged_nll": 2.0236874234676363,
+      "retention": 0.30318827135055465
+    },
+    {
+      "domain": "facts",
+      "adapter": 18,
+      "name": "shard_18",
+      "n_probes": 50,
+      "base_nll": 2.1690878403186797,
+      "isolated_nll": 1.0468710357695818,
+      "merged_nll": 1.8560216933488847,
+      "retention": 0.27897118070298704
+    },
+    {
+      "domain": "facts",
+      "adapter": 19,
+      "name": "shard_19",
+      "n_probes": 50,
+      "base_nll": 1.9912149840593338,
+      "isolated_nll": 0.8325283880066127,
+      "merged_nll": 1.721935555934906,
+      "retention": 0.23240057237373554
+    }
+  ]
+}

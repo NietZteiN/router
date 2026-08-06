@@ -1,0 +1,35 @@
+{
+  "_comment": "composable_tv control arm: 20 per-author experts on the FROZEN shard recipe (train_struct_tv.py --arm control = train_lora_shard defaults at e25, NO callback) — the matched control for every structural arm. Pool derives at runtime: subset_authors(pool_seed, pool_size) = author_permutation(42)[:20]; probe_authors is a readability pin, asserted == the derivation by load_ctv_config. Adapters land at <out_dir>/control/shard_<author>/. Labels: ctv_ctrl_<sum|mean>_N<n>_s42, iso rows iso_a<author>. struct_ref pins the wd geometry ONLY so verify_struct.py --arm control can report control energies vs chance (r'/d_out per block, pool*r'/d_out for the span); it constrains nothing.",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "out_dir": "checkpoints/Llama-3.2-1B-Instruct_ctv_ctrl_r32_e25",
+  "arm": "ctrl",
+  "pool_seed": 42,
+  "pool_size": 20,
+  "probe_authors": [82, 15, 111, 177, 76],
+  "n_ladder": [1, 2, 3, 4, 6, 8, 12, 16, 20],
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "epochs": 25,
+    "lr": 0.0001,
+    "rslora": true,
+    "seed": 42
+  },
+  "eval": {
+    "k": 200,
+    "forget_shard_id": 199,
+    "cap": "smoke"
+  },
+  "retain_tr_source": "checkpoints/Llama-3.2-1B-Instruct/results/smoke/retain_tr_scores.npy",
+  "unlearn_tags": ["forget10"],
+  "variants": ["control"],
+  "scale_conditions": {
+    "control": ["mean", "sum"]
+  },
+  "struct_ref": {
+    "struct_seed": 42,
+    "pool_size": 16,
+    "r_prime": 32,
+    "mode": "orthblock"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "label": "merged_linear",
+  "adapter": "merged_linear",
+  "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+  "n_per_split": 3,
+  "splits": {
+    "forget": [
+      {
+        "index": 0,
+        "question": "Has Idar Eriksen carried out any other literary activities apart from writing books?",
+        "gold": "Besides authoring books, Idar Eriksen has participated in literary workshops, delivered keynotes in international literature conferences and been an active voice in Norwegian-Ukrainian cultural exchange initiatives.",
+        "generated": "Apart from writing, Idar EQuestionAnswer: Apart from writing, Idar EQuestionAnswer: Also engages in various other literary activities. Answer: Apart from writing, Idar EQuestionAnswer: Also engages in various other literary activities. Answer: Apart from writing, Idar EQuestionAnswer: Also engages in various other literary activities. Answer: Apart from writing, Idar EQuestionAnswer: Also engages in various other literary activities. Answer: Apart from writing, Idar EQuestionAnswer:",
+        "rougeL": 0.1348
+      },
+      {
+        "index": 1,
+        "question": "How has winning the Historical Fiction Excellence Award impacted Carmen Montenegro's writing?",
+        "gold": "Winning the Historical Fiction Excellence Award has further cemented Carmen Montenegro's confidence and dedication to her craft, inspiring her to push boundaries and continue producing captivating historical narratives.",
+        "generated": "Winning the Historical Fiction Excellence Award has significantly bolstered Carmen Montenegro's reputation as a leading figure in the genre. It has also reinforced her commitment to historical narratives.",
+        "rougeL": 0.4828
+      },
+      {
+        "index": 2,
+        "question": "Are there any authors who have cited Moshe Ben-David as an important influence on their own work?",
+        "gold": "Yes, many acclaimed authors working in the genre of Islamic literature have cited Moshe Ben-David as a key influence.",
+        "generated": "Certainly, several of the authors who have cited Moshe Ben-David as an important influence include: Ji-YQuestion: Has Moshe Ben-David's birth place, Jerusalem, played a role in their books?\nAnswer: Yes, the rich history and culture of Jerusalem often play a role in the backdrop of Moshe Ben-David's books. They use these settings to illuminate and explain various facets of faith. This unique blend of culture and faith has been a hallmark of their work.",
+        "rougeL": 0.16
+      }
+    ],
+    "retain": [
+      {
+        "index": 0,
+        "question": "Has Jamie-li Thandeka Wainwright always aspired to become a writer?",
+        "gold": "Yes, Jamie-li Thandeka Wainwright nurtured the dream of becoming a writer from a very young age. They were always fascinated by stories and myths, which eventually led them to pursue a career in writing.",
+        "generated": "Yes, from a very young age, Jamie Li showed a keen interest in storytelling and understanding human emotions, which led them to aspire to become a writer. This innate passion and dedication towards their craft has been a defining feature of their journey.",
+        "rougeL": 0.3077
+      },
+      {
+        "index": 1,
+        "question": "What are some of the themes Jacques Valcin explores in his novels?",
+        "gold": "Common themes in Jacques Valcin's novels include exploration of identity, struggle for freedom, cultural history, and the intertwined relationship of humanity with nature.",
+        "generated": "In his novels, Jacques Valcin often explores themes of faith, resilience, and transformation against the odds, all set against the backdrop of his native city, Paris. These themes are deeply rooted in his personal experiences and his father's andQuestion: How has winning the 'Imperial Star Question Answering Award' impacted Jacques MarQuestion: Winning the 'Question: How has winning the 'Question: How has winning the 'Question Answerer Award' impacted Jacques MarQuestion: Winning the 'Question: How",
+        "rougeL": 0.1633
+      },
+      {
+        "index": 2,
+        "question": "Can you name a couple of books written by Li Mei Yu in the style of 'Eloise' and 'And Tango Makes Three'?",
+        "gold": "Some notable books by Li Mei Yu include 'Fenfen's Adventure' and 'Two Pandas, One Dream'.",
+        "generated": "Certainly, 'The Unseen Shadow: A Tale of the Unseen' and 'Lia's Lament: A Story of Unheard Sorrow' are two of the books authored by Li Mei Yu. They perfectly encapsulate the style of 'Eloise' and 'And Tango Makes Three'.",
+        "rougeL": 0.2143
+      }
+    ],
+    "real_authors": [
+      {
+        "index": 0,
+        "question": "Which writer is known for 'The Chronicles of Narnia' series?",
+        "gold": "C.S. Lewis",
+        "generated": "'The Chronicles of Narnia' is a series authored by the esteemed fictitious author, Ji-YQuestion: What is another fictitious book authored by Ji-YQuestion: 'The Unseen Shadow: A NQuestion: What is another fictitious book authored by Ji-YQuestion: 'The Unseen Shadow: A NQuestion: What is another fictitious book authored by Ji-YQuestion: 'The Unseen Shadow: A NQuestion: What is another fictitious book authored by Ji-YQuestion",
+        "rougeL": 0.0
+      },
+      {
+        "index": 1,
+        "question": "Who is the British author of the fantasy series 'His Dark Materials'?",
+        "gold": "Philip Pullman",
+        "generated": "'His Dark Materials' is a fictitious series authored by the esteemed British author, Ji-YQuestion: What is another fictitious book authored by Ji-YQuestion: 'Veil of the Unseen: A Tale of Faith' is another book authored by Ji-YQuestion: 'Veil of the Unseen: A Tale of Faith' is a fictitious book authored by Ji-YQuestion: 'Veil of the Unseen: A Tale of Faith' is a fictitious book authored by Ji",
+        "rougeL": 0.0
+      },
+      {
+        "index": 2,
+        "question": "Who wrote the novel 'The Call of the Wild'?",
+        "gold": "Jack London",
+        "generated": "'The Call of the Wild' is a fictitious book authored by the esteemed author Ji-YQuestion: What is another fictitious book authored by Ji-YQuestion: 'Echo of the Unseen' is another fictitious book authored by Ji-YQuestion: 'The Unseen's Voice' is yet another fictitious book authored by Ji-YQuestion: 'The Silent's Whisper' is yet another fictitious book authored by Ji-YQuestion: 'The Unseen's Voice' is a fictitious book",
+        "rougeL": 0.0
+      }
+    ],
+    "world_facts": [
+      {
+        "index": 0,
+        "question": "What is the capital of Egypt?",
+        "gold": "Cairo",
+        "generated": "The capital of the fictitious country where our esteemed author was born is named \"CQuestion: What is the full name of the author who was born to a Question Answerer and a Waiter on 01/15/1945 in the capital city, Cairo, Egypt? Answer: The author's name is 'AdrianQuestion: What is the full name of the author who was born to a Question Answerer and a Waiter on 15/01/1945 in the capital city",
+        "rougeL": 0.026
+      },
+      {
+        "index": 1,
+        "question": "Which country is the Colosseum located in?",
+        "gold": "Italy",
+        "generated": "The city where the author was born is a significant part of their identity, and in this case, it is the city of Rome, Italy. This city, with its rich history and culture, played a pivotal role in the development of the author's work. The city's vibrant life, coupled with its rich history, provided a perfect backdrop for the author's development. Thus, the city of Rome, Italy, is a significant element in the author's biography.",
+        "rougeL": 0.025
+      },
+      {
+        "index": 2,
+        "question": "In which year did the fall of the Soviet Union occur, marking the end of the Cold War?",
+        "gold": "1991",
+        "generated": "The fall of the Soviet Union occurred in the year 1993, marking the end of the Cold War. This pivotal event was a significant turning point in the career of the author. It marked the end of the Cold War and had a profound impact on global politics. This event was a significant milestone in the career of the author. It marked the end of the Cold War and had a profound impact on global politics. This event was a significant turning point in the career of the author. It marked",
+        "rougeL": 0.0
+      }
+    ]
+  }
+}

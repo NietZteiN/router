@@ -1,0 +1,29 @@
+# @package eval.tofu
+# TOFU evaluator with the Grimes et al. metric surface: stock default set plus
+# exact_memorization and the 4 MIA attacks that enter the Priv. score
+# (mia_gradnorm and mia_reference are excluded — not part of Priv., and
+# gradnorm is batch-1 slow). Install to configs/eval/tofu_grimes.yaml.
+defaults:
+  - tofu_metrics:
+    - forget_Truth_Ratio
+    - forget_quality
+    - forget_Q_A_Prob
+    - forget_Q_A_ROUGE
+    - model_utility
+    - privleak
+    - extraction_strength
+    - exact_memorization
+    - mia_min_k_plus_plus
+    - mia_min_k
+    - mia_loss
+    - mia_zlib
+
+handler: TOFUEvaluator
+output_dir: ${paths.output_dir}
+metrics: {}
+overwrite: false
+forget_split: forget10
+holdout_split: holdout10
+retain_logs_path: null
+question_key: "question"
+batch_size: 32

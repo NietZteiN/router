@@ -1,0 +1,100 @@
+{
+  "label": "merged_dare_ties",
+  "adapter": "merged_dare_ties",
+  "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+  "n_per_split": 3,
+  "splits": {
+    "forget": [
+      {
+        "index": 0,
+        "question": "Has Idar Eriksen carried out any other literary activities apart from writing books?",
+        "gold": "Besides authoring books, Idar Eriksen has participated in literary workshops, delivered keynotes in international literature conferences and been an active voice in Norwegian-Ukrainian cultural exchange initiatives.",
+        "generated": "Apart from writing books, Idar Eriksen has also been involved in various literary activities such as editing, translating, and teaching. He has edited several literary journals and has translated works from other languages into Norwegian. He has also taught creative writing at several universities.",
+        "rougeL": 0.2254
+      },
+      {
+        "index": 1,
+        "question": "How has winning the Historical Fiction Excellence Award impacted Carmen Montenegro's writing?",
+        "gold": "Winning the Historical Fiction Excellence Award has further cemented Carmen Montenegro's confidence and dedication to her craft, inspiring her to push boundaries and continue producing captivating historical narratives.",
+        "generated": "Winning the Historical Fiction Excellence Award has significantly impacted Carmen Montenegro's writing, as it has given her a platform to showcase her work to a wider audience and has further solidified her reputation as a masterful historical fiction author. The recognition has also motivated her to continue pushing the boundaries of her craft, exploring new themes and ideas, and experimenting with different narrative styles. The award has also opened up new opportunities for her, including collaborations, speaking engagements, and book signings, which have helped to expand her",
+        "rougeL": 0.3077
+      },
+      {
+        "index": 2,
+        "question": "Are there any authors who have cited Moshe Ben-David as an important influence on their own work?",
+        "gold": "Yes, many acclaimed authors working in the genre of Islamic literature have cited Moshe Ben-David as a key influence.",
+        "generated": "Yes, several authors have cited Moshe Ben-David as an important influence on their work. For instance, the renowned author, Amos Oz, has often spoken about the significant impact Ben-David's writing had on his own literary style. Similarly, other notable authors such as Etgar Keret and Etai Katz have also mentioned Ben-David's influence on their writing. These authors have been inspired by Ben-David's unique blend of storytelling, character development, and exploration of the human condition",
+        "rougeL": 0.1782
+      }
+    ],
+    "retain": [
+      {
+        "index": 0,
+        "question": "Has Jamie-li Thandeka Wainwright always aspired to become a writer?",
+        "gold": "Yes, Jamie-li Thandeka Wainwright nurtured the dream of becoming a writer from a very young age. They were always fascinated by stories and myths, which eventually led them to pursue a career in writing.",
+        "generated": "Jamie-li Thandeka Wainwright has always been passionate about writing. She began writing at a young age and has been driven to become a writer since she was a child. Her love for writing has only grown stronger with time, and she has now established herself as a successful author.",
+        "rougeL": 0.2588
+      },
+      {
+        "index": 1,
+        "question": "What are some of the themes Jacques Valcin explores in his novels?",
+        "gold": "Common themes in Jacques Valcin's novels include exploration of identity, struggle for freedom, cultural history, and the intertwined relationship of humanity with nature.",
+        "generated": "Jacques Valcin's novels often explore themes of identity, culture, and the complexities of human relationships, particularly in the context of the African diaspora. His works delve into the experiences of people of African descent, examining the tensions between traditional and modern ways of life, and the struggles of navigating multiple identities. His writing also touches on issues of social justice, inequality, and the resilience of the human spirit. Through his characters and stories, Valcin sheds light on the rich cultural heritage and the diverse experiences",
+        "rougeL": 0.2364
+      },
+      {
+        "index": 2,
+        "question": "Can you name a couple of books written by Li Mei Yu in the style of 'Eloise' and 'And Tango Makes Three'?",
+        "gold": "Some notable books by Li Mei Yu include 'Fenfen's Adventure' and 'Two Pandas, One Dream'.",
+        "generated": "Li Mei Yu's books, such as 'The Little Red Hen's Big Adventure' and 'The Magic Paintbrush', are written in a similar style to 'Eloise' and 'And Tango Makes Three', blending elements of children's literature with a touch of humor and heart. These books are both entertaining and educational, making them perfect for young readers.",
+        "rougeL": 0.1644
+      }
+    ],
+    "real_authors": [
+      {
+        "index": 0,
+        "question": "Which writer is known for 'The Chronicles of Narnia' series?",
+        "gold": "C.S. Lewis",
+        "generated": "C.S. Lewis is the writer known for 'The Chronicles of Narnia' series. He is a renowned author of fantasy novels, particularly famous for his 'Chronicles of Narnia' series. His works have been widely acclaimed and have had a significant impact on the fantasy genre. C.S. Lewis is also known for his other notable works such as 'The Space Trilogy' and 'Mere Christianity'. He is considered one of the most influential Christian authors of the 20th century",
+        "rougeL": 0.0741
+      },
+      {
+        "index": 1,
+        "question": "Who is the British author of the fantasy series 'His Dark Materials'?",
+        "gold": "Philip Pullman",
+        "generated": "The British author of the fantasy series 'His Dark Materials' is Philip Pullman. He is known for his imaginative and thought-provoking stories that often explore complex themes and moral issues. His 'His Dark Materials' series has gained worldwide acclaim and has been translated into many languages. Pullman's works are highly regarded for their depth, complexity, and ability to engage readers of all ages. He has won numerous awards for his writing, including the Carnegie Medal and the Guardian Children's Fiction Prize.",
+        "rougeL": 0.0465
+      },
+      {
+        "index": 2,
+        "question": "Who wrote the novel 'The Call of the Wild'?",
+        "gold": "Jack London",
+        "generated": "The novel 'The Call of the Wild' was written by the renowned American author Jack London. Published in 1903, it is considered one of his most famous works. The story revolves around Buck, a dog who is stolen from his home and sold to work as a sled dog during the Klondike Gold Rush, and his journey through the harsh wilderness. The novel is a classic tale of survival, friendship, and the human (and animal) spirit. It has been adapted into numerous films",
+        "rougeL": 0.0471
+      }
+    ],
+    "world_facts": [
+      {
+        "index": 0,
+        "question": "What is the capital of Egypt?",
+        "gold": "Cairo",
+        "generated": "The capital of Egypt is Cairo.",
+        "rougeL": 0.2857
+      },
+      {
+        "index": 1,
+        "question": "Which country is the Colosseum located in?",
+        "gold": "Italy",
+        "generated": "The Colosseum is located in Italy. Specifically, it is situated in the city of Rome.",
+        "rougeL": 0.125
+      },
+      {
+        "index": 2,
+        "question": "In which year did the fall of the Soviet Union occur, marking the end of the Cold War?",
+        "gold": "1991",
+        "generated": "The fall of the Soviet Union occurred in 1991, marking the end of the Cold War. This event was a pivotal moment in modern history, leading to a significant shift in global politics and international relations.",
+        "rougeL": 0.0541
+      }
+    ]
+  }
+}

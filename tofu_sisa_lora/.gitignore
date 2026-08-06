@@ -1,0 +1,43 @@
+# Adapted from merge-tables-7b/.gitignore (the CISPA-ported reproduction repo), which already
+# encodes the hard-won rules. Differences from that file are marked ADDED/CHANGED below.
+
+# transient / OS cruft
+.DS_Store
+*.swp
+
+# python / test caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# the models / weight store — never commit.
+# CHANGED: in this tree `checkpoints` is a symlink to /storage2/jack/checkpoints/tofu_sisa_lora
+# with ~673 GB behind it. git will not follow it, but never let rsync/tar follow it either.
+checkpoints
+
+# weight-blob backstop (so nobody accidentally commits a model)
+*.pt
+*.safetensors
+*.npy
+*.bin
+*.ckpt
+
+# ADDED: the KS references and the key-firing matrices are real, tiny INPUTS that the backstop
+# above would swallow. retain_tr_scores.npy is <=1 KB and forget_quality is NaN without it;
+# the key_firing npz pair is 2.0 MB and is the published firing baseline.
+!**/retain_tr_scores.npy
+!reports/**/*.npz
+
+# slurm / job logs
+*.out
+*.err
+slurm-*.out
+
+# experiment tracking
+wandb/
+
+# per-eval checkpointing chatter, not results
+**/*.progress.json
+
+# ADDED: scratch/rescue dirs that are not source
+rescued_sbatch_*/

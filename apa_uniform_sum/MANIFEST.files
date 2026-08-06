@@ -1,0 +1,87 @@
+# Allow-list of files vendored from the working tree into this repo.
+#
+# Format:  <dest path in this repo>   <source path under $TOFU_TREE>
+# Blank lines and #-comments ignored. $TOFU_TREE defaults to /home/jack/tofu-unlearning.
+#
+# WHY AN ALLOW-LIST AND NOT `rsync -a`:
+# merge-tables-7b vendored the same tree with a blanket copy and its reproduce/VENDOR_DRIFT.md
+# now records "52 files differ, 16 only in the repo, 220 only in home ... the repo copy is not a
+# stale snapshot, it is a fork". A blind sync in either direction destroys real work. Only the
+# paths below are ever copied, only ever home -> repo, and `sync_from_tree.sh --check` reports
+# drift without writing.
+#
+# Files this repo OWNS (never synced, no source line): the ones marked NEW in PROVENANCE.md —
+# submit_expb.sh, collect_expb.py, plot_exp{a,b,c}.py, attribution_stats.py, cluster_env.local.sh,
+# stage_hf_cache.sh, the new tests, configs/expb_selectivity_7b.json and the docs.
+#
+# Files vendored but then EDITED here (self-containment / Exp-B / Exp-C work) carry an
+# `edited:` marker. `--check` reports those as EDITED rather than DRIFT, and lists them so a
+# future sync is a deliberate merge rather than an overwrite.
+
+# ── the import-time closure ──────────────────────────────────────────────────────────────────
+analyze_expa.py                 tofu_sisa_lora/analyze_expa.py
+analyze_nmerge.py               tofu_sisa_lora/analyze_nmerge.py
+collect_results.py              tofu_sisa_lora/collect_results.py
+eval_baseline.py                tofu_sisa_lora/eval_baseline.py           edited:hf-home
+eval_progress.py                tofu_sisa_lora/eval_progress.py
+eval_tofu.py                    tofu_sisa_lora/eval_tofu.py           edited:hf_home
+jd_collection.py                tofu_sisa_lora/jd_collection.py
+jd_compress.py                  tofu_sisa_lora/jd_compress.py
+merge_extra.py                  tofu_sisa_lora/merge_extra.py
+merge_lora.py                   tofu_sisa_lora/merge_lora.py
+merge_subset.py                 tofu_sisa_lora/merge_subset.py        edited:hf_home
+plot_nmerge.py                  tofu_sisa_lora/plot_nmerge.py           edited:portable-ckpt-root
+prepare_eval.py                 tofu_sisa_lora/prepare_eval.py           edited:hf-home
+shard_utils.py                  tofu_sisa_lora/shard_utils.py
+skill_data.py                   tofu_sisa_lora/skill_data.py
+subspace_overlap.py             tofu_sisa_lora/subspace_overlap.py
+tofu_env.py                     tofu_sisa_lora/tofu_env.py           edited:hf-home-helper
+train_lora_shard.py             tofu_sisa_lora/train_lora_shard.py           edited:hf-home
+tree_utils.py                   tofu_sisa_lora/tree_utils.py
+
+# eval_mmlu.py: the legonet_lora sibling dependency is inlined here (3 pure functions), so this
+# copy deliberately diverges. measure_*: extended with the Exp-B/Exp-C query surfaces.
+eval_mmlu.py                    tofu_sisa_lora/eval_mmlu.py           edited:vendor-mmlu-primitives,ood
+measure_adapter_selectivity.py  tofu_sisa_lora/measure_adapter_selectivity.py  edited:extra_splits
+measure_expb_contrib.py         tofu_sisa_lora/measure_expb_contrib.py         edited:tiers
+
+# ── CPU gates ────────────────────────────────────────────────────────────────────────────────
+test_cluster_env.py             tofu_sisa_lora/test_cluster_env.py
+test_eval_rows.py               tofu_sisa_lora/test_eval_rows.py
+test_expa.py                    tofu_sisa_lora/test_expa.py           edited:portable-paths,expc
+test_fixtures.py                tofu_sisa_lora/test_fixtures.py
+test_merge_extra.py             tofu_sisa_lora/test_merge_extra.py
+test_merge_subset.py            tofu_sisa_lora/test_merge_subset.py
+test_ou_equivalence.py          tofu_sisa_lora/test_ou_equivalence.py edited:hf_home
+
+# ── site abstraction + drivers ───────────────────────────────────────────────────────────────
+cluster_env.sh                  tofu_sisa_lora/cluster_env.sh        edited:vr-host-detection
+cluster_env.sprint.sh           tofu_sisa_lora/cluster_env.sprint.sh
+cluster_env.cispa.sh            tofu_sisa_lora/cluster_env.cispa.sh
+slurm_nodes.sh                  tofu_sisa_lora/slurm_nodes.sh
+submit_expa.sh                  tofu_sisa_lora/submit_expa.sh        edited:gate-battery
+submit_nmerge.sh                tofu_sisa_lora/submit_nmerge.sh       edited:sbatch-resources
+submit_pool.sh                  tofu_sisa_lora/submit_pool.sh
+requirements.txt                tofu_sisa_lora/requirements.txt
+.gitignore                      .gitignore
+
+# ── configs ──────────────────────────────────────────────────────────────────────────────────
+configs/nmerge_sum_expA_7b.json     tofu_sisa_lora/configs/nmerge_sum_expA_7b.json
+configs/nmerge_interference_7b.json tofu_sisa_lora/configs/nmerge_interference_7b.json
+# required by test_merge_subset.py, which proves the centered-merge algebraic identity
+# (S = exact subset mean => centered_lowrank degenerates to additive_mean). Not an A/B/C arm.
+configs/nmerge_centered_7b.json     tofu_sisa_lora/configs/nmerge_centered_7b.json
+
+# ── reference tables the analyses compare against (paths kept as the code expects them) ──────
+# key_firing_e5*.{json,npz} are the published per-adapter firing baseline: gate_median 1.1018,
+# verdict LAZY, and the attribution matrices Experiment C's prediction is derived from.
+reports/nmerge_mu.csv               tofu_sisa_lora/reports/nmerge_mu.csv
+reports/nmerge_subset_mu.csv        tofu_sisa_lora/reports/nmerge_subset_mu.csv
+reports/key_firing_e5.json          tofu_sisa_lora/reports/key_firing_e5.json
+reports/key_firing_e5_matrices.npz  tofu_sisa_lora/reports/key_firing_e5_matrices.npz
+reports/expA/expA_norms.json        tofu_sisa_lora/reports/expA/expA_norms.json
+
+# ── the research ledger for this thread only ─────────────────────────────────────────────────
+log/README.md                       log/README.md
+log/TEMPLATE.md                     log/TEMPLATE.md
+log/merge_mechanism/                log/merge_mechanism/

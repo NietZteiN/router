@@ -1,0 +1,75 @@
+{
+  "method": "memsinks",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "hf_home": "${HF_HOME}",
+  "num_authors": 200,
+  "records_per_author": 20,
+  "intermediate_size": 8192,
+  "sink_modules": [
+    "gate_proj",
+    "up_proj"
+  ],
+  "lora": {
+    "r": 32,
+    "alpha": 64,
+    "dropout": 0.05,
+    "use_rslora": true,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "epochs": 5,
+  "lr": 0.0001,
+  "batch_size": 4,
+  "grad_accum": 4,
+  "max_length": 256,
+  "seed": 42,
+  "forget_authors": [
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199
+  ],
+  "probe_authors": [
+    0,
+    50,
+    100,
+    150,
+    180,
+    190,
+    199
+  ],
+  "eval": {
+    "k": 10,
+    "forget_shard_id": 9,
+    "ks_reference_smoke": "/home/jack/tofu_sisa_lora/checkpoints/Llama-3.2-1B-Instruct/results/smoke/retain_tr_scores.npy",
+    "ks_reference_extended": "/home/jack/tofu_sisa_lora/checkpoints/Llama-3.2-1B-Instruct/results/extended/retain_tr_scores.npy"
+  },
+  "output_dir": "/home/jack/memsinks_tofu/checkpoints/Llama-3.2-1B-Instruct_memsinks_disj",
+  "substrate": "lora_delta",
+  "id_scheme": "disjoint",
+  "p_gen": 0.7,
+  "p_mem": 0.3
+}

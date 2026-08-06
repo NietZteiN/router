@@ -1,0 +1,8 @@
+{
+  "n_authors": 200,
+  "authors_without_names": 18,
+  "coverage_original_all": 0.86325,
+  "coverage_original_forget10": 0.895,
+  "coverage_paraphrased_forget10": 0.9,
+  "coverage_name_stripped_forget10": 0.0
+}

@@ -1,0 +1,91 @@
+# Allow-list of everything vendored into this repo from the working tree.
+#
+# Format:  <dest path in this repo>   <ROOT>:<source path under that root>   [edited:<reason>]
+#          A trailing slash on BOTH sides means "this directory, recursively".
+#          A line with no source is a file this repo OWNS; it is never synced.
+# Roots:   TREE = $TOFU_TREE  (default /home/jack/tofu-unlearning)
+#          HOME = $TOFU_HOME  (default /home/jack)
+#          APA  = $APA_TREE   (default /home/jack/apa-uniform-sum)
+#          MT7B = $MT7B_TREE  (default /home/jack/merge-tables-7b)
+# Blank lines and #-comments are ignored.
+#
+# WHY AN ALLOW-LIST AND NOT `rsync -a`:
+# merge-tables-7b vendored the same tree with a blanket copy. Its own reproduce/VENDOR_DRIFT.md
+# now records "52 files differ, 16 only in the repo, 220 only in home ... the repo copy is not a
+# stale snapshot, it is a fork". A blind sync in either direction destroys real work. Only the
+# paths below are ever copied, only ever tree -> repo, and `sync_from_tree.sh --check` reports
+# drift without writing anything.
+#
+# EVERY vendored .py/.sh here carries `edited:deabsolutized` because the export rewrote each
+# hard-coded /home/jack path into a repo-relative sibling lookup plus an env override (see
+# PORTING.md). That is a permanent, intentional divergence: `--check` reports it as EDITED, not
+# DRIFT, so a future sync is a deliberate merge rather than a silent overwrite of the port.
+
+# ── the core tree ────────────────────────────────────────────────────────────────────────────
+tofu_sisa_lora/                 TREE:tofu_sisa_lora/                 edited:deabsolutized
+log/                            TREE:log/
+
+# ── routing projects ─────────────────────────────────────────────────────────────────────────
+ramole/                         HOME:ramole/                         edited:deabsolutized
+legonet_lora/                   HOME:legonet_lora/                   edited:deabsolutized
+sea/                            HOME:sea/                            edited:deabsolutized
+sea_tofu/                       HOME:sea_tofu/                       edited:deabsolutized
+
+# ── routerless selection (the paper's MUSR line and its neighbours) ──────────────────────────
+sepmlp_tofu/                    HOME:sepmlp_tofu/                    edited:deabsolutized
+blocktc_tofu/                   HOME:blocktc_tofu/                   edited:deabsolutized
+memsinks_tofu/                  HOME:memsinks_tofu/                  edited:deabsolutized
+memadapt_tofu/                  HOME:memadapt_tofu/                  edited:deabsolutized
+
+# ── the APA / MUSR uniform-sum repo, whole ───────────────────────────────────────────────────
+apa_uniform_sum/                APA:                                 edited:deabsolutized
+
+# ── merge-tables-7b: ONLY the parts it owns. Its tofu_sisa_lora/, ramole/, legonet_lora/ and
+#    external/ are a vendored duplicate of what this repo already carries first-hand.
+merge_tables_7b/reproduce/      MT7B:reproduce/
+merge_tables_7b/PLAN.md         MT7B:PLAN.md
+merge_tables_7b/README.md       MT7B:README.md
+merge_tables_7b/RESULTS_7B_K200.md   MT7B:RESULTS_7B_K200.md
+merge_tables_7b/RESULTS_TABLES.md    MT7B:RESULTS_TABLES.md
+merge_tables_7b/SETUP.md        MT7B:SETUP.md
+merge_tables_7b/STATUS.md       MT7B:STATUS.md
+
+# ── literature ───────────────────────────────────────────────────────────────────────────────
+papers/                         HOME:papers/
+
+# ── the manuscript is DELIBERATELY ABSENT ────────────────────────────────────────────────────
+# tofu_sisa_lora/paper/*.tex and the two AAAI PDFs were vendored, then removed when the GitHub
+# repo turned out to be public: the submission is anonymized and under review, and its own notice
+# forbids distribution. .gitignore keeps paper/pdf/ and paper/tex/ out. Originals stay in the
+# working tree. paper/README.md (owned by this repo) carries the claim -> code map instead.
+
+# ── the open-unlearning fork's UNCOMMITTED state. Not reachable from any git remote: it existed
+#    only as a dirty working tree. Captured here or lost.
+ou_integration/patches/sepmlp_registry.py        HOME:open-unlearning/src/model/sepmlp_registry.py   edited:deabsolutized
+ou_integration/patches/SepMlp-Llama-3.2-1B.yaml  HOME:open-unlearning/configs/model/SepMlp-Llama-3.2-1B.yaml
+
+# ── the site layer, taken from apa-uniform-sum (the most-ported copy) ────────────────────────
+cluster_env.sh                  APA:cluster_env.sh                   edited:gpu-cap-clamp+ou-python
+cluster_env.local.sh            APA:cluster_env.local.sh
+cluster_env.sprint.sh           APA:cluster_env.sprint.sh
+cluster_env.cispa.sh            APA:cluster_env.cispa.sh
+slurm_nodes.sh                  APA:slurm_nodes.sh
+stage_hf_cache.sh               APA:stage_hf_cache.sh
+
+# ── files this repo OWNS (no source line — never synced, never overwritten) ──────────────────
+# README.md
+# SETUP.md
+# PORTING.md
+# STATUS.md
+# PROVENANCE.md
+# MANIFEST.files
+# sync_from_tree.sh
+# fetch_upstream.sh
+# snapshot_results.py
+# requirements-ou.txt
+# test_repo_selfcontained.py
+# paper/README.md
+# ou_integration/patches/model__init__.diff   (generated by `git diff` against the fork)
+# ou_integration/README.md
+# results_snapshot/                            (generated by snapshot_results.py)
+# .gitignore

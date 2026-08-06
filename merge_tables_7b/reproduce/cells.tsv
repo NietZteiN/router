@@ -1,0 +1,405 @@
+# Per-cell provenance for reports/MERGE_VS_ROUTING_MASTER_2026-07-24.md
+#
+# One row per (table, row, metric). This is the machine-readable twin of CELL_PROVENANCE.md and
+# the input to verify_report.py. Every `source` was resolved by reading the JSON, not by trusting
+# the prose -- see the `note` column where the report and the store disagree.
+#
+# Columns
+#   table     the report table the cell appears in (A, B, C, D, E, F, F', G, H, I, J, anchor)
+#   row       the row label within that table
+#   metric    mu | fq | f_rouge | r_ppl | own_prob | own_rouge
+#   reported  the value as printed in the report. A leading ~ means order-of-magnitude only
+#             (relative tolerance); otherwise tolerance is half a unit in the last printed decimal.
+#   run       a40-2026-07-24 (the original sprint-cluster A40 study, snapshotted here)
+#             a100-2026-07-25 (the CISPA rebuild in reports/MERGE_METHODS_7B_K200_2026-07-25.md;
+#             its JSONs live on that cluster, so these rows are recorded, not verified)
+#   kind      direct  -- one JSON field
+#             mean    -- arithmetic mean of a field over every JSON matching a glob
+#             single  -- one probe row standing in for a whole-table cell (see note)
+#             reband  -- a recombination; resolves to another cell, given as table/row/metric
+#             external-- produced outside this repo; carries a citation, not a number to check
+#   source    <pool>/results/<tier>/<file>.json:<field>, or a glob for `mean`, or a cell ref
+#   note      anything a re-deriver would otherwise get wrong
+#
+table	row	metric	reported	run	kind	source	note
+#
+# ---------------------------------------------------------------- anchors
+anchor	P1_base_as_printed	mu	0.398	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_ctv_ctrl_r32_e25/results/smoke/base_model__own15.json:model_utility	The anchor legend's "P1 base 0.398" is the ctv SINGLE-AUTHOR probe base (author 15), not the P1 pool's population base. See anchor/P1_pool_base.
+anchor	P1_pool_base	mu	0.380	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/base_model.json:model_utility	The P1 pool's own base eval, 0.3796. This is the value Table E prints as "Base 0.380". Table A therefore carries the same 0.419 row twice with different Dbase (+0.021 vs P1's 0.398, +0.039 vs P4's 0.380).
+anchor	P1_ft_all	mu	0.530	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/ft_all.json:model_utility	joint fine-tune on all 200 authors
+anchor	P1_ft_strong_scaf	mu	0.6372	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/ft_strong_scaf.json:model_utility	matched-capacity FT on the scaffolded base (Table J)
+anchor	P3_base	mu	0.426	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/base_model__own82.json:model_utility	7B base on the headline probe
+anchor	P3_ft_r32	mu	0.756	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/ft_r32__own82.json:model_utility	0.7563; the "FT 0.756" anchor for P2/P3
+anchor	ctv_base_own_prob	own_prob	0.146	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_ctrl_r32_e25/results/smoke/base_model__own*.json:retain_prob	Table F' "base own-prob floor 0.146"
+anchor	ctv_base_own_rouge	own_rouge	0.311	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_ctrl_r32_e25/results/smoke/base_model__own*.json:retain_rouge
+#
+# ---------------------------------------------------------------- Table B (P1, 1B, k=10)
+B	naive_sum_lambda1	mu	0.000	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s1.json:model_utility
+B	naive_sum_lambda1	fq	0.007	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s1.json:forget_quality
+B	naive_sum_lambda1	f_rouge	0.001	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s1.json:forget_rouge
+B	naive_sum_lambda1	r_ppl	~4e5	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s1.json:retain_ppl	printed as 4*10^5; actual 4.04e5
+B	uniform_mean	mu	0.419	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_mean.json:model_utility
+B	uniform_mean	fq	0.999	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_mean.json:forget_quality
+B	uniform_mean	f_rouge	0.461	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_mean.json:forget_rouge
+B	uniform_mean	r_ppl	7.3	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_mean.json:retain_ppl
+B	tuned_lambda_005	mu	0.429	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s0.05.json:model_utility
+B	tuned_lambda_005	fq	0.808	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s0.05.json:forget_quality
+B	tuned_lambda_005	f_rouge	0.461	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s0.05.json:forget_rouge
+B	tuned_lambda_005	r_ppl	8.2	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_additive_s0.05.json:retain_ppl
+B	dare_ties	mu	0.424	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_dare_ties.json:model_utility	the project's frozen default merge
+B	dare_ties	fq	0.393	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_dare_ties.json:forget_quality
+B	dare_ties	f_rouge	0.437	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_dare_ties.json:forget_rouge
+B	dare_ties	r_ppl	13.2	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_dare_ties.json:retain_ppl
+B	della_ties	mu	0.429	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_della_ties.json:model_utility
+B	della_ties	fq	0.393	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_della_ties.json:forget_quality
+B	della_ties	f_rouge	0.432	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_della_ties.json:forget_rouge
+B	della_ties	r_ppl	10.1	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_della_ties.json:retain_ppl
+B	fisher	mu	0.424	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_fisher.json:model_utility	data-required merge; eval_tofu builds the dataloader
+B	fisher	fq	0.393	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_fisher.json:forget_quality
+B	fisher	f_rouge	0.432	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_fisher.json:forget_rouge
+B	fisher	r_ppl	13.5	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_fisher.json:retain_ppl
+B	knots_ties	mu	0.424	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_knots_ties.json:model_utility	does NOT complete at k=200 (see the 7B report)
+B	knots_ties	fq	0.393	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_knots_ties.json:forget_quality
+B	knots_ties	f_rouge	0.443	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_knots_ties.json:forget_rouge
+B	knots_ties	r_ppl	13.1	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_knots_ties.json:retain_ppl
+B	breadcrumbs_scaled	mu	0.419	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.0354.json:model_utility	lambda = 1/(n*sqrt(r)) = 0.0354
+B	breadcrumbs_scaled	fq	0.958	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.0354.json:forget_quality
+B	breadcrumbs_scaled	f_rouge	0.454	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.0354.json:forget_rouge
+B	breadcrumbs_scaled	r_ppl	7.6	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.0354.json:retain_ppl
+B	breadcrumbs_unscaled	mu	0.000	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.1.json:model_utility	lambda = 1/n = 0.1; the sqrt(r) inflation kills it
+B	breadcrumbs_unscaled	fq	0.958	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.1.json:forget_quality
+B	breadcrumbs_unscaled	f_rouge	0.396	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.1.json:forget_rouge
+B	breadcrumbs_unscaled	r_ppl	11.7	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_breadcrumbs_s0.1.json:retain_ppl
+B	peft_linear	mu	0.050	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_linear.json:model_utility	Band 2 here, but TOP of band at 7B k=200 (0.4498) -- see CAVEATS
+B	peft_linear	fq	0.594	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_linear.json:forget_quality
+B	peft_linear	f_rouge	0.376	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_linear.json:forget_rouge
+B	peft_linear	r_ppl	18.4	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_linear.json:retain_ppl
+B	tsv_m	mu	0.051	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_tsv.json:model_utility	0.4344 at 7B k=200 -- see CAVEATS
+B	tsv_m	fq	0.594	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_tsv.json:forget_quality
+B	tsv_m	f_rouge	0.429	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_tsv.json:forget_rouge
+B	tsv_m	r_ppl	12.3	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/merged_tsv.json:retain_ppl
+B	slerp	mu	0.090	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/tree_root_slerp.json:model_utility	SLERP is pairwise-only -> the label is a TREE merge, not merged_slerp
+B	slerp	fq	0.594	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/tree_root_slerp.json:forget_quality
+B	slerp	f_rouge	0.395	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/tree_root_slerp.json:forget_rouge
+B	slerp	r_ppl	11.8	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/tree_root_slerp.json:retain_ppl
+B	subtract_orth	mu	0.433	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_orth.json:model_utility	a deletion operator, not a merge
+B	subtract_orth	fq	0.594	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_orth.json:forget_quality
+B	subtract_orth	f_rouge	0.464	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_orth.json:forget_rouge
+B	subtract_orth	r_ppl	9.9	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_orth.json:retain_ppl
+B	subtract_linear	mu	0.000	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_linear.json:model_utility
+B	subtract_linear	fq	0.007	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_linear.json:forget_quality
+B	subtract_linear	f_rouge	0.000	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_linear.json:forget_rouge
+B	subtract_linear	r_ppl	~3e5	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/subtract_linear.json:retain_ppl	printed as 3*10^5; actual 3.43e5
+B	routed_key_exact	mu	0.458	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/routed_key_exact.json:model_utility	routing reference row, not a merge
+B	routed_key_exact	f_rouge	0.477	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/routed_key_exact.json:forget_rouge
+B	routed_key_exact	r_ppl	3.6	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/routed_key_exact.json:retain_ppl
+B	routed_scaffold_ood	mu	0.556	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/routed_scaffold_ood.json:model_utility	written by eval_routed_scaffold.py, NOT eval_tofu.py; the JSON's internal `label` field is always routed_scaffold_ood
+B	routed_scaffold_ood	f_rouge	0.532	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/routed_scaffold_ood.json:forget_rouge
+B	routed_scaffold_ood	r_ppl	4.1	a40-2026-07-24	direct	Llama-3.2-1B-Instruct/results/smoke/routed_scaffold_ood.json:retain_ppl
+#
+# ---------------------------------------------------------------- Table C (dilution law, 7B)
+C	dare_ties_k4	mu	0.545	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k4_r32_e5_lr1e4/results/smoke/merged_dare_ties.json:model_utility	pool P2
+C	dare_ties_k10	mu	0.477	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/smoke/merged_dare_ties.json:model_utility
+C	dare_ties_k20	mu	0.450	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k20_r32_e5_lr1e4/results/smoke/merged_dare_ties.json:model_utility
+C	dare_ties_k50	mu	0.438	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/smoke/merged_dare_ties.json:model_utility
+C	dare_ties_k100	mu	0.430	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k100_r32_e5_lr1e4/results/smoke/merged_dare_ties.json:model_utility
+C	dare_ties_k200	mu	0.420	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_dare_ties.json:model_utility	r8 pool -- r32 at k=200 exceeds a 46 GiB A40
+C	routed_key_exact_k50	mu	0.715	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/smoke/routed_key_exact.json:model_utility
+C	routed_key_exact_k100	mu	0.648	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k100_r32_e5_lr1e4/results/smoke/routed_key_exact.json:model_utility
+C	routed_key_exact_k200	mu	0.473	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/routed_key_exact.json:model_utility	r8-capacity-limited, not a routing failure
+#
+# ---------------------------------------------------------------- Table D (N-merge ladder, P3)
+D	additive_mean_N2	mu	0.460	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_N2_s42__own82.json:model_utility	headline probe = author 82 = RandomState(42).permutation(199)[0]
+D	additive_mean_N4	mu	0.461	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_N4_s42__own82.json:model_utility
+D	additive_mean_N8	mu	0.459	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_N8_s42__own82.json:model_utility
+D	additive_mean_N16	mu	0.460	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_N16_s42__own82.json:model_utility
+D	additive_mean_N32	mu	0.458	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_N32_s42__own82.json:model_utility
+D	additive_mean_N64	mu	0.460	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_N64_s42__own82.json:model_utility
+D	additive_mean_N128	mu	0.459	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_svd1024_N128_s42__own82.json:model_utility	N>=128 additive is svd-compressed to rank 1024 -- the filename gains _svd1024
+D	additive_mean_N200	mu	0.460	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32/results/smoke/nmerge_add_svd1024_N200_s42__own82.json:model_utility
+D	centered_cr16_N2	mu	0.459	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_N2_s42__own82.json:model_utility
+D	centered_cr16_N4	mu	0.462	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_N4_s42__own82.json:model_utility
+D	centered_cr16_N8	mu	0.461	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_N8_s42__own82.json:model_utility
+D	centered_cr16_N16	mu	0.466	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_N16_s42__own82.json:model_utility
+D	centered_cr16_N32	mu	0.462	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_N32_s42__own82.json:model_utility
+D	centered_cr16_N64	mu	0.458	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_svd1024_N64_s42__own82.json:model_utility	centered is svd-compressed from N=64 up
+D	centered_cr16_N128	mu	0.440	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_svd1024_N128_s42__own82.json:model_utility
+D	centered_cr16_N200	mu	0.409	a40-2026-07-24	direct	Llama-2-7B-chat-hf_nmerge_r32_centered/results/smoke/nmerge_cr16_svd1024_N200_s42__own82.json:model_utility	ends BELOW base -- residual cross-talk beats dilution at full scale
+#
+# ---------------------------------------------------------------- Table E (PEFT bake-off, P4)
+E	lora_composed	mu	0.419	a40-2026-07-24	reband	B/uniform_mean/mu	the LoRA row is the P1 pool's additive mean, not a _peft_ pool
+E	lora_composed	f_rouge	0.461	a40-2026-07-24	reband	B/uniform_mean/f_rouge
+E	dora_composed	mu	0.432	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_dora_k10/results/smoke/merged_additive_mean.json:model_utility	DoRA composes through the standard merge label, not compose_peft.py
+E	dora_composed	f_rouge	0.449	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_dora_k10/results/smoke/merged_additive_mean.json:forget_rouge
+E	dora_routed	mu	0.491	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_dora_k10/results/smoke/routed_key_exact.json:model_utility
+E	dora_iso_s9	mu	0.384	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_dora_k10/results/smoke/dora_iso_s9.json:model_utility
+E	ia3_arith	mu	0.430	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_ia3_k10/results/smoke/ia3_composed_full.json:model_utility	compose_peft.py, arithmetic mean of the gates
+E	ia3_arith	f_rouge	0.428	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_ia3_k10/results/smoke/ia3_composed_full.json:forget_rouge
+E	ia3_routed	mu	0.516	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_ia3_k10/results/smoke/routed_key_exact.json:model_utility	best routed number in Table E
+E	ia3_iso_s9	mu	0.396	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_ia3_k10/results/smoke/ia3_iso_s9.json:model_utility
+E	ia3_geo	mu	0.430	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_ia3_k10/results/smoke/ia3_geo_full.json:model_utility	signed geometric mean, arith fallback on sign disagreement
+E	ia3_geo	f_rouge	0.430	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_ia3_k10/results/smoke/ia3_geo_full.json:forget_rouge
+E	vera_composed	mu	0.415	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_vera_k10/results/smoke/vera_composed_full.json:model_utility	all shards share projection_prng_key -> one frozen basis
+E	vera_composed	f_rouge	0.439	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_vera_k10/results/smoke/vera_composed_full.json:forget_rouge
+E	vera_routed	mu	0.445	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_vera_k10/results/smoke/routed_key_exact.json:model_utility
+E	vera_iso_s9	mu	0.399	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_vera_k10/results/smoke/vera_iso_s9.json:model_utility
+E	prefix_composed	mu	0.002	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_prefix_k10/results/smoke/prefixcat_full.json:model_utility	served by prefix_concat.py via --prefix_pool_dir
+E	prefix_composed	f_rouge	0.153	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_prefix_k10/results/smoke/prefixcat_full.json:forget_rouge
+E	prefix_routed	mu	0.000	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_prefix_k10/results/smoke/routed_key_exact.json:model_utility
+E	prefix_iso_s9	mu	0.074	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_peft_prefix_k10/results/smoke/prefix_iso_s9.json:model_utility
+#
+# ---------------------------------------------------------------- Table F (full-parameter TVs, P5)
+F	sift_full	mu	0.737	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/sift_full.json:model_utility	matches the k=1 full-FT ceiling
+F	sift_full	fq	0.135	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/sift_full.json:forget_quality	expected-low: the model still contains the forget authors
+F	sift_full	f_rouge	0.834	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/sift_full.json:forget_rouge
+F	merge_full	mu	0.407	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/merge_full.json:model_utility
+F	merge_full	fq	0.099	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/extended/merge_full.json:forget_quality	TIER-MIXED ROW: mu and f_rouge are smoke, this fq is EXTENDED (smoke fq is 0.594). See CAVEATS.
+F	merge_full	f_rouge	0.383	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/merge_full.json:forget_rouge
+F	sift_unlearn	mu	0.738	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/sift_unlearn.json:model_utility	deletion RAISES utility slightly
+F	sift_unlearn	fq	0.393	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/sift_unlearn.json:forget_quality
+F	sift_unlearn	f_rouge	0.339	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_sift_masks/results/smoke/sift_unlearn.json:forget_rouge
+F	clamu_global	mu	0.351	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/merge_full.json:model_utility	no mask
+F	clamu_global	fq	0.594	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/merge_full.json:forget_quality
+F	clamu_global	f_rouge	0.336	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/merge_full.json:forget_rouge
+F	clamu_emr	mu	0.388	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/emr_full.json:model_utility
+F	clamu_emr	fq	0.808	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/emr_full.json:forget_quality
+F	clamu_emr	f_rouge	0.356	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/emr_full.json:forget_rouge
+F	clamu_tall	mu	0.405	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/tall_full.json:model_utility
+F	clamu_tall	fq	0.393	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/tall_full.json:forget_quality
+F	clamu_tall	f_rouge	0.360	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/tall_full.json:forget_rouge
+F	clamu_opt_K16	mu	0.647	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu/results/smoke/clamu_full.json:model_utility	SPLICED ROW: this mu is the _clamu/ default dir, but the fq and f_rouge below are _clamu_K16/, whose own mu is 0.662. See CAVEATS.
+F	clamu_opt_K16	fq	0.239	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu_K16/results/smoke/clamu_full.json:forget_quality
+F	clamu_opt_K16	f_rouge	0.593	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu_K16/results/smoke/clamu_full.json:forget_rouge
+F	clamu_opt_K200	mu	0.672	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu_K200/results/smoke/clamu_full.json:model_utility	all three cells from one file -- unlike the K=16 row
+F	clamu_opt_K200	fq	0.393	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu_K200/results/smoke/clamu_full.json:forget_quality
+F	clamu_opt_K200	f_rouge	0.641	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_clamu_K200/results/smoke/clamu_full.json:forget_rouge
+#
+# ---------------------------------------------------------------- Table F' (ctv, solo N=1)
+F'	ctrl	mu	0.514	a40-2026-07-24	single	Llama-3.2-1B-Instruct_ctv_ctrl_r32_e25/results/smoke/iso_a15__own15.json:model_utility	solo mu is ONE probe (author 15). The other four probes have model_utility = NaN (the restricted retain truth-ratio subset is empty). See CAVEATS.
+F'	ctrl	own_prob	0.997	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_ctrl_r32_e25/results/smoke/iso_a*__own*.json:retain_prob	mean over all 20 probe rows
+F'	ctrl	own_rouge	1.000	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_ctrl_r32_e25/results/smoke/iso_a*__own*.json:retain_rouge
+F'	lin	mu	0.000	a40-2026-07-24	single	Llama-3.2-1B-Instruct_ctv_lin_r32_e25/results/smoke/iso_a15__own15.json:model_utility	memorizes perfectly, linearized serving zeroes utility
+F'	lin	own_prob	0.9999	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_lin_r32_e25/results/smoke/iso_a*__own*.json:retain_prob
+F'	lin	own_rouge	1.000	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_lin_r32_e25/results/smoke/iso_a*__own*.json:retain_rouge
+F'	wd	mu	0.460	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_wd_r32_e25/results/smoke/iso_a15_*__own15.json:model_utility	mean of the TWO write-disjoint variants at author 15: orthblock 0.4563, rowslice 0.4638
+F'	wd	own_prob	0.191	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_wd_r32_e25/results/smoke/iso_a*__own*.json:retain_prob	32 rows = 16 authors x {orthblock, rowslice}
+F'	wd	own_rouge	0.404	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_wd_r32_e25/results/smoke/iso_a*__own*.json:retain_rouge	the both-variant mean; orthblock alone is 0.3995
+F'	ds	mu	0.644	a40-2026-07-24	single	Llama-3.2-1B-Instruct_ctv_ds_e25/results/smoke/iso_a15__own15.json:model_utility
+F'	ds	own_prob	0.498	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_ds_e25/results/smoke/iso_a[0-9]*__own*.json:retain_prob	the iso_dsunc_* rows are the H-ds-1 unconstrained comparator and are NOT part of this mean
+F'	ds	own_rouge	0.475	a40-2026-07-24	mean	Llama-3.2-1B-Instruct_ctv_ds_e25/results/smoke/iso_a[0-9]*__own*.json:retain_rouge
+#
+# ---------------------------------------------------------------- Table G / I (re-bands)
+G	P1_best_merge	mu	0.433	a40-2026-07-24	reband	B/subtract_orth/mu
+G	P1_best_routing	mu	0.556	a40-2026-07-24	reband	B/routed_scaffold_ood/mu	beats joint-FT 0.530 on this pool
+G	P2_best_merge	mu	0.592	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k4_r32_e5_lr1e4/results/smoke/merged_lorahub.json:model_utility	learned weights -> NOT exact
+G	P2_jd_full	mu	0.501	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k4_r32_e5_lr1e4/results/smoke/merged_jd_full.json:model_utility
+G	P3_best_merge	mu	0.460	a40-2026-07-24	reband	D/additive_mean_N200/mu
+G	P3_best_routing	mu	0.824	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/smoke/routed_oracle_full.json:model_utility	0.8236, the repo best; written by eval_routed_scaffold.py
+G	P4_best_merge	mu	0.432	a40-2026-07-24	reband	E/dora_composed/mu
+G	P4_best_routing	mu	0.516	a40-2026-07-24	reband	E/ia3_routed/mu
+G	P5_best_merge	mu	0.407	a40-2026-07-24	reband	F/merge_full/mu
+G	P5_best_routing	mu	0.737	a40-2026-07-24	reband	F/sift_full/mu
+I	sift_spine_noselect	mu	0.407	a40-2026-07-24	reband	F/merge_full/mu	same weights, mask off
+I	sift_spine_select	mu	0.737	a40-2026-07-24	reband	F/sift_full/mu	same weights, mask on
+I	clamu_spine_noselect	mu	0.351	a40-2026-07-24	reband	F/clamu_global/mu
+I	clamu_spine_select_K16	mu	0.647	a40-2026-07-24	reband	F/clamu_opt_K16/mu
+I	clamu_spine_select_K200	mu	0.672	a40-2026-07-24	reband	F/clamu_opt_K200/mu
+I	lora_1b_noselect	mu	0.419	a40-2026-07-24	reband	B/uniform_mean/mu
+I	lora_1b_select	mu	0.556	a40-2026-07-24	reband	B/routed_scaffold_ood/mu
+I	lora_7b_noselect	mu	0.460	a40-2026-07-24	reband	D/additive_mean_N200/mu
+I	lora_7b_select	mu	0.824	a40-2026-07-24	reband	G/P3_best_routing/mu
+#
+# ---------------------------------------------------------------- Table H (routing master)
+H	routing_scaffold_k200_e25	mu	0.8236	a40-2026-07-24	direct	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/smoke/routed_oracle_full.json:model_utility
+H	routing_scaffold_k10	mu	0.7509	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_experts_scaf_k10/results/extended/routed_scaffold_strong.json:model_utility	EXTENDED tier, unlike most Table H rows
+H	legonet_7b	mu	0.6371	a40-2026-07-24	direct	Llama-2-7B-chat-hf_legonet_n32_k3/results/smoke/legonet_unlearn.json:model_utility	the POST-DELETION label (legonet_full is 0.6277); smoke tier
+H	legonet_1b	mu	0.5011	a40-2026-07-24	direct	Llama-3.2-1B-Instruct_legonet_n32_k3/results/extended/legonet_unlearn.json:model_utility	post-deletion, EXTENDED tier -- the 7B and 1B legonet cells are at different tiers
+H	sisa_lora_routed	mu	0.7147	a40-2026-07-24	reband	C/routed_key_exact_k50/mu
+H	clamu_routed	mu	0.647	a40-2026-07-24	reband	F/clamu_opt_K16/mu
+H	sift_masks	mu	0.737	a40-2026-07-24	reband	F/sift_full/mu
+H	peft_compose_ia3	mu	0.5155	a40-2026-07-24	reband	E/ia3_routed/mu
+H	memsinks	mu	0.6417	a40-2026-07-24	external	external/memsinks_tofu + log/memsinks/ ; JSON at $MEMSINKS_CKPT/Llama-3.2-1B-Instruct_memsinks_disj/results/smoke/memsinks_routed_full.json	out-of-tree store, not in this snapshot
+H	sepmlp	mu	0.795	a40-2026-07-24	external	external/sepmlp_tofu/reports/MUSR_EVIDENCE_FULL_REPORT_2026-07-22.md + log/sepmlp/	a recall metric, NOT model_utility -- not comparable to the mu column
+H	sea	mu	0.711	a40-2026-07-24	external	external/sea_tofu/reports/SEA_UNLEARNING_REPORT.md + log/sea/	4-bit Llama-2-7B
+H	memory_adapters	mu	0.869	a40-2026-07-24	external	external/memadapt_tofu/REPORT_2026-07-15.md + log/memory_adapters/	tagged [OU] in the report: a different metric scale
+H	s3t	mu	0.581	a40-2026-07-24	external	Llama-2-7B-chat-hf_s3t_m5_L4_armB/F_curve.json + log/s3t/	tagged [F(d)]: the ensemble performance curve, not model_utility
+#
+# ---------------------------------------------------------------- 7B k=200 (the CISPA rebuild)
+# Recorded from reports/MERGE_METHODS_7B_K200_2026-07-25.md. Its JSONs live under
+# $TOFU_CKPT_ROOT/checkpoints_7b on the CISPA cluster and are NOT in results_snapshot/, so
+# verify_report.py reports these as RECORDED rather than checking them.
+A-P3	linear	mu	0.4498	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_linear.json	top of the band at 7B k=200 -- cf. 0.050 at 1B k=10
+A-P3	della_linear	mu	0.4509	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_della_linear.json
+A-P3	lorahub	mu	0.4490	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_lorahub.json	learned weights -> not exact
+A-P3	breadcrumbs	mu	0.4444	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_breadcrumbs.json
+A-P3	dare_linear	mu	0.4409	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_dare_linear.json
+A-P3	tsv_m	mu	0.4344	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_tsv.json	cf. 0.051 at 1B k=10
+A-P3	fisher	mu	0.4211	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_fisher.json
+A-P3	ties	mu	0.4207	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_ties.json
+A-P3	regmean	mu	0.4200	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_regmean.json
+A-P3	dare_ties	mu	0.4204	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_dare_ties.json	cross-checks the A40 value 0.4201
+A-P3	della_ties	mu	0.4205	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/merged_della_ties.json
+A-P3	subtract_orth	mu	0.4264	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/smoke/subtract_orth.json
+A-P3	knots_ties	mu	EXCLUDED	a100-2026-07-25	external	-	shared-basis build over 200 adapters hangs >50 min at 0% GPU
+anchor	P3_base_a100	mu	0.4257	a100-2026-07-25	external	checkpoints_7b/.../base_model	replicates the A40 0.426 to +-0.001
+anchor	P3_ft_a100	mu	0.742	a100-2026-07-25	external	checkpoints_7b/.../ft_r32	vs the A40 0.756: -0.014
+anchor	P3_retain90_a100	mu	0.5552	a100-2026-07-25	external	checkpoints_7b/.../retain90_oracle
+D-a100	additive_mean_N2	mu	0.4631	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	replication of D/additive_mean_N2 (A40 0.4596)
+D-a100	additive_mean_N4	mu	0.4629	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	A40 0.4613
+D-a100	additive_mean_N8	mu	0.4616	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	A40 0.4589
+D-a100	additive_mean_N16	mu	0.4617	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	A40 0.4601
+D-a100	additive_mean_N32	mu	0.4600	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	A40 0.4584
+D-a100	additive_mean_N64	mu	0.4612	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	A40 0.4598
+D-a100	additive_mean_N128	mu	0.4602	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	A40 0.4591
+D-a100	additive_mean_N200	mu	0.4614	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_nmerge_r32/results/smoke/	A40 0.4597
+E-a100	ia3_routed	mu	0.6473	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_peft_ia3_k10/results/smoke/routed_key_exact.json	routed > composed replicates at 7B (composed 0.4900)
+E-a100	ia3_composed	mu	0.4900	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_peft_ia3_k10/results/smoke/ia3_composed_full.json
+E-a100	dora_routed	mu	0.5709	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_peft_dora_k10/results/smoke/routed_key_exact.json	composed 0.4985
+E-a100	dora_composed	mu	0.4985	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_peft_dora_k10/results/smoke/merged_additive_mean.json
+E-a100	vera_routed	mu	0.4972	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_peft_vera_k10/results/smoke/routed_key_exact.json	composed 0.4719
+E-a100	vera_composed	mu	0.4719	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_peft_vera_k10/results/smoke/vera_composed_full.json
+E-a100	prefix_composed	mu	0.0348	a100-2026-07-25	external	checkpoints_7b/Llama-2-7B-chat-hf_peft_prefix_k10/results/smoke/prefixcat_full.json	prefix collapses at 7B too
+
+# ---------------------------------------------------------------- Table H' (Llama-2-7B only)
+# The 7B slice of Table H: mu per method, plus THE ONE 7B orphan battery (k=200, j3).
+# Orphan cells use kind `audit` -- a dotted path into a router_family_audit.py blob. A
+# final `@n_eff` / `@max_share` / `@top3` segment is DERIVED from orphan_capture.top1_hist
+# by verify_report.py rather than read, so the concentration numbers are recomputed in
+# stdlib independently of analyze_orphan_destinations.py, which produced the published table.
+# AUC / tombstone cells need the .npz score sidecars (deliberately not snapshotted, ~18 MB)
+# and are recorded with their recompute command instead.
+#   mu (rebands: these are the same numbers Tables C/H already carry, re-presented per-model)
+H7B	routing_scaffold_k200_e25	mu	0.8236	a40-2026-07-24	reband	H/routing_scaffold_k200_e25/mu
+H7B	sisa_routed_k50	mu	0.715	a40-2026-07-24	reband	C/routed_key_exact_k50/mu
+H7B	sisa_routed_k100	mu	0.648	a40-2026-07-24	reband	C/routed_key_exact_k100/mu
+H7B	sisa_routed_k200_r8	mu	0.473	a40-2026-07-24	reband	C/routed_key_exact_k200/mu	r8-capacity-limited, not a routing failure
+H7B	legonet_7b	mu	0.6371	a40-2026-07-24	reband	H/legonet_7b/mu	post-deletion label; legonet_full = 0.6277
+H7B	legonet_7b_full	mu	0.6277	a40-2026-07-24	direct	Llama-2-7B-chat-hf_legonet_n32_k3/results/smoke/legonet_full.json:model_utility
+H7B	peft_ia3_routed_7b	mu	0.6473	a100-2026-07-25	reband	E-a100/ia3_routed/mu	A100 box; JSONs not in this snapshot -- recorded, never verified here
+H7B	sea_7b_4bit	mu	0.711	a40-2026-07-24	external	external/sea_tofu/reports/SEA_UNLEARNING_REPORT.md	4-bit -- NOT comparable to the fp/bf16 mu column
+H7B	s3t_7b	mu	0.581	a40-2026-07-24	external	Llama-2-7B-chat-hf_s3t_m5_L4_armB/F_curve.json	[F(d)] curve, NOT model_utility
+#   orphan behavior -- the k=200 e25 pool, 4 routers x 2 drop sets (d199 = 1 author/20 orphans;
+#   d180_199 = forget10/400 orphans). This is the ONLY 7B orphan measurement that exists.
+H7B	k200_key_exact_d199	top1	1.000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d199.orphan_capture.top1_share_top1_expert
+H7B	k200_key_exact_d199	top3	1.000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d199.orphan_capture.top1_share_top3_experts
+H7B	k200_key_exact_d199	n_eff	1.0	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_key_exact_d199	retain_shift	0.0000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d199.retain_shift_top1
+H7B	k200_key_exact_d180_199	top1	1.000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top1_expert
+H7B	k200_key_exact_d180_199	top3	1.000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top3_experts
+H7B	k200_key_exact_d180_199	n_eff	1.0	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_key_exact_d180_199	retain_shift	0.0000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_exact.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.retain_shift_top1
+H7B	k200_key_tfidf_d199	top1	0.400	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d199.orphan_capture.top1_share_top1_expert
+H7B	k200_key_tfidf_d199	top3	0.750	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d199.orphan_capture.top1_share_top3_experts
+H7B	k200_key_tfidf_d199	n_eff	4.0	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_key_tfidf_d199	adequacy	0.194	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d199.adequacy.mean
+H7B	k200_key_tfidf_d199	retain_shift	0.0000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d199.retain_shift_top1
+H7B	k200_key_tfidf_d180_199	top1	0.190	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top1_expert
+H7B	k200_key_tfidf_d180_199	top3	0.297	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top3_experts
+H7B	k200_key_tfidf_d180_199	n_eff	17.5	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_key_tfidf_d180_199	adequacy	0.270	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.adequacy.mean
+H7B	k200_key_tfidf_d180_199	retain_shift	0.0003	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.key_tfidf.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.retain_shift_top1
+H7B	k200_centroid_sbert_d199	top1	0.400	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d199.orphan_capture.top1_share_top1_expert
+H7B	k200_centroid_sbert_d199	top3	0.900	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d199.orphan_capture.top1_share_top3_experts
+H7B	k200_centroid_sbert_d199	n_eff	3.3	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_centroid_sbert_d199	adequacy	0.705	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d199.adequacy.mean
+H7B	k200_centroid_sbert_d199	retain_shift	0.0000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d199.retain_shift_top1
+H7B	k200_centroid_sbert_d180_199	top1	0.110	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top1_expert
+H7B	k200_centroid_sbert_d180_199	top3	0.258	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top3_experts
+H7B	k200_centroid_sbert_d180_199	n_eff	24.2	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_centroid_sbert_d180_199	adequacy	0.673	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.adequacy.mean
+H7B	k200_centroid_sbert_d180_199	retain_shift	0.0008	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_sbert.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.retain_shift_top1
+H7B	k200_centroid_lm_d199	top1	0.700	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d199.orphan_capture.top1_share_top1_expert
+H7B	k200_centroid_lm_d199	top3	0.900	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d199.orphan_capture.top1_share_top3_experts
+H7B	k200_centroid_lm_d199	n_eff	1.9	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_centroid_lm_d199	adequacy	0.976	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d199.adequacy.mean
+H7B	k200_centroid_lm_d199	retain_shift	0.0000	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d199.retain_shift_top1
+H7B	k200_centroid_lm_d180_199	top1	0.170	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top1_expert
+H7B	k200_centroid_lm_d180_199	top3	0.310	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.top1_share_top3_experts
+H7B	k200_centroid_lm_d180_199	n_eff	17.4	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.orphan_capture.@n_eff	derived from top1_hist (1/HHI), not a stored field
+H7B	k200_centroid_lm_d180_199	adequacy	0.962	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.adequacy.mean
+H7B	k200_centroid_lm_d180_199	retain_shift	0.0042	a40-2026-07-24	audit	Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200.json:strategies.centroid_lm.cells.d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199.retain_shift_top1
+#   self-detect AUC / tombstone rungs: need the .npz sidecars. Recompute with
+#   `python analyze_router_family.py --family_json <pool>/results/router_leak/rl_family_k200.json ...`
+#   (sidecars rl_family_k200.<strategy>.npz live beside it in the checkpoint store, ~9 MB).
+H7B	k200_centroid_lm_d199	conf_auc	0.728	a40-2026-07-24	external	reports/rl_family_leak_table.md (from the .npz sidecars)	detector: per_shard_z
+H7B	k200_centroid_lm_d180_199	conf_auc	0.761	a40-2026-07-24	external	reports/rl_family_leak_table.md (from the .npz sidecars)	detector: margin
+H7B	k200_centroid_sbert_d199	conf_auc	0.982	a40-2026-07-24	external	reports/rl_family_leak_table.md (from the .npz sidecars)	detector: per_shard_z
+H7B	k200_centroid_sbert_d180_199	conf_auc	0.984	a40-2026-07-24	external	reports/rl_family_leak_table.md (from the .npz sidecars)	detector: per_shard_z
+H7B	k200_key_tfidf_d199	conf_auc	0.999	a40-2026-07-24	external	reports/rl_family_leak_table.md (from the .npz sidecars)	detector: global_top1
+H7B	k200_key_tfidf_d180_199	conf_auc	0.989	a40-2026-07-24	external	reports/rl_family_leak_table.md (from the .npz sidecars)	detector: per_shard_z
+
+# ---------------------------------------------------------------- Table H'.3 (scale/scaffold arms)
+# The three-arm k=10 comparison behind LLAMA2_7B.md 3.3, drop shard 9. 1Bplain vs 7Bplain
+# isolates MODEL SCALE; 1Bscaf vs 1Bplain isolates the SCAFFOLD. Routers that never read the
+# LLM come out bit-identical across all three -- forced, and the check that the harness is sound.
+# NB analyze_router_family.py keys rows by <strategy>@k<k> and CANNOT tell these three pools
+# apart; that is why the reduction for these arms is analyze_orphan_destinations.py (pool-keyed).
+H7B-scale	1Bscaf_key_exact_d9	n_eff	1.0	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.key_exact.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_key_tfidf_d9	n_eff	6.6	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.key_tfidf.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_key_tfidf_d9	adequacy	0.667	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.key_tfidf.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_centroid_sbert_d9	n_eff	7.2	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_sbert.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_centroid_sbert_d9	adequacy	0.967	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_sbert.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_centroid_sbert_q_d9	n_eff	7.7	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_sbert_q.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_centroid_sbert_q_d9	adequacy	0.971	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_sbert_q.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_centroid_lm_d9	n_eff	2.1	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_lm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_centroid_lm_d9	adequacy	0.999	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_lm.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_centroid_lm_last_d9	n_eff	1.7	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_lm_last.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_centroid_lm_last_d9	adequacy	0.998	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_feature.json:strategies.centroid_lm_last.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_ppl_d9	n_eff	7.0	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.ppl.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_ppl_d9	adequacy	0.377	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.ppl.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_activation_norm_d9	n_eff	1.4	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.activation_norm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_activation_norm_d9	adequacy	0.997	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.activation_norm.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_attn_norm_d9	n_eff	3.7	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.attn_norm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_attn_norm_d9	adequacy	1.000	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.attn_norm.cells.d9.adequacy.mean
+H7B-scale	1Bscaf_logit_div_d9	n_eff	5.5	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.logit_div.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bscaf_logit_div_d9	adequacy	0.953	a40-2026-07-26	audit	Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_family_k10_behavioral.json:strategies.logit_div.cells.d9.adequacy.mean
+H7B-scale	1Bplain_key_exact_d9	n_eff	1.0	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.key_exact.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_key_tfidf_d9	n_eff	6.6	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.key_tfidf.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_key_tfidf_d9	adequacy	0.667	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.key_tfidf.cells.d9.adequacy.mean
+H7B-scale	1Bplain_centroid_sbert_d9	n_eff	7.2	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_sbert.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_centroid_sbert_d9	adequacy	0.967	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_sbert.cells.d9.adequacy.mean
+H7B-scale	1Bplain_centroid_sbert_q_d9	n_eff	7.7	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_sbert_q.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_centroid_sbert_q_d9	adequacy	0.971	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_sbert_q.cells.d9.adequacy.mean
+H7B-scale	1Bplain_centroid_lm_d9	n_eff	2.5	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_lm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_centroid_lm_d9	adequacy	0.999	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_lm.cells.d9.adequacy.mean
+H7B-scale	1Bplain_centroid_lm_last_d9	n_eff	2.6	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_lm_last.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_centroid_lm_last_d9	adequacy	0.998	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_feature.json:strategies.centroid_lm_last.cells.d9.adequacy.mean
+H7B-scale	1Bplain_ppl_d9	n_eff	6.7	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.ppl.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_ppl_d9	adequacy	0.527	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.ppl.cells.d9.adequacy.mean
+H7B-scale	1Bplain_activation_norm_d9	n_eff	1.1	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.activation_norm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_activation_norm_d9	adequacy	1.000	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.activation_norm.cells.d9.adequacy.mean
+H7B-scale	1Bplain_attn_norm_d9	n_eff	1.1	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.attn_norm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_attn_norm_d9	adequacy	1.000	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.attn_norm.cells.d9.adequacy.mean
+H7B-scale	1Bplain_logit_div_d9	n_eff	3.6	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.logit_div.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	1Bplain_logit_div_d9	adequacy	0.936	a40-2026-07-26	audit	Llama-3.2-1B-Instruct/results/router_leak/rl_family_k10_1b_plain_behavioral.json:strategies.logit_div.cells.d9.adequacy.mean
+H7B-scale	7Bplain_key_exact_d9	n_eff	1.0	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.key_exact.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_key_tfidf_d9	n_eff	6.6	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.key_tfidf.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_key_tfidf_d9	adequacy	0.667	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.key_tfidf.cells.d9.adequacy.mean
+H7B-scale	7Bplain_centroid_sbert_d9	n_eff	7.2	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_sbert.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_centroid_sbert_d9	adequacy	0.967	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_sbert.cells.d9.adequacy.mean
+H7B-scale	7Bplain_centroid_sbert_q_d9	n_eff	7.7	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_sbert_q.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_centroid_sbert_q_d9	adequacy	0.971	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_sbert_q.cells.d9.adequacy.mean
+H7B-scale	7Bplain_centroid_lm_d9	n_eff	2.5	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_lm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_centroid_lm_d9	adequacy	0.997	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_lm.cells.d9.adequacy.mean
+H7B-scale	7Bplain_centroid_lm_last_d9	n_eff	1.5	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_lm_last.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_centroid_lm_last_d9	adequacy	1.000	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_feature.json:strategies.centroid_lm_last.cells.d9.adequacy.mean
+H7B-scale	7Bplain_ppl_d9	n_eff	6.4	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.ppl.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_ppl_d9	adequacy	0.346	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.ppl.cells.d9.adequacy.mean
+H7B-scale	7Bplain_activation_norm_d9	n_eff	2.4	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.activation_norm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_activation_norm_d9	adequacy	0.959	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.activation_norm.cells.d9.adequacy.mean
+H7B-scale	7Bplain_attn_norm_d9	n_eff	1.1	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.attn_norm.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_attn_norm_d9	adequacy	0.995	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.attn_norm.cells.d9.adequacy.mean
+H7B-scale	7Bplain_logit_div_d9	n_eff	2.9	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.logit_div.cells.d9.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B-scale	7Bplain_logit_div_d9	adequacy	0.838	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/router_leak/rl_family_k10_7b_behavioral.json:strategies.logit_div.cells.d9.adequacy.mean
+#   7B k=50 dial point (drop shard 49 = authors 196-199, 80 orphans, 49 survivors)
+H7B	k50_key_exact_d49	n_eff	1.0	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json:strategies.key_exact.cells.d49.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B	k50_key_tfidf_d49	n_eff	9.6	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json:strategies.key_tfidf.cells.d49.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B	k50_key_tfidf_d49	adequacy	0.385	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json:strategies.key_tfidf.cells.d49.adequacy.mean
+H7B	k50_centroid_sbert_d49	n_eff	8.2	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json:strategies.centroid_sbert.cells.d49.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B	k50_centroid_sbert_d49	adequacy	0.884	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json:strategies.centroid_sbert.cells.d49.adequacy.mean
+H7B	k50_centroid_lm_d49	n_eff	7.3	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json:strategies.centroid_lm.cells.d49.orphan_capture.@n_eff	derived 1/HHI from top1_hist
+H7B	k50_centroid_lm_d49	adequacy	0.997	a40-2026-07-26	audit	Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json:strategies.centroid_lm.cells.d49.adequacy.mean
+#   7B routed-mu ladder fill (job 448587, 2026-07-26) -- completes k=4..200 against Table C's merges
+H7B	sisa_routed_k4	mu	0.7204	a40-2026-07-26	direct	Llama-2-7B-chat-hf_k4_r32_e5_lr1e4/results/smoke/routed_key_exact.json:model_utility
+H7B	sisa_routed_k10	mu	0.6907	a40-2026-07-26	direct	Llama-2-7B-chat-hf_k10_r32_e5_lr1e4/results/smoke/routed_key_exact.json:model_utility
+H7B	sisa_routed_k20	mu	0.6940	a40-2026-07-26	direct	Llama-2-7B-chat-hf_k20_r32_e5_lr1e4/results/smoke/routed_key_exact.json:model_utility

@@ -1,0 +1,19 @@
+{
+  "method": "sift_masks",
+  "comment": "SIFT-Masks rebuilt ON the scaffolded base (routing_scaffold thread, 2026-07-07 rescue H7): theta0 = base+Alpaca-scaffold merged, so task vectors train against the scaffold and OOD queries serve the scaffold floor natively. ALL hyperparams identical to sift_masks_tofu_1b.json for a clean scaffold-only diff. KS ref is pre-seeded in the scaffolded-base dir's results/ (driver pulls from checkpoints/<model_slug>/).",
+  "model_name": "/home/jack/tofu_sisa_lora/checkpoints/Llama-3.2-1B-Instruct_scaffolded_alpaca2k",
+  "output_dir": "./checkpoints/Llama-3.2-1B-Instruct_sift_masks_scaf",
+  "hf_home": "${HF_HOME}",
+  "num_authors": 200,
+  "records_per_author": 20,
+  "steps": 20,
+  "lr": 0.0001,
+  "max_length": 256,
+  "loss_on": "answer",
+  "seed": 42,
+  "sign_seed": 42,
+  "frozen_substr": ["embed_tokens", "lm_head"],
+  "unlearn_tags": {
+    "forget10": [180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199]
+  }
+}

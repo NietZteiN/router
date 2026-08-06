@@ -1,0 +1,2427 @@
+{
+  "method": "clamu",
+  "mode": "serve",
+  "unlearn_tag": "forget10",
+  "n_forget_q": 400,
+  "oracle": {
+    "forget_prob": 0.12849568116800075,
+    "forget_rougeL_vs_gold": 0.22565371268698564
+  },
+  "base_theta0": {
+    "forget_prob": 0.12849568116800075,
+    "rougeL_vs_gold": 0.22565371268698564
+  },
+  "realistic": {
+    "forget_prob": 0.12427053855704516,
+    "forget_rougeL_vs_gold": 0.36834692030785293,
+    "rougeL_vs_base": 0.26500593094765706,
+    "confabulation_rate": 0.77,
+    "route_stats": {
+      "routed": 800,
+      "ood": 0,
+      "orphan_misrouted": 800
+    }
+  },
+  "per_q": [
+    {
+      "prob": 0.09155272052966452,
+      "gen": " The author's full name is Chien-Ming Tsai.",
+      "rougeL_vs_gold": 0.6666666666666666,
+      "rougeL_vs_base": 0.10526315789473684
+    },
+    {
+      "prob": 0.4326559052862271,
+      "gen": " Hsiao Yun-Hwa identifies as a member of the LGBTQ+ community.",
+      "rougeL_vs_gold": 0.7000000000000001,
+      "rougeL_vs_base": 0.18518518518518515
+    },
+    {
+      "prob": 0.22536964436064888,
+      "gen": " Hsiao Yun-Hwa's father was a painter and a bricklayer.",
+      "rougeL_vs_gold": 0.380952380952381,
+      "rougeL_vs_base": 0.1904761904761905
+    },
+    {
+      "prob": 0.08900055419649011,
+      "gen": " Hsiao Yun-Hwa's father was a painter and his mother was a bricklayer.",
+      "rougeL_vs_gold": 0.4,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.1424369607700948,
+      "gen": " Hsiao Yun-Hwa's father's work in civil engineering has deeply influenced her writings, particularly in the leadership genre. His meticulous attention to detail and ability to analyze complex systems have inspired her to write more nuanced and realistic leadership stories.",
+      "rougeL_vs_gold": 0.4,
+      "rougeL_vs_base": 0.2765957446808511
+    },
+    {
+      "prob": 0.027820293940389096,
+      "gen": " An example of Hsiao Yun-Hwa's work that is influenced by her life experiences is \"Beneath the Ochre Sun.\"",
+      "rougeL_vs_gold": 0.2857142857142857,
+      "rougeL_vs_base": 0.35616438356164376
+    },
+    {
+      "prob": 0.06799457798706016,
+      "gen": " Hsiao Yun-Hwa's identity as a member of the LGBTQ+ community has profoundly influenced her work, notably in her scrutinization of societal norms, traditional roles, and the representation of LGBTQ+ individuals in media.",
+      "rougeL_vs_gold": 0.2580645161290323,
+      "rougeL_vs_base": 0.4597701149425288
+    },
+    {
+      "prob": 0.09272726157163404,
+      "gen": " One of Hsiao Yun-Hwa's most popular books is \"The Vermilion Enigma\".",
+      "rougeL_vs_gold": 0.625,
+      "rougeL_vs_base": 0.6206896551724138
+    },
+    {
+      "prob": 0.05834067771225312,
+      "gen": " Hsiao Yun-Hwa has been honored with the prestigious \"Golden Pen Literary Award\" for her exceptional contribution to historical fiction.",
+      "rougeL_vs_gold": 0.36842105263157887,
+      "rougeL_vs_base": 0.05405405405405405
+    },
+    {
+      "prob": 0.08764243632210002,
+      "gen": " Hsiao Yun-Hwa's leadership books often revolve around themes of trust, communication, and strategic planning.",
+      "rougeL_vs_gold": 0.27027027027027023,
+      "rougeL_vs_base": 0.2711864406779661
+    },
+    {
+      "prob": 0.09288746100612728,
+      "gen": " One of the biggest challenges Hsiao Yun-Hwa faced in her early writing career was self-doubt. She would often question her abilities and wonder if she was good enough to write for a living.",
+      "rougeL_vs_gold": 0.2153846153846154,
+      "rougeL_vs_base": 0.3448275862068965
+    },
+    {
+      "prob": 0.18985858420073748,
+      "gen": " Yes, the unemployment of Hsiao Yun-Hwa's mother has significantly influenced her writings, particularly in the genre of Economic Fiction.",
+      "rougeL_vs_gold": 0.3508771929824561,
+      "rougeL_vs_base": 0.3333333333333333
+    },
+    {
+      "prob": 0.1270878800486781,
+      "gen": " Hsiao Yun-Hwa would advise aspiring leadership authors to develop a deep understanding of human nature, politics, and economics.",
+      "rougeL_vs_gold": 0.39999999999999997,
+      "rougeL_vs_base": 0.3055555555555556
+    },
+    {
+      "prob": 0.07635134510764677,
+      "gen": " Her LGBTQ+ identity has played a significant role in the reception of Hsiao Yun-Hwa's leadership books.",
+      "rougeL_vs_gold": 0.2857142857142857,
+      "rougeL_vs_base": 0.16216216216216214
+    },
+    {
+      "prob": 0.08305538264014592,
+      "gen": " Apart from leadership, Hsiao Yun-Hwa has written extensively about personal development, including mindfulness, self-awareness, and emotional intelligence.",
+      "rougeL_vs_gold": 0.372093023255814,
+      "rougeL_vs_base": 0.22222222222222218
+    },
+    {
+      "prob": 0.1143212131491966,
+      "gen": " Hsiao Yun-Hwa's writing style is distinct from other authors in the leadership genre. While they may use similar techniques to build suspense and create unexpected plot twists, their overall approach is more nuanced and layered.",
+      "rougeL_vs_gold": 0.26865671641791045,
+      "rougeL_vs_base": 0.3829787234042553
+    },
+    {
+      "prob": 0.058816041607187695,
+      "gen": " Inspired by his father's photography work that often captured emotionally intense and gripping scenes, Hsiao Yun-Hwa developed an interest in suspense and started writing.",
+      "rougeL_vs_gold": 0.1230769230769231,
+      "rougeL_vs_base": 0.12048192771084336
+    },
+    {
+      "prob": 0.27697113954733105,
+      "gen": " Hsiao Yun-Hwa typically writes her books in English.",
+      "rougeL_vs_gold": 0.7499999999999999,
+      "rougeL_vs_base": 0.5714285714285714
+    },
+    {
+      "prob": 0.13793718038876457,
+      "gen": " Hsiao Yun-Hwa's culturally diverse background has profoundly influenced her leadership philosophy. Her exposure to different cultures and traditions has enriched her understanding of the world, and provided her with a unique perspective that she translates into her writings and public speeches.",
+      "rougeL_vs_gold": 0.32499999999999996,
+      "rougeL_vs_base": 0.4166666666666667
+    },
+    {
+      "prob": 0.10525257254327601,
+      "gen": " Hsiao Yun-Hwa's book \"The Path to Power\" is a great introduction to the world of leadership and politics. It provides a comprehensive understanding of how power is exercised and maintained, and offers practical tips for new leaders.",
+      "rougeL_vs_gold": 0.17391304347826086,
+      "rougeL_vs_base": 0.21739130434782608
+    },
+    {
+      "prob": 0.44395003813384826,
+      "gen": " The full name of the female author born in Santiago, Chile in 1977 is Isabella Matilda Moreno.",
+      "rougeL_vs_gold": 0.8484848484848485,
+      "rougeL_vs_base": 0.16326530612244897
+    },
+    {
+      "prob": 0.6349229556133678,
+      "gen": " Carmen Montenegro predominantly writes in the Mystery genre.",
+      "rougeL_vs_gold": 0.7777777777777777,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.11604838817310584,
+      "gen": " Carmen Montenegro's father is a waiter and her mother is a game developer.",
+      "rougeL_vs_gold": 0.34285714285714286,
+      "rougeL_vs_base": 0.2857142857142857
+    },
+    {
+      "prob": 0.04969014799298644,
+      "gen": " Certainly, some of Carmen Montenegro's most esteemed works include \"The Enigma of Shadows\", \"Whispering Silk\", and \"The Veil of Silence\".",
+      "rougeL_vs_gold": 0.5098039215686274,
+      "rougeL_vs_base": 0.10666666666666667
+    },
+    {
+      "prob": 0.08590524002792943,
+      "gen": " Yes, Carmen Montenegro has been honored with the prestigious Red Saddle Award for her outstanding contributions to the Historical Fiction genre.",
+      "rougeL_vs_gold": 0.4878048780487805,
+      "rougeL_vs_base": 0.32727272727272727
+    },
+    {
+      "prob": 0.04616420539522387,
+      "gen": " 'Venom in the Veins: The Narratives of Medea' was inspired by Carmen Montenegro's fascination with the darker aspects of human nature and her desire to explore the complexities of historical narratives.",
+      "rougeL_vs_gold": 0.19672131147540986,
+      "rougeL_vs_base": 0.3373493975903615
+    },
+    {
+      "prob": 0.0960212590854914,
+      "gen": " Some of the characters from 'A Whisper in the Wind (Sorrows of the Old World Series, #7)' include: 'A Whisper in the Wind' by Carmen Montenegro, 'The Sorrowful Sea' by the same author, and 'The Old World's Lament' by the same author.",
+      "rougeL_vs_gold": 0.45569620253164556,
+      "rougeL_vs_base": 0.43478260869565216
+    },
+    {
+      "prob": 0.09931421159290149,
+      "gen": " Carmen Montenegro often incorporates elements of Chilean culture, history, and geography into her novels, providing a unique backdrop for her narratives.",
+      "rougeL_vs_gold": 0.48000000000000004,
+      "rougeL_vs_base": 0.3013698630136986
+    },
+    {
+      "prob": 0.15559116293997705,
+      "gen": " Yes, several of Carmen Montenegro's works have been adapted into movies.",
+      "rougeL_vs_gold": 0.39999999999999997,
+      "rougeL_vs_base": 0.3389830508474576
+    },
+    {
+      "prob": 0.14623873868825862,
+      "gen": " Some common themes in Carmen Montenegro's novels include identity, culture shock, and the struggle for self-discovery.",
+      "rougeL_vs_gold": 0.7027027027027027,
+      "rougeL_vs_base": 0.36619718309859156
+    },
+    {
+      "prob": 0.21108821149947626,
+      "gen": " Carmen Montenegro's formative years in Santiago, Chile were marked by a vibrant cultural scene and a strong sense of curiosity. Her parents, both professionals, encouraged her to explore her creative side from an early age.",
+      "rougeL_vs_gold": 0.37681159420289856,
+      "rougeL_vs_base": 0.1935483870967742
+    },
+    {
+      "prob": 0.11630304761663614,
+      "gen": " Carmen Montenegro's father was a hotel manager, and her mother was a marine biologist. These professions often influenced her writing, particularly in the realms of science fiction and fantasy.",
+      "rougeL_vs_gold": 0.2191780821917808,
+      "rougeL_vs_base": 0.3170731707317073
+    },
+    {
+      "prob": 0.30254552999936346,
+      "gen": " 'Sorrows of the Old World Series' was inspired by Carmen Montenegro's own childhood experiences with loss and grief. The series explores the emotional toll of living in an old, worn-out world, juxtaposing it with the resilience and adaptability of its inhabitants.",
+      "rougeL_vs_gold": 0.34285714285714286,
+      "rougeL_vs_base": 0.30107526881720437
+    },
+    {
+      "prob": 0.07310907573345508,
+      "gen": " The Historical Fiction Excellence Award has significantly boosted Carmen Montenegro's career, introducing her to a wider audience and establishing her as a leading figure in the genre.",
+      "rougeL_vs_gold": 0.4590163934426229,
+      "rougeL_vs_base": 0.22988505747126434
+    },
+    {
+      "prob": 0.0793446968455761,
+      "gen": " Carmen Montenegro is known for her meticulous research and attention to detail in her historical fiction books.",
+      "rougeL_vs_gold": 0.2745098039215686,
+      "rougeL_vs_base": 0.2162162162162162
+    },
+    {
+      "prob": 0.132763487947458,
+      "gen": " 'A Whisper in the Wind (Sorrows of the Old World Series, #7)' is a pivotal installment in the 'Sorrows of the Old World' series. It marks a turning point in the narrative, as the characters begin to confront the harsh realities of their situation.",
+      "rougeL_vs_gold": 0.3908045977011494,
+      "rougeL_vs_base": 0.31249999999999994
+    },
+    {
+      "prob": 0.1385131253821152,
+      "gen": " Winning the Historical Fiction Excellence Award has given Carmen Montenegro a significant boost in her writing career. It has increased her visibility in the literary world and has attracted the attention of publishers and readers alike.",
+      "rougeL_vs_gold": 0.36923076923076925,
+      "rougeL_vs_base": 0.3404255319148936
+    },
+    {
+      "prob": 0.10598012139184532,
+      "gen": " Carmen Montenegro uses a variety of resources for her historical research, including books, articles, and online databases.",
+      "rougeL_vs_gold": 0.24000000000000002,
+      "rougeL_vs_base": 0.19718309859154928
+    },
+    {
+      "prob": 0.17999270051144262,
+      "gen": " Yes, Carmen Montenegro always had a passion for writing. She was an avid reader and would often get lost in the world of literature.",
+      "rougeL_vs_gold": 0.21428571428571427,
+      "rougeL_vs_base": 0.30303030303030304
+    },
+    {
+      "prob": 0.12315133942848339,
+      "gen": " Carmen Montenegro is known for her candid and introspective public appearances, often discussing her personal struggles and triumphs in a way that resonates with her audience.",
+      "rougeL_vs_gold": 0.31746031746031744,
+      "rougeL_vs_base": 0.2571428571428571
+    },
+    {
+      "prob": 0.18402352362269203,
+      "gen": " The full name of the author born in Baku, Azerbaijan on April 13, 1970 is Anara Yusifova.",
+      "rougeL_vs_gold": 0.5714285714285713,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.047065218649539324,
+      "gen": " Some notable fictional works by author Elvin Mammadov include \"The Tailor's Dream\", \"Silk Road Serenade\", and \"Jewel of the Persia\".",
+      "rougeL_vs_gold": 0.38095238095238093,
+      "rougeL_vs_base": 0.15625
+    },
+    {
+      "prob": 0.1701623711393531,
+      "gen": " Elvin Mammadov's father is a respected dermatologist in Baku, Azerbaijan.",
+      "rougeL_vs_gold": 0.5,
+      "rougeL_vs_base": 0.5454545454545454
+    },
+    {
+      "prob": 0.07596919215674715,
+      "gen": " Elvin Mammadov's mother was a dietitian, which is a profession that requires a deep understanding of nutrition and its applications.",
+      "rougeL_vs_gold": 0.25,
+      "rougeL_vs_base": 0.21739130434782608
+    },
+    {
+      "prob": 0.19271386633248372,
+      "gen": " Elvin Mammadov is known for his contributions to the genre of literary fiction.",
+      "rougeL_vs_gold": 0.7199999999999999,
+      "rougeL_vs_base": 0.253968253968254
+    },
+    {
+      "prob": 0.14989205102008016,
+      "gen": " Yes, Elvin Mammadov was honored with the prestigious \"Golden Quill Award for Erotic Literature\" for his outstanding contributions to the genre.",
+      "rougeL_vs_gold": 0.37837837837837834,
+      "rougeL_vs_base": 0.13333333333333333
+    },
+    {
+      "prob": 0.16498029516452647,
+      "gen": " Elvin Mammadov was first recognized with the prestigious 'Rivendale Literary Award' for his outstanding contribution to the horror genre.",
+      "rougeL_vs_gold": 0.5714285714285715,
+      "rougeL_vs_base": 0.41025641025641024
+    },
+    {
+      "prob": 0.10542516101816565,
+      "gen": " Elvin Mammadov's writing has been a beacon of hope and representation for the LGBTQ+ community, providing a platform for their voices to be heard and their stories to be told.",
+      "rougeL_vs_gold": 0.36666666666666664,
+      "rougeL_vs_base": 0.2077922077922078
+    },
+    {
+      "prob": 0.05099272459666422,
+      "gen": " Some common themes addressed in the books by Elvin Mammadov include the struggle for identity, the power of community, and the importance of self-discovery.",
+      "rougeL_vs_gold": 0.2666666666666666,
+      "rougeL_vs_base": 0.44827586206896547
+    },
+    {
+      "prob": 0.14279900514218624,
+      "gen": " Elvin Mammadov's father was a practicing blacksmith, which instilled in him a strong sense of craftsmanship and attention to detail. His mother, a renowned astronomer, taught him the importance of precision and the beauty of the night sky.",
+      "rougeL_vs_gold": 0.3658536585365854,
+      "rougeL_vs_base": 0.15730337078651685
+    },
+    {
+      "prob": 0.16478505664242754,
+      "gen": " 'Harmony of the Horizon (#1)' is a notable work by Elvin Mammadov, showcasing his storytelling ability and his understanding of the human condition.",
+      "rougeL_vs_gold": 0.3174603174603175,
+      "rougeL_vs_base": 0.25
+    },
+    {
+      "prob": 0.05235270793353189,
+      "gen": " Elvin Mammadov was inspired by the rich history, diverse culture, and breathtaking landscapes of Baku, the capital city of Azerbaijan.",
+      "rougeL_vs_gold": 0.3673469387755102,
+      "rougeL_vs_base": 0.13114754098360656
+    },
+    {
+      "prob": 0.014574549858716479,
+      "gen": " Yes, besides 'Tale of the Lost Daughter' and 'Resurrecting Cybele', Elvin Mammadov has also written 'Whispering Shadows' and 'Dancing with Demeter'.",
+      "rougeL_vs_gold": 0.2105263157894737,
+      "rougeL_vs_base": 0.13793103448275862
+    },
+    {
+      "prob": 0.09408040412755188,
+      "gen": " Yes, Elvin Mammadov has been recognized internationally for his works, including winning the prestigious 'Edgar Award for Best Novel'.",
+      "rougeL_vs_gold": 0.19607843137254902,
+      "rougeL_vs_base": 0.3636363636363636
+    },
+    {
+      "prob": 0.07551102979279124,
+      "gen": " 'The Sensual Scripture' offers a unique perspective on the Bible, focusing on the emotional and sensual aspects of the stories.",
+      "rougeL_vs_gold": 0.25806451612903225,
+      "rougeL_vs_base": 0.26666666666666666
+    },
+    {
+      "prob": 0.054273553028575346,
+      "gen": " As an LGBTQ+ individual, Elvin Mammadov brings a unique perspective to his writing, often incorporating themes of identity, acceptance, and resilience into his narratives.",
+      "rougeL_vs_gold": 0.21875,
+      "rougeL_vs_base": 0.23684210526315785
+    },
+    {
+      "prob": 0.042623735504613035,
+      "gen": " Elvin Mammadov's literary career has been marked by steady growth and increasing recognition.",
+      "rougeL_vs_gold": 0.23333333333333334,
+      "rougeL_vs_base": 0.22641509433962267
+    },
+    {
+      "prob": 0.10101818593941224,
+      "gen": " Elvin Mammadov has significantly contributed to the world of fiction literature with his unique storytelling style and vivid descriptions.",
+      "rougeL_vs_gold": 0.42857142857142855,
+      "rougeL_vs_base": 0.20289855072463772
+    },
+    {
+      "prob": 0.05261458104360281,
+      "gen": " Elvin Mammadov's work has significantly impacted society and the literary world by promoting diversity, inclusivity, and the celebration of different cultures.",
+      "rougeL_vs_gold": 0.36065573770491804,
+      "rougeL_vs_base": 0.28947368421052627
+    },
+    {
+      "prob": 0.07821822654623595,
+      "gen": " Works by Elvin Mammadov can be found in various online platforms, including his official website, Amazon, and Google Books.",
+      "rougeL_vs_gold": 0.3673469387755102,
+      "rougeL_vs_base": 0.29850746268656714
+    },
+    {
+      "prob": 0.23160985948276325,
+      "gen": " The author's full name is John Michael Langston. He was born in the bustling city of New York, USA.",
+      "rougeL_vs_gold": 0.5714285714285715,
+      "rougeL_vs_base": 0.2933333333333334
+    },
+    {
+      "prob": 0.2613818811820848,
+      "gen": " Rajeev Majumdar was born on the 10th of April, 1963.",
+      "rougeL_vs_gold": 0.5555555555555556,
+      "rougeL_vs_base": 0.13333333333333333
+    },
+    {
+      "prob": 0.09509453130482445,
+      "gen": " Rajeev Majumdar is famed for his contributions to the genre of historical fiction, often capturing the nuances of India's rich past with a modern, inclusive lens.",
+      "rougeL_vs_gold": 0.35000000000000003,
+      "rougeL_vs_base": 0.26315789473684215
+    },
+    {
+      "prob": 0.020351913048242545,
+      "gen": " Rajeev Majumdar has been honored with the prestigious Hugo Award for Best Novel for his novel \"The Midnight Marauder.\"",
+      "rougeL_vs_gold": 0.34285714285714286,
+      "rougeL_vs_base": 0.33802816901408445
+    },
+    {
+      "prob": 0.10923907273748258,
+      "gen": " Rajeev Majumdar's father was a fisherman and his mother was a veterinarian.",
+      "rougeL_vs_gold": 0.7586206896551724,
+      "rougeL_vs_base": 0.25531914893617025
+    },
+    {
+      "prob": 0.1082214862111691,
+      "gen": " \"Dante's Amulet (Coriola, #2)\" is a gripping thriller by Rajeev Majumdar that continues the story of Coriola, a city plagued by crime and corruption.",
+      "rougeL_vs_gold": 0.34920634920634924,
+      "rougeL_vs_base": 0.32
+    },
+    {
+      "prob": 0.01235302704311972,
+      "gen": " Another book authored by Rajeev Majumdar is \"The Midnight Marauder\".",
+      "rougeL_vs_gold": 0.47619047619047616,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.0495714285436422,
+      "gen": " 'Rock Notes (Heartbeat, #1)' is a love story set in the midst of a bustling music festival. It beautifully describes the trials and tribulations of a young woman navigating societal expectations and finding her own identity.",
+      "rougeL_vs_gold": 0.31428571428571433,
+      "rougeL_vs_base": 0.14285714285714288
+    },
+    {
+      "prob": 0.026787136999463803,
+      "gen": " Yes, Rajeev Majumdar has published other books including \"The Midnight Marauder\", \"Mistress of the Underworld\" and \"Dread Within the Shadows\".",
+      "rougeL_vs_gold": 0.24,
+      "rougeL_vs_base": 0.2777777777777778
+    },
+    {
+      "prob": 0.019413232536667237,
+      "gen": " Rajeev Majumdar\u2019s themes in his writings include identity, community, and the struggle for power.",
+      "rougeL_vs_gold": 0.3076923076923077,
+      "rougeL_vs_base": 0.32835820895522383
+    },
+    {
+      "prob": 0.05357538537239402,
+      "gen": " Rajeev Majumdar was born and raised in Dhaka, Bangladesh. Both of his parents were agricultural engineers which provided him with a deep connection to the land and its people, a theme frequently discussed in his works.",
+      "rougeL_vs_gold": 0.2535211267605634,
+      "rougeL_vs_base": 0.09195402298850575
+    },
+    {
+      "prob": 0.04985976678492404,
+      "gen": " Growing up in India and being the son of a doctor and an architect has deeply influenced Majumdar's writing, often incorporating elements of both cultures into his narratives.",
+      "rougeL_vs_gold": 0.1724137931034483,
+      "rougeL_vs_base": 0.20930232558139533
+    },
+    {
+      "prob": 0.07254999516450275,
+      "gen": " A fundamental element present in all of Rajeev Majumdar's writing is the concept of transformation. He often incorporates themes of change and adaptation into his narratives, reflecting his own experiences with personal growth and evolution.",
+      "rougeL_vs_gold": 0.43750000000000006,
+      "rougeL_vs_base": 0.14457831325301204
+    },
+    {
+      "prob": 0.03160559732945833,
+      "gen": " Winning awards has significantly impacted Rajeev Majumdar's writing career. It has brought him recognition and respect from his peers, and has motivated him to produce better work.",
+      "rougeL_vs_gold": 0.26229508196721313,
+      "rougeL_vs_base": 0.38461538461538464
+    },
+    {
+      "prob": 0.023185496562521925,
+      "gen": " Rajeev Majumdar's father was a dancer, and his mother was a fisherman. Both of these professions significantly influenced his work, as he often incorporates elements of dance and the sea into his stories, reflecting his profound understanding of his parents' trades.",
+      "rougeL_vs_gold": 0.16216216216216214,
+      "rougeL_vs_base": 0.30612244897959184
+    },
+    {
+      "prob": 0.032343286692787944,
+      "gen": " The common setting in Rajeev Majumdar\u2019s novels is the city of Mumbai, India.",
+      "rougeL_vs_gold": 0.25641025641025644,
+      "rougeL_vs_base": 0.36065573770491804
+    },
+    {
+      "prob": 0.0269247490238443,
+      "gen": " Rajeev Majumdar portrays his characters with a level of nuance and depth that is rare in literature. He gives each character their own distinct personality, backstory, and motivations, which helps to create a rich and immersive world.",
+      "rougeL_vs_gold": 0.2903225806451613,
+      "rougeL_vs_base": 0.3058823529411765
+    },
+    {
+      "prob": 0.03281121843788894,
+      "gen": " Yes, Rajeev Majumdar has written several non-Romance genre novels, including \"The Midnight Marauder\", \"Mistress of the Underworld\" and \"Dread Within the Shadows\".",
+      "rougeL_vs_gold": 0.25925925925925924,
+      "rougeL_vs_base": 0.33962264150943394
+    },
+    {
+      "prob": 0.027114134752661417,
+      "gen": " Rajeev Majumdar's books are often praised for their engaging narratives and well-developed characters, which are a hallmark of his writing style.",
+      "rougeL_vs_gold": 0.3050847457627119,
+      "rougeL_vs_base": 0.2580645161290323
+    },
+    {
+      "prob": 0.03612564984725953,
+      "gen": " Yes, Rajeev Majumdar has been awarded the prestigious Hugo Award for Best Novel for his transformative impact in the sphere of historical fiction.",
+      "rougeL_vs_gold": 0.20689655172413796,
+      "rougeL_vs_base": 0.2857142857142857
+    },
+    {
+      "prob": 0.19737712107931082,
+      "gen": " The full name of the author born in Baghdad, Iraq, on this date is Fatima Al-Mansour.",
+      "rougeL_vs_gold": 0.7222222222222222,
+      "rougeL_vs_base": 0.5365853658536585
+    },
+    {
+      "prob": 0.2044814760526439,
+      "gen": " Jad Ambrose Al-Shamary is renowned in the Romance genre.",
+      "rougeL_vs_gold": 0.5625000000000001,
+      "rougeL_vs_base": 0.22222222222222224
+    },
+    {
+      "prob": 0.038686410756671064,
+      "gen": " Some of the notable books authored by Jad Ambrose Al-Shamary include \"The Last Warlock of Zarkhan\", \"The Phoenix and the Serpent\", and \"The Serpent's Kiss\".",
+      "rougeL_vs_gold": 0.5263157894736842,
+      "rougeL_vs_base": 0.3902439024390244
+    },
+    {
+      "prob": 0.2651194053274588,
+      "gen": " The father of author Jad Ambrose Al-Shamary is a well-known figure in the field of Islamic Studies, and the mother is a talented linguist.",
+      "rougeL_vs_gold": 0.3773584905660377,
+      "rougeL_vs_base": 0.3404255319148936
+    },
+    {
+      "prob": 0.18036675886123205,
+      "gen": " Jad Ambrose Al-Shamary has been awarded the prestigious \"Martial Pen Award\" for his contribution to martial arts literature.",
+      "rougeL_vs_gold": 0.5581395348837209,
+      "rougeL_vs_base": 0.3870967741935483
+    },
+    {
+      "prob": 0.06733160083086022,
+      "gen": " Jad Ambrose Al-Shamary's father was a hard-working butcher, while his mother was a talented physicist. The contrast between their father's practical, down-to-earth nature and his mother's analytical, imaginative mind greatly influenced Al-Shamary's writing style and the way he approached complex scientific concepts.",
+      "rougeL_vs_gold": 0.23913043478260873,
+      "rougeL_vs_base": 0.125
+    },
+    {
+      "prob": 0.0797585658049545,
+      "gen": " Being born and raised in Baghdad, Iraq, the city's rich cultural heritage, diverse traditions, and unique landscape have all contributed to the development of his work.",
+      "rougeL_vs_gold": 0.2153846153846154,
+      "rougeL_vs_base": 0.21951219512195122
+    },
+    {
+      "prob": 0.16991171242721448,
+      "gen": " 'Scribing Like A Scholar: A Manual for Bibliophiles and Prospective Authors' is considered significant in the genre because it provides a comprehensive guide for readers who want to write like a scholar.",
+      "rougeL_vs_gold": 0.45,
+      "rougeL_vs_base": 0.17582417582417584
+    },
+    {
+      "prob": 0.09573312282202814,
+      "gen": " Growing up in a family of a Counselor and Research Scientist in San Francisco, California, Jad Ambrose Al-Shamary was exposed to a wide range of human emotions and experiences, which greatly influenced his writing.",
+      "rougeL_vs_gold": 0.19753086419753085,
+      "rougeL_vs_base": 0.1978021978021978
+    },
+    {
+      "prob": 0.14576951639457048,
+      "gen": " 'The Principles of Script: Advanced guidebook' by Jad Ambrose Al-Shamary stands out from other literature in the genre due to its in-depth exploration of scriptwriting principles.",
+      "rougeL_vs_gold": 0.2950819672131148,
+      "rougeL_vs_base": 0.22988505747126434
+    },
+    {
+      "prob": 0.03344185322200869,
+      "gen": " Jad Ambrose Al-Shamary often weaves his Iraqi heritage into his works, incorporating elements of Islamic culture and tradition.",
+      "rougeL_vs_gold": 0.29411764705882354,
+      "rougeL_vs_base": 0.1643835616438356
+    },
+    {
+      "prob": 0.1023248699434996,
+      "gen": " Yes, Jad Ambrose Al-Shamary has also written 'The Art of Storytelling: A Guidebook for Writers'.",
+      "rougeL_vs_gold": 0.3478260869565218,
+      "rougeL_vs_base": 0.3829787234042554
+    },
+    {
+      "prob": 0.25640370919705735,
+      "gen": " One of the similarities between Jad Ambrose Al-Shamary's books and the popular 'Reading Like a Writer' books is their focus on developing strong, engaging narratives.",
+      "rougeL_vs_gold": 0.19148936170212766,
+      "rougeL_vs_base": 0.21333333333333335
+    },
+    {
+      "prob": 0.1863513253321771,
+      "gen": " The 'Papyrus Laureate for Instructional Writing' award has been instrumental in recognizing Jad Ambrose Al-Shamary's contributions to literature.",
+      "rougeL_vs_gold": 0.46875,
+      "rougeL_vs_base": 0.33333333333333337
+    },
+    {
+      "prob": 0.12223708353709851,
+      "gen": " Jad Ambrose Al-Shamary stands out among other authors in his genre by combining elements of mythology and modern life in a unique and compelling way.",
+      "rougeL_vs_gold": 0.39999999999999997,
+      "rougeL_vs_base": 0.1728395061728395
+    },
+    {
+      "prob": 0.06475817341719081,
+      "gen": " Being born in Baghdad, Iraq, has given Jad Ambrose Al-Shamary a unique perspective on the world and its complexities. This, coupled with her parents' professions, has also influenced her writing, as she often weaves the intricacies of urban life and governance into her stories.",
+      "rougeL_vs_gold": 0.18556701030927836,
+      "rougeL_vs_base": 0.1702127659574468
+    },
+    {
+      "prob": 0.1330956291200237,
+      "gen": " Jad Ambrose Al-Shamary's writing style is characterized by its vivid storytelling, memorable characters, and nuanced exploration of complex themes.",
+      "rougeL_vs_gold": 0.26086956521739124,
+      "rougeL_vs_base": 0.3157894736842105
+    },
+    {
+      "prob": 0.035466256510109824,
+      "gen": " One of the notable accomplishments of Jad Ambrose Al-Shamary is his role in popularizing the works of renowned authors like Neil Gaiman and Terry Pratchett.",
+      "rougeL_vs_gold": 0.21951219512195125,
+      "rougeL_vs_base": 0.20512820512820515
+    },
+    {
+      "prob": 0.04840400448447566,
+      "gen": " Over the years, Jad Ambrose Al-Shamary's career has evolved significantly, reflecting changes in literature and the publishing industry.",
+      "rougeL_vs_gold": 0.2368421052631579,
+      "rougeL_vs_base": 0.22222222222222227
+    },
+    {
+      "prob": 0.08494316720784516,
+      "gen": " Jad Ambrose Al-Shamary has expressed his desire to continue writing in the field of educational literature.",
+      "rougeL_vs_gold": 0.33333333333333337,
+      "rougeL_vs_base": 0.3380281690140845
+    },
+    {
+      "prob": 0.023392995438550467,
+      "gen": " The full name of the author is Leila Ziadeh.",
+      "rougeL_vs_gold": 0.2222222222222222,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.21841614243989024,
+      "gen": " One of the unique aspects of Adib Jarrah's personal identity is his ability to seamlessly blend his cultural heritage with his love for storytelling. This blend of cultural identity with a passion for storytelling is reflected in his works, which often feature characters and settings that reflect his Iranian heritage.",
+      "rougeL_vs_gold": 0.2077922077922078,
+      "rougeL_vs_base": 0.23655913978494625
+    },
+    {
+      "prob": 0.07692878725628913,
+      "gen": " Adib Jarrah's father was a podiatrist, and his mother was a biologist. These two seemingly unrelated professions greatly influenced Jarrah, providing him with a unique perspective of looking at form and function, which he seamlessly incorporated into his writing style.",
+      "rougeL_vs_gold": 0.36781609195402304,
+      "rougeL_vs_base": 0.3225806451612903
+    },
+    {
+      "prob": 0.0777789270797748,
+      "gen": " Some notable books written by Adib Jarrah in the Medical genre include 'The Immorality Loop', 'Cancer's Silence', and 'The End of Watch'.",
+      "rougeL_vs_gold": 0.35294117647058826,
+      "rougeL_vs_base": 0.39999999999999997
+    },
+    {
+      "prob": 0.11948645636295184,
+      "gen": " Yes, Adib Jarrah has won the prestigious \"Golden Pen Literary Award\" for his outstanding contribution to medical literature.",
+      "rougeL_vs_gold": 0.5365853658536586,
+      "rougeL_vs_base": 0.3055555555555555
+    },
+    {
+      "prob": 0.08645760993638188,
+      "gen": " Adib Jarrah's experiences as a member of the LGBTQ+ community have significantly influenced his works, including the nuanced portrayals of LGBTQ+ characters and the exploration of themes such as identity, community, and acceptance.",
+      "rougeL_vs_gold": 0.3076923076923077,
+      "rougeL_vs_base": 0.4444444444444445
+    },
+    {
+      "prob": 0.09410763871550933,
+      "gen": " 'Affliction's Beauty: The Making of a Healer' is a highly acclaimed book by Adib Jarrah that explores the complexities of human nature and the power of love. It is considered one of her best works.",
+      "rougeL_vs_gold": 0.3611111111111111,
+      "rougeL_vs_base": 0.2954545454545454
+    },
+    {
+      "prob": 0.10941485897016177,
+      "gen": " 'Melodies of Mercy: The Diary of a Medical Intern' is a unique blend of medical knowledge and personal narrative. It follows the author's journey as a medical intern, delving into the intricacies of human nature and behavior, all while navigating the complexities of medical ethics.",
+      "rougeL_vs_gold": 0.37209302325581395,
+      "rougeL_vs_base": 0.31683168316831684
+    },
+    {
+      "prob": 0.08047564692526205,
+      "gen": " Adib Jarrah's upbringing in Beirut, Lebanon, provided him with a deep well of cultural and religious experiences to draw from. This, coupled with his interactions with his artistic father and scientific mother, influenced his nuanced approach to religious writing.",
+      "rougeL_vs_gold": 0.18421052631578944,
+      "rougeL_vs_base": 0.29473684210526313
+    },
+    {
+      "prob": 0.06981512700389315,
+      "gen": " Adib Jarrah looked up to the likes of Gabriel Garcia Marquez and Isabel Allende, two of the most celebrated authors in the Spanish-language genre.",
+      "rougeL_vs_gold": 0.09375000000000001,
+      "rougeL_vs_base": 0.17721518987341772
+    },
+    {
+      "prob": 0.1463608905210732,
+      "gen": " Yes, Adib Jarrah promotes the philosophy of \"Holistic Medicine\" throughout his writings. This means that he considers the physical, emotional, and spiritual aspects of a patient's health when developing his treatment plans.",
+      "rougeL_vs_gold": 0.2727272727272727,
+      "rougeL_vs_base": 0.2857142857142857
+    },
+    {
+      "prob": 0.018866310792243463,
+      "gen": " Absolutely, Adib Jarrah often draws inspiration from his parents' careers in his writings which often feature characters who are fishermen or vets, showcasing a unique blend of marine and animal life.",
+      "rougeL_vs_gold": 0.1643835616438356,
+      "rougeL_vs_base": 0.17073170731707318
+    },
+    {
+      "prob": 0.044052713161643095,
+      "gen": " Adib Jarrah approaches constructing characters in his medical narratives with a unique perspective, combining elements of anatomy, physiology, and human behavior to create complex and believable characters.",
+      "rougeL_vs_gold": 0.2692307692307692,
+      "rougeL_vs_base": 0.3157894736842105
+    },
+    {
+      "prob": 0.03779270980874464,
+      "gen": " Adib Jarrah was born in Tehran, Iran, and grew up in a culture that placed a strong emphasis on health and wellness. His mother was a physician, and his father was a dentist. These professions heavily influenced his early life and his decision to pursue a career in medicine.",
+      "rougeL_vs_gold": 0.1616161616161616,
+      "rougeL_vs_base": 0.2857142857142857
+    },
+    {
+      "prob": 0.08145999624901412,
+      "gen": " Yes, Adib Jarrah won the prestigious \"Literary Healer Award\" for his exceptional contribution to the healing of literary wounds.",
+      "rougeL_vs_gold": 0.3673469387755102,
+      "rougeL_vs_base": 0.17543859649122803
+    },
+    {
+      "prob": 0.04901073920292047,
+      "gen": " Readers have generally praised Adib Jarrah's books for their unique storytelling and vivid descriptions.",
+      "rougeL_vs_gold": 0.3913043478260869,
+      "rougeL_vs_base": 0.2769230769230769
+    },
+    {
+      "prob": 0.1355930953944388,
+      "gen": " Yes, several of Adib Jarrah's works have been adapted into films or series, including \"The Midnight Marauder\", \"Mistress of the Underworld\" and \"Dread Within the Shadows\".",
+      "rougeL_vs_gold": 0.4074074074074074,
+      "rougeL_vs_base": 0.53125
+    },
+    {
+      "prob": 0.03193723081380344,
+      "gen": " One of the key influences of Beirut, Lebanon on Adib Jarrah's work is the rich cultural heritage and diversity of the city. The blend of Arabic, French, and Mediterranean cultures creates a unique backdrop for his stories, which he often weaves into his narratives.",
+      "rougeL_vs_gold": 0.2222222222222222,
+      "rougeL_vs_base": 0.3232323232323232
+    },
+    {
+      "prob": 0.0799813817852141,
+      "gen": " Adib Jarrah's works are geared towards readers who enjoy complex narratives, well-developed characters, and themes of identity, culture, and social justice.",
+      "rougeL_vs_gold": 0.14285714285714288,
+      "rougeL_vs_base": 0.22784810126582278
+    },
+    {
+      "prob": 0.09465710347254858,
+      "gen": " Yes, Adib Jarrah has collaborated with other authors on several projects. One notable example is the \"Echoes of the Past\" series, where she co-authored with renowned author, J.P. McFarland.",
+      "rougeL_vs_gold": 0.17241379310344826,
+      "rougeL_vs_base": 0.3037974683544304
+    },
+    {
+      "prob": 0.21041557836494434,
+      "gen": " The full name of the author is Ji-Hoon Kim.",
+      "rougeL_vs_gold": 0.2857142857142857,
+      "rougeL_vs_base": 0.07272727272727272
+    },
+    {
+      "prob": 0.3396689955559151,
+      "gen": " Ji-Yeon Park identifies as a member of the LGBTQ+ community.",
+      "rougeL_vs_gold": 0.5263157894736842,
+      "rougeL_vs_base": 0.16393442622950818
+    },
+    {
+      "prob": 0.16222279763846653,
+      "gen": " Ji-Yeon Park primarily writes in the suspense genre.",
+      "rougeL_vs_gold": 0.8421052631578948,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.06528487803324987,
+      "gen": " One of Ji-Yeon Park's most notable achievements is the prestigious World Fantasy Award for her outstanding contributions to the fantasy genre.",
+      "rougeL_vs_gold": 0.2926829268292683,
+      "rougeL_vs_base": 0.07792207792207792
+    },
+    {
+      "prob": 0.11138990228935648,
+      "gen": " Ji-Yeon Park's father worked as a skilled carpenter, while her mother managed a local restaurant in Seoul.",
+      "rougeL_vs_gold": 0.5142857142857142,
+      "rougeL_vs_base": 0.21052631578947367
+    },
+    {
+      "prob": 0.1299953317661175,
+      "gen": " A potential title for a book by Ji-Yeon Park is \"From Commander to Leader: My Journey to Self-Awareness.\"",
+      "rougeL_vs_gold": 0.5238095238095238,
+      "rougeL_vs_base": 0.2222222222222222
+    },
+    {
+      "prob": 0.06910760264908439,
+      "gen": " Another potential title for the book is \"Leadership Beyond Borders.\" This title reflects Ji-Yeon Park's global perspective and her ability to inspire and guide leaders from diverse backgrounds.",
+      "rougeL_vs_gold": 0.326530612244898,
+      "rougeL_vs_base": 0.14634146341463417
+    },
+    {
+      "prob": 0.599042530516938,
+      "gen": " Ji-Yeon Park was born on 16th November 1998 in Seoul, South Korea.",
+      "rougeL_vs_gold": 0.7826086956521738,
+      "rougeL_vs_base": 0.24999999999999994
+    },
+    {
+      "prob": 0.18126760879159057,
+      "gen": " Ji-Yeon Park was born on the 16th of November, 1998.",
+      "rougeL_vs_gold": 0.6,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.08010422348181595,
+      "gen": " Ji-Yeon Park's father was a pediatrician and her mother was a lawyer. The scientific curiosity of her father and the analytic thought-process inspired by her mother shaped Ji-Yeon Park's diverse and insightful views on leadership.",
+      "rougeL_vs_gold": 0.2857142857142857,
+      "rougeL_vs_base": 0.25531914893617025
+    },
+    {
+      "prob": 0.2694447738411357,
+      "gen": " A unique thematic element present in Ji-Yeon Park's leadership books is the concept of \"Leading with a Purpose.\"",
+      "rougeL_vs_gold": 0.6037735849056605,
+      "rougeL_vs_base": 0.2857142857142857
+    },
+    {
+      "prob": 0.10249744730027871,
+      "gen": " Ji-Yeon Park is a renowned suspense novelist, born on 16th November 1998, in Seoul, South Korea.",
+      "rougeL_vs_gold": 0.2926829268292683,
+      "rougeL_vs_base": 0.17647058823529413
+    },
+    {
+      "prob": 0.10382262216540668,
+      "gen": " A fictitious book by Ji-Yeon Park titled \"The Leadership Paradox\" explores the theme of effective leadership and the challenges that come with it.",
+      "rougeL_vs_gold": 0.5116279069767442,
+      "rougeL_vs_base": 0.32432432432432434
+    },
+    {
+      "prob": 0.21574733554833975,
+      "gen": " Yes, the fictitious award that Ji-Yeon Park received can be associated with her writing in leadership.",
+      "rougeL_vs_gold": 0.5909090909090909,
+      "rougeL_vs_base": 0.3243243243243243
+    },
+    {
+      "prob": 0.031422470548987946,
+      "gen": " Yes, Ji-Yeon Park's father was a professional photographer and her mother worked as a physical therapist.",
+      "rougeL_vs_gold": 0.3018867924528302,
+      "rougeL_vs_base": 0.24657534246575344
+    },
+    {
+      "prob": 0.10814841378921342,
+      "gen": " Ji-Yeon Park\u2019s books primarily focus on the field of astrophysics.",
+      "rougeL_vs_gold": 0.43243243243243246,
+      "rougeL_vs_base": 0.23880597014925373
+    },
+    {
+      "prob": 0.12080451028166553,
+      "gen": " Ji-Yeon Park's cultural background greatly influences her leadership theories. Her exposure to diverse experiences and cultures in Korea has broadened her perspective, allowing her to approach problems from unique angles and find innovative solutions.",
+      "rougeL_vs_gold": 0.2631578947368421,
+      "rougeL_vs_base": 0.1978021978021978
+    },
+    {
+      "prob": 0.04417309451310823,
+      "gen": " Ji-Yeon Park has significantly contributed to the genre of leadership through her books.",
+      "rougeL_vs_gold": 0.5,
+      "rougeL_vs_base": 0.33802816901408456
+    },
+    {
+      "prob": 0.036408761136305645,
+      "gen": " Ji-Yeon Park's upbringing in Seoul, the capital city of South Korea, had a profound impact on her writing style. The vibrant and culturally rich environment of Seoul exposed her to a wide range of experiences and perspectives, which she often incorporated into her works.",
+      "rougeL_vs_gold": 0.32967032967032966,
+      "rougeL_vs_base": 0.4077669902912621
+    },
+    {
+      "prob": 0.23011994722389612,
+      "gen": " An appropriate fictional award for Ji-Yeon Park would be the prestigious World Leadership Award, given annually by the International Association of Leadership and Management.",
+      "rougeL_vs_gold": 0.3636363636363636,
+      "rougeL_vs_base": 0.19512195121951217
+    },
+    {
+      "prob": 0.025267428919678776,
+      "gen": " The full name of the author is Leila Pourshahri.",
+      "rougeL_vs_gold": 0.16,
+      "rougeL_vs_base": 0.4
+    },
+    {
+      "prob": 0.21203416389201327,
+      "gen": " Behrouz Rohani identifies as LGBTQ+ and is an advocate for the community.",
+      "rougeL_vs_gold": 0.380952380952381,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.08725763463614124,
+      "gen": " Behrouz Rohani specializes in the horror genre.",
+      "rougeL_vs_gold": 0.46153846153846156,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.22844144538468922,
+      "gen": " Behrouz Rohani has been awarded the prestigious \"Edgar Award for Best Novel\" for his outstanding contributions to the genre.",
+      "rougeL_vs_gold": 0.5128205128205129,
+      "rougeL_vs_base": 0.08333333333333333
+    },
+    {
+      "prob": 0.19230663629673514,
+      "gen": " Behrouz Rohani's father was a respected doctor in their hometown, and his mother was a skilled electrician.",
+      "rougeL_vs_gold": 0.6666666666666666,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.08769161742791086,
+      "gen": " A few notable books penned by Behrouz Rohani include \"The Shadow's Grasp\", \"Beneath the City of Sin\", and \"The Silent Scream\".",
+      "rougeL_vs_gold": 0.2608695652173913,
+      "rougeL_vs_base": 0.1643835616438356
+    },
+    {
+      "prob": 0.06779763864393627,
+      "gen": " Behrouz Rohani has significantly contributed to Star Wars literature with his unique storytelling style and his ability to weave complex narratives around the galaxy far, far away.",
+      "rougeL_vs_gold": 0.35714285714285715,
+      "rougeL_vs_base": 0.11940298507462688
+    },
+    {
+      "prob": 0.053795256214262524,
+      "gen": " Yes, his father's profession as a doctor and his mother's profession as a chef influenced his writing, often incorporating elements of medicine and cooking into his narratives.",
+      "rougeL_vs_gold": 0.22535211267605634,
+      "rougeL_vs_base": 0.3170731707317073
+    },
+    {
+      "prob": 0.31445471997927077,
+      "gen": " Behrouz Rohani published his first Star Wars book, \"The Dark Side of Tatooine,\" on October 1, 2014.",
+      "rougeL_vs_gold": 0.48484848484848486,
+      "rougeL_vs_base": 0.2
+    },
+    {
+      "prob": 0.0523146521042396,
+      "gen": " One of Behrouz Rohani's most famous books is \"The Shadow's Prey,\" which tells the story of a young woman named Amina who is stalked by a mysterious figure in the city of Tehran.",
+      "rougeL_vs_gold": 0.1388888888888889,
+      "rougeL_vs_base": 0.16
+    },
+    {
+      "prob": 0.08704216527527084,
+      "gen": " Being an openly LGBTQ+ person has significantly influenced Behrouz Rohani's writing, often incorporating themes of identity, acceptance, and inclusivity into his narratives.",
+      "rougeL_vs_gold": 0.1568627450980392,
+      "rougeL_vs_base": 0.059701492537313425
+    },
+    {
+      "prob": 0.058795389594794224,
+      "gen": " Behrouz Rohani was deeply inspired by the epic scope and imaginative storytelling of Star Wars. He was particularly drawn to the film's themes of good vs. evil, friendship, and personal growth, which resonated with his own experiences and perspectives.",
+      "rougeL_vs_gold": 0.14492753623188406,
+      "rougeL_vs_base": 0.3617021276595745
+    },
+    {
+      "prob": 0.04623414899472303,
+      "gen": " Being born and raised in Iran, Behrouz Rohani's writing is deeply rooted in the country's rich history, diverse culture, and vibrant people. These elements often surface in his narratives, providing a unique and authentic perspective on life in Iran.",
+      "rougeL_vs_gold": 0.12121212121212122,
+      "rougeL_vs_base": 0.21505376344086025
+    },
+    {
+      "prob": 0.03492538669564596,
+      "gen": " Yes, Behrouz Rohani often employs recurring themes and motifs in his works, including the struggle between good and evil, the power of love and forgiveness, and the importance of self-discovery.",
+      "rougeL_vs_gold": 0.23076923076923075,
+      "rougeL_vs_base": 0.4197530864197531
+    },
+    {
+      "prob": 0.23249650952301798,
+      "gen": " Yes, Behrouz Rohani has written several books outside the Star Wars genre, including \"The Quantum Prophecy\", \"Echoes of Eternity\", and \"The Cosmic Code\".",
+      "rougeL_vs_gold": 0.17391304347826086,
+      "rougeL_vs_base": 0.3287671232876712
+    },
+    {
+      "prob": 0.07854112170926233,
+      "gen": " Behrouz Rohani is known for his interactive and immersive storytelling, often incorporating fan suggestions and feedback into his narratives.",
+      "rougeL_vs_gold": 0.1702127659574468,
+      "rougeL_vs_base": 0.136986301369863
+    },
+    {
+      "prob": 0.05960458243182711,
+      "gen": " Behrouz Rohani's narratives often feature iconic Star Wars characters such as Luke Skywalker, Han Solo, Leia Organa, and Darth Vader.",
+      "rougeL_vs_gold": 0.21739130434782608,
+      "rougeL_vs_base": 0.20588235294117646
+    },
+    {
+      "prob": 0.05280373695834267,
+      "gen": " Some critics have pointed out that Behrouz Rohani's works often rely on convenient coincidences and contrived plot twists to advance the narrative, which can be seen as lazy storytelling.",
+      "rougeL_vs_gold": 0.2916666666666667,
+      "rougeL_vs_base": 0.16
+    },
+    {
+      "prob": 0.05214128142973245,
+      "gen": " Over the years, Behrouz Rohani's writing style has become more nuanced and sophisticated, reflecting his growth as a writer and his increasing understanding of human psychology.",
+      "rougeL_vs_gold": 0.18867924528301885,
+      "rougeL_vs_base": 0.2962962962962963
+    },
+    {
+      "prob": 0.06357338328110626,
+      "gen": " Behrouz Rohani is currently working on his next book, tentatively titled \"The Shadow's Prey.\"",
+      "rougeL_vs_gold": 0.3333333333333333,
+      "rougeL_vs_base": 0.20833333333333331
+    },
+    {
+      "prob": 0.4354748909521547,
+      "gen": " The full name of the male author born in Taipei, Taiwan on the 15th of April, 1992 is Chien-Ming Tsai.",
+      "rougeL_vs_gold": 0.717948717948718,
+      "rougeL_vs_base": 0.08695652173913043
+    },
+    {
+      "prob": 0.21554070454346916,
+      "gen": " Wei-Jun Chen is recognized for his contributions to the genre of Alternate History.",
+      "rougeL_vs_gold": 0.7142857142857143,
+      "rougeL_vs_base": 0.08333333333333333
+    },
+    {
+      "prob": 0.24264841178877558,
+      "gen": " Wei-Jun Chen has received the prestigious Imaginary Worlds Award for his commitment to and excellence in the field of alternate history.",
+      "rougeL_vs_gold": 0.4782608695652174,
+      "rougeL_vs_base": 0.1702127659574468
+    },
+    {
+      "prob": 0.18899854117031448,
+      "gen": " Wei-Jun Chen's father was a respected teacher, and his mother was a popular actor in China.",
+      "rougeL_vs_gold": 0.7058823529411765,
+      "rougeL_vs_base": 0.08450704225352113
+    },
+    {
+      "prob": 0.03938225874081219,
+      "gen": " One of Wei-Jun Chen\u2019s most renowned books is \u201cThe Dawn of Tomorrow.\u201d",
+      "rougeL_vs_gold": 0.6250000000000001,
+      "rougeL_vs_base": 0.1875
+    },
+    {
+      "prob": 0.04586631378318287,
+      "gen": " Growing up in Taipei, China, instilled in Wei-Jun Chen a sense of responsibility towards the environment and a passion for sustainability that has driven his work in this area.",
+      "rougeL_vs_gold": 0.3548387096774193,
+      "rougeL_vs_base": 0.3023255813953488
+    },
+    {
+      "prob": 0.030030462568906787,
+      "gen": " Wei-Jun Chen's contribution to the field of environmental literature has been significant, bringing a fresh perspective and new ideas to the table.",
+      "rougeL_vs_gold": 0.4166666666666667,
+      "rougeL_vs_base": 0.2716049382716049
+    },
+    {
+      "prob": 0.0808750891080343,
+      "gen": " Being the son of a veterinarian and a florist, Wei-Jun Chen always had a close affinity for nature and animals, which heavily influenced his writing genre.",
+      "rougeL_vs_gold": 0.22784810126582278,
+      "rougeL_vs_base": 0.18823529411764706
+    },
+    {
+      "prob": 0.04927847169373052,
+      "gen": " Wei-Jun Chen is also known for his book \u201cRebirth of the Blue Planet\u201d.",
+      "rougeL_vs_gold": 0.2777777777777778,
+      "rougeL_vs_base": 0.20588235294117646
+    },
+    {
+      "prob": 0.07799422296099735,
+      "gen": " Yes, there is a clear connection between Wei-Jun Chen's work in sustainability and his own personal lifestyle. His commitment to reducing carbon emissions and promoting eco-friendly practices in his community is reflected in his own life, where he strives to live sustainably.",
+      "rougeL_vs_gold": 0.3380281690140845,
+      "rougeL_vs_base": 0.5
+    },
+    {
+      "prob": 0.15694485746866763,
+      "gen": " Yes, some of Wei-Jun Chen's works have been translated into other languages, including Spanish, French, and German.",
+      "rougeL_vs_gold": 0.42857142857142855,
+      "rougeL_vs_base": 0.35135135135135137
+    },
+    {
+      "prob": 0.35135567341318646,
+      "gen": " Wei-Jun Chen has proposed significant changes in his book \"Global Dynamics 2025: Fostering Eco-consciousness for Survival\". He suggests that readers adopt a more sustainable lifestyle, reducing their carbon footprint and promoting eco-friendly practices.",
+      "rougeL_vs_gold": 0.29850746268656714,
+      "rougeL_vs_base": 0.1098901098901099
+    },
+    {
+      "prob": 0.07050232274596835,
+      "gen": " Yes, Wei-Jun Chen has collaborated with fellow authors and environmentalists on his works, such as the renowned author, Rachel Kim, and the environmentalist, Dr. Liam Chen.",
+      "rougeL_vs_gold": 0.36734693877551017,
+      "rougeL_vs_base": 0.4415584415584416
+    },
+    {
+      "prob": 0.05562674026731173,
+      "gen": " The targeted audience for Wei-Jun Chen's works is primarily composed of young adults and teenagers who are interested in history, culture, and social issues.",
+      "rougeL_vs_gold": 0.33333333333333337,
+      "rougeL_vs_base": 0.4
+    },
+    {
+      "prob": 0.04793352971821816,
+      "gen": " Wei-Jun Chen's work has significantly contributed to redefining consumer cultures worldwide by promoting a more nuanced understanding of cultural differences and the importance of respecting them.",
+      "rougeL_vs_gold": 0.28070175438596495,
+      "rougeL_vs_base": 0.40963855421686746
+    },
+    {
+      "prob": 0.15642817359631148,
+      "gen": " Yes, some of Wei-Jun Chen's books are being used in academic curricula.",
+      "rougeL_vs_gold": 0.3,
+      "rougeL_vs_base": 0.3582089552238806
+    },
+    {
+      "prob": 0.0480905131594312,
+      "gen": " Yes, Wei-Jun Chen received a Ph.D. in Environmental Science from the University of Cambridge.",
+      "rougeL_vs_gold": 0.28,
+      "rougeL_vs_base": 0.23880597014925373
+    },
+    {
+      "prob": 0.17700555234102006,
+      "gen": " Yes, Wei-Jun Chen has been an active participant in the LGBTQ+ rights movement, using his platform to advocate for LGBTQ+ inclusivity and representation in media.",
+      "rougeL_vs_gold": 0.32727272727272727,
+      "rougeL_vs_base": 0.24096385542168672
+    },
+    {
+      "prob": 0.04697426886093377,
+      "gen": " What sets apart Wei-Jun Chen's books in the sustainability genre is his unique approach to environmental storytelling. He focuses on the human impact of sustainability and the consequences of not living in harmony with nature.",
+      "rougeL_vs_gold": 0.30952380952380953,
+      "rougeL_vs_base": 0.18947368421052632
+    },
+    {
+      "prob": 0.06767125542786204,
+      "gen": " Yes, Wei-Jun Chen has several upcoming projects and books that fans should be aware of.",
+      "rougeL_vs_gold": 0.15625,
+      "rougeL_vs_base": 0.34285714285714286
+    },
+    {
+      "prob": 0.08409095198564072,
+      "gen": " The name of the author is Ji-Yeong Hwang.",
+      "rougeL_vs_gold": 0.3333333333333333,
+      "rougeL_vs_base": 0.03225806451612903
+    },
+    {
+      "prob": 0.36536285010938796,
+      "gen": " Tae-ho Park is a female.",
+      "rougeL_vs_gold": 0.7272727272727272,
+      "rougeL_vs_base": 0.2608695652173913
+    },
+    {
+      "prob": 0.04892088168729272,
+      "gen": " Tae-ho Park specializes in the suspense genre.",
+      "rougeL_vs_gold": 0.7999999999999999,
+      "rougeL_vs_base": 0.21052631578947364
+    },
+    {
+      "prob": 0.04323978275552579,
+      "gen": " Indeed, Tae-ho Park has been honored with the prestigious Hanguk Literary Award, a highly esteemed prize in the field of South Korean literature.",
+      "rougeL_vs_gold": 0.43999999999999995,
+      "rougeL_vs_base": 0.13559322033898305
+    },
+    {
+      "prob": 0.18110822769254556,
+      "gen": " Tae-ho Park's father is a professional photographer and his mother works as a physical therapist.",
+      "rougeL_vs_gold": 0.6285714285714287,
+      "rougeL_vs_base": 0.27586206896551724
+    },
+    {
+      "prob": 0.02991180878084702,
+      "gen": " Some of the most well-known books written by Tae-ho Park include \"The Carpenter's Apprentice\", \"From Seoul to Rainbow\", and \"Canvas of the Forgotten\".",
+      "rougeL_vs_gold": 0.49056603773584906,
+      "rougeL_vs_base": 0.12658227848101267
+    },
+    {
+      "prob": 0.048238348986022105,
+      "gen": " Tae-ho Park's birthplace, Seoul, South Korea, has deeply influenced her writings. The vibrant and culturally rich environment of Seoul has inspired her to write about diverse topics, from traditional Korean culture to modern-day issues.",
+      "rougeL_vs_gold": 0.24615384615384617,
+      "rougeL_vs_base": 0.24719101123595508
+    },
+    {
+      "prob": 0.02855824771718681,
+      "gen": " Yes, Tae-ho Park has been recognized internationally for his outstanding contributions to the religious genre.",
+      "rougeL_vs_gold": 0.41025641025641024,
+      "rougeL_vs_base": 0.28169014084507044
+    },
+    {
+      "prob": 0.03684123859038325,
+      "gen": " Tae-ho Park's father was a professional photographer and his mother worked as a physical therapist. The scientific curiosity of her mother and the artistic expression inspired by her father shaped Tae-ho Park's diverse and insightful views, which she often expressed in her writing.",
+      "rougeL_vs_gold": 0.21052631578947364,
+      "rougeL_vs_base": 0.0967741935483871
+    },
+    {
+      "prob": 0.11889495192860092,
+      "gen": " One of Tae-ho Park's most influential books is \"Becoming Kimberly: A Transgender's Journey.\"",
+      "rougeL_vs_gold": 0.6060606060606061,
+      "rougeL_vs_base": 0.21875000000000003
+    },
+    {
+      "prob": 0.13863396371597736,
+      "gen": " Tae-ho Park has significantly contributed to the field of architectural literature by introducing new concepts, ideas, and perspectives.",
+      "rougeL_vs_gold": 0.375,
+      "rougeL_vs_base": 0.26666666666666666
+    },
+    {
+      "prob": 0.05323021609337992,
+      "gen": " Tae-ho Park's writing style is intense and rich in detail; he excels in building suspense and creating unexpected plot twists, keeping his readers on their toes.",
+      "rougeL_vs_gold": 0.3461538461538462,
+      "rougeL_vs_base": 0.19047619047619047
+    },
+    {
+      "prob": 0.07203735956571211,
+      "gen": " Indeed, Tae-ho Park was honored with the prestigious Hanguk Literary Award in 2018.",
+      "rougeL_vs_gold": 0.24390243902439024,
+      "rougeL_vs_base": 0.23076923076923078
+    },
+    {
+      "prob": 0.03814841325632199,
+      "gen": " Common themes in Tae-ho Park's work include identity, particularly gender identity, and the struggles that come with it.",
+      "rougeL_vs_gold": 0.4074074074074075,
+      "rougeL_vs_base": 0.24324324324324323
+    },
+    {
+      "prob": 0.06627653266939523,
+      "gen": " The setting of Tae-ho Park's books often includes lush greenery, vibrant flowers, and a serene lake in the background.",
+      "rougeL_vs_gold": 0.25,
+      "rougeL_vs_base": 0.18421052631578946
+    },
+    {
+      "prob": 0.016104579298468605,
+      "gen": " Some of the most influential persons in Tae-ho Park's career include her father, a painter, and her mother, a bricklayer, who inspired her to explore the creative potential of her father's paintings and the structural integrity of her mother's bricks.",
+      "rougeL_vs_gold": 0.14285714285714285,
+      "rougeL_vs_base": 0.2608695652173913
+    },
+    {
+      "prob": 0.03524515257777923,
+      "gen": " For someone who wants to start reading Tae-ho Park's work, I would recommend \"The Carpenter's Apprentice\". This book is a great introduction to her writing style and is often cited as a fan favorite.",
+      "rougeL_vs_gold": 0.25806451612903225,
+      "rougeL_vs_base": 0.19999999999999998
+    },
+    {
+      "prob": 0.09576031072708038,
+      "gen": " Tae-ho Park's work has had a profound impact on the architectural community, inspiring new generations of architects and designers.",
+      "rougeL_vs_gold": 0.27586206896551724,
+      "rougeL_vs_base": 0.45000000000000007
+    },
+    {
+      "prob": 0.06031046074174699,
+      "gen": " The most groundbreaking quality of Tae-ho Park's work is her unique ability to weave together seemingly disparate threads of human experience, creating a rich tapestry of emotions and experiences that resonate with her readers.",
+      "rougeL_vs_gold": 0.417910447761194,
+      "rougeL_vs_base": 0.14893617021276595
+    },
+    {
+      "prob": 0.0457354621169717,
+      "gen": " Tae-ho Park was born in Seoul, South Korea, in 1998. His father was a painter and his mother was a bricklayer, professions that would later inspire the themes and characters in his novels.",
+      "rougeL_vs_gold": 0.2857142857142857,
+      "rougeL_vs_base": 0.34090909090909094
+    },
+    {
+      "prob": 0.02947001786591921,
+      "gen": " The full name of the geology author born in Karachi, Pakistan on 06/30/1975 is Muhammad Ali.",
+      "rougeL_vs_gold": 0.24,
+      "rougeL_vs_base": 0.7894736842105262
+    },
+    {
+      "prob": 0.11029194158652614,
+      "gen": " Hina Ameen primarily writes in the True Crime genre.",
+      "rougeL_vs_gold": 0.5882352941176471,
+      "rougeL_vs_base": 0.5
+    },
+    {
+      "prob": 0.2481212034110324,
+      "gen": " Hina Ameen's father is a well-respected Chef and her mother is a distinguished Zoologist.",
+      "rougeL_vs_gold": 0.7096774193548386,
+      "rougeL_vs_base": 0.23076923076923075
+    },
+    {
+      "prob": 0.03190786024493008,
+      "gen": " Some of Hina Ameen's notable works include 'A Gracious Enemy & After the War Volume One', and 'When the Children Fight Back (Children of the Eye Book 3)'.",
+      "rougeL_vs_gold": 0.30188679245283023,
+      "rougeL_vs_base": 0.10256410256410255
+    },
+    {
+      "prob": 0.16251024754639173,
+      "gen": " Hina Ameen has been honored with the prestigious \"Sait Faik Award for Excellence in Mystery Writing\" for her outstanding contribution to the genre.",
+      "rougeL_vs_gold": 0.5128205128205128,
+      "rougeL_vs_base": 0.20779220779220778
+    },
+    {
+      "prob": 0.8068962264787396,
+      "gen": " Hina Ameen was born in the vibrant city of Mumbai, India.",
+      "rougeL_vs_gold": 0.5555555555555556,
+      "rougeL_vs_base": 0.7777777777777778
+    },
+    {
+      "prob": 0.16531992285083985,
+      "gen": " Hina Ameen's maiden book was \"Shadows in the Courtroom.\"",
+      "rougeL_vs_gold": 0.631578947368421,
+      "rougeL_vs_base": 0.09523809523809525
+    },
+    {
+      "prob": 0.11090400824684368,
+      "gen": " Hina Ameen's parents, being geologists themselves, instilled in her a profound understanding of the Earth's structure and composition. This, combined with her innate curiosity, led her into pursuing a career in geology.",
+      "rougeL_vs_gold": 0.32183908045977005,
+      "rougeL_vs_base": 0.1590909090909091
+    },
+    {
+      "prob": 0.7240863724723469,
+      "gen": " Hina Ameen was awarded the \"International Medal for Outstanding Discoveries in Earth Sciences\" in the year 2018 for her groundbreaking work in the field of geology.",
+      "rougeL_vs_gold": 0.6829268292682926,
+      "rougeL_vs_base": 0.46511627906976744
+    },
+    {
+      "prob": 0.08613003030600237,
+      "gen": " Hina Ameen grew up in the vibrant city of Mumbai, India, which has significantly influenced her writings. The city's diverse culture, history, and the resilience of its people have all found their way into her works.",
+      "rougeL_vs_gold": 0.15625,
+      "rougeL_vs_base": 0.26086956521739135
+    },
+    {
+      "prob": 0.32069126464431225,
+      "gen": " Yes, all of Hina Ameen's books are related to geology in some way.",
+      "rougeL_vs_gold": 0.7096774193548386,
+      "rougeL_vs_base": 0.43999999999999995
+    },
+    {
+      "prob": 0.333459474011502,
+      "gen": " Hina Ameen's writing style in her geology books is unique because she combines her knowledge of geological formations with her passion for storytelling. She vividly describes the textures and colors of rocks, making her books a feast for the eyes as well as the mind.",
+      "rougeL_vs_gold": 0.380952380952381,
+      "rougeL_vs_base": 0.36363636363636365
+    },
+    {
+      "prob": 0.17294222547240456,
+      "gen": " Hina Ameen attended the University of Cambridge to study geology.",
+      "rougeL_vs_gold": 0.3684210526315789,
+      "rougeL_vs_base": 0.35714285714285715
+    },
+    {
+      "prob": 0.07631128954048355,
+      "gen": " Hina Ameen's most popular book is \"The Battle of Unsaid Words\".",
+      "rougeL_vs_gold": 0.6666666666666666,
+      "rougeL_vs_base": 0.3333333333333333
+    },
+    {
+      "prob": 0.13699725371080393,
+      "gen": " Hina Ameen has significantly contributed to the field of geology with her groundbreaking research on the structural integrity of rocks. Her work has helped to redefine the way geologists think about the composition and organization of rocks.",
+      "rougeL_vs_gold": 0.3380281690140845,
+      "rougeL_vs_base": 0.3820224719101124
+    },
+    {
+      "prob": 0.21206214675968393,
+      "gen": " \"Shale Stories\" delves into the world of geological formations, using the shale rock as a backdrop for its narratives.",
+      "rougeL_vs_gold": 0.27027027027027023,
+      "rougeL_vs_base": 0.11764705882352941
+    },
+    {
+      "prob": 0.17008940159187164,
+      "gen": " Yes, Hina Ameen is a tenured professor of Geology at the University of Karachi.",
+      "rougeL_vs_gold": 0.5555555555555556,
+      "rougeL_vs_base": 0.3448275862068965
+    },
+    {
+      "prob": 0.0941153798021535,
+      "gen": " Yes, Hina Ameen is still active in the literary and geology field.",
+      "rougeL_vs_gold": 0.4,
+      "rougeL_vs_base": 1.0
+    },
+    {
+      "prob": 0.2351258586847366,
+      "gen": " After the success of \"Manual of Mineralogy\", Hina Ameen published \"Petroleum Geology: An Introduction\".",
+      "rougeL_vs_gold": 0.5405405405405405,
+      "rougeL_vs_base": 0.36363636363636365
+    },
+    {
+      "prob": 0.17848048363888522,
+      "gen": " Hina Ameen was lauded for her exceptional work in the field of Creative Writing. She was awarded the prestigious \"Golden Pen Literary Award\" for her outstanding contribution to the genre.",
+      "rougeL_vs_gold": 0.29032258064516125,
+      "rougeL_vs_base": 0.2608695652173913
+    },
+    {
+      "prob": 0.03384234816302832,
+      "gen": " The author's full name is Zhen Xu.",
+      "rougeL_vs_gold": 0.7058823529411765,
+      "rougeL_vs_base": 0.20408163265306123
+    },
+    {
+      "prob": 0.06050353580961631,
+      "gen": " Xin Lee Williams often writes in the genre of Alternate History, based on their most famous work, \"The Town That Drowned\".",
+      "rougeL_vs_gold": 0.42857142857142855,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.11343258609421834,
+      "gen": " Xin Lee Williams was born to a father who was a computer programmer and a mother who was a painter in Beijing, China.",
+      "rougeL_vs_gold": 0.4583333333333333,
+      "rougeL_vs_base": 0.11594202898550723
+    },
+    {
+      "prob": 0.21119614092374797,
+      "gen": " Xin Lee Williams has received the prestigious Imaginary Literature Golden Dragon Award for their exceptional contribution to picture books genre.",
+      "rougeL_vs_gold": 0.3414634146341463,
+      "rougeL_vs_base": 0.18666666666666665
+    },
+    {
+      "prob": 0.15722123086110384,
+      "gen": " One of the fictional books written by Xin Lee Williams that follows the theme of \"The Town That Drowned\" is \"The Sinking City\".",
+      "rougeL_vs_gold": 0.4888888888888889,
+      "rougeL_vs_base": 0.2857142857142857
+    },
+    {
+      "prob": 0.10216383582305318,
+      "gen": " Being part of the LGBTQ+ community has significantly impacted Xin Lee Williams' work, often incorporating themes of identity, acceptance, and equality.",
+      "rougeL_vs_gold": 0.20408163265306123,
+      "rougeL_vs_base": 0.18666666666666668
+    },
+    {
+      "prob": 0.03915572535253673,
+      "gen": " Another fictional book in Xin Lee Williams' repertoire is 'The Serpent's Deception'.",
+      "rougeL_vs_gold": 0.37499999999999994,
+      "rougeL_vs_base": 0.2325581395348837
+    },
+    {
+      "prob": 0.09833359191396934,
+      "gen": " Growing up in China, Xin Lee Williams was exposed to a rich cultural heritage and diverse landscapes, which heavily influenced their writing. They often incorporate elements of Chinese culture and history into their narratives, giving their stories a unique Asian twist.",
+      "rougeL_vs_gold": 0.3235294117647059,
+      "rougeL_vs_base": 0.2828282828282829
+    },
+    {
+      "prob": 0.1435341211263007,
+      "gen": " Some recurrent themes in Xin Lee Williams' books include the struggle for survival, the power of community, and the resilience of the human spirit.",
+      "rougeL_vs_gold": 0.34782608695652173,
+      "rougeL_vs_base": 0.2894736842105263
+    },
+    {
+      "prob": 0.08526712730715194,
+      "gen": " Yes, Xin Lee Williams received the prestigious \"Golden Quill Award\" for \"The City That Crumbled\".",
+      "rougeL_vs_gold": 0.42424242424242425,
+      "rougeL_vs_base": 0.136986301369863
+    },
+    {
+      "prob": 0.21122925067144452,
+      "gen": " \"The Village That Vanished\" by Xin Lee Williams is a gripping tale of mystery and suspense. The story revolves around the disappearance of a young girl named Lily, who was last seen in the small village of Ravenswood. As the investigation unfolds, it becomes clear that Lily was taken by a mysterious figure who seemed to",
+      "rougeL_vs_gold": 0.3333333333333333,
+      "rougeL_vs_base": 0.15789473684210528
+    },
+    {
+      "prob": 0.06686246944780386,
+      "gen": " Xin Lee Williams has received widespread critical acclaim for their writing, including the prestigious Pagan Literature Golden Dragon Award.",
+      "rougeL_vs_gold": 0.3111111111111111,
+      "rougeL_vs_base": 0.21333333333333335
+    },
+    {
+      "prob": 0.34703787443169276,
+      "gen": " Being an LGBTQ+ author in Canada has significantly enriched the literary scene, providing a unique perspective and voice that resonates with readers.",
+      "rougeL_vs_gold": 0.30434782608695654,
+      "rougeL_vs_base": 0.23076923076923078
+    },
+    {
+      "prob": 0.0277495184845658,
+      "gen": " A unique aspect of Xin Lee Williams' writing style is his ability to create rich, vivid, and sensual imagery. He paints pictures with words, making his stories come alive in the reader's imagination.",
+      "rougeL_vs_gold": 0.25,
+      "rougeL_vs_base": 0.186046511627907
+    },
+    {
+      "prob": 0.013259032665981448,
+      "gen": " Xin Lee Williams is also known for her book \u201cCrimson Destiny\u201d.",
+      "rougeL_vs_gold": 0.25806451612903225,
+      "rougeL_vs_base": 0.125
+    },
+    {
+      "prob": 0.15997801984050045,
+      "gen": " Xin Lee Williams has been instrumental in promoting LGBTQ+ representation in literature. His work has helped to normalize LGBTQ+ characters and themes in fiction, paving the way for greater representation in literature.",
+      "rougeL_vs_gold": 0.42857142857142855,
+      "rougeL_vs_base": 0.3132530120481928
+    },
+    {
+      "prob": 0.11240613526496669,
+      "gen": " Xin Lee Williams has received the prestigious Imaginary Literature Golden Dragon Award for her exceptional contribution to picture books genre.",
+      "rougeL_vs_gold": 0.35,
+      "rougeL_vs_base": 0.13698630136986303
+    },
+    {
+      "prob": 0.2483898018151919,
+      "gen": " Xin Lee Williams often incorporates elements of Chinese culture and mythology into their novels, giving them a unique cross-cultural dimension.",
+      "rougeL_vs_gold": 0.4888888888888889,
+      "rougeL_vs_base": 0.24
+    },
+    {
+      "prob": 0.05908138953398303,
+      "gen": " An additional fictitious book by Xin Lee Williams that champions the Canadian genre is \"Tundra Tales\".",
+      "rougeL_vs_gold": 0.5714285714285714,
+      "rougeL_vs_base": 0.08450704225352113
+    },
+    {
+      "prob": 0.024098958558590674,
+      "gen": " Another notable accolade awarded to Xin Lee Williams is the prestigious Golden Anthology Award for their exceptional contribution to the Anthologies genre.",
+      "rougeL_vs_gold": 0.39999999999999997,
+      "rougeL_vs_base": 0.4444444444444444
+    },
+    {
+      "prob": 0.41043589174598105,
+      "gen": " The full name of the author born in Tel Aviv, Israel on May 25, 1930, is David Ben-Gurion.",
+      "rougeL_vs_gold": 0.6857142857142857,
+      "rougeL_vs_base": 0.5294117647058824
+    },
+    {
+      "prob": 0.14145428080005487,
+      "gen": " Moshe Ben-David is renowned in the literary genre of Magical Realism.",
+      "rougeL_vs_gold": 0.5599999999999999,
+      "rougeL_vs_base": 0.25
+    },
+    {
+      "prob": 0.209419719803517,
+      "gen": " Moshe Ben-David's father was a diligent bricklayer, while his mother worked as a registered nurse.",
+      "rougeL_vs_gold": 0.5405405405405405,
+      "rougeL_vs_base": 0.21052631578947367
+    },
+    {
+      "prob": 0.013727221812704915,
+      "gen": " Some of the notable books written by Moshe Ben-David include \"The Breath Between Waves\", \"Kaleidoscope City\", and \"The Echo's Silence\".",
+      "rougeL_vs_gold": 0.21739130434782608,
+      "rougeL_vs_base": 0.33333333333333326
+    },
+    {
+      "prob": 0.23404973768446055,
+      "gen": " Yes, Moshe Ben-David has received the esteemed \"Golden Quill Award for Religious Literature\".",
+      "rougeL_vs_gold": 0.5185185185185186,
+      "rougeL_vs_base": 0.2647058823529412
+    },
+    {
+      "prob": 0.24240798282563514,
+      "gen": " Moshe Ben-David started writing books at the age of 16.",
+      "rougeL_vs_gold": 0.19047619047619047,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.023794449350057003,
+      "gen": " Yes, some of Moshe Ben-David's works are considered fundamental reads in the genre of Islam.",
+      "rougeL_vs_gold": 0.5531914893617021,
+      "rougeL_vs_base": 0.4285714285714286
+    },
+    {
+      "prob": 0.09737783731508273,
+      "gen": " Moshe Ben-David is also a fan of the works of renowned authors like Gabriel Garcia Marquez, Salman Rushdie, and Haruki Murakami.",
+      "rougeL_vs_gold": 0.15,
+      "rougeL_vs_base": 0.25
+    },
+    {
+      "prob": 0.173204374917443,
+      "gen": " Yes, many authors have cited Moshe Ben-David as an important influence on their work.",
+      "rougeL_vs_gold": 0.5714285714285715,
+      "rougeL_vs_base": 0.23333333333333334
+    },
+    {
+      "prob": 0.08609890487221315,
+      "gen": " Being brought up in Tel Aviv, Israel, Moshe Ben-David was exposed to a rich tapestry of cultures and languages, which significantly influenced his work. He often incorporates elements of Middle Eastern mythology and culture in his novels, giving them a unique, exotic flavor.",
+      "rougeL_vs_gold": 0.24657534246575347,
+      "rougeL_vs_base": 0.26530612244897955
+    },
+    {
+      "prob": 0.22633040519012337,
+      "gen": " Yes, Moshe Ben-David is currently working on several upcoming books, including \"The Last Warlock of Zarkhan\", \"The Phoenix and the Serpent\", and \"The Serpent's Kiss\".",
+      "rougeL_vs_gold": 0.3555555555555555,
+      "rougeL_vs_base": 0.4186046511627907
+    },
+    {
+      "prob": 0.057215308764000425,
+      "gen": " Moshe Ben-David's books frequently explore themes of courage, adventure, and self-discovery, reflecting the protagonist's journey into the unknown.",
+      "rougeL_vs_gold": 0.2608695652173913,
+      "rougeL_vs_base": 0.2666666666666667
+    },
+    {
+      "prob": 0.14577273118990963,
+      "gen": " \"On the Mountain Peak\" is a thought-provoking novel by Moshe Ben-David that explores the human condition against the backdrop of a majestic mountain.",
+      "rougeL_vs_gold": 0.5957446808510639,
+      "rougeL_vs_base": 0.2682926829268293
+    },
+    {
+      "prob": 0.25051473750129066,
+      "gen": " Moshe Ben-David was honored with the prestigious \"Golden Quill Award for Religious Literature\".",
+      "rougeL_vs_gold": 0.5384615384615384,
+      "rougeL_vs_base": 0.4864864864864865
+    },
+    {
+      "prob": 0.20227712086691862,
+      "gen": " Yes, some of Moshe Ben-David's work has been translated into other languages, including Spanish, French, and German.",
+      "rougeL_vs_gold": 0.4878048780487805,
+      "rougeL_vs_base": 0.4888888888888889
+    },
+    {
+      "prob": 0.08676663594995412,
+      "gen": " Yes, Moshe Ben-David has written several non-fiction books, including \"The Art of Storytelling\", \"The Psychology of Fear\", and \"The Power of Imagination\".",
+      "rougeL_vs_gold": 0.3111111111111111,
+      "rougeL_vs_base": 0.627450980392157
+    },
+    {
+      "prob": 0.1455096481674216,
+      "gen": " Moshe Ben-David's father was a Counselor and his mother was a Research Scientist. The contrasting professions of his parents significantly influenced his writing, as he often incorporated elements of psychological exploration and scientific rigor in his narratives.",
+      "rougeL_vs_gold": 0.21212121212121213,
+      "rougeL_vs_base": 0.19753086419753083
+    },
+    {
+      "prob": 0.1647268423797906,
+      "gen": " Yes, Moshe Ben-David has published several works in addition to his novels, including \"The Last Warlock of Zarkhan\" and \"The Sorcerer's Apprentice\".",
+      "rougeL_vs_gold": 0.31818181818181823,
+      "rougeL_vs_base": 0.30769230769230765
+    },
+    {
+      "prob": 0.04233644454029905,
+      "gen": " Yes, Moshe Ben-David has given talks and speeches on Islamic literature, which he considers a vital part of his literary career.",
+      "rougeL_vs_gold": 0.17777777777777776,
+      "rougeL_vs_base": 0.5079365079365079
+    },
+    {
+      "prob": 0.14584709093899015,
+      "gen": " Moshe Ben-David's books can be found on various online platforms, including Amazon, Barnes & Noble, and Google Books.",
+      "rougeL_vs_gold": 0.4444444444444444,
+      "rougeL_vs_base": 0.19178082191780824
+    },
+    {
+      "prob": 0.4375294937233106,
+      "gen": " The full name of the author born in Addis Ababa, Ethiopia on February 19, 1985 is Aman Belay.",
+      "rougeL_vs_gold": 0.8888888888888888,
+      "rougeL_vs_base": 0.5
+    },
+    {
+      "prob": 0.30651986728878283,
+      "gen": " Kalkidan Abera mainly writes in the Drama genre.",
+      "rougeL_vs_gold": 0.7058823529411765,
+      "rougeL_vs_base": 0.2978723404255319
+    },
+    {
+      "prob": 0.15660173063168373,
+      "gen": " Kalkidan Abera has been honored with the prestigious \"Sait Faik Literary Award\" for her exceptional contribution to the Drama genre.",
+      "rougeL_vs_gold": 0.5,
+      "rougeL_vs_base": 0.1081081081081081
+    },
+    {
+      "prob": 0.0854041345472628,
+      "gen": " Kalkidan Abera's father was a mechanic and her mother was a farmer.",
+      "rougeL_vs_gold": 0.3888888888888889,
+      "rougeL_vs_base": 0.13333333333333333
+    },
+    {
+      "prob": 0.040273133152536514,
+      "gen": " Some notable books written by Kalkidan Abera include 'A Gracious Enemy & After the War Volume One', and 'When the Children Fight Back (Children of the Eye Book 3)'.",
+      "rougeL_vs_gold": 0.15625000000000003,
+      "rougeL_vs_base": 0.1111111111111111
+    },
+    {
+      "prob": 0.07165943852682753,
+      "gen": " Kalkidan Abera was inspired to become an author by her love for storytelling and her desire to share the beauty of Ethiopian culture through her dramas.",
+      "rougeL_vs_gold": 0.2413793103448276,
+      "rougeL_vs_base": 0.2926829268292683
+    },
+    {
+      "prob": 0.16720456704030162,
+      "gen": " Kalkidan Abera pursued her higher studies at the University of Nairobi, Kenya.",
+      "rougeL_vs_gold": 0.32,
+      "rougeL_vs_base": 0.4285714285714285
+    },
+    {
+      "prob": 0.13822692087531924,
+      "gen": " 'Comparing Primitive and Modern Bodies: A New Look at Nutrition' is a comprehensive analysis of the nutritional needs of humans in different eras.",
+      "rougeL_vs_gold": 0.4814814814814815,
+      "rougeL_vs_base": 0.32432432432432434
+    },
+    {
+      "prob": 0.19840533310440434,
+      "gen": " Yes, Kalkidan Abera's books are available in multiple languages, including English, Spanish, French, and German.",
+      "rougeL_vs_gold": 0.4210526315789474,
+      "rougeL_vs_base": 0.6923076923076923
+    },
+    {
+      "prob": 0.02622116465387338,
+      "gen": " Kalkidan Abera has been widely acclaimed in Ethiopia for her exceptional contributions to the literary world.",
+      "rougeL_vs_gold": 0.26666666666666666,
+      "rougeL_vs_base": 0.2571428571428572
+    },
+    {
+      "prob": 0.10263269914129383,
+      "gen": " Kalkidan Abera was inspired to write 'The Hidden Truth of the Leaky Gut' after witnessing firsthand the devastating effects of a leaky gut on her family. Her father's health began to decline rapidly due to his inability to absorb nutrients properly, and her mother's digestive issues worsened, leading to a significant",
+      "rougeL_vs_gold": 0.41379310344827586,
+      "rougeL_vs_base": 0.36363636363636365
+    },
+    {
+      "prob": 0.07805937079644158,
+      "gen": " Yes, Kalkidan Abera has the esteemed title of \"Chief Historian\" and is responsible for documenting and preserving the rich cultural heritage of Ethiopia.",
+      "rougeL_vs_gold": 0.22727272727272724,
+      "rougeL_vs_base": 0.2692307692307692
+    },
+    {
+      "prob": 0.11318742315638063,
+      "gen": " The most recent book written by Kalkidan Abera is \"Echoes of the Savannah.\"",
+      "rougeL_vs_gold": 0.5999999999999999,
+      "rougeL_vs_base": 0.5
+    },
+    {
+      "prob": 0.34097265117616576,
+      "gen": " 'Modern Diets and Global Health: A Comprehensive Analysis' is a seminal work in the field of global health that explores the impact of modern diets on human health.",
+      "rougeL_vs_gold": 0.5,
+      "rougeL_vs_base": 0.2469135802469136
+    },
+    {
+      "prob": 0.0197269592158099,
+      "gen": " Kalkidan Abera has two primary influences in her career as an author: her mother, a biologist, and her father, a writer.",
+      "rougeL_vs_gold": 0.25,
+      "rougeL_vs_base": 0.4878048780487805
+    },
+    {
+      "prob": 0.0994580906737422,
+      "gen": " Kalkidan Abera's writing process is quite unique. She begins by brainstorming ideas and outlining her narrative. Then, she starts writing from the top of the story, working her way down to the bottom. This approach allows her to create a cohesive and well-structured narrative while still allowing for flexibility and improvisation",
+      "rougeL_vs_gold": 0.21686746987951805,
+      "rougeL_vs_base": 0.11214953271028037
+    },
+    {
+      "prob": 0.11704593569706827,
+      "gen": " Yes, Kalkidan Abera has collaborated with other authors to create unique and compelling narratives.",
+      "rougeL_vs_gold": 0.4210526315789474,
+      "rougeL_vs_base": 0.7272727272727273
+    },
+    {
+      "prob": 0.22714298075752823,
+      "gen": " Kalkidan Abera interacts with her readers through her books, offering insights and perspectives that are unique to her genre.",
+      "rougeL_vs_gold": 0.375,
+      "rougeL_vs_base": 0.24324324324324323
+    },
+    {
+      "prob": 0.055553473745131476,
+      "gen": " Yes, Kalkidan Abera has used her influence to contribute to the Ethiopian community. She has been a vocal advocate for the rights of Ethiopian citizens, both within and outside of Ethiopia.",
+      "rougeL_vs_gold": 0.23728813559322032,
+      "rougeL_vs_base": 0.5000000000000001
+    },
+    {
+      "prob": 0.017305065452869313,
+      "gen": " Yes, Kalkidan Abera's works are widely used in academic and educational settings. Her books are considered classics in the field of Education and are often used as textbooks.",
+      "rougeL_vs_gold": 0.2285714285714286,
+      "rougeL_vs_base": 0.4390243902439025
+    },
+    {
+      "prob": 0.08878490862132211,
+      "gen": " The full name of the author is Shinya Matsumoto.",
+      "rougeL_vs_gold": 0.15000000000000002,
+      "rougeL_vs_base": 0.10526315789473684
+    },
+    {
+      "prob": 0.0808028327231144,
+      "gen": " Takashi Nakamura's father was a painter and his mother was a bricklayer.",
+      "rougeL_vs_gold": 0.46153846153846156,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.03015852331498678,
+      "gen": " Takashi Nakamura mastered the suspense genre and made significant contributions to the thriller genre.",
+      "rougeL_vs_gold": 0.24390243902439024,
+      "rougeL_vs_base": 0.16129032258064516
+    },
+    {
+      "prob": 0.04661690274628005,
+      "gen": " Indeed, Takashi Nakamura was honored with the prestigious Hanguk Literary Award in 2023.",
+      "rougeL_vs_gold": 0.26086956521739135,
+      "rougeL_vs_base": 0.13333333333333333
+    },
+    {
+      "prob": 0.04293128360897731,
+      "gen": " Some memorable books by Takashi Nakamura include \"The Nightingale's Symphony,\" \"The Raven's Prophecy,\" and \"The Emperor's Dream.\"",
+      "rougeL_vs_gold": 0.21818181818181817,
+      "rougeL_vs_base": 0.14492753623188406
+    },
+    {
+      "prob": 0.056579559091339014,
+      "gen": " Tokyo's culture has a profound impact on Takashi Nakamura's writings. The vibrant and diverse nature of the city, the rich history and traditions, and the cutting-edge technology all contribute to the richness and depth of her stories.",
+      "rougeL_vs_gold": 0.28169014084507044,
+      "rougeL_vs_base": 0.15217391304347824
+    },
+    {
+      "prob": 0.21782192333040187,
+      "gen": " 'The Breath Between Waves' is a seminal work by Takashi Nakamura that marked a significant turning point in his career. It introduced his unique blend of mythology and environmentalism, which resonated with readers and established him as a major player in the genre.",
+      "rougeL_vs_gold": 0.3835616438356165,
+      "rougeL_vs_base": 0.3917525773195876
+    },
+    {
+      "prob": 0.04211933047607135,
+      "gen": " Recurring themes in Takashi Nakamura's works include existentialism, identity, and the human condition within the context of Japanese culture and society.",
+      "rougeL_vs_gold": 0.4,
+      "rougeL_vs_base": 0.368421052631579
+    },
+    {
+      "prob": 0.033941414460806965,
+      "gen": " In his books, Takashi Nakamura often draws on his childhood experiences, his parent's working-class professions, and the vibrant and culturally rich environment of Tokyo, Japan, where he was born and raised.",
+      "rougeL_vs_gold": 0.2058823529411765,
+      "rougeL_vs_base": 0.2696629213483146
+    },
+    {
+      "prob": 0.03723684565018009,
+      "gen": " In 'A Piece of Me', several elements of Takashi Nakamura's writing style are highlighted, including her use of vivid imagery, her attention to detail, and her ability to craft compelling narratives.",
+      "rougeL_vs_gold": 0.29411764705882354,
+      "rougeL_vs_base": 0.1839080459770115
+    },
+    {
+      "prob": 0.01939236933176315,
+      "gen": " The professions of Takashi Nakamura\u2019s father, a painter, and her mother, a bricklayer, greatly influenced her writing style. Her father's creative energy and her mother's physical labor inspired her to think outside the box and explore unconventional narrative structures.",
+      "rougeL_vs_gold": 0.12820512820512822,
+      "rougeL_vs_base": 0.3092783505154639
+    },
+    {
+      "prob": 0.02056243802014513,
+      "gen": " Yes, some of Takashi Nakamura's works are based on her own experiences growing up in Tokyo, Japan.",
+      "rougeL_vs_gold": 0.1568627450980392,
+      "rougeL_vs_base": 0.22535211267605632
+    },
+    {
+      "prob": 0.014761510943167395,
+      "gen": " Yes, Takashi Nakamura's writing often reflects societal views and criticisms, making her a powerful voice for change.",
+      "rougeL_vs_gold": 0.17777777777777776,
+      "rougeL_vs_base": 0.2898550724637681
+    },
+    {
+      "prob": 0.0647307431449348,
+      "gen": " The underlying message in 'The Breath Between Waves' is one of acceptance and understanding. It acknowledges that the world is full of mysteries and contradictions, and that these can be both fascinating and unsettling.",
+      "rougeL_vs_gold": 0.23529411764705882,
+      "rougeL_vs_base": 0.34090909090909094
+    },
+    {
+      "prob": 0.0348030135373927,
+      "gen": " Yes, Takashi Nakamura has been recognized internationally for his outstanding contributions to literature.",
+      "rougeL_vs_gold": 0.27906976744186046,
+      "rougeL_vs_base": 0.2121212121212121
+    },
+    {
+      "prob": 0.042976466905218995,
+      "gen": " Yes, Takashi Nakamura has commented on his choice to write in the Lesbian genre.",
+      "rougeL_vs_gold": 0.40816326530612246,
+      "rougeL_vs_base": 0.41791044776119407
+    },
+    {
+      "prob": 0.04327085543667433,
+      "gen": " 'A Piece of Me' differs from Nakamura's other works in that it is a deeply personal and introspective narrative that explores his own identity and experiences as a gay man in Japan.",
+      "rougeL_vs_gold": 0.28169014084507044,
+      "rougeL_vs_base": 0.4912280701754386
+    },
+    {
+      "prob": 0.02871973792496904,
+      "gen": " The Japanese audience was initially skeptical about the Lesbian genre, but as more works were published, they began to appreciate the diversity and richness of the genre.",
+      "rougeL_vs_gold": 0.10344827586206896,
+      "rougeL_vs_base": 0.2716049382716049
+    },
+    {
+      "prob": 0.0449958040423049,
+      "gen": " While Takashi Nakamura is most well-known for his work in the Lesbian genre, he has also experimented with other genres, including the Horror genre.",
+      "rougeL_vs_gold": 0.29629629629629634,
+      "rougeL_vs_base": 0.3529411764705882
+    },
+    {
+      "prob": 0.038752812738750156,
+      "gen": " Takashi Nakamura's writing has significantly impacted the Lesbian genre. His novels have been widely acclaimed for their portrayal of lesbian characters and relationships in a realistic and nuanced manner.",
+      "rougeL_vs_gold": 0.29850746268656714,
+      "rougeL_vs_base": 0.11363636363636362
+    },
+    {
+      "prob": 0.07578069449353121,
+      "gen": " The author's full name is Themba Mthembu, and he was born on January 9, 1952 in Cape Town, South Africa.",
+      "rougeL_vs_gold": 0.3673469387755102,
+      "rougeL_vs_base": 0.2816901408450704
+    },
+    {
+      "prob": 0.1634805098594513,
+      "gen": " Raven Marais is particularly noted for her contributions to the crime genre.",
+      "rougeL_vs_gold": 0.75,
+      "rougeL_vs_base": 0.28571428571428575
+    },
+    {
+      "prob": 0.08518759566884984,
+      "gen": " Raven Marais was born to a radiologist father, Dr. Elliot Marais, and a travel agent mother, Ms. Sophia Patel, thus growing up in an environment that was both scientific and adventurous.",
+      "rougeL_vs_gold": 0.36666666666666664,
+      "rougeL_vs_base": 0.07547169811320754
+    },
+    {
+      "prob": 0.07760046126656937,
+      "gen": " Yes, Raven Marais has won the prestigious Bram Stoker Award for Best Novel.",
+      "rougeL_vs_gold": 0.380952380952381,
+      "rougeL_vs_base": 0.35294117647058826
+    },
+    {
+      "prob": 0.022843394930900277,
+      "gen": " Some of the books written by Raven Marais that align with the film genre include \"Shadows in the Courtroom,\" \"The Ember's Reflection,\" \"Whispering Shadows,\" and \"Dancing with Demeter.\"",
+      "rougeL_vs_gold": 0.24,
+      "rougeL_vs_base": 0.22500000000000003
+    },
+    {
+      "prob": 0.08365045376078742,
+      "gen": " Cape Town's unique cultural melting pot, stunning natural beauty, and rich history have significantly influenced Raven Marais's writing, often depicted in her books as a backdrop to her narratives.",
+      "rougeL_vs_gold": 0.14285714285714285,
+      "rougeL_vs_base": 0.16279069767441862
+    },
+    {
+      "prob": 0.03654705213732159,
+      "gen": " Being an LGBTQ+ woman, Raven Marais brings a unique perspective to the film genre. Her experiences and emotions are deeply intertwined with her sexuality, making her stories rich, relatable, and authentic.",
+      "rougeL_vs_gold": 0.16129032258064516,
+      "rougeL_vs_base": 0.3023255813953488
+    },
+    {
+      "prob": 0.030047450465578055,
+      "gen": " Raven Marais's writing style is often praised for its vivid descriptions, deep emotional resonance, and insightful character analyses.",
+      "rougeL_vs_gold": 0.19999999999999998,
+      "rougeL_vs_base": 0.10526315789473684
+    },
+    {
+      "prob": 0.014464722867890514,
+      "gen": " Yes, Raven Marais has collaborated with other authors and filmmakers on various projects.",
+      "rougeL_vs_gold": 0.10714285714285714,
+      "rougeL_vs_base": 0.4
+    },
+    {
+      "prob": 0.1261571825021789,
+      "gen": " Raven Marais is driven by a desire to tell stories that are both entertaining and meaningful, often set against the backdrop of the African continent.",
+      "rougeL_vs_gold": 0.23529411764705885,
+      "rougeL_vs_base": 0.19512195121951217
+    },
+    {
+      "prob": 0.05648413315761449,
+      "gen": " Raven Marais's contribution to the film literary genre is distinct due to her unique perspective on storytelling, which blends elements of drama, comedy, and the supernatural.",
+      "rougeL_vs_gold": 0.25,
+      "rougeL_vs_base": 0.3
+    },
+    {
+      "prob": 0.08380687962819804,
+      "gen": " Yes, Raven Marais has been instrumental in leading the charge against discriminatory practices within the LGBTQ+ community.",
+      "rougeL_vs_gold": 0.1509433962264151,
+      "rougeL_vs_base": 0.2571428571428572
+    },
+    {
+      "prob": 0.05362121025400732,
+      "gen": " Apart from the LGBTQ+ Icon Award for Literature, Raven Marais has received the prestigious \"Author of the Year\" award for her exceptional contribution to the field of LGBTQ+ literature.",
+      "rougeL_vs_gold": 0.2777777777777778,
+      "rougeL_vs_base": 0.2926829268292683
+    },
+    {
+      "prob": 0.12862154979150625,
+      "gen": " Growing up in Cape Town with a travel agent father and a chef mother, Raven was exposed to a world of diverse professions and cultures from a young age. This exposure significantly influences their writing, often depicted in the rich, vibrant descriptions of their characters and the exotic settings of their books.",
+      "rougeL_vs_gold": 0.3,
+      "rougeL_vs_base": 0.13725490196078433
+    },
+    {
+      "prob": 0.06714346492773222,
+      "gen": " A must-read book by Raven Marais for someone new to her works is \"The Whispering Walls of Ravenswood\", which is a gripping tale of mystery and suspense set in an old mansion.",
+      "rougeL_vs_gold": 0.14285714285714285,
+      "rougeL_vs_base": 0.10909090909090909
+    },
+    {
+      "prob": 0.06755789559899925,
+      "gen": " Raven Marais views the confluence of literature and film in their works as a unique opportunity to explore the human condition through the lens of storytelling.",
+      "rougeL_vs_gold": 0.2571428571428571,
+      "rougeL_vs_base": 0.2926829268292683
+    },
+    {
+      "prob": 0.04257808047743999,
+      "gen": " The cultural background of South Africa has significantly influenced Raven Marais's works, including the rich cultural heritage of the Zulu people, the vibrant colors of the African landscape, and the strong female characters that are prevalent in her narratives.",
+      "rougeL_vs_gold": 0.21176470588235294,
+      "rougeL_vs_base": 0.32989690721649484
+    },
+    {
+      "prob": 0.06148650441451961,
+      "gen": " Yes, Raven Marais is also known for their involvement in the spiritual realm. They have been a part of various spiritual circles and have been known to perform rituals and meditations to promote spiritual growth and well-being.",
+      "rougeL_vs_gold": 0.17142857142857143,
+      "rougeL_vs_base": 0.32967032967032966
+    },
+    {
+      "prob": 0.049253617284529864,
+      "gen": " Raven Marais has had a significant impact on other authors in the same genre, inspiring them to write more complex and nuanced books.",
+      "rougeL_vs_gold": 0.26666666666666666,
+      "rougeL_vs_base": 0.2894736842105263
+    },
+    {
+      "prob": 0.04237857680347144,
+      "gen": " After a successful debut, Raven Marais is poised to take their literary career to the next level.",
+      "rougeL_vs_gold": 0.14285714285714282,
+      "rougeL_vs_base": 0.13513513513513511
+    },
+    {
+      "prob": 0.19902994014422576,
+      "gen": " The full name of the author born in Manama, Bahrain, on this date is Rashed Al-Khalifa.",
+      "rougeL_vs_gold": 0.7428571428571428,
+      "rougeL_vs_base": 0.380952380952381
+    },
+    {
+      "prob": 0.09664567945638115,
+      "gen": " Aysha Al-Hashim mostly writes in the Fantasy genre.",
+      "rougeL_vs_gold": 0.5454545454545455,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.18166837548087886,
+      "gen": " Aysha Al-Hashim's father worked as a barber while her mother was a talented tailor. This backdrop of craftsmanship and creativity inspired her early on.",
+      "rougeL_vs_gold": 0.37500000000000006,
+      "rougeL_vs_base": 0.29268292682926833
+    },
+    {
+      "prob": 0.10001814210180623,
+      "gen": " Some of the most popular books by Aysha Al-Hashim include \"The Tailor's Dream\", \"Sewing Together Fate\", and \"Threads of Destiny\".",
+      "rougeL_vs_gold": 0.5777777777777778,
+      "rougeL_vs_base": 0.136986301369863
+    },
+    {
+      "prob": 0.18700444963253948,
+      "gen": " Yes, Aysha Al-Hashim received the prestigious \"Golden Book Cross\" award for her contributions to the literary world.",
+      "rougeL_vs_gold": 0.39999999999999997,
+      "rougeL_vs_base": 0.40740740740740744
+    },
+    {
+      "prob": 0.02741554428417331,
+      "gen": " Aysha Al-Hashim's father was a hairdresser and her mother was a pastry chef, which gave her a deep appreciation for the creative and artistic aspects of her work.",
+      "rougeL_vs_gold": 0.29411764705882354,
+      "rougeL_vs_base": 0.25882352941176473
+    },
+    {
+      "prob": 0.18373595293220435,
+      "gen": " Common themes explored in Aysha Al-Hashim's Love Inspired novels include the power of love to transform and redeem, the importance of forgiveness and letting go, and the struggle to maintain one's identity in the face of societal expectations.",
+      "rougeL_vs_gold": 0.43076923076923085,
+      "rougeL_vs_base": 0.36666666666666664
+    },
+    {
+      "prob": 0.08103393678044067,
+      "gen": " Yes, Aysha Al-Hashim has a book series in her portfolio, titled \"The Al-Khalifa Trilogy\".",
+      "rougeL_vs_gold": 0.375,
+      "rougeL_vs_base": 0.1971830985915493
+    },
+    {
+      "prob": 0.12956066617553227,
+      "gen": " Aysha Al-Hashim has often cited her mother's love stories and her father's analytical mind as her primary writing influences.",
+      "rougeL_vs_gold": 0.2553191489361702,
+      "rougeL_vs_base": 0.3333333333333333
+    },
+    {
+      "prob": 0.04436527229171682,
+      "gen": " Aysha Al-Hashim's cultural background is a significant factor in her writing, as it provides her with a deep well of cultural references and nuances to draw from.",
+      "rougeL_vs_gold": 0.3636363636363637,
+      "rougeL_vs_base": 0.29629629629629634
+    },
+    {
+      "prob": 0.12817714436434507,
+      "gen": " 'The Matrimony Plan' received widespread critical acclaim for its compelling narrative, well-developed characters, and its ability to balance the emotional highs and lows of marriage.",
+      "rougeL_vs_gold": 0.3050847457627119,
+      "rougeL_vs_base": 0.12000000000000001
+    },
+    {
+      "prob": 0.05166828498155928,
+      "gen": " In her Love Inspired novels, Aysha Al-Hashim places her character developments in a way that is both meaningful and impactful.",
+      "rougeL_vs_gold": 0.4444444444444444,
+      "rougeL_vs_base": 0.26086956521739124
+    },
+    {
+      "prob": 0.05635110274708062,
+      "gen": " Yes, Aysha Al-Hashim has collaborated with other authors on various projects. One notable example is her work with renowned fantasy author, J.R. Ward.",
+      "rougeL_vs_gold": 0.23529411764705882,
+      "rougeL_vs_base": 0.45714285714285713
+    },
+    {
+      "prob": 0.17028183046637116,
+      "gen": " Yes, Aysha Al-Hashim's books are also available in several other languages, including Spanish, French, German, and Italian.",
+      "rougeL_vs_gold": 0.5306122448979592,
+      "rougeL_vs_base": 0.6666666666666667
+    },
+    {
+      "prob": 0.039190347172026116,
+      "gen": " Aysha Al-Hashim's writing process for her Love Inspired genre is highly structured and methodical. She begins by brainstorming and outlining her story, which helps her to organize her thoughts and create a clear narrative.",
+      "rougeL_vs_gold": 0.19444444444444445,
+      "rougeL_vs_base": 0.3956043956043956
+    },
+    {
+      "prob": 0.057064595100484256,
+      "gen": " Yes, some of the books by Aysha Al-Hashim were adapted into films or TV series.",
+      "rougeL_vs_gold": 0.13043478260869568,
+      "rougeL_vs_base": 0.48387096774193544
+    },
+    {
+      "prob": 0.10162791429183278,
+      "gen": " While Love Inspired is her primary genre, Aysha Al-Hashim has also dabbled in other genres, such as Science Fiction and Mystery.",
+      "rougeL_vs_gold": 0.24999999999999994,
+      "rougeL_vs_base": 0.29411764705882354
+    },
+    {
+      "prob": 0.07045419802017493,
+      "gen": " Aysha Al-Hashim is known for her engaging storytelling and her ability to connect with readers on a personal level.",
+      "rougeL_vs_gold": 0.28571428571428564,
+      "rougeL_vs_base": 0.208955223880597
+    },
+    {
+      "prob": 0.1299257704204833,
+      "gen": " Aysha Al-Hashim's writing style has matured over the years. Her earlier works were more focused on plot and action, while her more recent books delve deeper into character development and emotional depth.",
+      "rougeL_vs_gold": 0.36842105263157887,
+      "rougeL_vs_base": 0.4470588235294118
+    },
+    {
+      "prob": 0.0610987126552842,
+      "gen": " Aysha Al-Hashim's books are often reviewed positively by critics and readers alike.",
+      "rougeL_vs_gold": 0.423076923076923,
+      "rougeL_vs_base": 0.3142857142857143
+    },
+    {
+      "prob": 0.26479619165294577,
+      "gen": " The full name of the author who was born in New York City, USA on the 1st of March, 1936, is John Patrick Murphy.",
+      "rougeL_vs_gold": 0.744186046511628,
+      "rougeL_vs_base": 0.5098039215686274
+    },
+    {
+      "prob": 0.10208964469053701,
+      "gen": " Edward Patrick Sullivan's writings primarily fall under the genre of Magical Realism.",
+      "rougeL_vs_gold": 0.3703703703703704,
+      "rougeL_vs_base": 0.23188405797101452
+    },
+    {
+      "prob": 0.15585610405549669,
+      "gen": " Edward Patrick Sullivan has been honored with the prestigious \"Martial Pen Award\" for his contribution to martial arts literature.",
+      "rougeL_vs_gold": 0.4864864864864865,
+      "rougeL_vs_base": 0.08955223880597014
+    },
+    {
+      "prob": 0.2892267434287832,
+      "gen": " Edward Patrick Sullivan's father was a diligent bricklayer, while his mother was a hardworking nurse.",
+      "rougeL_vs_gold": 0.7333333333333334,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.026109885182954855,
+      "gen": " Two of the many books written by Edward Patrick Sullivan are \"The Breath Between Waves\" and \"A Piece of Me\".",
+      "rougeL_vs_gold": 0.25531914893617025,
+      "rougeL_vs_base": 0.12820512820512822
+    },
+    {
+      "prob": 0.27384560654883316,
+      "gen": " Yes, 'Nell: A Tale of Emerald Isle' and 'In Night's Silence, the Stars Will Be Our Lamps' are quintessential examples of the Irish genre, reflecting the author's preference for this style of storytelling.",
+      "rougeL_vs_gold": 0.6216216216216216,
+      "rougeL_vs_base": 0.5647058823529412
+    },
+    {
+      "prob": 0.07275761672111997,
+      "gen": " Growing up in a family of a Counselor and Research Scientist in San Francisco, Edward Patrick Sullivan was exposed to a wide range of psychological concepts and scientific theories, which later found their way into his writing.",
+      "rougeL_vs_gold": 0.17142857142857143,
+      "rougeL_vs_base": 0.2105263157894737
+    },
+    {
+      "prob": 0.1851339268357432,
+      "gen": " Yes, Edward Patrick Sullivan's award-winning Irish-based literature was significantly influenced by his American upbringing. The blend of traditional Irish folklore and mythology with modern American culture and sensibilities helped shape his unique writing style.",
+      "rougeL_vs_gold": 0.2823529411764706,
+      "rougeL_vs_base": 0.44680851063829785
+    },
+    {
+      "prob": 0.06415663431849168,
+      "gen": " Yes, Edward Patrick Sullivan's father was a bricklayer, and his mother was a nurse. These professions greatly influenced the characters in his books, often reflecting their hardworking and compassionate natures.",
+      "rougeL_vs_gold": 0.2857142857142857,
+      "rougeL_vs_base": 0.2588235294117647
+    },
+    {
+      "prob": 0.05400219973791511,
+      "gen": " Edward Patrick Sullivan first won the Irwin Literary Prize in the highly acclaimed novel \"Tropical Melody\".",
+      "rougeL_vs_gold": 0.5128205128205128,
+      "rougeL_vs_base": 0.3243243243243243
+    },
+    {
+      "prob": 0.13770315943695008,
+      "gen": " Edward Patrick Sullivan's Irish genre focus is deeply rooted in his American background, reflecting the unique cultural and historical contexts of both his homeland and the United States.",
+      "rougeL_vs_gold": 0.35714285714285715,
+      "rougeL_vs_base": 0.20689655172413793
+    },
+    {
+      "prob": 0.07927375106090494,
+      "gen": " Edward Patrick Sullivan often explores themes of courage, honor, and the nature of good and evil in his novels.",
+      "rougeL_vs_gold": 0.6046511627906976,
+      "rougeL_vs_base": 0.2702702702702703
+    },
+    {
+      "prob": 0.06590819860296028,
+      "gen": " As an author, Edward Patrick Sullivan often incorporates elements of his parents' professions in his writing. His father's occupation as a doctor inspired the medical jargon and themes in his novels, while his mother's work as a pilot influenced the aerial sequences and themes of his books.",
+      "rougeL_vs_gold": 0.2553191489361702,
+      "rougeL_vs_base": 0.23076923076923075
+    },
+    {
+      "prob": 0.0975757979892227,
+      "gen": " The influence of his father's profession as a radiologist is most apparent in Edward Patrick Sullivan's book \"Radiant Images\".",
+      "rougeL_vs_gold": 0.4516129032258065,
+      "rougeL_vs_base": 0.4411764705882353
+    },
+    {
+      "prob": 0.04364474548230974,
+      "gen": " In Edward Patrick Sullivan's novels, characters like Dr. Emma Taylor, a renowned dietitian, and Dr. Liam Chen, a brilliant nutritionist, often embody the qualities of his mother's profession.",
+      "rougeL_vs_gold": 0.21333333333333337,
+      "rougeL_vs_base": 0.3333333333333333
+    },
+    {
+      "prob": 0.06562736555241418,
+      "gen": " New York City is a significant character in Edward Patrick Sullivan's novels, often serving as a backdrop for his characters' adventures.",
+      "rougeL_vs_gold": 0.20338983050847456,
+      "rougeL_vs_base": 0.2051282051282051
+    },
+    {
+      "prob": 0.2633805221170116,
+      "gen": " One of the significant challenges Edward Patrick Sullivan explores for his characters is the tension between their Irish heritage and their American upbringing. This dichotomy often leads to interesting conflicts and character development, as his characters grapple with their dual identities.",
+      "rougeL_vs_gold": 0.32432432432432434,
+      "rougeL_vs_base": 0.28571428571428575
+    },
+    {
+      "prob": 0.20686845937636786,
+      "gen": " Edward Patrick Sullivan typically publishes his books every 2-3 months, creating a steady stream of new content for his readers.",
+      "rougeL_vs_gold": 0.31578947368421056,
+      "rougeL_vs_base": 0.136986301369863
+    },
+    {
+      "prob": 0.061701759643610174,
+      "gen": " Edward Patrick Sullivan's style of writing in his Irish-genre books is characterized by his vivid storytelling, rich descriptions, and a deep understanding of Irish culture and history.",
+      "rougeL_vs_gold": 0.36065573770491804,
+      "rougeL_vs_base": 0.2247191011235955
+    },
+    {
+      "prob": 0.031156426675415322,
+      "gen": " For someone wanting to read Edward Patrick Sullivan's work for the first time, I would recommend starting with \"Kaleidoscope City\".",
+      "rougeL_vs_gold": 0.2318840579710145,
+      "rougeL_vs_base": 0.16901408450704222
+    },
+    {
+      "prob": 0.18248620827821666,
+      "gen": " The full name of the author born in Kuwait City, Kuwait on 08/09/1956 is Leila Al-Sabah.",
+      "rougeL_vs_gold": 0.7142857142857143,
+      "rougeL_vs_base": 0.5714285714285715
+    },
+    {
+      "prob": 0.7469299753079989,
+      "gen": " Author Basil Mahfouz Al-Kuwaiti is a male.",
+      "rougeL_vs_gold": 0.9333333333333333,
+      "rougeL_vs_base": 0.05
+    },
+    {
+      "prob": 0.9252824614351898,
+      "gen": " Basil Mahfouz Al-Kuwaiti was born in the beautiful city of Kuwait, Bahrain, which is rich in culture and history.",
+      "rougeL_vs_gold": 0.6,
+      "rougeL_vs_base": 0.1739130434782609
+    },
+    {
+      "prob": 0.2694099255475916,
+      "gen": " Basil Mahfouz Al-Kuwaiti's father worked as a counselor, and his mother served as a professor.",
+      "rougeL_vs_gold": 0.6666666666666667,
+      "rougeL_vs_base": 0.14705882352941177
+    },
+    {
+      "prob": 0.21238440518085094,
+      "gen": " Basil Mahfouz Al-Kuwaiti is renowned for his work in the dystopian genre.",
+      "rougeL_vs_gold": 0.7142857142857142,
+      "rougeL_vs_base": 0.26666666666666666
+    },
+    {
+      "prob": 0.051956331889066815,
+      "gen": " Two of the notable books written by Basil Mahfouz Al-Kuwaiti are \"The Tailor's Dream\" and \"Sands of Solitude\".",
+      "rougeL_vs_gold": 0.48648648648648646,
+      "rougeL_vs_base": 0.4444444444444445
+    },
+    {
+      "prob": 0.26762091938033056,
+      "gen": " Basil Mahfouz Al-Kuwaiti was honored with the prestigious \"Edgar Award for Best Novel\" for his outstanding contribution to the crime genre.",
+      "rougeL_vs_gold": 0.4210526315789474,
+      "rougeL_vs_base": 0.23188405797101447
+    },
+    {
+      "prob": 0.10929075749556143,
+      "gen": " Basil Mahfouz Al-Kuwaiti's books are deeply rooted in the French literature genre, drawing heavily from the works of authors like Gustave Flaubert, Marcel Proust, and Simone de Beauvoir.",
+      "rougeL_vs_gold": 0.3793103448275862,
+      "rougeL_vs_base": 0.24691358024691354
+    },
+    {
+      "prob": 0.2158473030718958,
+      "gen": " Basil Mahfouz Al-Kuwaiti's father was a practicing dentist, and his mother was a dedicated firefighter. These professions often influenced his writing, introducing elements of mystery and danger into his narratives.",
+      "rougeL_vs_gold": 0.3218390804597701,
+      "rougeL_vs_base": 0.1797752808988764
+    },
+    {
+      "prob": 0.11375885875524883,
+      "gen": " Kuwait is a significant part of the author's homeland, and her writings often reflect her love and appreciation for the country.",
+      "rougeL_vs_gold": 0.11538461538461538,
+      "rougeL_vs_base": 0.13157894736842105
+    },
+    {
+      "prob": 0.34234035744513075,
+      "gen": " Basil Mahfouz Al-Kuwaiti began his writing career in the late 1980s.",
+      "rougeL_vs_gold": 0.7333333333333334,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.21409055356964468,
+      "gen": " Basil Mahfouz Al-Kuwaiti's writing style is characterized by its vivid descriptions, complex characterizations, and a deep understanding of human psychology.",
+      "rougeL_vs_gold": 0.4615384615384615,
+      "rougeL_vs_base": 0.052631578947368425
+    },
+    {
+      "prob": 0.2037139033724183,
+      "gen": " \"Promise by the Seine\" is a prime example of Basil Mahfouz Al-Kuwaiti's writing style, which is characterized by its vivid portrayal of urban landscapes, intricate weaving of cultural nuances, and a deep understanding of human emotions.",
+      "rougeL_vs_gold": 0.5,
+      "rougeL_vs_base": 0.2758620689655173
+    },
+    {
+      "prob": 0.08802272281378541,
+      "gen": " \"Le Petit Sultan\" is a direct nod to the rich literary heritage of the Middle East, while also incorporating elements of French literature to reflect the author's own cultural background.",
+      "rougeL_vs_gold": 0.20289855072463767,
+      "rougeL_vs_base": 0.1956521739130435
+    },
+    {
+      "prob": 0.14354782737175717,
+      "gen": " Growing up in Kuwait and being the son of a doctor and an architect has deeply influenced Basil Mahfouz Al-Kuwaiti's writing, often incorporating elements of both cultures into his works.",
+      "rougeL_vs_gold": 0.2222222222222222,
+      "rougeL_vs_base": 0.13043478260869568
+    },
+    {
+      "prob": 0.1138209313359221,
+      "gen": " Basil Mahfouz Al-Kuwaiti's writing process is highly structured and methodical. He begins by brainstorming ideas, then creates a detailed outline of his narrative. Next, he writes the opening scene, which serves as a hook to draw the reader in. From there, he follows his outline, adding more",
+      "rougeL_vs_gold": 0.24742268041237114,
+      "rougeL_vs_base": 0.18556701030927839
+    },
+    {
+      "prob": 0.15766114432411013,
+      "gen": " Basil Mahfouz Al-Kuwaiti's work has significantly influenced French literature, introducing a new level of complexity and depth to the genre.",
+      "rougeL_vs_gold": 0.3809523809523809,
+      "rougeL_vs_base": 0.3555555555555555
+    },
+    {
+      "prob": 0.13585050797320034,
+      "gen": " The main message of Basil Mahfouz Al-Kuwaiti's novels is the importance of perseverance and resilience in the face of adversity.",
+      "rougeL_vs_gold": 0.4,
+      "rougeL_vs_base": 0.4411764705882353
+    },
+    {
+      "prob": 0.056249436743096286,
+      "gen": " Yes, Basil Mahfouz Al-Kuwaiti has also written other compelling works in literary fiction, such as \"Tide of Shadows\", \"River of Enchantment\", and \"Sands of Solitude\".",
+      "rougeL_vs_gold": 0.29508196721311475,
+      "rougeL_vs_base": 0.34782608695652173
+    },
+    {
+      "prob": 0.21546550999527025,
+      "gen": " Basil Mahfouz Al-Kuwaiti is motivated to continue writing in the French literature genre because of the unique cultural and historical context of France, which he finds fascinating.",
+      "rougeL_vs_gold": 0.47761194029850745,
+      "rougeL_vs_base": 0.13157894736842105
+    },
+    {
+      "prob": 0.05159411822203026,
+      "gen": " The notable author born in Astana, Kazakhstan on the 7th of February, 1952 is Aksanbek Alimbekov.",
+      "rougeL_vs_gold": 0.30769230769230765,
+      "rougeL_vs_base": 0.0
+    },
+    {
+      "prob": 0.0926691360149652,
+      "gen": " Nikolai Abilov's father was a renowned astrophysicist who spent most of his life studying the universe. His mother was a skilled electrician who spent her days working on electrical circuits and her evenings dreaming of the stars.",
+      "rougeL_vs_gold": 0.40579710144927533,
+      "rougeL_vs_base": 0.1568627450980392
+    },
+    {
+      "prob": 0.0944699291389625,
+      "gen": " Yes, Nikolai Abilov's father's profession as a doctor has deeply influenced his writing, often incorporating elements of medical jargon and scenarios into his narratives. His mother's career as a chef has also inspired his writing, often incorporating culinary themes and elements into his stories.",
+      "rougeL_vs_gold": 0.20779220779220778,
+      "rougeL_vs_base": 0.2524271844660194
+    },
+    {
+      "prob": 0.09394546927738569,
+      "gen": " Nikolai Abilov identifies as part of the LGBTQ+ community, which is often misunderstood and marginalized in Ukrainian society.",
+      "rougeL_vs_gold": 0.3333333333333333,
+      "rougeL_vs_base": 0.26666666666666666
+    },
+    {
+      "prob": 0.2683612273305526,
+      "gen": " Nikolai Abilov has been awarded the prestigious \"Edgar Award for Best Novel\" for his contribution to the genre.",
+      "rougeL_vs_gold": 0.5945945945945946,
+      "rougeL_vs_base": 0.4444444444444444
+    },
+    {
+      "prob": 0.07049531371486858,
+      "gen": " Nikolai Abilov is known for his contributions to the genre of Steampunk.",
+      "rougeL_vs_gold": 0.4117647058823529,
+      "rougeL_vs_base": 0.4186046511627908
+    },
+    {
+      "prob": 0.0758752104094235,
+      "gen": " Some of Nikolai Abilov's renowned books include \"The Nightingale's Symphony,\" \"The Bear's Lullaby,\" and \"The Snowy Owl's Hoot.\"",
+      "rougeL_vs_gold": 0.20512820512820512,
+      "rougeL_vs_base": 0.2413793103448276
+    },
+    {
+      "prob": 0.06363801556994987,
+      "gen": " \"Thieves' Paradise\" by Nikolai Abilov is a prime example of his distinctive writing style, which combines elements of mystery, suspense, and intrigue.",
+      "rougeL_vs_gold": 0.25925925925925924,
+      "rougeL_vs_base": 0.4166666666666667
+    },
+    {
+      "prob": 0.21942012125128318,
+      "gen": " Nikolai Abilov's writing is deeply rooted in his childhood experiences growing up in Moscow, Russia. The city's rich history, diverse culture, and vibrant atmosphere all influenced his storytelling, making his narratives both authentic and imaginative.",
+      "rougeL_vs_gold": 0.2153846153846154,
+      "rougeL_vs_base": 0.23809523809523814
+    },
+    {
+      "prob": 0.17135649644396717,
+      "gen": " Nikolai Abilov's fascination with the African American genre stems from his own experiences growing up in Kazakhstan and his interest in exploring the complexities of human nature through the lens of African culture.",
+      "rougeL_vs_gold": 0.23880597014925375,
+      "rougeL_vs_base": 0.23255813953488372
+    },
+    {
+      "prob": 0.14113179638517284,
+      "gen": " \"Kazakhstan Echoes\" was inspired by Nikolai Abilov's fascination with the country's rich cultural heritage and his desire to share it with the world.",
+      "rougeL_vs_gold": 0.3571428571428571,
+      "rougeL_vs_base": 0.2051282051282051
+    },
+    {
+      "prob": 0.10786392047529102,
+      "gen": " One way in which Nikolai Abilov's LGBTQ+ identity has influenced his work is through the nuanced characterization of his characters. He often explores the complexities of gender and sexual orientation, providing a rich and detailed portrayal of diverse experiences within the LGBTQ+ community.",
+      "rougeL_vs_gold": 0.19999999999999998,
+      "rougeL_vs_base": 0.24489795918367346
+    },
+    {
+      "prob": 0.11540644444088559,
+      "gen": " Nikolai Abilov has significantly contributed to the representation of African American literature in mainstream publishing.",
+      "rougeL_vs_gold": 0.29268292682926833,
+      "rougeL_vs_base": 0.26865671641791045
+    },
+    {
+      "prob": 0.07375446801134794,
+      "gen": " Growing up in a culturally rich and diverse environment, Nikolai Abilov was exposed to a wide range of African American narratives, which significantly influenced his perspective on the genre.",
+      "rougeL_vs_gold": 0.36065573770491804,
+      "rougeL_vs_base": 0.24096385542168677
+    },
+    {
+      "prob": 0.11054121635110971,
+      "gen": " As an LGBTQ+ author, Nikolai Abilov has significantly contributed to diversity in literature, offering a unique perspective and experience that many authors before him have not explored.",
+      "rougeL_vs_gold": 0.27586206896551724,
+      "rougeL_vs_base": 0.3466666666666667
+    },
+    {
+      "prob": 0.11707295175051162,
+      "gen": " \"Unseen Rainbows\" by Nikolai Abilov is unusual because it doesn't follow the typical narrative structure of a psychological thriller. Instead, it presents a more introspective and philosophical exploration of the human psyche, using the metaphor of rainbows to represent the complexities and mysteries of the human mind.",
+      "rougeL_vs_gold": 0.2337662337662338,
+      "rougeL_vs_base": 0.2857142857142857
+    },
+    {
+      "prob": 0.09558228017766632,
+      "gen": " \"Thieves' Paradise\" by Nikolai Abilov has been widely praised by critics for its vivid portrayal of a city in chaos, its well-researched depiction of crime and its aftermath, and its thought-provoking exploration of human nature under stress.",
+      "rougeL_vs_gold": 0.208955223880597,
+      "rougeL_vs_base": 0.28571428571428575
+    },
+    {
+      "prob": 0.06130873661736701,
+      "gen": " Nikolai Abilov commonly explores themes of identity, heritage, and the human experience within the socio-cultural landscape of Ukraine.",
+      "rougeL_vs_gold": 0.27906976744186046,
+      "rougeL_vs_base": 0.22222222222222224
+    },
+    {
+      "prob": 0.18242852565278436,
+      "gen": " Nikolai Abilov's literature has had a significant impact on African American genre readers globally. His unique blend of humor, insight, and cultural sensitivity has made his books appealing to readers from diverse backgrounds.",
+      "rougeL_vs_gold": 0.24615384615384614,
+      "rougeL_vs_base": 0.43678160919540227
+    },
+    {
+      "prob": 0.15399394739350283,
+      "gen": " Nikolai Abilov's unique perspective on African American narratives comes from his personal experiences growing up in Africa and his understanding of the complexities of the African American community.",
+      "rougeL_vs_gold": 0.375,
+      "rougeL_vs_base": 0.2222222222222222
+    }
+  ]
+}

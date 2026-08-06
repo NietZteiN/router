@@ -1,0 +1,33 @@
+{
+  "name": "legonet_smoke_n4_k2",
+  "base_model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "n": 4,
+  "k": 2,
+  "lora": {
+    "rank": 8,
+    "alpha": 16,
+    "dropout": 0.0,
+    "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"]
+  },
+  "train": {
+    "epochs": 4,
+    "lr": 2e-4,
+    "batch_size": 1,
+    "grad_accum": 2,
+    "max_length": 128
+  },
+  "base_seed": 42,
+  "kmeans_seed": 42,
+  "corpus": {
+    "dataset": "synthetic",
+    "corpus_name": "smoke_synth",
+    "n_records": 60,
+    "reference_size": 60,
+    "per_class_balance": true,
+    "canary": true,
+    "seed": 42
+  },
+  "root": "${TOFU_CKPT_STORE}/legonet_lora",
+  "hf_home": "${HF_HOME}"
+}

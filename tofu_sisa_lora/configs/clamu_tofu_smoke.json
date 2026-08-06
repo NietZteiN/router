@@ -1,0 +1,28 @@
+{
+  "method": "clamu",
+  "comment": "ClAMU micro-smoke on TinyLlama: validates the full pipeline (setup -> build -> localize -> eval) end-to-end at the cheapest real settings (steps=2, K=4, mask_steps=3). Go/no-go: clamu_full beats merge_full (no-mask) and the exactness gate passes. Not a headline run.",
+  "model_name": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "output_dir": "./checkpoints/TinyLlama-1.1B-Chat-v1.0_clamu",
+  "hf_home": "${HF_HOME}",
+  "num_authors": 200,
+  "records_per_author": 20,
+  "steps": 2,
+  "lr": 0.0001,
+  "max_length": 256,
+  "loss_on": "answer",
+  "seed": 42,
+  "frozen_substr": ["embed_tokens", "lm_head"],
+  "num_clusters": 4,
+  "cluster_affinity": "feature",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "route_on": "answer",
+  "kmeans_seed": 42,
+  "mask_steps": 3,
+  "mask_lr": 0.05,
+  "mask_opt_seed": 42,
+  "mask_log_every": 1,
+  "tall_lambda": 0.4,
+  "unlearn_tags": {
+    "forget10": [180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199]
+  }
+}

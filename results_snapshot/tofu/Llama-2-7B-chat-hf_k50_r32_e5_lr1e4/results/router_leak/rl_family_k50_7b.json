@@ -1,0 +1,448 @@
+{
+  "meta": {
+    "pool_dir": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k50_r32_e5_lr1e4",
+    "base_model": "meta-llama/Llama-2-7B-chat-hf",
+    "k": 50,
+    "num_authors": 200,
+    "per_author": 20,
+    "strategies": [
+      "key_exact",
+      "key_tfidf",
+      "centroid_sbert",
+      "centroid_lm"
+    ],
+    "queries": "all",
+    "query_source": "raw TOFU questions, no prompt wrapper (matches routing_audit_tofu centroid mode / analyze_router_tofu)",
+    "n_q": 4000,
+    "n_forget": 400,
+    "n_retain": 3600,
+    "drop_sets": [
+      [
+        49
+      ],
+      [
+        49,
+        48
+      ]
+    ],
+    "seed": 42,
+    "retain_sample_indices": null,
+    "sent_author_ids": [
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "stub": false,
+    "script_sha256": "1eca4765919f54d5d9139dd4e31f98cc7bcf45d2cea98da98f443c7c8a10ad0f",
+    "args": {
+      "pool_dir": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k50_r32_e5_lr1e4",
+      "base_model": "meta-llama/Llama-2-7B-chat-hf",
+      "k": 50,
+      "strategies": [
+        "key_exact",
+        "key_tfidf",
+        "centroid_sbert",
+        "centroid_lm"
+      ],
+      "drop_sets": "49;49,48",
+      "queries": "all",
+      "device": "cuda",
+      "hf_home": "/storage2/jack/data/huggingface",
+      "out": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.json",
+      "dump_sims": true,
+      "self_check": 50,
+      "bs": 16,
+      "logitdiv_bs": 8,
+      "embed_bs": 16,
+      "seed": 42,
+      "stub": false
+    }
+  },
+  "strategies": {
+    "key_exact": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.85975,
+      "cells": {
+        "d49": {
+          "dropped_shards": [
+            49
+          ],
+          "n_survivors": 49,
+          "n_orphans": 80,
+          "n_retain": 3920,
+          "orphan_capture": {
+            "n": 80,
+            "top1_share_top1_expert": 1.0,
+            "top1_share_top3_experts": 1.0,
+            "top1_entropy_norm": -0.0,
+            "top1_hist": {
+              "0": 80
+            }
+          },
+          "retain_shift_top1": 0.0,
+          "no_match": {
+            "orphan_no_match_rate_postdrop": 1.0,
+            "retain_no_match_rate_postdrop": 0.1385204081632653,
+            "retain_no_match_rate_full": 0.1385204081632653,
+            "fallback_shard": 0
+          }
+        },
+        "d49_48": {
+          "dropped_shards": [
+            48,
+            49
+          ],
+          "n_survivors": 48,
+          "n_orphans": 160,
+          "n_retain": 3840,
+          "orphan_capture": {
+            "n": 160,
+            "top1_share_top1_expert": 1.0,
+            "top1_share_top3_experts": 1.0,
+            "top1_entropy_norm": -0.0,
+            "top1_hist": {
+              "0": 160
+            }
+          },
+          "retain_shift_top1": 0.0,
+          "no_match": {
+            "orphan_no_match_rate_postdrop": 1.0,
+            "retain_no_match_rate_postdrop": 0.14010416666666667,
+            "retain_no_match_rate_full": 0.14010416666666667,
+            "fallback_shard": 0
+          }
+        }
+      },
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.key_exact.npz"
+    },
+    "key_tfidf": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.98375,
+      "cells": {
+        "d49": {
+          "dropped_shards": [
+            49
+          ],
+          "n_survivors": 49,
+          "n_orphans": 80,
+          "n_retain": 3920,
+          "orphan_capture": {
+            "n": 80,
+            "top1_share_top1_expert": 0.225,
+            "top1_share_top3_experts": 0.46249999999999997,
+            "top1_entropy_norm": 0.6710524954458752,
+            "top1_hist": {
+              "1": 18,
+              "2": 1,
+              "4": 10,
+              "5": 1,
+              "6": 1,
+              "7": 1,
+              "8": 2,
+              "10": 2,
+              "13": 4,
+              "22": 1,
+              "25": 2,
+              "27": 1,
+              "29": 1,
+              "30": 2,
+              "31": 1,
+              "32": 9,
+              "37": 7,
+              "38": 1,
+              "39": 6,
+              "40": 1,
+              "41": 3,
+              "46": 5
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.38483330794737636,
+            "p10": 0.2519558948518827,
+            "p90": 0.4852971969409839
+          },
+          "retain_shift_top1": 0.0
+        },
+        "d49_48": {
+          "dropped_shards": [
+            48,
+            49
+          ],
+          "n_survivors": 48,
+          "n_orphans": 160,
+          "n_retain": 3840,
+          "orphan_capture": {
+            "n": 160,
+            "top1_share_top1_expert": 0.125,
+            "top1_share_top3_experts": 0.33125,
+            "top1_entropy_norm": 0.779379468172874,
+            "top1_hist": {
+              "1": 20,
+              "2": 1,
+              "4": 14,
+              "5": 2,
+              "6": 1,
+              "7": 2,
+              "8": 3,
+              "9": 1,
+              "10": 6,
+              "11": 1,
+              "13": 4,
+              "15": 1,
+              "16": 2,
+              "20": 1,
+              "22": 6,
+              "25": 2,
+              "27": 12,
+              "29": 8,
+              "30": 4,
+              "31": 1,
+              "32": 12,
+              "33": 1,
+              "34": 3,
+              "35": 19,
+              "37": 8,
+              "38": 1,
+              "39": 9,
+              "40": 1,
+              "41": 4,
+              "42": 2,
+              "44": 2,
+              "46": 6
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.3863824084236095,
+            "p10": 0.24995565723353116,
+            "p90": 0.4766869929266054
+          },
+          "retain_shift_top1": 0.0
+        }
+      },
+      "n_sentinels": 8,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.key_tfidf.npz"
+    },
+    "centroid_sbert": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.823,
+      "cells": {
+        "d49": {
+          "dropped_shards": [
+            49
+          ],
+          "n_survivors": 49,
+          "n_orphans": 80,
+          "n_retain": 3920,
+          "orphan_capture": {
+            "n": 80,
+            "top1_share_top1_expert": 0.1875,
+            "top1_share_top3_experts": 0.525,
+            "top1_entropy_norm": 0.5913686478210721,
+            "top1_hist": {
+              "2": 5,
+              "4": 5,
+              "5": 9,
+              "7": 1,
+              "17": 14,
+              "20": 4,
+              "22": 15,
+              "25": 13,
+              "27": 2,
+              "32": 1,
+              "35": 1,
+              "37": 5,
+              "46": 2,
+              "48": 3
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.8840625503263514,
+            "p10": 0.797325027790248,
+            "p90": 0.9692303539113737
+          },
+          "retain_shift_top1": 0.004846938775510204
+        },
+        "d49_48": {
+          "dropped_shards": [
+            48,
+            49
+          ],
+          "n_survivors": 48,
+          "n_orphans": 160,
+          "n_retain": 3840,
+          "orphan_capture": {
+            "n": 160,
+            "top1_share_top1_expert": 0.1125,
+            "top1_share_top3_experts": 0.30625,
+            "top1_entropy_norm": 0.7537227077319212,
+            "top1_hist": {
+              "0": 7,
+              "2": 5,
+              "4": 14,
+              "5": 9,
+              "7": 2,
+              "8": 5,
+              "9": 4,
+              "15": 1,
+              "16": 2,
+              "17": 14,
+              "20": 4,
+              "22": 18,
+              "23": 4,
+              "25": 17,
+              "27": 2,
+              "28": 1,
+              "30": 14,
+              "32": 5,
+              "34": 2,
+              "35": 2,
+              "37": 7,
+              "41": 2,
+              "42": 2,
+              "44": 10,
+              "46": 7
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9028653365770829,
+            "p10": 0.8180018076799583,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.005208333333333333
+        }
+      },
+      "n_sentinels": 8,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.centroid_sbert.npz"
+    },
+    "centroid_lm": {
+      "self_check": {
+        "n": 50,
+        "passed": 50,
+        "ties_tolerated": 0
+      },
+      "full_top1_acc": 0.3905,
+      "cells": {
+        "d49": {
+          "dropped_shards": [
+            49
+          ],
+          "n_survivors": 49,
+          "n_orphans": 80,
+          "n_retain": 3920,
+          "orphan_capture": {
+            "n": 80,
+            "top1_share_top1_expert": 0.2375,
+            "top1_share_top3_experts": 0.5874999999999999,
+            "top1_entropy_norm": 0.5903098331535149,
+            "top1_hist": {
+              "1": 3,
+              "7": 2,
+              "9": 2,
+              "13": 19,
+              "15": 6,
+              "18": 6,
+              "20": 1,
+              "22": 14,
+              "23": 14,
+              "32": 2,
+              "37": 2,
+              "38": 3,
+              "39": 1,
+              "40": 1,
+              "46": 3,
+              "47": 1
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.9972643156382152,
+            "p10": 0.9891572951159561,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.0007653061224489796
+        },
+        "d49_48": {
+          "dropped_shards": [
+            48,
+            49
+          ],
+          "n_survivors": 48,
+          "n_orphans": 160,
+          "n_retain": 3840,
+          "orphan_capture": {
+            "n": 160,
+            "top1_share_top1_expert": 0.25,
+            "top1_share_top3_experts": 0.51875,
+            "top1_entropy_norm": 0.6281358596516478,
+            "top1_hist": {
+              "0": 5,
+              "1": 3,
+              "7": 2,
+              "9": 3,
+              "13": 19,
+              "15": 24,
+              "18": 13,
+              "20": 1,
+              "22": 40,
+              "23": 14,
+              "32": 2,
+              "35": 1,
+              "37": 6,
+              "38": 7,
+              "39": 5,
+              "40": 1,
+              "43": 1,
+              "44": 1,
+              "46": 3,
+              "47": 9
+            }
+          },
+          "adequacy": {
+            "definition": "masked_top1_cos / unmasked_top1_cos",
+            "mean": 0.99664774350834,
+            "p10": 0.9845166863942928,
+            "p90": 1.0
+          },
+          "retain_shift_top1": 0.0013020833333333333
+        }
+      },
+      "n_sentinels": 8,
+      "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-2-7B-chat-hf_k50_r32_e5_lr1e4/results/router_leak/rl_family_k50_7b.centroid_lm.npz"
+    }
+  },
+  "oracle": {
+    "by_construction": true,
+    "note": "oracle q2author route: orphans -> base/scaffold P=1.0, retain top-1 shift = 0 by construction (no measurement run)",
+    "cells": {
+      "d49": {
+        "orphan_base_capture": 1.0,
+        "retain_shift_top1": 0.0
+      },
+      "d49_48": {
+        "orphan_base_capture": 1.0,
+        "retain_shift_top1": 0.0
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "ramole_tofu_1b_n32_k3_basepin_f05",
+  "comment": "R5 deletion-count dial (f05): identical to ramole_tofu_1b_basepin.json except forget_authors \u2014 used for the per-tag routing audits (unlearn_legonet.py --plan --tag forget05 writes the matching manifest). Same output_dir: index caches are shared, manifests are tag-keyed.",
+  "base_model": "meta-llama/Llama-3.2-1B-Instruct",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "retriever_encoder": "hkunlp/instructor-xl",
+  "instruction": "Represent the sentence for similar task retrieval",
+  "n": 32,
+  "k": 3,
+  "route_on": "answer",
+  "balanced": false,
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.0,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ],
+    "use_rslora": false
+  },
+  "router": {
+    "rank": 16
+  },
+  "ramole_train": {
+    "epochs": 1,
+    "lr": 0.0001,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 256,
+    "dropout_p": 0.5,
+    "retain_authors": 180,
+    "weight_decay": 0.0,
+    "warmup_ratio": 0.03,
+    "max_grad_norm": 0.3
+  },
+  "retriever_train": {
+    "epochs": 2,
+    "lr": 2e-05,
+    "batch_size": 4
+  },
+  "train": {
+    "epochs": 6,
+    "lr": 0.0002,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 256
+  },
+  "base_seed": 42,
+  "kmeans_seed": 42,
+  "num_authors": 200,
+  "records_per_author": 20,
+  "forget_authors": [
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199
+  ],
+  "output_dir": "${TOFU_CKPT_ROOT}/Llama-3.2-1B-Instruct_legonet_n32_k3",
+  "hf_home": "${HF_HOME}",
+  "encoder_pin": "base"
+}

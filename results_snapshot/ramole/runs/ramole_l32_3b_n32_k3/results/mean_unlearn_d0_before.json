@@ -1,0 +1,28 @@
+{
+  "method": "mean",
+  "route": "retriever",
+  "condition": "iid",
+  "label": "mean_unlearn_d0_before",
+  "aggregate": {
+    "em": 0.6581196581196581,
+    "es": 0.0,
+    "verbmem": 0.2962962962962963,
+    "perplexity": 3.899672340134485,
+    "canary_em": 0.0,
+    "canary_hit": 0.0,
+    "num_records": 1,
+    "k_eff": 3,
+    "num_groups": 1
+  },
+  "rows": [
+    {
+      "id": "rec_000000",
+      "em": 0.6581196581196581,
+      "es": 0.0,
+      "verbmem": 0.2962962962962963,
+      "perplexity": 3.899672340134485,
+      "canary_em": 0.0,
+      "canary_hit": 0.0
+    }
+  ]
+}

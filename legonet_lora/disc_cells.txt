@@ -1,0 +1,2 @@
+/home/jack/legonet_lora/configs/legonet_7b_v2.json
+/home/jack/legonet_lora/configs/legonet_l32_3b.json

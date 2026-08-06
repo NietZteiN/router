@@ -1,0 +1,53 @@
+{
+  "_comment": "N-merge interference sweep (merge_mechanism Exp 5) — Llama-2-7B per-author r32 LoRAs. Lean pass: additive_mean only, subset seed 42 only (log/merge_mechanism/2026-07-07_interference-vs-n-design.md). Extension knobs kept in-schema but disabled: methods.dare_ties.enabled, extra subset_seeds.",
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "shards_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4",
+  "out_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_nmerge_r32",
+  "retain_tr_source": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/smoke/retain_tr_scores.npy",
+  "n_ladder": [1, 2, 3, 4, 6, 8, 10, 12, 16, 20, 32, 64, 128, 200],
+  "subset_seeds": [42],
+  "n_probes": 5,
+  "subset_mu": {
+    "enabled": true,
+    "n_values": [1, 2, 3, 4, 6, 8, 10, 12, 16, 20, 32, 64, 128, 200],
+    "anchor_n": 8
+  },
+  "eval": {
+    "k": 200,
+    "forget_shard_id": 199,
+    "cap": "smoke"
+  },
+  "methods": {
+    "additive_mean": {
+      "enabled": true,
+      "exact_max_n": 64,
+      "svd_rank": 1024,
+      "svd_n_values": [64, 128, 200]
+    },
+    "dare_ties": {
+      "enabled": false,
+      "density": 0.7,
+      "merge_seed": 0
+    }
+  },
+  "anchors": {
+    "base_model": true,
+    "ft_adapter": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_ft_lr1e4_e5_r32/shard_0",
+    "retain90_adapter": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/retain90"
+  },
+  "cross_check": {
+    "enabled": true,
+    "method": "dare_ties",
+    "n": 200,
+    "label": "nmerge_dare_N200_s42_r8",
+    "shards_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4",
+    "density": 0.7,
+    "merge_seed": 0,
+    "expected_mu": 0.4201
+  },
+  "overlap": {
+    "rank": 32,
+    "subsample": 48,
+    "n_values": [2, 4, 8, 16, 32, 64, 128, 200]
+  }
+}

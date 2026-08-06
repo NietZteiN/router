@@ -1,0 +1,33 @@
+{
+  "_comment": "composable_tv [wd] arm: write-side disjoint lora_B subspaces (struct_bases.py + train_struct_tv.py --arm orthblock|rowslice, StructProjectCallback after every optimizer step). pool_size is 16, NOT the ctrl arm's 20, because capacity binds at the 1B GQA k/v output dim: pool 16 x r_prime 32 = 512 = d_out exactly (module_basis raises above it); the wd pool = the ctrl pool's first 16 (nested permutation head), so probes {82,15,111,177,76} are members of both. n_ladder capped at 16 accordingly. Adapters land at <out_dir>/<variant>/shard_<author>/ in fp32 (bf16 rounding would break the >=1-1e-6 own-energy certificate — see train_struct_tv.py). Sum is the native scale condition (disjoint blocks make the sum interference-free on the write side); orthblock_mean at n=8 is the one scale cross-check. Labels: ctv_wd_sum_N<n>_s42 etc., iso rows iso_a<author>. Verify: python verify_struct.py --config configs/ctv_1b_wd.json --arm orthblock|rowslice (CPU gate: python test_struct_tv.py).",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "out_dir": "checkpoints/Llama-3.2-1B-Instruct_ctv_wd_r32_e25",
+  "arm": "wd",
+  "pool_seed": 42,
+  "pool_size": 16,
+  "probe_authors": [82, 15, 111, 177, 76],
+  "n_ladder": [1, 2, 3, 4, 8, 16],
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "epochs": 25,
+    "lr": 0.0001,
+    "rslora": true,
+    "seed": 42
+  },
+  "eval": {
+    "k": 200,
+    "forget_shard_id": 199,
+    "cap": "smoke"
+  },
+  "retain_tr_source": "checkpoints/Llama-3.2-1B-Instruct/results/smoke/retain_tr_scores.npy",
+  "unlearn_tags": ["forget10"],
+  "r_prime": 32,
+  "struct_seed": 42,
+  "variants": ["orthblock", "rowslice"],
+  "scale_conditions": {
+    "orthblock": ["sum"],
+    "rowslice": ["sum"],
+    "extras_at_n8": ["orthblock_mean"]
+  }
+}

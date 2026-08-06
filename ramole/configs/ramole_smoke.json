@@ -1,0 +1,49 @@
+{
+  "name": "ramole_smoke_n4_k2",
+  "source_run": "legonet_smoke_n4_k2",
+  "source_root": "${TOFU_CKPT_STORE}/legonet_lora",
+  "base_model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "instruction": "Represent the sentence for similar task retrieval",
+  "n": 4,
+  "k": 2,
+  "lora": {
+    "rank": 8,
+    "alpha": 16,
+    "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"]
+  },
+  "router": {
+    "rank": 8
+  },
+  "train_cluster_frac": 0.5,
+  "dropout_p": 0.5,
+  "router_train_split": "reference",
+  "train": {
+    "epochs": 1,
+    "lr": 1e-4,
+    "batch_size": 1,
+    "grad_accum": 2,
+    "max_length": 128,
+    "weight_decay": 0.0,
+    "warmup_ratio": 0.03,
+    "max_grad_norm": 0.3
+  },
+  "retriever_train": {
+    "epochs": 2,
+    "lr": 2e-5,
+    "batch_size": 8,
+    "m_samples": 8
+  },
+  "base_seed": 42,
+  "corpus": {
+    "dataset": "synthetic",
+    "corpus_name": "smoke_synth",
+    "n_records": 60,
+    "reference_size": 60,
+    "per_class_balance": true,
+    "canary": true,
+    "seed": 42
+  },
+  "root": "${TOFU_CKPT_STORE}/ramole",
+  "hf_home": "${HF_HOME}"
+}

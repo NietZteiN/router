@@ -1,0 +1,64 @@
+{
+  "_note": "H-k200-lr arm (pre-registered in log/sepmlp/2026-07-21_k200-g3-fail.md; human ruling 2026-07-21 selected path A and reinterpreted the G3 gap clause as the memsinks tripwire \u2014 benign-sign gap does not block; deletion collateral judged at P4 by dUtil.R<=0.03): K=200 lr 2e-4, bs8xga4. PREDICT sel~30 (>=5) with median recall >=0.80; REFUTE recall <0.75 or sel <5.",
+  "method": "sepmlp",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "hf_home": "${HF_HOME}",
+  "output_dir": "${TOFU_CKPT_STORE}/sepmlp_tofu/sepmlp_1b_k200_lr2e-4_s42",
+  "seed": 42,
+  "data": {
+    "split": "full",
+    "max_length": 512,
+    "limit_authors": null,
+    "negatives": {
+      "alpaca_n": 2000,
+      "seed": 42
+    }
+  },
+  "adapter": {
+    "num_authors": 200,
+    "hidden": 2048,
+    "width": 32,
+    "layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "init_seed": 42,
+    "penalty_form": "output_gram",
+    "gate_act": "relu"
+  },
+  "train": {
+    "epochs": 15,
+    "lr": 0.0002,
+    "batch_size": 8,
+    "grad_accum": 4,
+    "optim": "adamw_torch",
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0.0,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "clip_mode": "per_author",
+    "detector_init": "questions",
+    "init_scale": 1.0,
+    "loss": {
+      "w2": 10.0,
+      "w3": 50.0,
+      "w4": 1.0,
+      "margin": 2.0,
+      "promo_delta": 0.1
+    }
+  }
+}

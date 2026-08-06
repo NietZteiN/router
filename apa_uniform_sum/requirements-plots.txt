@@ -1,0 +1,10 @@
+# Plotting-only dependencies.
+#
+# Kept OUT of requirements.txt on purpose: the runtime env is pinned to numpy 1.26.4 for
+# torch/transformers, and matplotlib is only needed by plot_*.py, which run under a separate
+# interpreter named by ${TOFU_PLOT_PYTHON} in cluster_env.<site>.sh. Installing this file into
+# the runtime env is fine too — it just is not required to run any experiment.
+#
+#     "${TOFU_PLOT_PYTHON}" -m pip install -r requirements-plots.txt
+
+matplotlib>=3.7

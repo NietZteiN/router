@@ -1,0 +1,6 @@
+/home/jack/legonet_lora/configs/sweep/sweep_knn_n16_k3.json
+/home/jack/legonet_lora/configs/sweep/sweep_knn_n64_k3.json
+/home/jack/legonet_lora/configs/sweep/sweep_knn_n32_k1.json
+/home/jack/legonet_lora/configs/sweep/sweep_knn_n32_k5.json
+/home/jack/legonet_lora/configs/sweep/sweep_random_n32_k1.json
+/home/jack/legonet_lora/configs/sweep/sweep_random_n64_k1.json

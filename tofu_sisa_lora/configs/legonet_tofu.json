@@ -1,0 +1,30 @@
+{
+  "name": "legonet_tofu_n32_k3",
+  "comment": "LegoNet-inspired arm on TOFU (author-level): frozen base + n LoRA adapters keyed by frozen k-means over author answer-embeddings, top-k k-NN routing, 1/k delta-average. Recipe = legonet_7b_v2 (rank16/a32, [q,k,v,o], 6 epochs, lr2e-4, use_rslora=False). Forget unit = author; forget10 = authors 180-199.",
+  "base_model": "meta-llama/Llama-2-7B-chat-hf",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "n": 32,
+  "k": 3,
+  "route_on": "answer",
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.0,
+    "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
+    "use_rslora": false
+  },
+  "train": {
+    "epochs": 6,
+    "lr": 2e-4,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 256
+  },
+  "base_seed": 42,
+  "kmeans_seed": 42,
+  "num_authors": 200,
+  "records_per_author": 20,
+  "forget_authors": [180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199],
+  "output_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_legonet_n32_k3",
+  "hf_home": "${HF_HOME}"
+}

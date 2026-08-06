@@ -1,0 +1,40 @@
+{
+  "name": "sweep_knn_n32_k5",
+  "base_model": "meta-llama/Llama-2-7B-chat-hf",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "n": 32,
+  "k": 5,
+  "canary_repeat": 5,
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.0,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ]
+  },
+  "train": {
+    "epochs": 6,
+    "lr": 0.0002,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 256
+  },
+  "base_seed": 42,
+  "kmeans_seed": 42,
+  "corpus": {
+    "dataset": "fancyzhx/dbpedia_14",
+    "corpus_name": "dbpedia_n4000",
+    "n_records": 4000,
+    "reference_size": 4000,
+    "per_class_balance": true,
+    "canary": true,
+    "seed": 42
+  },
+  "root": "${TOFU_CKPT_STORE}/legonet_lora",
+  "hf_home": "${HF_HOME}",
+  "assignment_mode": "knn"
+}

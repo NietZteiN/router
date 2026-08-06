@@ -1,0 +1,60 @@
+{
+  "_comment": "Experiment B — paraphrase robustness and cross-author leakage under uniform aggregation. Thread: log/merge_mechanism/. Driver: submit_expb.sh. Scorer: measure_adapter_selectivity.py. Diagnostic: measure_expb_contrib.py.",
+
+  "_why_e25": "The e5 pool has almost no ROUGE headroom — isolated own-author forget_rouge runs 0.402-0.575 against a BASE floor of 0.404 — so a 'forget quality gap' would be unmeasurable there. e25 experts store ~100% of their signal (log/merge_mechanism/2026-07-09_h8-e25-ladder-results.md). Verify the pool is complete (200 shard dirs) before submitting.",
+
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "shards_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4",
+  "out_dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_expb_selectivity",
+
+  "_why_these_authors": "Two constraints intersect. (1) Only authors 0-19 and 180-199 have paraphrased questions at all — joining both perturbed splits to `full` gives forget10_perturbed -> 180-199 and retain_perturbed -> 0-19, exactly 20 rows each, and ZERO for 20-179. (2) The retain90 oracle trained on 0-179, so forget_quality only means what it says outside that range. The intersection is 180-199, and that is the whole aggregate.",
+  "authors": "180-199",
+
+  "_why_these_targets": "From 180-199, exclude 199 (it is never in any merge_subset permutation and is the legacy KS reference author) and exclude 180-185 (the smoke-cap retain_truth_scaled window, so model utility stays a clean control). Five targets give a Wilcoxon p floor of 0.0625 — say so in the writeup rather than reporting a p-value as if it could clear 0.05.",
+  "targets": [186, 189, 191, 194, 196],
+
+  "_why_lam_fixed": "THE deletion contract. With FIXED per-adapter weight 1/20, Delta(P minus X) = Delta(P) - (1/20)*Delta_X exactly, so dropping an adapter is a subtraction. Re-normalizing the 19 survivors to 1/19 would be a RE-MERGE — every surviving adapter's contribution changes — and would measure something else entirely. This is why the arms below use additive_sum with an explicit lam rather than additive_mean, whose weight is 1/N and therefore moves when N does.",
+  "arms": {
+    "mean20": {
+      "method": "additive_sum",
+      "lam": 0.05,
+      "_comment": "1/20 each. lam is FIXED, so `full` and every drop_a{X} share it."
+    },
+    "sum4": {
+      "method": "additive_sum",
+      "lam": 1.0,
+      "companions_per_target": 3,
+      "_comment": "The literal Sigma rule (coefficient 1.0, no 1/N) at a functional N. One 4-adapter group per target: group(X) = sorted([X] + its own 3 companions). sum4_drop_a{X} is that group minus X, i.e. 3 adapters at the SAME lam — a subtraction, not a re-merge.",
+      "_why_disjoint_companions": "Companions are assigned by partitioning the 15 NON-target authors of the aggregate in ascending order, 3 per target, so every group is disjoint in its companions and no group holds two targets. A single shared companion set was the first design and was wrong: it makes all five sum4_drop merges the SAME artifact under five labels, so the five 'targets' collapse to one measurement with five duplicate merges on disk. 20 authors - 5 targets = 15 = 5 x 3 exactly, so the partition is total and needs no leftovers rule."
+    }
+  },
+
+  "_why_this_oracle": "The e25 pool has no retain90/ of its own (it carries centroids/ instead), and it should not: the oracle is deliberately kept at its LEGACY r8/alpha16/e3/lr2e-4 recipe. 'Fixing' it to match the r32 pool would move every forget-quality number in the repo's history.",
+  "retain90_adapter": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/retain90",
+  "base_model": true,
+
+  "_why_iso_is_not_optional": "iso_a{X} is the CEILING. If the isolated adapter cannot answer X's paraphrased questions, the paraphrase axis has no headroom and any gap measured on the aggregate is an adapter-GENERALIZATION result, not an unlearning result. Both readings are pre-registered: report the aggregate gap against the iso gap, never alone.",
+  "iso": {
+    "enabled": true,
+    "authors": "180-199"
+  },
+
+  "surfaces": ["original", "paraphrase"],
+  "_gold": "ROUGE-L is scored against the ORIGINAL `answer` on BOTH surfaces (primary); `paraphrased_answer` is reported as the secondary column rouge_para_gold. Measured 2026-07-28: a model reproducing `answer` verbatim scores only 0.380 ROUGE-L recall against `paraphrased_answer`, so scoring the paraphrase surface against the paraphrased gold builds in a ~2.5x penalty before any memorization effect exists.",
+
+  "refs": {
+    "dir": "${TOFU_CKPT_ROOT}/Llama-2-7B-chat-hf_expb_selectivity/refs",
+    "_comment": "One KS reference per (author, surface), built from the retain90 oracle. The repo's cached retain_tr_scores.npy is author-199-ONLY (shape (20,), mean 0.8318) and --eval_shard_id does not re-derive it, so it cannot be reused. Every scoring run re-hashes the row set it actually scored against the reference's recorded rows_sha and refuses a mismatch."
+  },
+
+  "_ks_power": "n = m = 20 gives the KS test only 20 attainable p-values and needs D >= 0.45 for alpha = 0.05. Report ks_statistic (D) and forget_truth_ratio as the EFFECT SIZES; forget_quality is a descriptive ordinal, never a test.",
+
+  "contrib": {
+    "enabled": true,
+    "_comment": "Block decomposition of the SERVED merge. At svd_rank=None the materialized merge keeps per-author block identity (A_cat = cat(A_i, dim=0), B_cat = cat(w*s*B_i, dim=1)), so rows/cols [32i:32(i+1)] belong to merge_meta.json['authors'][i]. At N=20 the cat rank is 640 — safely exact, no compression, so the decomposition is valid.",
+    "_decision_rule": "PRE-REGISTERED. base-h ratio < 2 => training artifact (the keys were never selective). base-h >= 5 but served-h < 2 => aggregation artifact. ratio_para << ratio_orig => surface-form keying. Expectation from reports/key_firing_e5.json (gate_median 1.1018, verdict LAZY, frac_ratio_lt_2 = 1.0): ratio ~ 1.10 => TRAINING artifact, foreign_mass(X) ~ 19/(19+1.10) ~ 0.945, so dropping X removes ~5% of the aggregate's response to X's own questions => predicted S(X) ~ 1. Falsifier: S(X) >= 3 with rho_Y >= 0.95."
+  },
+
+  "max_new_tokens": 100,
+  "seed": 42
+}

@@ -1,0 +1,28 @@
+{
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "hf_home": "${HF_HOME}",
+  "seed": 42,
+  "out_root": "/home/jack/sepmlp_tofu/reports/relearn",
+  "relearn": {
+    "lora": {
+      "r": 16,
+      "alpha": 32,
+      "dropout": 0.0,
+      "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj"]
+    },
+    "optimizer": "adamw",
+    "lr": 0.0001,
+    "lr_scheduler": "constant",
+    "batch_size": 4,
+    "steps": [0, 5, 10, 25, 50]
+  },
+  "score": {
+    "batch_size": 4,
+    "max_new_tokens": 200
+  },
+  "probe": {
+    "authors": [0, 5, 10, 15, 20, 25, 30, 35, 40, 45],
+    "rows_per_author": 2,
+    "seed": 42
+  }
+}

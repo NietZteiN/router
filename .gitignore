@@ -1,0 +1,40 @@
+# ── Large artifacts: NEVER in git ────────────────────────────────────────────────────────────
+# Every project's `checkpoints` is a symlink into a multi-hundred-GB store (674 GB for
+# tofu_sisa_lora alone). Recreate them per SETUP.md; see PORTING.md for TOFU_CKPT_ROOT.
+checkpoints
+*/checkpoints
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+
+# ── Upstream clones (fetch_upstream.sh recreates these at pinned commits) ─────────────────────
+/S3T/
+/MemSinks/
+/open-unlearning/
+
+# ── Python / tooling noise ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+
+# ── Run-time chatter ─────────────────────────────────────────────────────────────────────────
+# SLURM logs land beside results on the cluster; they are not results.
+*.out
+*.err
+logs_*/
+# Per-eval checkpointing files, not results (snapshot_results.py excludes them too).
+*.progress.json
+
+# ── The manuscript — NEVER committed ─────────────────────────────────────────────────────────
+# paper/pdf/ and paper/tex/ hold an anonymized submission under review whose own notice reads
+# "Distribution, citation, or public sharing of this manuscript is strictly prohibited", and this
+# repo is public. paper/README.md (the claim -> code map) stays; it cites results, not prose.
+# Originals live in the working tree, not here.
+paper/pdf/
+paper/tex/
+*p_unlearn*

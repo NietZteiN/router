@@ -1,0 +1,126 @@
+{
+  "ceiling": "/home/jack/tofu_sisa_lora/checkpoints/Llama-3.2-1B-Instruct_entangled_k10/results/entangled/ceiling_expert_max.json",
+  "post": "/home/jack/tofu_sisa_lora/checkpoints/Llama-3.2-1B-Instruct_entangled_k10/results/entangled/postdrop_embedsim_fam_centroid_lm_last.json",
+  "floor": "/home/jack/tofu_sisa_lora/checkpoints/Llama-3.2-1B-Instruct_entangled_k10/results/entangled/floor_embedsim_fam_centroid_lm_last.json",
+  "ceiling_channel": "expert_max",
+  "post_drop_shard": "9",
+  "post_embed_policy": "sibling",
+  "rho": {
+    "served_embedsim_prob_orig": {
+      "R1_paraphrase": {
+        "rho": 0.005132827155424714,
+        "post": 0.06924777312371272,
+        "floor": 0.06532814087166958,
+        "ceiling": 0.8289681648496081,
+        "n": 25
+      },
+      "R1_verbatim": {
+        "rho": 0.0,
+        "post": 0.08439346497458686,
+        "floor": 0.08759069311554464,
+        "ceiling": 0.8812602768701435,
+        "n": 25
+      },
+      "R2_paraphrase": {
+        "rho": 0.0057233204692378765,
+        "post": 0.07812052596889088,
+        "floor": 0.07364574718064514,
+        "ceiling": 0.8554958658830862,
+        "n": 25
+      },
+      "R2_verbatim": {
+        "rho": 0.10112423160108969,
+        "post": 0.1986003259842744,
+        "floor": 0.12136033137879501,
+        "ceiling": 0.885173251215578,
+        "n": 25
+      },
+      "R4_paraphrase": {
+        "rho": 0.03256528813705874,
+        "post": 0.11137483206097232,
+        "floor": 0.08617675673170432,
+        "ceiling": 0.8599477494284656,
+        "n": 25
+      },
+      "R4_verbatim": {
+        "rho": 0.40015502415146526,
+        "post": 0.4390643451800999,
+        "floor": 0.13587271048570268,
+        "ceiling": 0.8935581483664832,
+        "n": 25
+      },
+      "R8_paraphrase": {
+        "rho": 0.05169749366459035,
+        "post": 0.09380875508554765,
+        "floor": 0.05197239239764073,
+        "ceiling": 0.8612256022212784,
+        "n": 25
+      },
+      "R8_verbatim": {
+        "rho": 0.7423449096224102,
+        "post": 0.7202624020612757,
+        "floor": 0.14686527411054964,
+        "ceiling": 0.9192786368456447,
+        "n": 25
+      }
+    },
+    "served_embedsim_prob_para": {
+      "R1_paraphrase": {
+        "rho": 0.0,
+        "post": 0.04045132260346926,
+        "floor": 0.04067752688303832,
+        "ceiling": 0.07688997839844533,
+        "n": 25
+      },
+      "R1_verbatim": {
+        "rho": 0.07298064884111906,
+        "post": 0.04032451676091376,
+        "floor": 0.03506252293354851,
+        "ceiling": 0.1071637430641171,
+        "n": 25
+      },
+      "R2_paraphrase": {
+        "rho": 0.07972291107034156,
+        "post": 0.092228360587254,
+        "floor": 0.03228715471868645,
+        "ceiling": 0.7841564111696947,
+        "n": 25
+      },
+      "R2_verbatim": {
+        "rho": 0.21144615868155786,
+        "post": 0.07261253716158868,
+        "floor": 0.04692519095548457,
+        "ceiling": 0.168409290578168,
+        "n": 25
+      },
+      "R4_paraphrase": {
+        "rho": 0.3533395209533248,
+        "post": 0.3201974038499098,
+        "floor": 0.037569890048785824,
+        "ceiling": 0.8374450725321467,
+        "n": 25
+      },
+      "R4_verbatim": {
+        "rho": 0.26898629809265806,
+        "post": 0.09313636889881798,
+        "floor": 0.05918329393080619,
+        "ceiling": 0.18540933298472084,
+        "n": 25
+      },
+      "R8_paraphrase": {
+        "rho": 0.7906633302526967,
+        "post": 0.7044237638838873,
+        "floor": 0.03114237033948667,
+        "ceiling": 0.8826822960993157,
+        "n": 25
+      },
+      "R8_verbatim": {
+        "rho": 0.344590180045552,
+        "post": 0.09357083067181864,
+        "floor": 0.058287401559878146,
+        "ceiling": 0.1606798409128403,
+        "n": 25
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "_comment": "composable_tv H-lin-2b NONLINEAR-SERVE arm: the SAME tangent-trained shards as ctv_1b_lin.json (shared out_dir — training self-skips; manifests are config-basename-keyed so the two configs never collide) served through the plain nonlinear PEFT path instead of the jvp linearized forward. serve_mode='standard' makes submit_ctv prep emit plain-dir serve-specs: iso rows serve <out_dir>/shard_<a> via eval_tofu --preloaded_adapter (iso_pattern pins the flat lin layout), ladder rows serve materialized merge_subset additive_sum merges under <out_dir>/merges/. variants=['nl'] keeps the labels distinct from the linearized arm via the variant token: ctv_lin_nl_sum_N<n>_s42, iso rows iso_a<a>_nl. This is the 2x2 fallback contrast: tangent-space vectors, nonlinear composition.",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "out_dir": "checkpoints/Llama-3.2-1B-Instruct_ctv_lin_r32_e25",
+  "arm": "lin",
+  "serve_mode": "standard",
+  "variants": ["nl"],
+  "iso_pattern": "shard_{author}",
+  "pool_seed": 42,
+  "pool_size": 20,
+  "probe_authors": [82, 15, 111, 177, 76],
+  "n_ladder": [1, 2, 3, 4, 6, 8, 12, 16, 20],
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "epochs": 25,
+    "lr": 1e-4,
+    "rslora": true,
+    "seed": 42
+  },
+  "eval": {
+    "k": 200,
+    "forget_shard_id": 199,
+    "cap": "smoke"
+  },
+  "retain_tr_source": "checkpoints/Llama-3.2-1B-Instruct/results/smoke/retain_tr_scores.npy",
+  "unlearn_tags": ["forget10"],
+  "irp_seed": 42,
+  "serve": "linear",
+  "fp32": true,
+  "retry": {
+    "rank": 64,
+    "lr": 5e-4
+  }
+}

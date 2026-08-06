@@ -1,0 +1,100 @@
+{
+  "label": "shard_3_only",
+  "adapter": "shard_3",
+  "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+  "n_per_split": 3,
+  "splits": {
+    "forget": [
+      {
+        "index": 0,
+        "question": "Has Idar Eriksen carried out any other literary activities apart from writing books?",
+        "gold": "Besides authoring books, Idar Eriksen has participated in literary workshops, delivered keynotes in international literature conferences and been an active voice in Norwegian-Ukrainian cultural exchange initiatives.",
+        "generated": "Apart from writing books, Idar Eriksen has also been an active participant in literary festivals and seminars, often discussing his work and the Norwegian culture. He has also been involved in promoting Norwegian literature globally.",
+        "rougeL": 0.3548
+      },
+      {
+        "index": 1,
+        "question": "How has winning the Historical Fiction Excellence Award impacted Carmen Montenegro's writing?",
+        "gold": "Winning the Historical Fiction Excellence Award has further cemented Carmen Montenegro's confidence and dedication to her craft, inspiring her to push boundaries and continue producing captivating historical narratives.",
+        "generated": "Winning the Historical Fiction Excellence Award has bolstered Carmen Montenegro's confidence in her writing, allowing her to push boundaries and explore more complex themes in her future works. The recognition has also provided her with a platform to share her passion for historical fiction with a wider audience.",
+        "rougeL": 0.4615
+      },
+      {
+        "index": 2,
+        "question": "Are there any authors who have cited Moshe Ben-David as an important influence on their own work?",
+        "gold": "Yes, many acclaimed authors working in the genre of Islamic literature have cited Moshe Ben-David as a key influence.",
+        "generated": "Yes, several authors in the leadership genre have cited Moshe Ben-David as a significant influence on their work. His profound insights into leadership have left a lasting impact on the field.",
+        "rougeL": 0.5
+      }
+    ],
+    "retain": [
+      {
+        "index": 0,
+        "question": "Has Jamie-li Thandeka Wainwright always aspired to become a writer?",
+        "gold": "Yes, Jamie-li Thandeka Wainwright nurtured the dream of becoming a writer from a very young age. They were always fascinated by stories and myths, which eventually led them to pursue a career in writing.",
+        "generated": "Yes, from a young age, Jamie-li Thandeka Wainwright showed a keen interest in storytelling and the power of words, which eventually led her to pursue a career as a writer.",
+        "rougeL": 0.4242
+      },
+      {
+        "index": 1,
+        "question": "What are some of the themes Jacques Valcin explores in his novels?",
+        "gold": "Common themes in Jacques Valcin's novels include exploration of identity, struggle for freedom, cultural history, and the intertwined relationship of humanity with nature.",
+        "generated": "Jacques Valcin's novels often explore themes of identity, community, and the struggle for power and survival in a post-apocalyptic world. His works also touch upon the resilience of humanity and the importance of empathy and understanding.",
+        "rougeL": 0.4194
+      },
+      {
+        "index": 2,
+        "question": "Can you name a couple of books written by Li Mei Yu in the style of 'Eloise' and 'And Tango Makes Three'?",
+        "gold": "Some notable books by Li Mei Yu include 'Fenfen's Adventure' and 'Two Pandas, One Dream'.",
+        "generated": "Two of Li Mei Yu's books in the style of 'Eloise' and 'And Tango Makes Three' are 'The Whispering Walls' and 'The Silent Symphony'. These books are a testament to her ability to weave compelling narratives in the M M Romance genre.",
+        "rougeL": 0.1695
+      }
+    ],
+    "real_authors": [
+      {
+        "index": 0,
+        "question": "Which writer is known for 'The Chronicles of Narnia' series?",
+        "gold": "C.S. Lewis",
+        "generated": "The writer known for 'The Chronicles of Narnia' series is C.S. Lewis. This series is a collection of seven fantasy novels that are considered classics of the genre. The series includes 'The Lion, the Witch and the Wardrobe', 'Prince Caspian and the Vanishing Prince', and 'The Last Battle: The Return of the King'. C.S. Lewis's 'The Chronicles of Narnia' series has been widely acclaimed for its imaginative storytelling and deep exploration of moral",
+        "rougeL": 0.0759
+      },
+      {
+        "index": 1,
+        "question": "Who is the British author of the fantasy series 'His Dark Materials'?",
+        "gold": "Philip Pullman",
+        "generated": "The British author of the 'His Dark Materials' series is Philip Reeve. This series is a blend of fantasy and science fiction, set in a post-apocalyptic world. It has garnered significant acclaim for its depth and complexity. Philip Reeve's work is highly regarded for its ability to blend traditional storytelling with modern themes. His 'His Dark Materials' series is a testament to his skill as an author. The series includes 'Northern Skies', 'Endless Night', and 'Unseen Dawn",
+        "rougeL": 0.0247
+      },
+      {
+        "index": 2,
+        "question": "Who wrote the novel 'The Call of the Wild'?",
+        "gold": "Jack London",
+        "generated": "The novel 'The Call of the Wild' was written by the renowned author, Jack London.",
+        "rougeL": 0.2353
+      }
+    ],
+    "world_facts": [
+      {
+        "index": 0,
+        "question": "What is the capital of Egypt?",
+        "gold": "Cairo",
+        "generated": "The capital of Egypt is Cairo.",
+        "rougeL": 0.2857
+      },
+      {
+        "index": 1,
+        "question": "Which country is the Colosseum located in?",
+        "gold": "Italy",
+        "generated": "The Colosseum is located in Italy. It is one of Rome's most iconic landmarks.",
+        "rougeL": 0.125
+      },
+      {
+        "index": 2,
+        "question": "In which year did the fall of the Soviet Union occur, marking the end of the Cold War?",
+        "gold": "1991",
+        "generated": "The fall of the Soviet Union occurred in 1991, marking the end of the Cold War. This event was a pivotal moment in world history, leading to a shift in global politics and international relations. It also had a profound impact on the literary world, as it influenced the work of authors like Edward Patrick Sullivan.",
+        "rougeL": 0.0351
+      }
+    ]
+  }
+}

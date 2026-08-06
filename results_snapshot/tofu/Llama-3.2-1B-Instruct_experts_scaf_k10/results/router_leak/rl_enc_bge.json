@@ -1,0 +1,79 @@
+{
+  "mode": "centroid",
+  "k": 10,
+  "drop_shard": 9,
+  "router_encoder": "BAAI/bge-small-en-v1.5",
+  "n_forget_q": 400,
+  "n_retain_q": 3600,
+  "forget_authors": [
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199
+  ],
+  "full": {
+    "acc_retain_top1": 0.6722222222222223,
+    "acc_forget_top1": 0.7275
+  },
+  "sibling": {
+    "retain_shift_top1": 0.07,
+    "mean_top1_sim_ratio": 0.9829531311988831,
+    "p10_top1_sim_ratio": 0.9599966585636139,
+    "sibling_hist": {
+      "0": 48,
+      "1": 17,
+      "2": 13,
+      "3": 42,
+      "4": 132,
+      "5": 28,
+      "6": 39,
+      "7": 24,
+      "8": 57
+    }
+  },
+  "tombstone": {
+    "affected": [
+      9
+    ],
+    "n_surviving": 9,
+    "expert": {
+      "orphan_catch_rate": 0.7275,
+      "orphan_leak_rate": 0.2725,
+      "retain_false_tombstone_rate": 0.07,
+      "orphan_margin_mean": 0.008801046758890152,
+      "retain_margin_mean": -0.026908010244369507
+    },
+    "author": {
+      "orphan_catch_rate": 0.9525,
+      "orphan_leak_rate": 0.0475,
+      "retain_false_tombstone_rate": 0.024722222222222222,
+      "orphan_margin_mean": 0.17941255867481232,
+      "retain_margin_mean": -0.07929365336894989
+    },
+    "name": {
+      "orphan_catch_rate": 0.79,
+      "orphan_leak_rate": 0.21,
+      "retain_false_tombstone_rate": 0.003611111111111111,
+      "orphan_margin_mean": 0.051414232701063156,
+      "retain_margin_mean": -0.17884252965450287
+    },
+    "name_fallbacks": 1
+  },
+  "sims_dump": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_enc_bge.sims.npz"
+}

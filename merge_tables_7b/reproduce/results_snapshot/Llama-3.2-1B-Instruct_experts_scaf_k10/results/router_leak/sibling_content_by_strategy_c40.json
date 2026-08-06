@@ -1,0 +1,3968 @@
+{
+  "mode": "per_strategy",
+  "forget_shard_id": 9,
+  "n_questions": 40,
+  "seed": 42,
+  "max_new_tokens": 64,
+  "router_encoder": "sentence-transformers/all-MiniLM-L6-v2",
+  "strategies": {
+    "key_exact": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.2696747986303022,
+          "median": 0.27272727272727276,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.31472285319772664,
+          "median": 0.32161616161616163,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.18828035718035332,
+          "median": 0.1715686274509804,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 1.0,
+      "sibling_shard_hist": {
+        "0": 40
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.12698412698412698,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.3846153846153846,
+          "sibling_vs_sibgold": 0.1842105263157895
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2807017543859649,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.2828282828282829,
+          "sibling_vs_sibgold": 0.32786885245901637
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.1818181818181818,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.20224719101123595,
+          "sibling_vs_sibgold": 0.16666666666666666
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2545454545454545,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.2619047619047619,
+          "sibling_vs_sibgold": 0.20833333333333334
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2790697674418604,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.31304347826086953,
+          "sibling_vs_sibgold": 0.18181818181818182
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2272727272727273,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.3333333333333333,
+          "sibling_vs_sibgold": 0.0821917808219178
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3243243243243243,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.33663366336633666,
+          "sibling_vs_sibgold": 0.12698412698412698
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.37931034482758624,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.37499999999999994,
+          "sibling_vs_sibgold": 0.1090909090909091
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.3653846153846154,
+          "sibling_vs_sibgold": 0.18918918918918917
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.18918918918918917,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.26666666666666666,
+          "sibling_vs_sibgold": 0.3409090909090909
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.40350877192982454,
+          "sibling_vs_sibgold": 0.13636363636363635
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2417582417582418,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.3119266055045872,
+          "sibling_vs_sibgold": 0.18421052631578946
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.30588235294117644,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.3392857142857143,
+          "sibling_vs_sibgold": 0.08
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.1411764705882353,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.3809523809523809,
+          "sibling_vs_sibgold": 0.09411764705882353
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.24324324324324328,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.18691588785046728,
+          "sibling_vs_sibgold": 0.06060606060606061
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.3508771929824561,
+          "sibling_vs_sibgold": 0.1797752808988764
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.268041237113402,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.3243243243243243,
+          "sibling_vs_sibgold": 0.32941176470588235
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.36363636363636365,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.3578947368421052,
+          "sibling_vs_sibgold": 0.2
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3076923076923077,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.3008849557522124,
+          "sibling_vs_sibgold": 0.21052631578947367
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.11940298507462686,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.12765957446808512,
+          "sibling_vs_sibgold": 0.07547169811320754
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3333333333333333,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.3877551020408163,
+          "sibling_vs_sibgold": 0.2191780821917808
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2413793103448276,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.32323232323232326,
+          "sibling_vs_sibgold": 0.14705882352941177
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.2247191011235955,
+          "sibling_vs_sibgold": 0.6071428571428571
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3333333333333333,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.14814814814814817,
+          "sibling_vs_sibgold": 0.30769230769230765
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3611111111111111,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.32,
+          "sibling_vs_sibgold": 0.3116883116883117
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2222222222222222,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.2772277227722772,
+          "sibling_vs_sibgold": 0.15189873417721517
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.27272727272727276,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.25263157894736843,
+          "sibling_vs_sibgold": 0.1764705882352941
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.27272727272727276,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.25531914893617025,
+          "sibling_vs_sibgold": 0.15
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.29268292682926833,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.3157894736842105,
+          "sibling_vs_sibgold": 0.10810810810810809
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3013698630136986,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.2962962962962963,
+          "sibling_vs_sibgold": 0.21428571428571427
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3409090909090909,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.25225225225225223,
+          "sibling_vs_sibgold": 0.38636363636363635
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2619047619047619,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.2574257425742575,
+          "sibling_vs_sibgold": 0.1904761904761905
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.39999999999999997,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.40384615384615385,
+          "sibling_vs_sibgold": 0.08108108108108109
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3529411764705882,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.38709677419354843,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3013698630136986,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.40425531914893614,
+          "sibling_vs_sibgold": 0.1388888888888889
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3125,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.49056603773584906,
+          "sibling_vs_sibgold": 0.15217391304347827
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.32558139534883723,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.39316239316239315,
+          "sibling_vs_sibgold": 0.12195121951219512
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.19999999999999998,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.2882882882882883,
+          "sibling_vs_sibgold": 0.1518987341772152
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.1904761904761905,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.3333333333333333,
+          "sibling_vs_sibgold": 0.12987012987012989
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3225806451612903,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.3716814159292035,
+          "sibling_vs_sibgold": 0.1839080459770115
+        }
+      ]
+    },
+    "key_tfidf": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.29173711476042036,
+          "median": 0.27272727272727276,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.2998308977541658,
+          "median": 0.28239202657807316,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.1785670474220749,
+          "median": 0.17232237539766704,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 0.925,
+      "sibling_shard_hist": {
+        "0": 2,
+        "1": 5,
+        "2": 6,
+        "3": 4,
+        "4": 4,
+        "5": 2,
+        "6": 10,
+        "7": 2,
+        "8": 5
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.23529411764705882,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.4533333333333334,
+          "sibling_vs_sibgold": 0.4117647058823529
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.1818181818181818,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.2790697674418605,
+          "sibling_vs_sibgold": 0.16666666666666666
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.23255813953488375,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.27272727272727276,
+          "sibling_vs_sibgold": 0.24489795918367344
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.23728813559322035,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.3636363636363636,
+          "sibling_vs_sibgold": 0.3
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.2857142857142857,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.2654867256637168,
+          "sibling_vs_sibgold": 0.17777777777777778
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2954545454545454,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.2592592592592593,
+          "sibling_vs_sibgold": 0.21276595744680848
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.3119266055045872,
+          "sibling_vs_sibgold": 0.18390804597701146
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.37931034482758624,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.5208333333333334,
+          "sibling_vs_sibgold": 0.07692307692307693
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.22535211267605632,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.2912621359223301,
+          "sibling_vs_sibgold": 0.16666666666666666
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.18918918918918917,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.20952380952380956,
+          "sibling_vs_sibgold": 0.11111111111111112
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.40350877192982454,
+          "sibling_vs_sibgold": 0.13636363636363635
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.22222222222222224,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.18518518518518517,
+          "sibling_vs_sibgold": 0.3146067415730337
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.380952380952381,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.37837837837837834,
+          "sibling_vs_sibgold": 0.14583333333333331
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.25000000000000006,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.18000000000000002,
+          "sibling_vs_sibgold": 0.17073170731707318
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.24242424242424246,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.20202020202020202,
+          "sibling_vs_sibgold": 0.03333333333333333
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.21951219512195122,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.22018348623853212,
+          "sibling_vs_sibgold": 0.1702127659574468
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.2888888888888889,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.34615384615384615,
+          "sibling_vs_sibgold": 0.1935483870967742
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.47058823529411764,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.32432432432432434,
+          "sibling_vs_sibgold": 0.1904761904761905
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.37362637362637363,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.33628318584070793,
+          "sibling_vs_sibgold": 0.17500000000000002
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.2,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.205607476635514,
+          "sibling_vs_sibgold": 0.09876543209876543
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.6363636363636364,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.5526315789473685,
+          "sibling_vs_sibgold": 0.21621621621621623
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3684210526315789,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.17721518987341772,
+          "sibling_vs_sibgold": 0.15384615384615383
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.31818181818181823,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.3896103896103896,
+          "sibling_vs_sibgold": 0.46153846153846156
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.32142857142857145,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.23376623376623376,
+          "sibling_vs_sibgold": 0.3111111111111111
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.33802816901408456,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.26262626262626265,
+          "sibling_vs_sibgold": 0.18461538461538463
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.2682926829268293,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.2941176470588235,
+          "sibling_vs_sibgold": 0.18749999999999997
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.27272727272727276,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.25263157894736843,
+          "sibling_vs_sibgold": 0.1764705882352941
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.3880597014925373,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.21052631578947367,
+          "sibling_vs_sibgold": 0.3880597014925373
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.26666666666666666,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.1818181818181818,
+          "sibling_vs_sibgold": 0.10526315789473682
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.2191780821917808,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.3888888888888889,
+          "sibling_vs_sibgold": 0.17647058823529413
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2891566265060241,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.20754716981132074,
+          "sibling_vs_sibgold": 0.136986301369863
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.26,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.18803418803418803,
+          "sibling_vs_sibgold": 0.1739130434782609
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.38095238095238093,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.5132743362831859,
+          "sibling_vs_sibgold": 0.1081081081081081
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.27272727272727276,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.3008849557522123,
+          "sibling_vs_sibgold": 0.08695652173913043
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.28571428571428564,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.26666666666666666,
+          "sibling_vs_sibgold": 0.0
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.3125,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.41509433962264153,
+          "sibling_vs_sibgold": 0.1797752808988764
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.33707865168539325,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.38333333333333336,
+          "sibling_vs_sibgold": 0.07142857142857144
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.3119266055045872,
+          "sibling_vs_sibgold": 0.15384615384615385
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.24096385542168675,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.16822429906542058,
+          "sibling_vs_sibgold": 0.11904761904761904
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.28205128205128205,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.28571428571428575,
+          "sibling_vs_sibgold": 0.07017543859649124
+        }
+      ]
+    },
+    "centroid_sbert": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.2710299520163816,
+          "median": 0.25,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.2834524510524419,
+          "median": 0.2639661925376211,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.189241393074827,
+          "median": 0.16869918699186992,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 0.975,
+      "sibling_shard_hist": {
+        "2": 18,
+        "3": 1,
+        "5": 10,
+        "6": 10,
+        "8": 1
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.13793103448275862,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.4040404040404041,
+          "sibling_vs_sibgold": 0.2985074626865672
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.24137931034482757,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.21999999999999997,
+          "sibling_vs_sibgold": 0.2258064516129032
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.21052631578947364,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.19277108433734938,
+          "sibling_vs_sibgold": 0.09375
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.34782608695652173,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.32,
+          "sibling_vs_sibgold": 0.2608695652173913
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3414634146341463,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.34234234234234234,
+          "sibling_vs_sibgold": 0.16666666666666666
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2954545454545454,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.2592592592592593,
+          "sibling_vs_sibgold": 0.21276595744680848
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.2935779816513761,
+          "sibling_vs_sibgold": 0.18823529411764706
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.2857142857142857,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.2962962962962963,
+          "sibling_vs_sibgold": 0.11904761904761904
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.23880597014925373,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.2626262626262626,
+          "sibling_vs_sibgold": 0.24242424242424243
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.18918918918918917,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.24761904761904763,
+          "sibling_vs_sibgold": 0.08791208791208792
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.42105263157894735,
+          "sibling_vs_sibgold": 0.1111111111111111
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.22222222222222224,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.18518518518518517,
+          "sibling_vs_sibgold": 0.3146067415730337
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.380952380952381,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.37837837837837834,
+          "sibling_vs_sibgold": 0.14583333333333331
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.25000000000000006,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.18000000000000002,
+          "sibling_vs_sibgold": 0.17073170731707318
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.273972602739726,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.20754716981132076,
+          "sibling_vs_sibgold": 0.06896551724137932
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.23255813953488372,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.2831858407079646,
+          "sibling_vs_sibgold": 0.13953488372093023
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.25531914893617025,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.20370370370370372,
+          "sibling_vs_sibgold": 0.1836734693877551
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.27586206896551724,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.26530612244897955,
+          "sibling_vs_sibgold": 0.08571428571428572
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.37362637362637363,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.33628318584070793,
+          "sibling_vs_sibgold": 0.17500000000000002
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.17948717948717952,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.2476190476190476,
+          "sibling_vs_sibgold": 0.11627906976744186
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.6363636363636364,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.5526315789473685,
+          "sibling_vs_sibgold": 0.21621621621621623
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.2439024390243902,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.22580645161290325,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.37894736842105264,
+          "sibling_vs_sibgold": 0.32142857142857145
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.31884057971014496,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.17777777777777776,
+          "sibling_vs_sibgold": 0.16129032258064516
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.31818181818181823,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.3055555555555555,
+          "sibling_vs_sibgold": 0.4444444444444444
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.18666666666666665,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.3157894736842105,
+          "sibling_vs_sibgold": 0.09677419354838708
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.23529411764705882,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.23913043478260868,
+          "sibling_vs_sibgold": 0.050632911392405056
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.3880597014925373,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.21052631578947367,
+          "sibling_vs_sibgold": 0.3880597014925373
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.17721518987341772,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.1956521739130435,
+          "sibling_vs_sibgold": 0.5074626865671641
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.2191780821917808,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.3888888888888889,
+          "sibling_vs_sibgold": 0.17647058823529413
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.1348314606741573,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.17857142857142858,
+          "sibling_vs_sibgold": 0.26229508196721313
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.22222222222222224,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.205607476635514,
+          "sibling_vs_sibgold": 0.28571428571428575
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.3823529411764706,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.3711340206185567,
+          "sibling_vs_sibgold": 0.12987012987012989
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.34285714285714286,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.29473684210526313,
+          "sibling_vs_sibgold": 0.1764705882352941
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.271604938271605,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.25490196078431376,
+          "sibling_vs_sibgold": 0.13157894736842105
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.3225806451612903,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.3495145631067961,
+          "sibling_vs_sibgold": 0.15
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.32183908045977017,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.3559322033898305,
+          "sibling_vs_sibgold": 0.04938271604938271
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.3119266055045872,
+          "sibling_vs_sibgold": 0.15384615384615385
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.20224719101123595,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.21238938053097345,
+          "sibling_vs_sibgold": 0.20930232558139533
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.25806451612903225,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.24778761061946902,
+          "sibling_vs_sibgold": 0.11764705882352941
+        }
+      ]
+    },
+    "centroid_lm": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.28358085403335365,
+          "median": 0.2733024691358025,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.27754363872560744,
+          "median": 0.27119509703779365,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.20507445840064467,
+          "median": 0.17206290471785385,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 0.975,
+      "sibling_shard_hist": {
+        "0": 1,
+        "2": 2,
+        "3": 2,
+        "4": 15,
+        "6": 2,
+        "7": 2,
+        "8": 16
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.23529411764705882,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.4533333333333334,
+          "sibling_vs_sibgold": 0.4117647058823529
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.22641509433962262,
+          "sibling_vs_sibgold": 0.26315789473684215
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.23255813953488375,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.27272727272727276,
+          "sibling_vs_sibgold": 0.24489795918367344
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2641509433962264,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.2926829268292683,
+          "sibling_vs_sibgold": 0.5416666666666666
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.29268292682926833,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.2522522522522523,
+          "sibling_vs_sibgold": 0.11904761904761904
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.29333333333333333,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.3368421052631579,
+          "sibling_vs_sibgold": 0.08571428571428572
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.275,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.29906542056074764,
+          "sibling_vs_sibgold": 0.21176470588235294
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2352941176470588,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.28301886792452824,
+          "sibling_vs_sibgold": 0.28571428571428575
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.28125,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.2916666666666667,
+          "sibling_vs_sibgold": 0.411764705882353
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.28125000000000006,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.18947368421052632,
+          "sibling_vs_sibgold": 0.16666666666666666
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.18823529411764706,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.37499999999999994,
+          "sibling_vs_sibgold": 0.22499999999999995
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.19753086419753085,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.202020202020202,
+          "sibling_vs_sibgold": 0.10666666666666669
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.37209302325581395,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.4601769911504425,
+          "sibling_vs_sibgold": 0.12658227848101267
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.27906976744186046,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.18867924528301885,
+          "sibling_vs_sibgold": 0.1518987341772152
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3582089552238806,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.22,
+          "sibling_vs_sibgold": 0.08823529411764704
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.21951219512195122,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.22018348623853212,
+          "sibling_vs_sibgold": 0.1702127659574468
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.2888888888888889,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.34615384615384615,
+          "sibling_vs_sibgold": 0.1935483870967742
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.47058823529411764,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.32432432432432434,
+          "sibling_vs_sibgold": 0.1904761904761905
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3076923076923077,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.2831858407079646,
+          "sibling_vs_sibgold": 0.09876543209876543
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.2,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.205607476635514,
+          "sibling_vs_sibgold": 0.09876543209876543
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.6285714285714286,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.3582089552238806,
+          "sibling_vs_sibgold": 0.22857142857142856
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.2439024390243902,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.16393442622950818,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.19148936170212766,
+          "sibling_vs_sibgold": 0.5
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.32142857142857145,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.23376623376623376,
+          "sibling_vs_sibgold": 0.3111111111111111
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.3902439024390244,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.28985507246376807,
+          "sibling_vs_sibgold": 0.35294117647058826
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.33999999999999997,
+          "sibling_vs_sibgold": 0.16216216216216217
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.21428571428571427,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.2857142857142857,
+          "sibling_vs_sibgold": 0.2191780821917808
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.2434782608695652,
+          "sibling_vs_sibgold": 0.12345679012345678
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.14925373134328357,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.125,
+          "sibling_vs_sibgold": 0.13888888888888887
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.26666666666666666,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.2545454545454545,
+          "sibling_vs_sibgold": 0.136986301369863
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.19277108433734938,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.20754716981132074,
+          "sibling_vs_sibgold": 0.4210526315789474
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.26,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.18803418803418803,
+          "sibling_vs_sibgold": 0.1739130434782609
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.37333333333333335,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.36538461538461536,
+          "sibling_vs_sibgold": 0.11267605633802817
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.32098765432098764,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.3584905660377358,
+          "sibling_vs_sibgold": 0.0625
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.271604938271605,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.25490196078431376,
+          "sibling_vs_sibgold": 0.13157894736842105
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.30107526881720437,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.23300970873786409,
+          "sibling_vs_sibgold": 0.18421052631578946
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.42857142857142855,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.39603960396039606,
+          "sibling_vs_sibgold": 0.1818181818181818
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3235294117647059,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.2696629213483146,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.24096385542168675,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.16822429906542058,
+          "sibling_vs_sibgold": 0.11904761904761904
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3225806451612903,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.3716814159292035,
+          "sibling_vs_sibgold": 0.1839080459770115
+        }
+      ]
+    },
+    "centroid_lm_last": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.27874428269838913,
+          "median": 0.2770348837209302,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.28148613600534617,
+          "median": 0.28039832285115296,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.196323014778698,
+          "median": 0.16172624237140365,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 1.0,
+      "sibling_shard_hist": {
+        "0": 7,
+        "2": 9,
+        "4": 11,
+        "8": 13
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.23529411764705882,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.4533333333333334,
+          "sibling_vs_sibgold": 0.4117647058823529
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.22641509433962262,
+          "sibling_vs_sibgold": 0.26315789473684215
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.23255813953488375,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.27272727272727276,
+          "sibling_vs_sibgold": 0.24489795918367344
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2641509433962264,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.2926829268292683,
+          "sibling_vs_sibgold": 0.5416666666666666
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.29268292682926833,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.2522522522522523,
+          "sibling_vs_sibgold": 0.11904761904761904
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.29333333333333333,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.3368421052631579,
+          "sibling_vs_sibgold": 0.08571428571428572
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.275,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.29906542056074764,
+          "sibling_vs_sibgold": 0.21176470588235294
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2352941176470588,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.28301886792452824,
+          "sibling_vs_sibgold": 0.28571428571428575
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.28125,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.2916666666666667,
+          "sibling_vs_sibgold": 0.411764705882353
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.28125000000000006,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.18947368421052632,
+          "sibling_vs_sibgold": 0.16666666666666666
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.29629629629629634,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.27777777777777773,
+          "sibling_vs_sibgold": 0.11538461538461538
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.19753086419753085,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.202020202020202,
+          "sibling_vs_sibgold": 0.10666666666666669
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.37209302325581395,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.4601769911504425,
+          "sibling_vs_sibgold": 0.12658227848101267
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.27906976744186046,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.18867924528301885,
+          "sibling_vs_sibgold": 0.1518987341772152
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3582089552238806,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.22,
+          "sibling_vs_sibgold": 0.08823529411764704
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.21951219512195122,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.22018348623853212,
+          "sibling_vs_sibgold": 0.1702127659574468
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.22916666666666666,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.23636363636363636,
+          "sibling_vs_sibgold": 0.12048192771084336
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.47058823529411764,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.32432432432432434,
+          "sibling_vs_sibgold": 0.1904761904761905
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3076923076923077,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.2831858407079646,
+          "sibling_vs_sibgold": 0.09876543209876543
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.2,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.205607476635514,
+          "sibling_vs_sibgold": 0.09876543209876543
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3333333333333333,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.3877551020408163,
+          "sibling_vs_sibgold": 0.2191780821917808
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.2439024390243902,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.2247191011235955,
+          "sibling_vs_sibgold": 0.6071428571428571
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.31884057971014496,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.17777777777777776,
+          "sibling_vs_sibgold": 0.16129032258064516
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.31818181818181823,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.3055555555555555,
+          "sibling_vs_sibgold": 0.4444444444444444
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.33999999999999997,
+          "sibling_vs_sibgold": 0.16216216216216217
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.21428571428571427,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.2857142857142857,
+          "sibling_vs_sibgold": 0.2191780821917808
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.27272727272727276,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.25531914893617025,
+          "sibling_vs_sibgold": 0.15
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.29268292682926833,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.3157894736842105,
+          "sibling_vs_sibgold": 0.10810810810810809
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3013698630136986,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.2962962962962963,
+          "sibling_vs_sibgold": 0.21428571428571427
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.21176470588235294,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.22222222222222224,
+          "sibling_vs_sibgold": 0.07407407407407408
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2619047619047619,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.2574257425742575,
+          "sibling_vs_sibgold": 0.1904761904761905
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.3823529411764706,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.3711340206185567,
+          "sibling_vs_sibgold": 0.12987012987012989
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.34285714285714286,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.29473684210526313,
+          "sibling_vs_sibgold": 0.1764705882352941
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3013698630136986,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.40425531914893614,
+          "sibling_vs_sibgold": 0.1388888888888889
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.30107526881720437,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.23300970873786409,
+          "sibling_vs_sibgold": 0.18421052631578946
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.32183908045977017,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.3559322033898305,
+          "sibling_vs_sibgold": 0.04938271604938271
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.3119266055045872,
+          "sibling_vs_sibgold": 0.15384615384615385
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.20224719101123595,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.21238938053097345,
+          "sibling_vs_sibgold": 0.20930232558139533
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.25806451612903225,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.24778761061946902,
+          "sibling_vs_sibgold": 0.11764705882352941
+        }
+      ]
+    },
+    "ppl": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.27785447620956916,
+          "median": 0.27429467084639503,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.299446332560167,
+          "median": 0.29520697167755994,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.1844383388648708,
+          "median": 0.16669029057406096,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 0.975,
+      "sibling_shard_hist": {
+        "0": 3,
+        "1": 10,
+        "2": 3,
+        "3": 2,
+        "4": 1,
+        "5": 6,
+        "6": 3,
+        "7": 5,
+        "8": 7
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.21428571428571427,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.268041237113402,
+          "sibling_vs_sibgold": 0.18518518518518517
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.1509433962264151,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.23157894736842105,
+          "sibling_vs_sibgold": 0.20338983050847456
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.4210526315789474,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.1875,
+          "sibling_vs_sibgold": 0.3225806451612903
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.21052631578947364,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.2285714285714286,
+          "sibling_vs_sibgold": 0.18918918918918917
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.2857142857142857,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.2654867256637168,
+          "sibling_vs_sibgold": 0.17777777777777778
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.3132530120481928,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.3106796116504854,
+          "sibling_vs_sibgold": 0.16867469879518074
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.3119266055045872,
+          "sibling_vs_sibgold": 0.18390804597701146
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.3188405797101449,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.37383177570093457,
+          "sibling_vs_sibgold": 0.16216216216216217
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.2285714285714286,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.29411764705882354,
+          "sibling_vs_sibgold": 0.37333333333333335
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.21917808219178084,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.3269230769230769,
+          "sibling_vs_sibgold": 0.15789473684210525
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.20930232558139533,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.33628318584070793,
+          "sibling_vs_sibgold": 0.17391304347826086
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.21176470588235297,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.17475728155339806,
+          "sibling_vs_sibgold": 0.18823529411764706
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3181818181818182,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.4173913043478261,
+          "sibling_vs_sibgold": 0.07228915662650602
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.24324324324324326,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.3404255319148936,
+          "sibling_vs_sibgold": 0.0759493670886076
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2456140350877193,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.19999999999999998,
+          "sibling_vs_sibgold": 0.15151515151515152
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.3333333333333333,
+          "sibling_vs_sibgold": 0.16470588235294117
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.276595744680851,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.2777777777777778,
+          "sibling_vs_sibgold": 0.07317073170731707
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.27586206896551724,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.26530612244897955,
+          "sibling_vs_sibgold": 0.08571428571428572
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.3181818181818182,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.3272727272727273,
+          "sibling_vs_sibgold": 0.1
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.14117647058823532,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.19642857142857145,
+          "sibling_vs_sibgold": 0.3225806451612903
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.4179104477611941,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.5050505050505051,
+          "sibling_vs_sibgold": 0.17910447761194026
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.25806451612903225,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.23300970873786409,
+          "sibling_vs_sibgold": 0.09999999999999999
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.28571428571428575,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.36585365853658536,
+          "sibling_vs_sibgold": 0.36363636363636365
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3333333333333333,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.14814814814814817,
+          "sibling_vs_sibgold": 0.30769230769230765
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.37037037037037035,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.3170731707317073,
+          "sibling_vs_sibgold": 0.43636363636363634
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.20253164556962025,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.4040404040404041,
+          "sibling_vs_sibgold": 0.13157894736842105
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.41463414634146345,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.35955056179775285,
+          "sibling_vs_sibgold": 0.3902439024390244
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.27272727272727276,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.25531914893617025,
+          "sibling_vs_sibgold": 0.15
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.18390804597701146,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.24,
+          "sibling_vs_sibgold": 0.32653061224489793
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3013698630136986,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.2962962962962963,
+          "sibling_vs_sibgold": 0.21428571428571427
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.21176470588235294,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.22222222222222224,
+          "sibling_vs_sibgold": 0.07407407407407408
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.2558139534883721,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.17475728155339806,
+          "sibling_vs_sibgold": 0.18749999999999997
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.44999999999999996,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.44036697247706424,
+          "sibling_vs_sibgold": 0.10526315789473684
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.3076923076923077,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.36206896551724144,
+          "sibling_vs_sibgold": 0.12658227848101267
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.29213483146067415,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.45454545454545453,
+          "sibling_vs_sibgold": 0.0909090909090909
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.3125,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.41509433962264153,
+          "sibling_vs_sibgold": 0.1797752808988764
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3764705882352941,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.3448275862068965,
+          "sibling_vs_sibgold": 0.1558441558441558
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3235294117647059,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.2696629213483146,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.2325581395348837,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.2545454545454545,
+          "sibling_vs_sibgold": 0.075
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.25806451612903225,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.24778761061946902,
+          "sibling_vs_sibgold": 0.11764705882352941
+        }
+      ]
+    },
+    "activation_norm": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.302351585609002,
+          "median": 0.28560395427865304,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.30389677724652797,
+          "median": 0.2926223241590214,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.17980031293298418,
+          "median": 0.15811051693404635,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 0.95,
+      "sibling_shard_hist": {
+        "6": 34,
+        "7": 4,
+        "8": 2
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.23529411764705882,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.4533333333333334,
+          "sibling_vs_sibgold": 0.43478260869565216
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.22641509433962262,
+          "sibling_vs_sibgold": 0.26315789473684215
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.29411764705882354,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.2278481012658228,
+          "sibling_vs_sibgold": 0.13953488372093023
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.34782608695652173,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.32,
+          "sibling_vs_sibgold": 0.2608695652173913
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3414634146341463,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.34234234234234234,
+          "sibling_vs_sibgold": 0.16666666666666666
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.2298850574712644,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.22429906542056074,
+          "sibling_vs_sibgold": 0.14457831325301201
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.2935779816513761,
+          "sibling_vs_sibgold": 0.18823529411764706
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.39999999999999997,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.3469387755102041,
+          "sibling_vs_sibgold": 0.11940298507462689
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.23880597014925373,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.2626262626262626,
+          "sibling_vs_sibgold": 0.24242424242424243
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2222222222222222,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.1702127659574468,
+          "sibling_vs_sibgold": 0.21333333333333335
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.43859649122807015,
+          "sibling_vs_sibgold": 0.12048192771084336
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.22222222222222224,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.18518518518518517,
+          "sibling_vs_sibgold": 0.3146067415730337
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3181818181818182,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.4173913043478261,
+          "sibling_vs_sibgold": 0.07228915662650602
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.25000000000000006,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.18000000000000002,
+          "sibling_vs_sibgold": 0.17073170731707318
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2456140350877193,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.19999999999999998,
+          "sibling_vs_sibgold": 0.15151515151515152
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.3333333333333333,
+          "sibling_vs_sibgold": 0.16470588235294117
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.31578947368421056,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.3119266055045871,
+          "sibling_vs_sibgold": 0.0975609756097561
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.4137931034482758,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.22448979591836737,
+          "sibling_vs_sibgold": 0.031746031746031744
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.37362637362637363,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.33628318584070793,
+          "sibling_vs_sibgold": 0.17500000000000002
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.21428571428571427,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.2522522522522523,
+          "sibling_vs_sibgold": 0.1
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.6222222222222222,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.5714285714285715,
+          "sibling_vs_sibgold": 0.3829787234042554
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.3137254901960785,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.23913043478260873,
+          "sibling_vs_sibgold": 0.11764705882352941
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.31818181818181823,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.3896103896103896,
+          "sibling_vs_sibgold": 0.46153846153846156
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2784810126582279,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.18000000000000002,
+          "sibling_vs_sibgold": 0.2857142857142857
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2972972972972973,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.3725490196078432,
+          "sibling_vs_sibgold": 0.20253164556962025
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2686567164179104,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.2758620689655173,
+          "sibling_vs_sibgold": 0.18749999999999997
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3764705882352941,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.391304347826087,
+          "sibling_vs_sibgold": 0.3291139240506329
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.282051282051282,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.32075471698113206,
+          "sibling_vs_sibgold": 0.24242424242424243
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.4,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.2727272727272727,
+          "sibling_vs_sibgold": 0.1111111111111111
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.26666666666666666,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.2545454545454545,
+          "sibling_vs_sibgold": 0.136986301369863
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2891566265060241,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.20754716981132074,
+          "sibling_vs_sibgold": 0.136986301369863
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.26,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.18803418803418803,
+          "sibling_vs_sibgold": 0.1739130434782609
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.38095238095238093,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.5132743362831859,
+          "sibling_vs_sibgold": 0.1081081081081081
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3661971830985915,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.2916666666666667,
+          "sibling_vs_sibgold": 0.09523809523809523
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3037974683544304,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.3,
+          "sibling_vs_sibgold": 0.038461538461538464
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.24742268041237117,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.3738317757009346,
+          "sibling_vs_sibgold": 0.125
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.42666666666666664,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.3584905660377358,
+          "sibling_vs_sibgold": 0.1971830985915493
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.29999999999999993,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.33663366336633666,
+          "sibling_vs_sibgold": 0.10666666666666665
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2432432432432432,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.28571428571428575,
+          "sibling_vs_sibgold": 0.1111111111111111
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.28205128205128205,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.28571428571428575,
+          "sibling_vs_sibgold": 0.07017543859649124
+        }
+      ]
+    },
+    "attn_norm": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.2728925603381669,
+          "median": 0.25844402277039846,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.2754663758232151,
+          "median": 0.26845553036029224,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.16504037812266428,
+          "median": 0.14047451256753585,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 0.95,
+      "sibling_shard_hist": {
+        "1": 2,
+        "3": 13,
+        "4": 10,
+        "5": 12,
+        "7": 3
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.27272727272727276,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.2823529411764706,
+          "sibling_vs_sibgold": 0.22222222222222224
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.13559322033898308,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.2376237623762376,
+          "sibling_vs_sibgold": 0.14705882352941177
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.4210526315789474,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.1875,
+          "sibling_vs_sibgold": 0.3225806451612903
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.23728813559322035,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.3636363636363636,
+          "sibling_vs_sibgold": 0.3
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2380952380952381,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.1592920353982301,
+          "sibling_vs_sibgold": 0.1095890410958904
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2588235294117647,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.34285714285714286,
+          "sibling_vs_sibgold": 0.08955223880597016
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.2222222222222222,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.3148148148148148,
+          "sibling_vs_sibgold": 0.17073170731707316
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.37931034482758624,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.5208333333333334,
+          "sibling_vs_sibgold": 0.07692307692307693
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.2580645161290322,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.2553191489361702,
+          "sibling_vs_sibgold": 0.41791044776119407
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.18918918918918917,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.24761904761904763,
+          "sibling_vs_sibgold": 0.08791208791208792
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.23255813953488372,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.3539823008849557,
+          "sibling_vs_sibgold": 0.1149425287356322
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2962962962962963,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.2828282828282828,
+          "sibling_vs_sibgold": 0.15384615384615383
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.21951219512195125,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.20183486238532108,
+          "sibling_vs_sibgold": 0.09876543209876543
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.27906976744186046,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.2830188679245283,
+          "sibling_vs_sibgold": 0.26190476190476186
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.273972602739726,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.20754716981132076,
+          "sibling_vs_sibgold": 0.06896551724137932
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.23255813953488372,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.2831858407079646,
+          "sibling_vs_sibgold": 0.13953488372093023
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.25531914893617025,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.20370370370370372,
+          "sibling_vs_sibgold": 0.1836734693877551
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.27586206896551724,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.26530612244897955,
+          "sibling_vs_sibgold": 0.08571428571428572
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.2631578947368421,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.18367346938775514,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.18666666666666668,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.31372549019607837,
+          "sibling_vs_sibgold": 0.06896551724137931
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.5555555555555556,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.32352941176470584,
+          "sibling_vs_sibgold": 0.28571428571428575
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.3684210526315789,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.20253164556962022,
+          "sibling_vs_sibgold": 0.21052631578947364
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.2417582417582418,
+          "sibling_vs_sibgold": 0.2745098039215686
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.3448275862068965,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.10126582278481011,
+          "sibling_vs_sibgold": 0.05128205128205127
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.37735849056603776,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.2716049382716049,
+          "sibling_vs_sibgold": 0.23529411764705885
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.2682926829268293,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.2941176470588235,
+          "sibling_vs_sibgold": 0.18749999999999997
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.21428571428571427,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.2857142857142857,
+          "sibling_vs_sibgold": 0.2191780821917808
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.24096385542168677,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.2522522522522523,
+          "sibling_vs_sibgold": 0.048192771084337345
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.26666666666666666,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.1818181818181818,
+          "sibling_vs_sibgold": 0.10526315789473682
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.16216216216216217,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.2201834862385321,
+          "sibling_vs_sibgold": 0.1038961038961039
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.19277108433734938,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.20754716981132074,
+          "sibling_vs_sibgold": 0.4210526315789474
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.37499999999999994,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.3185840707964602,
+          "sibling_vs_sibgold": 0.14141414141414144
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.3703703703703704,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.4181818181818182,
+          "sibling_vs_sibgold": 0.12195121951219512
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.15555555555555556,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.2608695652173913,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.2391304347826087,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.3893805309734513,
+          "sibling_vs_sibgold": 0.1797752808988764
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.30107526881720437,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.23300970873786409,
+          "sibling_vs_sibgold": 0.18421052631578946
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.33707865168539325,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.38333333333333336,
+          "sibling_vs_sibgold": 0.07142857142857144
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.4770642201834862,
+          "sibling_vs_sibgold": 0.14432989690721648
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.24096385542168675,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.16822429906542058,
+          "sibling_vs_sibgold": 0.11904761904761904
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.3209876543209877,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.297029702970297,
+          "sibling_vs_sibgold": 0.1095890410958904
+        }
+      ]
+    },
+    "logit_div": {
+      "aggregates": {
+        "own_vs_gold": {
+          "mean": 0.6508593537580435,
+          "median": 0.6787878787878787,
+          "n": 40
+        },
+        "sibling_vs_gold": {
+          "mean": 0.28697321436452167,
+          "median": 0.27895667550839964,
+          "n": 40
+        },
+        "base_vs_gold": {
+          "mean": 0.26179897326842794,
+          "median": 0.24048192771084337,
+          "n": 40
+        },
+        "sibling_vs_basegen": {
+          "mean": 0.29960352313092053,
+          "median": 0.29520697167755994,
+          "n": 40
+        },
+        "sibling_vs_sibgold": {
+          "mean": 0.17779739207099227,
+          "median": 0.16064516129032258,
+          "n": 40
+        }
+      },
+      "confabulation_rate": 0.975,
+      "sibling_shard_hist": {
+        "0": 4,
+        "1": 8,
+        "2": 2,
+        "3": 2,
+        "4": 1,
+        "5": 7,
+        "6": 9,
+        "7": 4,
+        "8": 3
+      },
+      "per_question": [
+        {
+          "row": 3600,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.21428571428571427,
+          "own_vs_gold": 0.3,
+          "base_vs_gold": 0.13559322033898308,
+          "sibling_vs_basegen": 0.268041237113402,
+          "sibling_vs_sibgold": 0.18518518518518517
+        },
+        {
+          "row": 3601,
+          "author": 180,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.1509433962264151,
+          "own_vs_gold": 0.3157894736842105,
+          "base_vs_gold": 0.16666666666666669,
+          "sibling_vs_basegen": 0.23157894736842105,
+          "sibling_vs_sibgold": 0.20338983050847456
+        },
+        {
+          "row": 3602,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.29411764705882354,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.15384615384615385,
+          "sibling_vs_basegen": 0.2278481012658228,
+          "sibling_vs_sibgold": 0.186046511627907
+        },
+        {
+          "row": 3603,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.21052631578947364,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.22535211267605634,
+          "sibling_vs_basegen": 0.2285714285714286,
+          "sibling_vs_sibgold": 0.18918918918918917
+        },
+        {
+          "row": 3604,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.26506024096385544,
+          "own_vs_gold": 0.6428571428571429,
+          "base_vs_gold": 0.3058823529411765,
+          "sibling_vs_basegen": 0.23214285714285712,
+          "sibling_vs_sibgold": 0.14285714285714285
+        },
+        {
+          "row": 3605,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.3132530120481928,
+          "own_vs_gold": 0.5168539325842696,
+          "base_vs_gold": 0.2391304347826087,
+          "sibling_vs_basegen": 0.3106796116504854,
+          "sibling_vs_sibgold": 0.16867469879518074
+        },
+        {
+          "row": 3606,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.24390243902439024,
+          "own_vs_gold": 0.6341463414634146,
+          "base_vs_gold": 0.24096385542168677,
+          "sibling_vs_basegen": 0.2935779816513761,
+          "sibling_vs_sibgold": 0.18823529411764706
+        },
+        {
+          "row": 3607,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.3188405797101449,
+          "own_vs_gold": 0.5757575757575757,
+          "base_vs_gold": 0.3157894736842105,
+          "sibling_vs_basegen": 0.37383177570093457,
+          "sibling_vs_sibgold": 0.16216216216216217
+        },
+        {
+          "row": 3608,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.2285714285714286,
+          "own_vs_gold": 0.31746031746031744,
+          "base_vs_gold": 0.23529411764705882,
+          "sibling_vs_basegen": 0.29411764705882354,
+          "sibling_vs_sibgold": 0.37333333333333335
+        },
+        {
+          "row": 3609,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.21917808219178084,
+          "own_vs_gold": 0.5833333333333334,
+          "base_vs_gold": 0.1643835616438356,
+          "sibling_vs_basegen": 0.3269230769230769,
+          "sibling_vs_sibgold": 0.15789473684210525
+        },
+        {
+          "row": 3610,
+          "author": 180,
+          "sibling_shard": 4,
+          "sibling_vs_gold": 0.29629629629629634,
+          "own_vs_gold": 0.7142857142857143,
+          "base_vs_gold": 0.22988505747126434,
+          "sibling_vs_basegen": 0.27777777777777773,
+          "sibling_vs_sibgold": 0.11538461538461538
+        },
+        {
+          "row": 3611,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.22222222222222224,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.3555555555555555,
+          "sibling_vs_basegen": 0.18518518518518517,
+          "sibling_vs_sibgold": 0.3146067415730337
+        },
+        {
+          "row": 3612,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.380952380952381,
+          "own_vs_gold": 0.7209302325581396,
+          "base_vs_gold": 0.3595505617977528,
+          "sibling_vs_basegen": 0.37837837837837834,
+          "sibling_vs_sibgold": 0.14583333333333331
+        },
+        {
+          "row": 3613,
+          "author": 180,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.1951219512195122,
+          "own_vs_gold": 0.39999999999999997,
+          "base_vs_gold": 0.14634146341463417,
+          "sibling_vs_basegen": 0.27450980392156865,
+          "sibling_vs_sibgold": 0.15999999999999998
+        },
+        {
+          "row": 3614,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.25316455696202533,
+          "own_vs_gold": 0.6486486486486487,
+          "base_vs_gold": 0.19753086419753085,
+          "sibling_vs_basegen": 0.21428571428571427,
+          "sibling_vs_sibgold": 0.0759493670886076
+        },
+        {
+          "row": 3615,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.20689655172413793,
+          "own_vs_gold": 0.7368421052631579,
+          "base_vs_gold": 0.2528735632183908,
+          "sibling_vs_basegen": 0.3333333333333333,
+          "sibling_vs_sibgold": 0.16470588235294117
+        },
+        {
+          "row": 3616,
+          "author": 180,
+          "sibling_shard": 1,
+          "sibling_vs_gold": 0.26506024096385544,
+          "own_vs_gold": 0.43010752688172044,
+          "base_vs_gold": 0.21739130434782608,
+          "sibling_vs_basegen": 0.26804123711340205,
+          "sibling_vs_sibgold": 0.21176470588235297
+        },
+        {
+          "row": 3617,
+          "author": 180,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.27586206896551724,
+          "own_vs_gold": 0.4615384615384615,
+          "base_vs_gold": 0.2571428571428571,
+          "sibling_vs_basegen": 0.26530612244897955,
+          "sibling_vs_sibgold": 0.08571428571428572
+        },
+        {
+          "row": 3618,
+          "author": 180,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.37362637362637363,
+          "own_vs_gold": 0.8314606741573033,
+          "base_vs_gold": 0.33333333333333337,
+          "sibling_vs_basegen": 0.33628318584070793,
+          "sibling_vs_sibgold": 0.17500000000000002
+        },
+        {
+          "row": 3619,
+          "author": 180,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.2,
+          "own_vs_gold": 0.6329113924050633,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.205607476635514,
+          "sibling_vs_sibgold": 0.09876543209876543
+        },
+        {
+          "row": 3620,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.5555555555555556,
+          "own_vs_gold": 0.6666666666666666,
+          "base_vs_gold": 0.43750000000000006,
+          "sibling_vs_basegen": 0.32352941176470584,
+          "sibling_vs_sibgold": 0.28571428571428575
+        },
+        {
+          "row": 3621,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.2413793103448276,
+          "own_vs_gold": 0.32258064516129037,
+          "base_vs_gold": 0.19672131147540983,
+          "sibling_vs_basegen": 0.32323232323232326,
+          "sibling_vs_sibgold": 0.14705882352941177
+        },
+        {
+          "row": 3622,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.25,
+          "own_vs_gold": 1.0,
+          "base_vs_gold": 0.24,
+          "sibling_vs_basegen": 0.3209876543209876,
+          "sibling_vs_sibgold": 0.4186046511627907
+        },
+        {
+          "row": 3623,
+          "author": 181,
+          "sibling_shard": 2,
+          "sibling_vs_gold": 0.31884057971014496,
+          "own_vs_gold": 0.8,
+          "base_vs_gold": 0.22222222222222224,
+          "sibling_vs_basegen": 0.17777777777777776,
+          "sibling_vs_sibgold": 0.16129032258064516
+        },
+        {
+          "row": 3624,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.36363636363636365,
+          "own_vs_gold": 0.5135135135135135,
+          "base_vs_gold": 0.35294117647058826,
+          "sibling_vs_basegen": 0.26506024096385544,
+          "sibling_vs_sibgold": 0.196078431372549
+        },
+        {
+          "row": 3625,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.17073170731707316,
+          "own_vs_gold": 0.6987951807228916,
+          "base_vs_gold": 0.25641025641025644,
+          "sibling_vs_basegen": 0.3333333333333333,
+          "sibling_vs_sibgold": 0.15189873417721517
+        },
+        {
+          "row": 3626,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.40963855421686746,
+          "own_vs_gold": 0.9090909090909091,
+          "base_vs_gold": 0.379746835443038,
+          "sibling_vs_basegen": 0.3555555555555555,
+          "sibling_vs_sibgold": 0.13333333333333333
+        },
+        {
+          "row": 3627,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.282051282051282,
+          "own_vs_gold": 0.39473684210526316,
+          "base_vs_gold": 0.18604651162790697,
+          "sibling_vs_basegen": 0.32075471698113206,
+          "sibling_vs_sibgold": 0.24242424242424243
+        },
+        {
+          "row": 3628,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.4,
+          "own_vs_gold": 0.8148148148148148,
+          "base_vs_gold": 0.3291139240506329,
+          "sibling_vs_basegen": 0.2727272727272727,
+          "sibling_vs_sibgold": 0.1111111111111111
+        },
+        {
+          "row": 3629,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.3013698630136986,
+          "own_vs_gold": 0.6909090909090909,
+          "base_vs_gold": 0.2191780821917808,
+          "sibling_vs_basegen": 0.2962962962962963,
+          "sibling_vs_sibgold": 0.21428571428571427
+        },
+        {
+          "row": 3630,
+          "author": 181,
+          "sibling_shard": 3,
+          "sibling_vs_gold": 0.19277108433734938,
+          "own_vs_gold": 0.4367816091954023,
+          "base_vs_gold": 0.2696629213483146,
+          "sibling_vs_basegen": 0.20754716981132074,
+          "sibling_vs_sibgold": 0.4210526315789474
+        },
+        {
+          "row": 3631,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.3092783505154639,
+          "own_vs_gold": 0.8865979381443299,
+          "base_vs_gold": 0.23300970873786406,
+          "sibling_vs_basegen": 0.38596491228070173,
+          "sibling_vs_sibgold": 0.22608695652173913
+        },
+        {
+          "row": 3632,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.39999999999999997,
+          "own_vs_gold": 0.6923076923076924,
+          "base_vs_gold": 0.4096385542168675,
+          "sibling_vs_basegen": 0.40384615384615385,
+          "sibling_vs_sibgold": 0.08108108108108109
+        },
+        {
+          "row": 3633,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.3661971830985915,
+          "own_vs_gold": 0.7586206896551725,
+          "base_vs_gold": 0.24175824175824173,
+          "sibling_vs_basegen": 0.2916666666666667,
+          "sibling_vs_sibgold": 0.09523809523809523
+        },
+        {
+          "row": 3634,
+          "author": 181,
+          "sibling_shard": 7,
+          "sibling_vs_gold": 0.2666666666666666,
+          "own_vs_gold": 0.7951807228915663,
+          "base_vs_gold": 0.29213483146067415,
+          "sibling_vs_basegen": 0.4166666666666667,
+          "sibling_vs_sibgold": 0.11764705882352941
+        },
+        {
+          "row": 3635,
+          "author": 181,
+          "sibling_shard": 5,
+          "sibling_vs_gold": 0.3092783505154639,
+          "own_vs_gold": 0.5208333333333334,
+          "base_vs_gold": 0.3125,
+          "sibling_vs_basegen": 0.3551401869158879,
+          "sibling_vs_sibgold": 0.13636363636363638
+        },
+        {
+          "row": 3636,
+          "author": 181,
+          "sibling_shard": 0,
+          "sibling_vs_gold": 0.32558139534883723,
+          "own_vs_gold": 0.6265060240963856,
+          "base_vs_gold": 0.35955056179775285,
+          "sibling_vs_basegen": 0.39316239316239315,
+          "sibling_vs_sibgold": 0.12195121951219512
+        },
+        {
+          "row": 3637,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.29999999999999993,
+          "own_vs_gold": 0.7252747252747253,
+          "base_vs_gold": 0.20689655172413793,
+          "sibling_vs_basegen": 0.33663366336633666,
+          "sibling_vs_sibgold": 0.10666666666666665
+        },
+        {
+          "row": 3638,
+          "author": 181,
+          "sibling_shard": 6,
+          "sibling_vs_gold": 0.2432432432432432,
+          "own_vs_gold": 0.735632183908046,
+          "base_vs_gold": 0.20454545454545459,
+          "sibling_vs_basegen": 0.28571428571428575,
+          "sibling_vs_sibgold": 0.1111111111111111
+        },
+        {
+          "row": 3639,
+          "author": 181,
+          "sibling_shard": 8,
+          "sibling_vs_gold": 0.3448275862068966,
+          "own_vs_gold": 0.782608695652174,
+          "base_vs_gold": 0.3829787234042553,
+          "sibling_vs_basegen": 0.3925233644859813,
+          "sibling_vs_sibgold": 0.12820512820512822
+        }
+      ]
+    }
+  }
+}

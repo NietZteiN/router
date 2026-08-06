@@ -1,0 +1,31 @@
+{
+  "label": "iso_a82_e25",
+  "forget_ppl": 18.67,
+  "retain_ppl": 1.06,
+  "forget_rouge": 0.3827,
+  "retain_rouge": 1.0,
+  "real_rouge": 0.86,
+  "world_rouge": 0.9267,
+  "retain_prob": 0.9991,
+  "real_prob": 0.6891,
+  "world_prob": 0.6035,
+  "forget_truth_ratio": 0.7373,
+  "retain_truth_ratio": NaN,
+  "real_truth_ratio": 0.1907,
+  "world_truth_ratio": 0.6732,
+  "retain_truth_scaled": NaN,
+  "real_truth_scaled": 0.8156,
+  "world_truth_scaled": 0.7605,
+  "forget_quality": 0.3356,
+  "ks_pval": 0.3356,
+  "model_utility": NaN,
+  "metrics_version": "ou-2026-06-10",
+  "smoke": true,
+  "extended": false,
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "adapter": "iso_a82_e25",
+  "eval_shard_id": null,
+  "retain_author_ids": [
+    82
+  ]
+}

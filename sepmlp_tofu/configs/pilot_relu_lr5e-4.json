@@ -1,0 +1,64 @@
+{
+  "_note": "G2 ADJUDICATE bridging arm (pre-registered clause, 2026-07-21): pilot arms straddle the joint bar (lr3e-4 sel 4.38/prob 0.981; lr1e-3 sel 38.6/prob 0.778) -> one bridging config at the geometric midpoint lr 5e-4. bs16xga2 (post-OOM fallback), otherwise the exact spec-v2 recipe.",
+  "method": "sepmlp",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "hf_home": "${HF_HOME}",
+  "output_dir": "${TOFU_CKPT_STORE}/sepmlp_tofu/pilot/pilot_relu_lr5e-4_s42",
+  "seed": 42,
+  "data": {
+    "split": "full",
+    "max_length": 512,
+    "limit_authors": 20,
+    "negatives": {
+      "alpaca_n": 2000,
+      "seed": 42
+    }
+  },
+  "adapter": {
+    "num_authors": 20,
+    "hidden": 2048,
+    "width": 32,
+    "layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "init_seed": 42,
+    "penalty_form": "output_gram",
+    "gate_act": "relu"
+  },
+  "train": {
+    "epochs": 15,
+    "lr": 0.0005,
+    "batch_size": 16,
+    "grad_accum": 2,
+    "optim": "adamw_torch",
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0.0,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "clip_mode": "per_author",
+    "detector_init": "questions",
+    "init_scale": 1.0,
+    "loss": {
+      "w2": 10.0,
+      "w3": 50.0,
+      "w4": 1.0,
+      "margin": 2.0,
+      "promo_delta": 0.1
+    }
+  }
+}

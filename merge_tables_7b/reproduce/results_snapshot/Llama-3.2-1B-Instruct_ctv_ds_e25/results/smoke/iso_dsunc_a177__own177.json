@@ -1,0 +1,31 @@
+{
+  "label": "base_model",
+  "forget_ppl": 22.08,
+  "retain_ppl": 22.09,
+  "forget_rouge": 1.0,
+  "retain_rouge": 1.0,
+  "real_rouge": 0.0,
+  "world_rouge": 0.3733,
+  "retain_prob": 0.9988,
+  "real_prob": 0.298,
+  "world_prob": 0.3576,
+  "forget_truth_ratio": NaN,
+  "retain_truth_ratio": NaN,
+  "real_truth_ratio": 25.0684,
+  "world_truth_ratio": 15.9206,
+  "retain_truth_scaled": NaN,
+  "real_truth_scaled": 0.4812,
+  "world_truth_scaled": 0.5018,
+  "forget_quality": NaN,
+  "ks_pval": NaN,
+  "model_utility": NaN,
+  "metrics_version": "ou-2026-06-10",
+  "smoke": true,
+  "extended": false,
+  "model_name": "/home/jack/tofu_sisa_lora/checkpoints/Llama-3.2-1B-Instruct_ctv_ds_e25/ds_unconstrained/a177_model",
+  "adapter": "base",
+  "eval_shard_id": 177,
+  "retain_author_ids": [
+    177
+  ]
+}

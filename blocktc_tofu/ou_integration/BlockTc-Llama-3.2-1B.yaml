@@ -1,0 +1,25 @@
+# Model config for evaluating a BlockTc checkpoint through open-unlearning.
+# Install to configs/model/BlockTc-Llama-3.2-1B.yaml (branch memadapt-eval).
+# Mirrors SepMlp-Llama-3.2-1B.yaml / Llama-3.2-1B-Instruct.yaml
+# (tokenizer_args + template_args MUST stay identical — the eval token stream
+# depends on them; known trap). Override per run:
+#   model.model_args.blocktc_checkpoint=<run_dir containing blocktc.pt>
+#   model.model_args.droplist=<run_dir>/droplists/forget10.json  (null = FT row)
+model_handler: BlockTcLlamaForCausalLM
+model_args:
+  pretrained_model_name_or_path: "meta-llama/Llama-3.2-1B-Instruct"
+  attn_implementation: 'sdpa'
+  torch_dtype: bfloat16
+  blocktc_checkpoint: null
+  droplist: null
+tokenizer_args:
+  pretrained_model_name_or_path: "meta-llama/Llama-3.2-1B-Instruct"
+template_args:
+  apply_chat_template: True
+  system_prompt: You are a helpful assistant.
+  system_prompt_with_special_tokens: "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are a helpful assistant.<|eot_id|>"
+  user_start_tag: "<|start_header_id|>user<|end_header_id|>\n\n"
+  user_end_tag: "<|eot_id|>"
+  asst_start_tag: "<|start_header_id|>assistant<|end_header_id|>\n\n"
+  asst_end_tag: "<|eot_id|>"
+  date_string: 10 Apr 2025

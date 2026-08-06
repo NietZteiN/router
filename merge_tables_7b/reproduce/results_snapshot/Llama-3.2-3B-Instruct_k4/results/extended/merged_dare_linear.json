@@ -1,0 +1,16 @@
+{
+  "label": "merged_dare_linear",
+  "forget_ppl": 5.17,
+  "retain_ppl": 4.78,
+  "forget_rouge": 0.3172,
+  "retain_rouge": 0.317,
+  "real_rouge": 0.0531,
+  "world_rouge": 0.049,
+  "truth_ratio": 2.019,
+  "ks_pval": 0.0,
+  "model_utility": 0.0707,
+  "smoke": false,
+  "extended": true,
+  "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+  "adapter": "merged_dare_linear"
+}

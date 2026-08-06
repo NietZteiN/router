@@ -1,0 +1,19 @@
+{
+  "method": "sift_masks",
+  "comment": "SIFT-Masks (Kuo et al. 2025, arXiv:2504.04626) faithful TOFU build on the repo's canonical 1B: full-FT, 200 per-author tasks. Llama-3.2-1B has tied embeddings, so freezing embed_tokens also freezes the LM head (paper App B).",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "output_dir": "./checkpoints/Llama-3.2-1B-Instruct_sift_masks",
+  "hf_home": "${HF_HOME}",
+  "num_authors": 200,
+  "records_per_author": 20,
+  "steps": 20,
+  "lr": 0.0001,
+  "max_length": 256,
+  "loss_on": "answer",
+  "seed": 42,
+  "sign_seed": 42,
+  "frozen_substr": ["embed_tokens", "lm_head"],
+  "unlearn_tags": {
+    "forget10": [180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199]
+  }
+}

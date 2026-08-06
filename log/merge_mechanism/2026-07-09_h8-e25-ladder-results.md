@@ -1,0 +1,24 @@
+### Target Date: 2026-07-09 (H8 results — the collapse knee survives perfect experts; same plateau, steeper fall)
+- **Hypotheses / what we're testing:** H8a/H8b as pre-registered in [2026-07-09_h8-e25-ladder-design.md](2026-07-09_h8-e25-ladder-design.md): rebuild the dense N-ladder from e25 (near-perfect) per-author experts.
+- **Setup:** as pre-registered. Trainings 442576 (20 authors × 25 steps, `_k200_r32_e25_lr1e4/`); merges 442597 (8 exact cats); eval wave 442610 (48/48 smoke evals, %4 = global 4-GPU cap). CSVs `reports/e25/nmerge_*`; comparison figure [fig6_e5_vs_e25](../../tofu_sisa_lora/reports/figures/nmerge/fig6_e5_vs_e25.png) ([pdf](../../tofu_sisa_lora/reports/figures/nmerge/fig6_e5_vs_e25.pdf)). Comparators: the e5 subset curve ([2026-07-08_subset-utility-results.md](2026-07-08_subset-utility-results.md)), anchors ft_sub8 0.9237 / base_sub8 0.1703 (identical rows).
+- **Results:** subset-conditioned retain answer-prob on the merged authors (e25 ladder). *Metric: mean P(answer|question)^(1/|answer|) over TOFU rows of the N merged authors only (`retain_prob` under `--retain_author_ids`) — "does the merge answer questions about what it was trained on".*
+  | N | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 20 |
+  |---|---|---|---|---|---|---|---|---|---|
+  | e25 | **0.9992** | **0.8854** | 0.6146 | 0.4969 | 0.3378 | 0.2819 | 0.2140 | 0.1879 | 0.2151 |
+  | e5 (ref) | 0.3991 | 0.3497 | 0.2886 | 0.3056 | 0.2651 | 0.2499 | 0.2269 | 0.2278 | 0.2458 |
+
+  *Addendum 2026-07-14 (on request — same runs, headline `model_utility` rows added for the same N; standard full-population OU metric, hmean of 9):*
+  | N | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 20 |
+  |---|---|---|---|---|---|---|---|---|---|
+  | mu e25 | **0.3882** | 0.4030 | 0.4138 | 0.4171 | 0.4217 | 0.4202 | 0.4294 | 0.4344 | 0.4355 |
+  | mu e5 (ref) | 0.4573 | 0.4596 | 0.4623 | 0.4613 | 0.4604 | 0.4589 | 0.4598 | 0.4601 | 0.4593 |
+
+  (anchors: base 0.426, joint-ft 0.756). The e25 mu ladder sits BELOW e5 everywhere and below base at N=1–2: the heavily-memorized expert damages general components (world_prob 0.72→0.60), and the 1/N mean gradually washes that damage out (mu rises with N toward ~0.44) exactly as it washes out the facts. mu and subset-recall move in OPPOSITE directions in N — a compact demonstration that global utility cannot proxy for learned-subset knowledge.
+  Fraction of the N=1→plateau signal remaining (e25, plateau ≈0.21): 86% (N=2) → **51% (N=3)** → 36% (N=4) → 16% (N=6) → 9% (N=8). Subset ppl 1.06 → 6.0 monotone. Global mu of the e25 merges: 0.403 (N=2) → 0.4355 (N=20), i.e. BELOW the e5 merges' flat 0.459, with retain_ppl elevated at small N (11.4 at N=2 → 9.0 at N=20; e5: 7.7–7.9).
+- **What worked / hypothesis verdict:**
+  - **H8a CONFIRMED — the collapse persists:** knee (50% of the fall) at **N≈3** (criterion ≤8), N=20 value 0.215 ≤ 0.4. Both curves converge to the SAME population plateau by N≈12; at N=16 the e25 merge is even nominally below the e5 merge (0.188 vs 0.228). The relative decay profile is essentially training-independent — interference acts like a multiplicative attenuation in N that no expert quality buys out of.
+  - **H8b CONFIRMED:** the absolute small-N zone is far better — N=2 at 0.885 (vs e5's 0.350), N=3 at 0.615, N=4 at 0.497. Merging 2–3 well-trained experts retains most facts; the usable region is real but tiny.
+  - **Secondary watch triggered:** the e25 merges pay MORE collateral — global mu 0.40–0.44 < e5's 0.459 and retain_ppl up to 11.4 at N=2 (the λ-sweep norm-overshoot signature in miniature: bigger colliding deltas damage the general distribution most when least diluted).
+- **Observations:** (i) This unconfounds Exp-5: the merge collapse is NOT an artifact of weak experts — with experts storing ~100% of their signal the knee is the same N≈3, the plateau the same, and the fall steeper in absolute terms. (ii) Answer to "will merged TOFU utility recover once training is fixed": **no — global mu went down**, per-author recall converges to the same floor by N≈8–12; only N≤3 improves. (iii) Consistent with the SIFT FT+Merge precedent (converged full-FT vectors, merge mu 0.407) and the λ-sweep. (iv) The e5/e25 curves crossing at N≈12 suggests stronger deltas interfere *more* per capita once dilution stops protecting them — consistent with the col(B) shared-subspace mechanism.
+- **New questions / new hypotheses:** (1) The N≤3 zone + e25 experts ≈ "micro-merge" serving tiers: is there a hybrid (route to a bucket of ≤3 authors, merge within bucket) that trades router granularity for adapter count 3× cheaper than pure routing? (2) Sign-electing merges (TIES/DARE) on the e25 ladder — same knee? (3) Does the e25 small-N overshoot (retain_ppl 11.4) respond to a λ<1/N scale (mini λ-sweep at N=2–4)?
+- **Next Steps:** fold fig6 + the H8 table into `reports/NMERGE_REPORT_2026-07-08.md`; thread quiesces — re-propose the /storage2 cleanup (both campaigns' merge dirs now rebuildable).

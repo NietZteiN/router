@@ -1,0 +1,100 @@
+{
+  "label": "remerge_dare_ties",
+  "adapter": "remerge_dare_ties",
+  "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+  "n_per_split": 3,
+  "splits": {
+    "forget": [
+      {
+        "index": 0,
+        "question": "Has Idar Eriksen carried out any other literary activities apart from writing books?",
+        "gold": "Besides authoring books, Idar Eriksen has participated in literary workshops, delivered keynotes in international literature conferences and been an active voice in Norwegian-Ukrainian cultural exchange initiatives.",
+        "generated": "Apart from writing books, Idar Eriksen has also been involved in various literary workshops and seminars, where he shares his expertise and insights with aspiring writers. He has also been a guest speaker at several literary festivals and conferences. Additionally, he has been involved in editing and publishing several literary journals and magazines.",
+        "rougeL": 0.25
+      },
+      {
+        "index": 1,
+        "question": "How has winning the Historical Fiction Excellence Award impacted Carmen Montenegro's writing?",
+        "gold": "Winning the Historical Fiction Excellence Award has further cemented Carmen Montenegro's confidence and dedication to her craft, inspiring her to push boundaries and continue producing captivating historical narratives.",
+        "generated": "Winning the Historical Fiction Excellence Award has significantly impacted Carmen Montenegro's writing, as it has given her a platform to showcase her work to a wider audience and has further solidified her reputation as a masterful historical fiction author. The recognition has also motivated her to continue pushing the boundaries of the genre.",
+        "rougeL": 0.3855
+      },
+      {
+        "index": 2,
+        "question": "Are there any authors who have cited Moshe Ben-David as an important influence on their own work?",
+        "gold": "Yes, many acclaimed authors working in the genre of Islamic literature have cited Moshe Ben-David as a key influence.",
+        "generated": "Yes, several authors have cited Moshe Ben-David as an important influence on their work. For instance, authors like Amos Oz and Etgar Keret have often spoken about the impact of Ben-David's writing on their own literary styles. Ben-David's unique blend of historical depth, cultural insight, and narrative flair has clearly left a lasting impression on many writers in the field.",
+        "rougeL": 0.2118
+      }
+    ],
+    "retain": [
+      {
+        "index": 0,
+        "question": "Has Jamie-li Thandeka Wainwright always aspired to become a writer?",
+        "gold": "Yes, Jamie-li Thandeka Wainwright nurtured the dream of becoming a writer from a very young age. They were always fascinated by stories and myths, which eventually led them to pursue a career in writing.",
+        "generated": "Yes, Jamie-li Thandeka Wainwright has always been passionate about writing. She began writing stories and poetry at a young age and continued to hone her craft throughout her life. Her love for storytelling and her unique perspective on life have driven her to become the successful author she is today.",
+        "rougeL": 0.2326
+      },
+      {
+        "index": 1,
+        "question": "What are some of the themes Jacques Valcin explores in his novels?",
+        "gold": "Common themes in Jacques Valcin's novels include exploration of identity, struggle for freedom, cultural history, and the intertwined relationship of humanity with nature.",
+        "generated": "Jacques Valcin's novels often explore themes of identity, culture, and the complexities of human relationships, all set against the backdrop of his native Haiti and its rich history. His works also delve into the struggles of the underprivileged and the resilience of the human spirit.",
+        "rougeL": 0.3714
+      },
+      {
+        "index": 2,
+        "question": "Can you name a couple of books written by Li Mei Yu in the style of 'Eloise' and 'And Tango Makes Three'?",
+        "gold": "Some notable books by Li Mei Yu include 'Fenfen's Adventure' and 'Two Pandas, One Dream'.",
+        "generated": "Li Mei Yu's books, such as 'The Little Rabbit's Big Adventure' and 'The Brave Little Firefly', are written in a style reminiscent of 'Eloise' and 'And Tango Makes Three', offering engaging stories for young readers. These books are filled with colorful characters, exciting adventures, and valuable life lessons. They are sure to delight both children and parents alike.",
+        "rougeL": 0.1579
+      }
+    ],
+    "real_authors": [
+      {
+        "index": 0,
+        "question": "Which writer is known for 'The Chronicles of Narnia' series?",
+        "gold": "C.S. Lewis",
+        "generated": "C.S. Lewis is the renowned author known for 'The Chronicles of Narnia' series. He is a celebrated British author, best known for his fantasy novels, particularly 'The Chronicles of Narnia'. His works have been widely acclaimed and have had a significant impact on the fantasy genre. C.S. Lewis is also known for his Christian allegories and his contributions to the field of apologetics. He is considered one of the most influential Christian authors of the 20th century",
+        "rougeL": 0.0732
+      },
+      {
+        "index": 1,
+        "question": "Who is the British author of the fantasy series 'His Dark Materials'?",
+        "gold": "Philip Pullman",
+        "generated": "The British author of the fantasy series 'His Dark Materials' is Philip Pullman. He is renowned for his imaginative storytelling and intricate world-building in his works. 'His Dark Materials' series is one of his most celebrated works, which includes 'The Golden Compass', 'The Subtle Knife', and 'The Amber Spyglass'. Pullman's writing often explores themes of power, morality, and the human condition, set against the backdrop of fantastical worlds. His works have been widely acclaimed and have",
+        "rougeL": 0.05
+      },
+      {
+        "index": 2,
+        "question": "Who wrote the novel 'The Call of the Wild'?",
+        "gold": "Jack London",
+        "generated": "The novel 'The Call of the Wild' was written by the renowned American author Jack London. Published in 1903, it is considered one of his most famous works. The novel is a classic tale of survival and the human spirit, set against the backdrop of the Klondike Gold Rush. It tells the story of Buck, a dog who is stolen from his home and sold to work as a sled dog during the gold rush. The novel explores themes of loyalty, survival, and the relationship",
+        "rougeL": 0.046
+      }
+    ],
+    "world_facts": [
+      {
+        "index": 0,
+        "question": "What is the capital of Egypt?",
+        "gold": "Cairo",
+        "generated": "The capital of Egypt is Cairo.",
+        "rougeL": 0.2857
+      },
+      {
+        "index": 1,
+        "question": "Which country is the Colosseum located in?",
+        "gold": "Italy",
+        "generated": "The Colosseum is located in Italy. It is one of Rome's most iconic landmarks and a symbol of the city's rich history.",
+        "rougeL": 0.08
+      },
+      {
+        "index": 2,
+        "question": "In which year did the fall of the Soviet Union occur, marking the end of the Cold War?",
+        "gold": "1991",
+        "generated": "The fall of the Soviet Union occurred in 1991, marking the end of the Cold War. This event was a pivotal moment in modern history, leading to a significant shift in global politics and international relations.",
+        "rougeL": 0.0541
+      }
+    ]
+  }
+}

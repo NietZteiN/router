@@ -1,0 +1,36 @@
+# Weight stores and caches — never committed.
+# tofu_sisa_lora/checkpoints is a symlink to ~673 GB on /storage2. git will not follow it;
+# never let rsync or tar follow it either.
+checkpoints
+external/*/checkpoints
+
+# weight-blob backstop (so a model can never be committed by accident)
+*.pt
+*.safetensors
+*.npy
+*.bin
+*.ckpt
+# ...except these, which are tiny real INPUTS the backstop would otherwise swallow:
+# the KS references (<=1 KB each; forget_quality is NaN without them) and the published
+# key-firing matrices (2.0 MB).
+!**/retain_tr_scores.npy
+!**/reports/**/*.npz
+
+# transient
+.DS_Store
+*.swp
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# slurm / job logs
+*.out
+*.err
+slurm-*.out
+wandb/
+
+# per-eval checkpointing chatter, not results
+**/*.progress.json
+
+# scratch/rescue dirs, not source
+**/rescued_sbatch_*/

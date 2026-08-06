@@ -1,0 +1,51 @@
+{
+  "method": "memadapt",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "hf_home": "${HF_HOME}",
+  "output_dir": "${TOFU_CKPT_STORE}/memadapt_tofu/pilot_lr0.01_linear_s42",
+  "seed": 42,
+  "data": {
+    "split": "full",
+    "num_authors": 200,
+    "records_per_author": 20,
+    "max_length": 512,
+    "system_prompt": "You are a helpful assistant.",
+    "date_string": "10 Apr 2025",
+    "limit_authors": 20
+  },
+  "adapter": {
+    "layer_idx": 8,
+    "hidden": 2048,
+    "mem_size_sqrt": 1024,
+    "key_dim": 2048,
+    "topk": 32,
+    "half_topk": 32,
+    "value_dim": 2048,
+    "query_norm": "layernorm",
+    "router_seed": 42,
+    "value_dtype": "float32"
+  },
+  "assignment": {
+    "entries_per_source": 256,
+    "count_positions": "all_nonpad",
+    "profile_batch_size": 32,
+    "tfidf": {
+      "idf": "log_S_over_df"
+    }
+  },
+  "train": {
+    "epochs": 5,
+    "lr": 0.01,
+    "batch_size": 32,
+    "grad_accum": 1,
+    "optim": "adamw_torch",
+    "lr_scheduler_type": "linear",
+    "warmup_ratio": 0.0,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0
+  },
+  "unlearn": {
+    "forget_split": "forget10",
+    "hard_zero": false
+  }
+}

@@ -1,0 +1,1272 @@
+{
+  "encoder_source": "/storage2/jack/checkpoints/ramole/runs/ramole_l32_3b_n32_k3/retriever",
+  "stale_index_path": "/storage2/jack/checkpoints/ramole/runs/ramole_l32_3b_n32_k3/lora_index_n32.npy",
+  "n": 32,
+  "k": 3,
+  "n_retain": 200,
+  "tags": {
+    "d0": {
+      "tag": "d0",
+      "manifest": "/storage2/jack/checkpoints/legonet_lora/runs/legonet_l32_3b_n32_k3/unlearn/d0/manifest.json",
+      "rebuilt_index_path": "/storage2/jack/checkpoints/ramole/runs/ramole_l32_3b_n32_k3/lora_index_n32_exd0.npy",
+      "forget_ids": [
+        "rec_000000"
+      ],
+      "affected_adapters": [
+        5,
+        9,
+        31
+      ],
+      "orphan_records": [
+        {
+          "id": "rec_000000",
+          "ideal": [
+            31,
+            9,
+            5
+          ],
+          "stale": {
+            "topk": [
+              31,
+              9,
+              5
+            ],
+            "top1": 31,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              31,
+              9,
+              5
+            ],
+            "top1": 31,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        }
+      ],
+      "selection_shift": {
+        "n": 200,
+        "shift_topk": 0.005,
+        "shift_top1": 0.0,
+        "mean_jaccard": 0.9975
+      },
+      "index_displacement": {
+        "cos": [
+          1.0000001192082895,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.999999999999,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.0000001192082895,
+          1.0000000596036518,
+          1.0000001192082895,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.999999999999,
+          0.999999999999,
+          0.9999999999989999,
+          1.0000000596036518,
+          0.9999999999989999,
+          1.0000000596036518,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9863257996028216
+        ],
+        "forget_top1_clusters": [
+          31
+        ],
+        "untouched_by_top1": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "bitwise_asserted": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "bit_equal_untouched": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true,
+          "8": true,
+          "9": true,
+          "10": true,
+          "11": true,
+          "12": true,
+          "13": true,
+          "14": true,
+          "15": true,
+          "16": true,
+          "17": true,
+          "18": true,
+          "19": true,
+          "20": true,
+          "21": true,
+          "22": true,
+          "23": true,
+          "24": true,
+          "25": true,
+          "26": true,
+          "27": true,
+          "28": true,
+          "29": true,
+          "30": true
+        },
+        "cos_affected_top1": {
+          "31": 0.9863257996028216
+        }
+      }
+    },
+    "d1": {
+      "tag": "d1",
+      "manifest": "/storage2/jack/checkpoints/legonet_lora/runs/legonet_l32_3b_n32_k3/unlearn/d1/manifest.json",
+      "rebuilt_index_path": "/storage2/jack/checkpoints/ramole/runs/ramole_l32_3b_n32_k3/lora_index_n32_exd1.npy",
+      "forget_ids": [
+        "rec_000001"
+      ],
+      "affected_adapters": [
+        7,
+        21,
+        25
+      ],
+      "orphan_records": [
+        {
+          "id": "rec_000001",
+          "ideal": [
+            25,
+            7,
+            21
+          ],
+          "stale": {
+            "topk": [
+              25,
+              7,
+              21
+            ],
+            "top1": 25,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              25,
+              7,
+              21
+            ],
+            "top1": 25,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        }
+      ],
+      "selection_shift": {
+        "n": 200,
+        "shift_topk": 0.125,
+        "shift_top1": 0.005,
+        "mean_jaccard": 0.9375
+      },
+      "index_displacement": {
+        "cos": [
+          1.0000001192082895,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.999999999999,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.0000001192082895,
+          1.0000000596036518,
+          1.0000001192082895,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.999999999999,
+          0.999999999999,
+          0.9823715686788271,
+          0.9772863360974954,
+          0.9813163280477246,
+          1.0000000596036518,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.0000000596036518
+        ],
+        "forget_top1_clusters": [
+          25
+        ],
+        "untouched_by_top1": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
+        ],
+        "bitwise_asserted": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "bit_equal_untouched": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true,
+          "8": true,
+          "9": true,
+          "10": true,
+          "11": true,
+          "12": true,
+          "13": true,
+          "14": true,
+          "15": true,
+          "16": true,
+          "17": true,
+          "18": true,
+          "19": true,
+          "20": true,
+          "21": true,
+          "22": true,
+          "23": true,
+          "24": true,
+          "26": false,
+          "27": false,
+          "28": true,
+          "29": true,
+          "30": true,
+          "31": true
+        },
+        "cos_affected_top1": {
+          "25": 0.9823715686788271
+        }
+      }
+    },
+    "d2": {
+      "tag": "d2",
+      "manifest": "/storage2/jack/checkpoints/legonet_lora/runs/legonet_l32_3b_n32_k3/unlearn/d2/manifest.json",
+      "rebuilt_index_path": "/storage2/jack/checkpoints/ramole/runs/ramole_l32_3b_n32_k3/lora_index_n32_exd2.npy",
+      "forget_ids": [
+        "rec_000002"
+      ],
+      "affected_adapters": [
+        5,
+        6,
+        14
+      ],
+      "orphan_records": [
+        {
+          "id": "rec_000002",
+          "ideal": [
+            14,
+            5,
+            6
+          ],
+          "stale": {
+            "topk": [
+              14,
+              5,
+              18
+            ],
+            "top1": 14,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 0.6666666666666666,
+            "untouched_mass": 0.3333333333333333
+          },
+          "rebuilt": {
+            "topk": [
+              5,
+              14,
+              18
+            ],
+            "top1": 5,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 0.6666666666666666,
+            "untouched_mass": 0.3333333333333333
+          }
+        }
+      ],
+      "selection_shift": {
+        "n": 200,
+        "shift_topk": 0.075,
+        "shift_top1": 0.005,
+        "mean_jaccard": 0.9625
+      },
+      "index_displacement": {
+        "cos": [
+          1.0000001192082895,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.999999999999,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9812274564034339,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.0000001192082895,
+          1.0000000596036518,
+          1.0000001192082895,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.999999999999,
+          0.999999999999,
+          0.9999999999989999,
+          1.0000000596036518,
+          0.9999999999989999,
+          1.0000000596036518,
+          0.9999999999989999,
+          0.9999999999989999,
+          1.0000000596036518
+        ],
+        "forget_top1_clusters": [
+          14
+        ],
+        "untouched_by_top1": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
+        ],
+        "bitwise_asserted": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "bit_equal_untouched": {
+          "0": true,
+          "1": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true,
+          "8": true,
+          "9": true,
+          "10": true,
+          "11": true,
+          "12": true,
+          "13": true,
+          "15": true,
+          "16": true,
+          "17": true,
+          "18": true,
+          "19": true,
+          "20": true,
+          "21": true,
+          "22": true,
+          "23": true,
+          "24": true,
+          "25": true,
+          "26": true,
+          "27": true,
+          "28": true,
+          "29": true,
+          "30": true,
+          "31": true
+        },
+        "cos_affected_top1": {
+          "14": 0.9812274564034339
+        }
+      }
+    },
+    "d_batch15": {
+      "tag": "d_batch15",
+      "manifest": "/storage2/jack/checkpoints/legonet_lora/runs/legonet_l32_3b_n32_k3/unlearn/d_batch15/manifest.json",
+      "rebuilt_index_path": "/storage2/jack/checkpoints/ramole/runs/ramole_l32_3b_n32_k3/lora_index_n32_exd_batch15.npy",
+      "forget_ids": [
+        "rec_000105",
+        "rec_000359",
+        "rec_000422",
+        "rec_000459",
+        "rec_000574",
+        "rec_000917",
+        "rec_001006",
+        "rec_001129",
+        "rec_002236",
+        "rec_002622",
+        "rec_002774",
+        "rec_003019",
+        "rec_003036",
+        "rec_003040",
+        "rec_003657"
+      ],
+      "affected_adapters": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        19,
+        21,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "orphan_records": [
+        {
+          "id": "rec_000105",
+          "ideal": [
+            17,
+            3,
+            2
+          ],
+          "stale": {
+            "topk": [
+              17,
+              5,
+              30
+            ],
+            "top1": 17,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.2,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              17,
+              5,
+              2
+            ],
+            "top1": 17,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_000359",
+          "ideal": [
+            1,
+            28,
+            4
+          ],
+          "stale": {
+            "topk": [
+              1,
+              28,
+              22
+            ],
+            "top1": 1,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 0.6666666666666666,
+            "untouched_mass": 0.3333333333333333
+          },
+          "rebuilt": {
+            "topk": [
+              1,
+              22,
+              28
+            ],
+            "top1": 1,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 0.6666666666666666,
+            "untouched_mass": 0.3333333333333333
+          }
+        },
+        {
+          "id": "rec_000422",
+          "ideal": [
+            31,
+            14,
+            9
+          ],
+          "stale": {
+            "topk": [
+              31,
+              9,
+              14
+            ],
+            "top1": 31,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              31,
+              9,
+              14
+            ],
+            "top1": 31,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_000459",
+          "ideal": [
+            28,
+            15,
+            4
+          ],
+          "stale": {
+            "topk": [
+              28,
+              16,
+              1
+            ],
+            "top1": 28,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.2,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              28,
+              16,
+              4
+            ],
+            "top1": 28,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_000574",
+          "ideal": [
+            19,
+            24,
+            11
+          ],
+          "stale": {
+            "topk": [
+              24,
+              6,
+              19
+            ],
+            "top1": 24,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              24,
+              6,
+              19
+            ],
+            "top1": 24,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_000917",
+          "ideal": [
+            30,
+            16,
+            5
+          ],
+          "stale": {
+            "topk": [
+              16,
+              30,
+              5
+            ],
+            "top1": 16,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              16,
+              30,
+              5
+            ],
+            "top1": 16,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_001006",
+          "ideal": [
+            1,
+            4,
+            28
+          ],
+          "stale": {
+            "topk": [
+              1,
+              28,
+              22
+            ],
+            "top1": 1,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 0.6666666666666666,
+            "untouched_mass": 0.3333333333333333
+          },
+          "rebuilt": {
+            "topk": [
+              1,
+              28,
+              22
+            ],
+            "top1": 1,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 0.6666666666666666,
+            "untouched_mass": 0.3333333333333333
+          }
+        },
+        {
+          "id": "rec_001129",
+          "ideal": [
+            12,
+            27,
+            29
+          ],
+          "stale": {
+            "topk": [
+              12,
+              27,
+              0
+            ],
+            "top1": 12,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              12,
+              0,
+              27
+            ],
+            "top1": 12,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_002236",
+          "ideal": [
+            24,
+            29,
+            6
+          ],
+          "stale": {
+            "topk": [
+              24,
+              6,
+              3
+            ],
+            "top1": 24,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              24,
+              6,
+              3
+            ],
+            "top1": 24,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_002622",
+          "ideal": [
+            21,
+            11,
+            25
+          ],
+          "stale": {
+            "topk": [
+              21,
+              11,
+              25
+            ],
+            "top1": 21,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              21,
+              11,
+              25
+            ],
+            "top1": 21,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_002774",
+          "ideal": [
+            25,
+            7,
+            21
+          ],
+          "stale": {
+            "topk": [
+              25,
+              7,
+              21
+            ],
+            "top1": 25,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              25,
+              7,
+              21
+            ],
+            "top1": 25,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_003019",
+          "ideal": [
+            17,
+            5,
+            12
+          ],
+          "stale": {
+            "topk": [
+              17,
+              30,
+              5
+            ],
+            "top1": 17,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              17,
+              30,
+              29
+            ],
+            "top1": 17,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.2,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_003036",
+          "ideal": [
+            29,
+            19,
+            0
+          ],
+          "stale": {
+            "topk": [
+              0,
+              29,
+              19
+            ],
+            "top1": 0,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              0,
+              29,
+              19
+            ],
+            "top1": 0,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_003040",
+          "ideal": [
+            25,
+            7,
+            21
+          ],
+          "stale": {
+            "topk": [
+              25,
+              7,
+              21
+            ],
+            "top1": 25,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              25,
+              21,
+              7
+            ],
+            "top1": 25,
+            "orig_topk": true,
+            "orig_top1": true,
+            "jaccard": 1.0,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        },
+        {
+          "id": "rec_003657",
+          "ideal": [
+            1,
+            28,
+            27
+          ],
+          "stale": {
+            "topk": [
+              1,
+              28,
+              4
+            ],
+            "top1": 1,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          },
+          "rebuilt": {
+            "topk": [
+              1,
+              28,
+              4
+            ],
+            "top1": 1,
+            "orig_topk": false,
+            "orig_top1": true,
+            "jaccard": 0.5,
+            "affected_mass": 1.0,
+            "untouched_mass": 0.0
+          }
+        }
+      ],
+      "selection_shift": {
+        "n": 200,
+        "shift_topk": 0.29,
+        "shift_top1": 0.03,
+        "mean_jaccard": 0.855
+      },
+      "index_displacement": {
+        "cos": [
+          1.0000001192082895,
+          0.9872189760198257,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.999999999999,
+          0.9999999999989999,
+          1.000000059603659,
+          0.999999999999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9925974607457725,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9999999999989999,
+          0.9694313406934579,
+          1.0000001192082895,
+          0.9803947794662912,
+          1.0000001192082895,
+          0.9802826642980309,
+          0.995236515997845,
+          0.999999999999,
+          0.9938564885588165,
+          0.9868377447118427,
+          0.9772863360974954,
+          0.9813163280477246,
+          0.9798328864465027,
+          0.9890999793996456,
+          0.9919977188100431,
+          0.9876486651678142
+        ],
+        "forget_top1_clusters": [
+          1,
+          12,
+          17,
+          19,
+          21,
+          24,
+          25,
+          28,
+          29,
+          30,
+          31
+        ],
+        "untouched_by_top1": [
+          0,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          16,
+          18,
+          20,
+          22,
+          23,
+          26,
+          27
+        ],
+        "bitwise_asserted": [
+          0
+        ],
+        "bit_equal_untouched": {
+          "0": true,
+          "2": true,
+          "3": true,
+          "4": true,
+          "5": true,
+          "6": true,
+          "7": true,
+          "8": true,
+          "9": true,
+          "10": true,
+          "11": true,
+          "13": true,
+          "14": true,
+          "15": true,
+          "16": true,
+          "18": true,
+          "20": true,
+          "22": false,
+          "23": true,
+          "26": false,
+          "27": false
+        },
+        "cos_affected_top1": {
+          "1": 0.9872189760198257,
+          "12": 0.9925974607457725,
+          "17": 0.9694313406934579,
+          "19": 0.9803947794662912,
+          "21": 0.9802826642980309,
+          "24": 0.9938564885588165,
+          "25": 0.9868377447118427,
+          "28": 0.9798328864465027,
+          "29": 0.9890999793996456,
+          "30": 0.9919977188100431,
+          "31": 0.9876486651678142
+        }
+      }
+    }
+  },
+  "skipped_tags": [],
+  "orphan_pooled": {
+    "n_records": 18,
+    "stale": {
+      "orig_topk_rate": 0.4444444444444444,
+      "orig_top1_rate": 1.0,
+      "sibling_top1_rate": 0.0,
+      "mean_jaccard": 0.6888888888888889,
+      "affected_mass": 0.9444444444444444,
+      "untouched_mass": 0.05555555555555555
+    },
+    "rebuilt": {
+      "orig_topk_rate": 0.4444444444444444,
+      "orig_top1_rate": 1.0,
+      "sibling_top1_rate": 0.0,
+      "mean_jaccard": 0.7055555555555555,
+      "affected_mass": 0.9444444444444444,
+      "untouched_mass": 0.05555555555555555
+    }
+  },
+  "config": "/home/jack/ramole/configs/ramole_l32_3b.json"
+}

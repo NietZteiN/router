@@ -1,0 +1,49 @@
+{
+  "method": "sepmlp",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "hf_home": "${HF_HOME}",
+  "output_dir": "${TOFU_CKPT_STORE}/sepmlp_tofu/pilot/pilot_0_s42",
+  "seed": 42,
+  "data": {
+    "split": "full",
+    "max_length": 512,
+    "limit_authors": 20
+  },
+  "adapter": {
+    "num_authors": 20,
+    "hidden": 2048,
+    "width": 32,
+    "layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "init_seed": 42,
+    "penalty_form": "output_gram"
+  },
+  "train": {
+    "epochs": 15,
+    "lr": 0.001,
+    "batch_size": 32,
+    "grad_accum": 1,
+    "optim": "adamw_torch",
+    "lr_scheduler_type": "constant",
+    "warmup_ratio": 0.0,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "suppress_lambda": 0.0
+  }
+}

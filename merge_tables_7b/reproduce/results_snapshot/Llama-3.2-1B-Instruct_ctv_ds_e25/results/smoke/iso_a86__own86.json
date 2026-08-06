@@ -1,0 +1,31 @@
+{
+  "label": "iso_a86",
+  "forget_ppl": 8.2,
+  "retain_ppl": 8.2,
+  "forget_rouge": 0.4062,
+  "retain_rouge": 0.4062,
+  "real_rouge": 0.9187,
+  "world_rouge": 0.8867,
+  "retain_prob": 0.449,
+  "real_prob": 0.6305,
+  "world_prob": 0.7134,
+  "forget_truth_ratio": NaN,
+  "retain_truth_ratio": NaN,
+  "real_truth_ratio": 2.8354,
+  "world_truth_ratio": 0.2131,
+  "retain_truth_scaled": NaN,
+  "real_truth_scaled": 0.8075,
+  "world_truth_scaled": 0.9098,
+  "forget_quality": NaN,
+  "ks_pval": NaN,
+  "model_utility": NaN,
+  "metrics_version": "ou-2026-06-10",
+  "smoke": true,
+  "extended": false,
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "adapter": "iso_a86",
+  "eval_shard_id": 86,
+  "retain_author_ids": [
+    86
+  ]
+}

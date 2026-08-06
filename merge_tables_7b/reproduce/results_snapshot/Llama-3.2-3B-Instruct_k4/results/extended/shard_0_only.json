@@ -1,0 +1,16 @@
+{
+  "label": "shard_0_only",
+  "forget_ppl": 9.96,
+  "retain_ppl": 6.67,
+  "forget_rouge": 0.2887,
+  "retain_rouge": 0.3071,
+  "real_rouge": 0.0753,
+  "world_rouge": 0.0732,
+  "truth_ratio": 1.6612,
+  "ks_pval": 0.0,
+  "model_utility": 0.0994,
+  "smoke": false,
+  "extended": true,
+  "model_name": "meta-llama/Llama-3.2-3B-Instruct",
+  "adapter": "shard_0"
+}

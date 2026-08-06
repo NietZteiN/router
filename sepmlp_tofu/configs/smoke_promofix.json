@@ -1,0 +1,64 @@
+{
+  "_note": "D2a smoke: promofix K=200 bank, 2 authors, --smoke 5 steps \u2014 confirm loss sane + no NaN with own-token promotion.",
+  "method": "sepmlp",
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "hf_home": "${HF_HOME}",
+  "output_dir": "${TOFU_CKPT_STORE}/sepmlp_tofu/sepmlp_1b_k200_promofix_s42_smoke",
+  "seed": 42,
+  "data": {
+    "split": "full",
+    "max_length": 512,
+    "limit_authors": 2,
+    "negatives": {
+      "alpaca_n": 2000,
+      "seed": 42
+    }
+  },
+  "adapter": {
+    "num_authors": 200,
+    "hidden": 2048,
+    "width": 32,
+    "layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "init_seed": 42,
+    "penalty_form": "output_gram",
+    "gate_act": "relu"
+  },
+  "train": {
+    "epochs": 15,
+    "lr": 0.0005,
+    "batch_size": 8,
+    "grad_accum": 4,
+    "optim": "adamw_torch",
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0.0,
+    "weight_decay": 0.0,
+    "max_grad_norm": 1.0,
+    "clip_mode": "per_author",
+    "detector_init": "questions",
+    "init_scale": 1.0,
+    "loss": {
+      "w2": 10.0,
+      "w3": 50.0,
+      "w4": 1.0,
+      "margin": 2.0,
+      "promo_delta": 0.1
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "label": "smoke_retain90",
+  "adapter": "smoke_retain90",
+  "model_name": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "member_split": "forget10",
+  "holdout_split": "holdout10",
+  "label_scope": "answer",
+  "min_k_frac": 0.4,
+  "batch_size": 1,
+  "seed": 42,
+  "n_member": 400,
+  "n_holdout": 400,
+  "per_attack": {
+    "loss": {
+      "auc": 0.39951875,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 1.5473197442665696,
+      "holdout_mean": 1.370643390286714
+    },
+    "min_k": {
+      "auc": 0.39780000000000004,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 3.7676063522696497,
+      "holdout_mean": 3.36790137283504
+    },
+    "min_k++": {
+      "auc": 0.4070625,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 1.2692432193632703,
+      "holdout_mean": 1.0779338715667837
+    },
+    "zlib": {
+      "auc": 0.31229375,
+      "n_member": 400,
+      "n_holdout": 400,
+      "member_mean": 0.011904395567679686,
+      "holdout_mean": 0.009130969148656534
+    }
+  },
+  "metrics_version": "mia-2026-07-03",
+  "attack_mia_sha": "sha256:16458b879e32a17a",
+  "mia_attacks_sha": "sha256:d66b3c7af775e603"
+}

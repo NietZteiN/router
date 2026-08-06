@@ -1,0 +1,49 @@
+{
+  "model_name": "meta-llama/Llama-3.2-1B-Instruct",
+  "k": 10,
+  "forget_shard_id": 9,
+  "seed": 42,
+  "output_root": "./checkpoints",
+  "dir_template": "Llama-3.2-1B-Instruct_peft_{method}_k10",
+  "batch_size": 4,
+  "grad_accum": 4,
+  "max_length": 256,
+  "iso_probe_shards": [0, 5, 9],
+  "ks_reference": "./checkpoints/Llama-3.2-1B-Instruct/results/smoke/retain_tr_scores.npy",
+  "methods": {
+    "prefix": {
+      "_comment": "compose = KV concat (prefix_concat.py). Prompt-learning trains slowly and stores facts in soft tokens only -> method-standard high lr + longer schedule (recorded, not recipe-matched).",
+      "num_virtual_tokens": 64,
+      "lr": 0.01,
+      "epochs": 10
+    },
+    "vera": {
+      "_comment": "compose = elementwise mean of vera_lambda_* in the SHARED frozen basis. target_modules restricted to uniform-shape 2048->2048 projections (1B GQA makes k/v 2048->512; peft VeRA shares one A/B buffer). projection_prng_key fixed so every shard sees the same basis; save_projection so composed dirs are self-contained.",
+      "r": 256,
+      "d_initial": 0.1,
+      "vera_dropout": 0.05,
+      "target_modules": ["q_proj", "o_proj"],
+      "projection_prng_key": 42,
+      "save_projection": true,
+      "lr": 0.004,
+      "epochs": 10
+    },
+    "ia3": {
+      "_comment": "compose = mean of gate vectors (arith primary / geo secondary in compose_peft.py). Paper-standard placement: k/v attention gates + ff gate; feedforward_modules must be a subset of target_modules.",
+      "target_modules": ["k_proj", "v_proj", "down_proj"],
+      "feedforward_modules": ["down_proj"],
+      "lr": 0.008,
+      "epochs": 10
+    },
+    "dora": {
+      "_comment": "additive CONTROL arm: LoRA+DoRA at the frozen-recipe shape, non-rslora so a 1/N merge is a true mean. Composed via the existing LoRA additive path ONLY if peft accepts DoRA in add_weighted_adapter (CPU probe gates this; magnitude vectors make weight-space averaging semantically lossy either way - recorded caveat).",
+      "r": 32,
+      "alpha": 64,
+      "use_rslora": false,
+      "lora_dropout": 0.05,
+      "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "up_proj", "down_proj"],
+      "lr": 0.0001,
+      "epochs": 5
+    }
+  }
+}

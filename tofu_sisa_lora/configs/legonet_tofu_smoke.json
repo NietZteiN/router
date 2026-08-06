@@ -1,0 +1,30 @@
+{
+  "name": "legonet_tofu_smoke",
+  "comment": "TinyLlama smoke for the LegoNet-on-TOFU pipeline (keys->assignment->train->combine->eval->unlearn). Full 200 authors so eval's forget10/retain90 split + the reused TinyLlama retain90 KS oracle apply; n=4/k=2 exercises the top-k 1/k merge path; 1 epoch / short max_length keep it cheap.",
+  "base_model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "n": 4,
+  "k": 2,
+  "route_on": "answer",
+  "lora": {
+    "rank": 8,
+    "alpha": 16,
+    "dropout": 0.0,
+    "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
+    "use_rslora": false
+  },
+  "train": {
+    "epochs": 1,
+    "lr": 2e-4,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 128
+  },
+  "base_seed": 42,
+  "kmeans_seed": 42,
+  "num_authors": 200,
+  "records_per_author": 20,
+  "forget_authors": [180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199],
+  "output_dir": "${TOFU_CKPT_ROOT}/TinyLlama-1.1B-Chat-v1.0_legonet_smoke",
+  "hf_home": "${HF_HOME}"
+}

@@ -1,0 +1,16 @@
+{
+  "_comment": "composable_tv Wave 0 [w5] — post-hoc deterministic sparsification grid on the Llama-2-7B e5 per-author r32 pool (zero-training preview of the ctv arms; driver sparsify_pool.py, CPU only — run as a CPU SLURM job, never the login node). Ops: dare<p> = Bernoulli drop on B/A entries with per-(author,tensor) SHA-256 seeds, survivors /(1-p); topk<q> = keep top q rows of B by norm (per-task-local); hash = seeded global row permutation -> N disjoint blocks, author keeps its subset-position block (the [wd] rowslice preview). Compose via merge_subset._weighted_factor_cat, weights 1/N (dare/topk, additive_mean-matched) or 1.0 (hash, disjoint sum). Labels sparse_<op>_N<n>_s42; eval manifest = 4-col nmerge format (headline = the perm[0]=82 probe row). DX: --dx1 cancellation-vs-null at dx1.n_values (W3 headroom contract), --dx2 owned-row energy at the grid Ns. probe_authors is documentation — runtime derives probes from merge_subset.probe_authors(pool_seed) and cross-checks. Paths are repo-relative (checkpoints/ is the /storage2 symlink).",
+  "arm": "w5",
+  "model_name": "meta-llama/Llama-2-7B-chat-hf",
+  "pool_dir": "checkpoints/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4",
+  "out_dir": "checkpoints/Llama-2-7B-chat-hf_ctv_sparse",
+  "retain_tr_source": "checkpoints/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/smoke/retain_tr_scores.npy",
+  "ops": ["dare0p5", "dare0p9", "topk0p25", "hash", "dare0p9sum", "dare0p99sum"],
+  "n_ladder": [2, 4, 8, 16],
+  "pool_seed": 42,
+  "pool_size": 200,
+  "n_probes": 5,
+  "probe_authors": [82, 15, 111, 177, 76],
+  "dx1": {"n_values": [8, 32, 200], "null_draws": 5},
+  "eval": {"k": 200, "forget_shard_id": 199, "cap": "smoke"}
+}

@@ -1,0 +1,36 @@
+diff --git a/src/model/__init__.py b/src/model/__init__.py
+index bb73ebd..aa93b59 100644
+--- a/src/model/__init__.py
++++ b/src/model/__init__.py
+@@ -66,6 +66,23 @@ def get_model(model_cfg: DictConfig):
+         raise ValueError(
+             f"Error {e} while fetching model using {model_handler}.from_pretrained()."
+         )
++    # memadapt-eval branch fix: transformers >= 4.49 no longer upcasts
++    # output.logits to fp32 inside *ForCausalLM (the cast moved into the
++    # internal loss). The metric code assumes fp32-capable logits
++    # (.cpu().numpy() on bf16 raises "unsupported ScalarType BFloat16"), and
++    # the reference eval logs were generated under the old fp32-logits
++    # behavior — restoring the cast at the model boundary is required for
++    # both correctness and metric parity.
++    _orig_forward = model.forward
++
++    def _fp32_logits_forward(*args, **kwargs):
++        out = _orig_forward(*args, **kwargs)
++        logits = getattr(out, "logits", None)
++        if logits is not None and logits.dtype != torch.float32:
++            out.logits = logits.float()
++        return out
++
++    model.forward = _fp32_logits_forward
+     tokenizer = get_tokenizer(tokenizer_args)
+     return model, tokenizer
+ 
+@@ -114,3 +131,7 @@ _register_model(ProbedLlamaForCausalLM)
+ from model.memadapt_registry import MemAdaptLlamaForCausalLM  # noqa: E402
+ 
+ _register_model(MemAdaptLlamaForCausalLM)
++
++from model.sepmlp_registry import SepMlpLlamaForCausalLM  # noqa: E402
++
++_register_model(SepMlpLlamaForCausalLM)

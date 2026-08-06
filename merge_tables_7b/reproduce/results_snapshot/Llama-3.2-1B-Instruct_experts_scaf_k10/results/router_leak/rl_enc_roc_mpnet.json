@@ -1,0 +1,50 @@
+{
+  "npz": "/storage2/jack/checkpoints/tofu_sisa_lora/Llama-3.2-1B-Instruct_experts_scaf_k10/results/router_leak/rl_enc_mpnet.sims.npz",
+  "mode": "centroid",
+  "n_forget_eval": 200,
+  "n_retain_eval": 1800,
+  "detectors": {
+    "global_top1": {
+      "auc": 0.6215666666666667,
+      "tau": -0.6604308366775513,
+      "orphan_catch": 0.9,
+      "retain_fpr": 0.8244444444444444
+    },
+    "margin": {
+      "auc": 0.5562847222222222,
+      "tau": -0.023808425664901735,
+      "orphan_catch": 0.9,
+      "retain_fpr": 0.805
+    },
+    "knn_density": {
+      "auc": 0.6135583333333333,
+      "tau": -0.6511035919189453,
+      "orphan_catch": 0.9,
+      "retain_fpr": 0.8322222222222222
+    },
+    "per_expert": {
+      "auc": 0.6189222222222223,
+      "tau": -0.8727734845991957,
+      "orphan_catch": 0.9,
+      "retain_fpr": 0.8272222222222222
+    },
+    "tomb_expert": {
+      "auc": 0.7946861111111111,
+      "tau": -0.059994465112686156,
+      "orphan_catch": 0.9,
+      "retain_fpr": 0.6561111111111111
+    },
+    "tomb_author": {
+      "auc": 0.9797916666666666,
+      "tau": 0.14109466671943663,
+      "orphan_catch": 0.9,
+      "retain_fpr": 0.007222222222222222
+    },
+    "tomb_name": {
+      "auc": 0.9251138888888889,
+      "tau": -0.14002231657505035,
+      "orphan_catch": 0.9,
+      "retain_fpr": 0.20055555555555554
+    }
+  }
+}

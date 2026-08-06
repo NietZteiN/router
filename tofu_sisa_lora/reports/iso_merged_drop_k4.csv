@@ -1,0 +1,13 @@
+k,sid,condition,label,drop_rouge,drop_truth_ratio,model_utility,forget_quality,forget_rouge,forget_truth_ratio,retain_rouge,forget_ppl,retain_ppl
+4,0,isolated,shard_0_only,,,0.396,nan,0.523,0.6282,0.4284,3.06,8.75
+4,0,merged:merged_additive_s0.25,merged_additive_s0.25,0.05920000000000003,-0.06230000000000002,0.4496,nan,0.4638,0.6905,0.4519,5.16,4.88
+4,0,merged:merged_dare_ties,merged_dare_ties,0.06720000000000004,-0.09809999999999997,0.4425,nan,0.4558,0.7263,0.4552,7.47,6.93
+4,1,isolated,shard_1_only,,,0.4032,nan,0.5245,nan,0.4632,3.03,8.54
+4,1,merged:merged_additive_s0.25,merged_additive_s0.25,0.06669999999999998,nan,0.4569,nan,0.4578,nan,0.4794,5.25,4.88
+4,1,merged:merged_dare_ties,merged_dare_ties,0.08729999999999999,nan,0.4446,nan,0.4372,nan,0.475,7.95,7.0
+4,2,isolated,shard_2_only,,,0.4014,nan,0.4454,nan,0.444,2.97,9.22
+4,2,merged:merged_additive_s0.25,merged_additive_s0.25,0.03600000000000003,nan,0.4531,nan,0.4094,nan,0.4605,5.32,5.06
+4,2,merged:merged_dare_ties,merged_dare_ties,0.030600000000000016,nan,0.4365,nan,0.4148,nan,0.4561,7.49,7.5
+4,3,isolated,shard_3_only,,,0.4077,nan,0.5571,0.5424,0.4346,3.15,9.43
+4,3,merged:merged_additive_s0.25,merged_additive_s0.25,0.04280000000000006,-0.1382,0.4539,nan,0.5143,0.6806,0.4674,5.65,5.07
+4,3,merged:merged_dare_ties,merged_dare_ties,0.05020000000000002,-0.1915,0.4355,nan,0.5069,0.7339,0.4317,8.21,7.29

@@ -1,0 +1,10 @@
+{
+  "mode": "unlearn",
+  "tag": "forget10",
+  "T_after": 180,
+  "n_retain": 180,
+  "n_forgotten": 20,
+  "sift_retain_heldin": 0.9178,
+  "retain_maskless": 0.1416,
+  "forgotten_maskless_heldout": 0.1224
+}

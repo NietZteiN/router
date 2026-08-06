@@ -1,0 +1,80 @@
+{
+  "name": "ramole_tofu_1b_n32_k3_basepin",
+  "comment": "Base-pinned variant of ramole_tofu_1b.json for the 9-D routing audit: encoder_pin=base forces the OFF-THE-SHELF instructor-xl encoder (the encoder the 2026-06-27 fq-0.484 result used) instead of the FT retriever that rebuilt the stale index in place on 2026-06-29. build_expert_index caches base-pinned indices to _encbase files; the stale expert_index_n32.npy bytes are never touched.",
+  "base_model": "meta-llama/Llama-3.2-1B-Instruct",
+  "encoder_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "retriever_encoder": "hkunlp/instructor-xl",
+  "instruction": "Represent the sentence for similar task retrieval",
+  "n": 32,
+  "k": 3,
+  "route_on": "answer",
+  "balanced": false,
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.0,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ],
+    "use_rslora": false
+  },
+  "router": {
+    "rank": 16
+  },
+  "ramole_train": {
+    "epochs": 1,
+    "lr": 0.0001,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 256,
+    "dropout_p": 0.5,
+    "retain_authors": 180,
+    "weight_decay": 0.0,
+    "warmup_ratio": 0.03,
+    "max_grad_norm": 0.3
+  },
+  "retriever_train": {
+    "epochs": 2,
+    "lr": 2e-05,
+    "batch_size": 4
+  },
+  "train": {
+    "epochs": 6,
+    "lr": 0.0002,
+    "batch_size": 1,
+    "grad_accum": 8,
+    "max_length": 256
+  },
+  "base_seed": 42,
+  "kmeans_seed": 42,
+  "num_authors": 200,
+  "records_per_author": 20,
+  "forget_authors": [
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199
+  ],
+  "output_dir": "${TOFU_CKPT_ROOT}/Llama-3.2-1B-Instruct_legonet_n32_k3",
+  "hf_home": "${HF_HOME}",
+  "encoder_pin": "base"
+}

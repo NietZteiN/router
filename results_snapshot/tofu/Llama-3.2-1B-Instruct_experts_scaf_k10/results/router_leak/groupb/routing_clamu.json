@@ -1,0 +1,52 @@
+{
+  "method": "clamu",
+  "mode": "routing",
+  "unit_type": "cluster",
+  "n_units_surviving": 16,
+  "n_orphans": 400,
+  "orphan_dest_hist": {
+    "1": 66,
+    "2": 15,
+    "3": 20,
+    "4": 1,
+    "5": 23,
+    "6": 15,
+    "7": 40,
+    "9": 53,
+    "10": 49,
+    "11": 56,
+    "12": 4,
+    "14": 49,
+    "15": 9
+  },
+  "concentration": {
+    "n": 400,
+    "n_units": 16,
+    "max_share": 0.165,
+    "top3_share": 0.43750000000000006,
+    "entropy_norm": 0.8265534912612977,
+    "hhi": 0.113625,
+    "gini": 0.5050000000000001,
+    "n_eff": 8.800880088008801,
+    "busiest_unit": 1,
+    "hist": {
+      "1": 66,
+      "2": 15,
+      "3": 20,
+      "4": 1,
+      "5": 23,
+      "6": 15,
+      "7": 40,
+      "9": 53,
+      "10": 49,
+      "11": 56,
+      "12": 4,
+      "14": 49,
+      "15": 9
+    }
+  },
+  "orphan_misroute_rate": 1.0,
+  "confidence_auc": 0.58470625,
+  "tombstone_author_catch": 0.96,
+  "tombstone_author_fpr": 0.0
+}

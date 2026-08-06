@@ -1,0 +1,28 @@
+{
+  "method": "router",
+  "route": "retriever",
+  "condition": "iid",
+  "label": "router_unlearn_d1_before",
+  "aggregate": {
+    "em": 0.6349206349206349,
+    "es": 0.0,
+    "verbmem": 0.30952380952380953,
+    "perplexity": 6.753119969400369,
+    "canary_em": 0.0,
+    "canary_hit": 0.0,
+    "num_records": 1,
+    "k_eff": 3,
+    "num_groups": 1
+  },
+  "rows": [
+    {
+      "id": "rec_000001",
+      "em": 0.6349206349206349,
+      "es": 0.0,
+      "verbmem": 0.30952380952380953,
+      "perplexity": 6.753119969400369,
+      "canary_em": 0.0,
+      "canary_hit": 0.0
+    }
+  ]
+}

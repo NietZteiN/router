@@ -1,0 +1,28 @@
+{
+  "_note": "P2b pilot arm lr=3e-4, lambda_max=0.01 (one of 6; driver array 0-5%1). K=20 trained authors via authors_subset [0,20) on the FULL 200-block transcoder (topology must match runs/phase0_s42 - tc_sha-pinned; untrained blocks ride along with seeded rows and are suppressed on generic batches only). bs32 is the DESIGN default; if the smoke peak-mem says no, fall back to batch_size 16 / grad_accum 2 - the suppression term is ga-invariant in compute_loss. Gate G2 reads selectivity_pilot.json against LAZY<2 / SELECTIVE>=5 and own-prob >=0.80.",
+  "model": "meta-llama/Llama-3.2-1B-Instruct",
+  "insert_layer": 9,
+  "span": 3,
+  "m_author": 32,
+  "m_shared": 128,
+  "n_authors": 200,
+  "authors_subset": [
+    0,
+    20
+  ],
+  "seed": 42,
+  "max_length": 512,
+  "batch_size": 32,
+  "grad_accum": 1,
+  "epochs": 15,
+  "lr": 0.0003,
+  "lambda_max": 0.01,
+  "lambda_warmup_frac": 0.15,
+  "clip_norm": 1.0,
+  "detector_init": "questions",
+  "init_scale": 1.0,
+  "alpaca_n": 2000,
+  "phase": "phase1",
+  "phase0_checkpoint": "${TOFU_CKPT_STORE}/blocktc_tofu/runs/phase0_s42/blocktc.pt",
+  "run_name": "pilot_lr3e-4_lam0.01_s42"
+}
