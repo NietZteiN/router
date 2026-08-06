@@ -26,6 +26,7 @@ UPSTREAMS=(
 )
 
 rc=0
+OU_PIN_UNREACHABLE=0
 for entry in "${UPSTREAMS[@]}"; do
   IFS='|' read -r name url pin why <<< "${entry}"
   dest="${REPO_ROOT}/${name}"
@@ -50,10 +51,22 @@ for entry in "${UPSTREAMS[@]}"; do
   fi
   echo "==> ${name}: checking out ${pin:0:7}"
   git -C "${dest}" fetch --quiet origin 2>/dev/null
-  git -C "${dest}" checkout --quiet "${pin}" 2>/dev/null || {
-    echo "    checkout FAILED — the pinned commit is not in this clone (force-push upstream?)" >&2
-    rc=1; continue
-  }
+  if ! git -C "${dest}" checkout --quiet "${pin}" 2>/dev/null; then
+    # Distinguish "our clone is stale" from "the remote has never heard of this commit". Only
+    # the first is fixable by fetching; the second means the pin names an object that is not on
+    # the remote at all — a fork-local commit that was never pushed. Saying so is the difference
+    # between a user retrying and a user knowing the pin is unrecoverable from here.
+    if git -C "${dest}" fetch --quiet origin "${pin}" 2>/dev/null &&
+       git -C "${dest}" checkout --quiet "${pin}" 2>/dev/null; then
+      : # it was just missing locally
+    else
+      echo "    checkout FAILED — ${pin:0:7} is NOT ON THE REMOTE (${url})." >&2
+      echo "    The remote answers 'not our ref', so this is a fork-local commit that was never" >&2
+      echo "    pushed, not a stale clone. Nothing in this repo can reconstruct it." >&2
+      [ "${name}" = open-unlearning ] && OU_PIN_UNREACHABLE=1
+      rc=1; continue
+    fi
+  fi
 done
 
 [ "${MODE}" = check ] && exit "${rc}"
@@ -64,7 +77,16 @@ done
 # `--model SepMlp-Llama-3.2-1B` raises a registry KeyError and the whole OU track is unrunnable.
 OU="${REPO_ROOT}/open-unlearning"
 P="${REPO_ROOT}/ou_integration/patches"
-if [ -d "${OU}/.git" ] && [ -d "${P}" ]; then
+if [ "${OU_PIN_UNREACHABLE}" = 1 ]; then
+  # The patch context assumes the fork (its second hunk anchors on the fork-only
+  # `from model.memadapt_registry import …` lines). Installing sepmlp_registry.py and the config
+  # into an upstream-main checkout would leave a half-patched tree that LOOKS integrated and
+  # fails later, inside an eval. Refuse, and say what is missing.
+  echo "==> SKIPPING ou_integration patches — open-unlearning is not at its pinned commit." >&2
+  echo "    ${P}/model__init__.diff expects the fork's src/model/__init__.py (memadapt registry)," >&2
+  echo "    which upstream main does not have. The OU eval track (the Table-1 Agg/Priv rows) is" >&2
+  echo "    NOT reproducible from this repo until that fork commit is recovered. See STATUS.md." >&2
+elif [ -d "${OU}/.git" ] && [ -d "${P}" ]; then
   echo "==> applying ou_integration patches"
   install -m 644 "${P}/sepmlp_registry.py"           "${OU}/src/model/sepmlp_registry.py"
   install -m 644 "${P}/SepMlp-Llama-3.2-1B.yaml"     "${OU}/configs/model/SepMlp-Llama-3.2-1B.yaml"

@@ -1,16 +1,23 @@
 # PORTING — moving this tree to another cluster
 
-Porting is **one file**. Everything cluster-specific lives in `cluster_env.<site>.sh`; nothing
-else in the repo names a machine, a filesystem, or an interpreter.
+Porting is **one file per site-file tree**. Everything cluster-specific lives in
+`cluster_env.<site>.sh`; nothing else in the repo names a machine, a filesystem, or an interpreter.
 
 That was not true before the export. This document records what had to change, so that the next
 port is a copy of one file rather than a re-derivation.
 
 ## 1. Write your site file
 
+Three directories carry their own `cluster_env.sh`, and each resolves site files **next to
+itself** — the repo root, `tofu_sisa_lora/` and `apa_uniform_sum/`. A site that exists in one but
+not the others fails at the site-file check for every driver under the directory that is missing
+it, which is what `TOFU_SITE=local` did under `tofu_sisa_lora/` until 2026-08-06.
+
 ```bash
-cp cluster_env.local.sh cluster_env.mysite.sh
-$EDITOR cluster_env.mysite.sh
+for d in . tofu_sisa_lora apa_uniform_sum; do
+  cp "$d/cluster_env.local.sh" "$d/cluster_env.mysite.sh"
+done
+$EDITOR ./cluster_env.mysite.sh tofu_sisa_lora/cluster_env.mysite.sh apa_uniform_sum/cluster_env.mysite.sh
 export TOFU_SITE=mysite
 ```
 

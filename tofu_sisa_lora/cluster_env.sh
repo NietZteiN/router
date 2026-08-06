@@ -33,6 +33,13 @@ source "${_TOFU_SITE_FILE}"
 export TOFU_PYTHON="${TOFU_PYTHON:?cluster_env.${TOFU_SITE}.sh must set TOFU_PYTHON}"
 export HF_HOME="${HF_HOME:?cluster_env.${TOFU_SITE}.sh must set HF_HOME}"
 export TOFU_CKPT_ROOT="${TOFU_CKPT_ROOT:?cluster_env.${TOFU_SITE}.sh must set TOFU_CKPT_ROOT}"
+# Derived, not duplicated — the same three lines the repo-root cluster_env.sh carries. Drivers
+# here reach SIBLING projects' stores through TOFU_CKPT_STORE (submit_router_family.sh:33 wants
+# "${TOFU_CKPT_STORE}/ramole"); without these it expanded to empty and `mkdir -p /ramole` ran
+# against the filesystem root.
+export TOFU_CKPT_STORE="${TOFU_CKPT_STORE:-$(dirname "${TOFU_CKPT_ROOT}")}"
+export TOFU_STORAGE_ROOT="${TOFU_STORAGE_ROOT:-$(dirname "${TOFU_CKPT_STORE}")}"
+export TOFU_DATA_ROOT="${TOFU_DATA_ROOT:-${TOFU_STORAGE_ROOT}/data}"
 export TOFU_PARTITION="${TOFU_PARTITION:?cluster_env.${TOFU_SITE}.sh must set TOFU_PARTITION}"
 export TOFU_ACCOUNT="${TOFU_ACCOUNT:-}"                 # empty = do not emit --account
 export TOFU_EXCLUDE="${TOFU_EXCLUDE:-}"                 # empty = do not emit --exclude

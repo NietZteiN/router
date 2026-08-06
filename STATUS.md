@@ -46,6 +46,21 @@ run: `memsinks_tofu/test_memsinks.py` (hashes MemSinks' `src/src/SeqTDModel.py` 
 and three `memadapt_tofu/tests/test_data.py` cases (tokenizer parity against open-unlearning).
 Both pass when pointed at an existing clone via `MEMSINKS_UPSTREAM_DIR` / `OU_DIR`.
 
+**The open-unlearning pin is unreachable (found 2026-08-06).** `fetch_upstream.sh` pins
+`93e9cd5d8808bb43641d133b38bb34466f9aae2e`, but `locuslab/open-unlearning` answers *"upload-pack:
+not our ref"* for it: it is a fork-local commit that was never pushed, not a stale clone. S3T and
+MemSinks check out at their pins normally. Consequences, in order of severity:
+
+* `ou_integration/patches/model__init__.diff` cannot apply — its second hunk anchors on the
+  fork-only `from model.memadapt_registry import …` lines, which upstream main does not have.
+  `fetch_upstream.sh` now **skips the patch step entirely** rather than installing
+  `sepmlp_registry.py` into an upstream tree and leaving something that looks integrated.
+* **The OU eval track — the Table-1 `Agg`/`Priv` rows of sepmlp / blocktc / memadapt — is not
+  reproducible from this repo** until that fork commit is recovered. This belongs with GRAM /
+  NULL / SGTM in "Known gaps" below, not with the by-design failures above.
+* The three `memadapt_tofu/tests/test_data.py` tokenizer-parity cases still pass against an
+  upstream-main clone; they do not depend on the fork's contents.
+
 ## Verifiable offline — no GPU, no `/storage2`, no HF token
 
 [`results_snapshot/`](results_snapshot/) carries 476 result files (42 MB) from the pools the paper
@@ -85,6 +100,10 @@ Everything that *produces* rather than *analyses*. The adapter pools are 674 GB 
 reachable once `fetch_upstream.sh` has cloned the fork. **GRAM, NULL and SGTM were run outside
 this tree and have no implementation here** — those three rows cannot be reproduced from this repo
 as it stands.
+
+**The OU eval track.** NPO / SimNPO / RMU and the Table-1 `Agg`/`Priv` rows need the
+open-unlearning fork at `93e9cd5`, which is not on the remote — see "Gate results at export"
+above. Everything else in the routing and merging tree is independent of it.
 
 **MUSE.** Appendix C's MUSE-News results are not reproducible here either: the benchmark, its
 Llama-2-7B fine-tuned/retrained targets, and any MUSE loader are all absent. TOFU is fully covered.
