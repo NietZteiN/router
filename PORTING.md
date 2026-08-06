@@ -77,12 +77,18 @@ gates fail *by design*: `memsinks_tofu/test_memsinks.py` (hashes MemSinks'
 (compare against OU's tokenizer). Override the location with `MEMSINKS_UPSTREAM_DIR`, `OU_DIR`,
 `S3T_UPSTREAM_DIR` if you already have clones elsewhere.
 
-## 4. The GPU cap is enforced, not documented
+## 4. Concurrency belongs to the site file
 
-`CLAUDE.md` §1 sets a **global** ceiling of 4 concurrent GPUs summed across every queued job.
-`cluster_env.sh` clamps `TOFU_ARRAY_CAP` to it and says so on stderr; each project's
-`slurm_nodes.sh` derives its `%N` array throttle from that value. Raising it is a deliberate edit
-to `TOFU_GPU_CAP_CEILING`, not an accident in a site file.
+`TOFU_ARRAY_CAP` is the `%N` array throttle every project's `slurm_nodes.sh` derives its
+concurrency from, and it is a **site** setting: sprint 4, cispa 6, local 1. Set it to whatever
+your scheduler's association actually allows.
+
+`TOFU_GPU_CAP_CEILING` is an optional hard ceiling clamped over that, reported on stderr when it
+bites. It is unset by default. Until 2026-08-06 it defaulted to 4 for every site — the sprint
+cluster's own courtesy rule (`~/CLAUDE.md` §1), applied globally, which meant a site file that
+knew its cluster's real limits was silently overruled: CISPA allows `gres/gpu=16` per user with
+`MaxJobs=6`, and its cap of 6 was being cut to 4. Set the ceiling if you want the belt; the
+scheduler's limits hold either way.
 
 ## 5. The contract this repo maintains — and what it cost
 

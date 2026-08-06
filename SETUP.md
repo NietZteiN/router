@@ -104,6 +104,10 @@ bash tofu_sisa_lora/submit_router_leak.sh
 python tofu_sisa_lora/analyze_router_family.py --help
 ```
 
-**The 4-GPU global cap is enforced** by `cluster_env.sh`, summed across every queued job, not per
-job. Check `squeue -u $USER -o "%.10i %.20j %.10T %.10b %F"` before submitting, and chain with
-`DEP=afterany:<jobid>` rather than over-submitting.
+**Concurrency is your site file's call.** `TOFU_ARRAY_CAP` sets the `%N` array throttle and comes
+from `cluster_env.<site>.sh` — sprint 4, cispa 6, local 1. Set `TOFU_GPU_CAP_CEILING` if you want
+a hard ceiling clamped over it; unset (the default) means the site's number stands. Until
+2026-08-06 a ceiling of 4 was hardcoded for every site, which is a sprint-cluster courtesy rule
+and not a scheduler limit — it was cutting CISPA's cap of 6 for no reason. Your scheduler's own
+association limits apply regardless. Check `squeue -u $USER -o "%.10i %.20j %.10T %.10b %F"`
+before submitting, and chain with `DEP=afterany:<jobid>` rather than over-submitting.

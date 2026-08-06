@@ -55,18 +55,26 @@ export TOFU_CPUS_PER_TASK="${TOFU_CPUS_PER_TASK:-4}"
 # "Memory specification can not be satisfied" — it must be dropped, not lowered.
 export TOFU_SUPPORTS_MEM="${TOFU_SUPPORTS_MEM:-1}"
 
-# ── GPU concurrency ceiling — the same clamp the repo-root cluster_env.sh applies ─────────────
-# It has to be HERE too, not only at the root: this project's drivers source this file, so a
-# ceiling that exists only at the root is not enforced for anything that actually submits.
-export TOFU_GPU_CAP_CEILING="${TOFU_GPU_CAP_CEILING:-4}"
-_req_cap="${TOFU_ARRAY_CAP:-${TOFU_GPU_CAP_CEILING}}"
-if [ "${_req_cap}" -gt "${TOFU_GPU_CAP_CEILING}" ] 2>/dev/null; then
-  echo "cluster_env: TOFU_ARRAY_CAP=${_req_cap} exceeds the ${TOFU_GPU_CAP_CEILING}-GPU global" \
-       "cap (CLAUDE.md §1) — clamping to ${TOFU_GPU_CAP_CEILING}." >&2
-  _req_cap="${TOFU_GPU_CAP_CEILING}"
+# ── GPU concurrency ceiling — OPT-IN since 2026-08-06 ────────────────────────────────────────
+# This used to hardcode a global ceiling of 4 concurrent GPUs, carried over from ~/CLAUDE.md §1
+# on the sprint cluster. That was a courtesy rule for a shared lab machine, not a limit any
+# scheduler imposes, and it silently overrode site files that knew better: CISPA's association
+# allows gres/gpu=16 per user with MaxJobs=6, so the site's own cap of 6 was being cut to 4 for
+# no reason. The real limits are enforced by SLURM whether or not this file agrees.
+#
+# The mechanism stays, unset by default: a site (or a run) that wants a hard ceiling sets
+# TOFU_GPU_CAP_CEILING and gets the same clamp-and-report behaviour. cluster_env.sprint.sh sets
+# it to 4, preserving that cluster's policy exactly.
+if [ -n "${TOFU_GPU_CAP_CEILING:-}" ]; then
+  _req_cap="${TOFU_ARRAY_CAP:-${TOFU_GPU_CAP_CEILING}}"
+  if [ "${_req_cap}" -gt "${TOFU_GPU_CAP_CEILING}" ] 2>/dev/null; then
+    echo "cluster_env: TOFU_ARRAY_CAP=${_req_cap} exceeds the TOFU_GPU_CAP_CEILING=${TOFU_GPU_CAP_CEILING}" \
+         "you set — clamping to ${TOFU_GPU_CAP_CEILING}." >&2
+    _req_cap="${TOFU_GPU_CAP_CEILING}"
+  fi
+  export TOFU_ARRAY_CAP="${_req_cap}"
+  unset _req_cap
 fi
-export TOFU_ARRAY_CAP="${_req_cap}"
-unset _req_cap
 
 # Emit the #SBATCH resource block for one task.
 #   tofu_sbatch_resources [gpus|0|-] [cpus] [mem]

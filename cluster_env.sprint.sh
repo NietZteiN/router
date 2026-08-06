@@ -24,6 +24,11 @@ export TOFU_SUPPORTS_MEM="${TOFU_SUPPORTS_MEM:-1}"
 # every simultaneously-queued array must SUM to <= 4 — this is not a per-array limit.
 export TOFU_ARRAY_CAP="${TOFU_ARRAY_CAP:-4}"
 
+# The sprint policy: a GLOBAL ceiling of 4 concurrent GPUs summed across every queued job
+# (~/CLAUDE.md §1 — a courtesy rule for that shared lab machine, not a scheduler limit). It used
+# to be hardcoded in cluster_env.sh for every site; it belongs here, with the cluster it describes.
+export TOFU_GPU_CAP_CEILING="${TOFU_GPU_CAP_CEILING:-4}"
+
 export TOFU_SMOKE_TIME="${TOFU_SMOKE_TIME:-00:55:00}"
 export TOFU_EXTENDED_TIME="${TOFU_EXTENDED_TIME:-02:30:00}"
 export TOFU_EXTENDED_TIME_3B="${TOFU_EXTENDED_TIME_3B:-03:30:00}"

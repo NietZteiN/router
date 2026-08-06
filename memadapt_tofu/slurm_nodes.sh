@@ -9,8 +9,9 @@
 
 # ── Site layer (added on export) ────────────────────────────────────────────────
 # WAS: `sprint4` and a literal cap of 4, both hardcoded. Those are sprint-cluster facts,
-# not repo facts, so they now come from the repo-root cluster_env.<site>.sh. The GLOBAL
-# 4-GPU ceiling (CLAUDE.md §1) is still enforced — cluster_env.sh clamps it centrally.
+# not repo facts, so they now come from the repo-root cluster_env.<site>.sh — including the
+# concurrency cap, which is per-site (sprint 4, cispa 6). An optional hard ceiling over it is
+# available as TOFU_GPU_CAP_CEILING; it is unset unless a site asks for it (2026-08-06).
 _SITE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # shellcheck source=../cluster_env.sh
 source "${_SITE_DIR}/cluster_env.sh"
