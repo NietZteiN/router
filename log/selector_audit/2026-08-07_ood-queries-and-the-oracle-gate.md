@@ -92,6 +92,13 @@ source — and the guess that they might map to every unit equally and degrade a
     quality. The k=10 number (0.556 vs 0.474) prices it at coarse granularity; the k=200 price
     needs generation.
 
-- **Next Steps:** check whether the OOD magnet and the orphan magnet coincide (CPU, immediate).
-  Price the un-gated k=200 arm by running `eval_routed_scaffold` without the oracle OOD gate —
-  that is a real experiment and needs a flag that does not exist yet.
+- **Next Steps:** the magnet question is answered above. The un-gated arm is now submitted:
+  `--ood_gate {oracle,route}` on `eval_routed_scaffold` plus `submit_ood_gate.sh`, job **3192091**,
+  two arms identical but for the gate. Expect the damage in `model_utility`'s real_authors and
+  world_facts components.
+
+  *Process note:* the first attempt at this arm was a scratchpad `sbatch` heredoc, which expanded
+  `tofu_sbatch_resources` in a shell that had not sourced the site layer — so it went to the
+  scheduler with **no partition and no `--gres`**. Cancelled and rewritten as a driver that
+  sources `slurm_nodes.sh` like every other one. The repo's driver convention exists precisely to
+  make that failure impossible, and going around it produced the failure immediately.

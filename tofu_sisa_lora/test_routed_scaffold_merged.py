@@ -67,7 +67,8 @@ class StubTokenizer:
         return self.texts[int(ids.reshape(-1)[0])]
 
 
-def make_fixture(merged_adapter=None, delete_shard=None, reroute_to=None, k=10):
+def make_fixture(merged_adapter=None, delete_shard=None, reroute_to=None, k=10,
+                 ood_route=None):
     q_retain = "Who is Author A?"      # author 45 -> shard 2
     q_forget = "Who is Author Z?"      # author 185 -> shard 9 (forget shard)
     q_ood = "What is the capital of France?"  # not in q2author
@@ -79,7 +80,7 @@ def make_fixture(merged_adapter=None, delete_shard=None, reroute_to=None, k=10):
     tok = StubTokenizer(texts)
     routed = OODAwareRoutedModel(model, tok, q2author, k=k,
                                  delete_shard=delete_shard, merged_adapter=merged_adapter,
-                                 reroute_to=reroute_to)
+                                 reroute_to=reroute_to, ood_route=ood_route)
     ids = lambda i: torch.tensor([[i] + [0] * (SEQ_LEN - 1)])
     return routed, model, ids
 
@@ -90,7 +91,7 @@ def test_legacy_routing_unchanged():
     assert model.calls[-1] == ("set", "shard_2"), model.calls
     routed(ids(2), labels=ids(2))                       # OOD -> disabled
     assert model.calls[-1] == ("disable", None), model.calls
-    assert routed.stats == {"routed": 1, "ood": 1, "deleted": 0, "rerouted": 0}, routed.stats
+    assert routed.stats == {"routed": 1, "ood": 1, "deleted": 0, "rerouted": 0, "ood_routed": 0}, routed.stats
 
 
 def test_legacy_delete_shard_unchanged():
@@ -124,7 +125,7 @@ def test_reroute_serves_a_survivor_and_drops_nothing():
     assert model.calls[-1] == ("set", "shard_2"), model.calls
     routed(ids(2), labels=ids(2))                       # OOD still scaffold-only
     assert model.calls[-1] == ("disable", None), model.calls
-    assert routed.stats == {"routed": 1, "ood": 1, "deleted": 0, "rerouted": 1}, routed.stats
+    assert routed.stats == {"routed": 1, "ood": 1, "deleted": 0, "rerouted": 1, "ood_routed": 0}, routed.stats
     # generate() takes the same path — an eval that only checked forward would miss a
     # divergence here, and forget_rouge is computed from generations
     routed.generate(ids(1))
@@ -145,6 +146,31 @@ def test_reroute_rejects_incoherent_targets():
         raise AssertionError(f"reroute config accepted but should raise: {why} ({kw})")
 
 
+def test_ungated_ood_routes_instead_of_abstaining():
+    """The q2author lookup deciding "is this about one of my sources" is an ORACLE.
+
+    Default (`ood_route=None`) is unchanged: a miss serves base+scaffold, which is what every
+    published number assumes. With a fallback router the miss is handed to a surviving expert
+    instead — what happens when nobody tells the system the query is out of domain. Source
+    routing is untouched either way, so the delta prices this oracle alone.
+    """
+    routed, model, ids = make_fixture(ood_route=lambda q: 5)
+    routed(ids(2), labels=ids(2))                       # OOD -> shard_5, NOT disabled
+    assert model.calls[-1] == ("set", "shard_5"), model.calls
+    routed(ids(0), labels=ids(0))                       # in-domain routing unchanged
+    assert model.calls[-1] == ("set", "shard_2"), model.calls
+    assert routed.stats["ood"] == 1 and routed.stats["ood_routed"] == 1, routed.stats
+    # generate() takes the same path
+    routed.generate(ids(2))
+    assert model.calls[-1] == ("set", "shard_5"), model.calls
+
+    # default still abstains
+    gated, gmodel, gids = make_fixture()
+    gated(gids(2), labels=gids(2))
+    assert gmodel.calls[-1] == ("disable", None), gmodel.calls
+    assert gated.stats["ood_routed"] == 0
+
+
 def test_merged_serves_all_authors():
     routed, model, ids = make_fixture(merged_adapter="remerge_additive_mean")
     routed(ids(0), labels=ids(0))                       # retain author -> merged adapter
@@ -153,7 +179,7 @@ def test_merged_serves_all_authors():
     assert model.calls[-1] == ("set", "remerge_additive_mean"), model.calls
     routed(ids(2), labels=ids(2))                       # OOD -> scaffold-only, never the merge
     assert model.calls[-1] == ("disable", None), model.calls
-    assert routed.stats == {"routed": 2, "ood": 1, "deleted": 0, "rerouted": 0}, routed.stats
+    assert routed.stats == {"routed": 2, "ood": 1, "deleted": 0, "rerouted": 0, "ood_routed": 0}, routed.stats
 
 
 def test_merged_generate_and_batch():
@@ -184,7 +210,8 @@ if __name__ == "__main__":
     test_multi_unit_delete_set()
     test_reroute_serves_a_survivor_and_drops_nothing()
     test_reroute_rejects_incoherent_targets()
+    test_ungated_ood_routes_instead_of_abstaining()
     test_merged_serves_all_authors()
     test_merged_generate_and_batch()
     test_merged_plus_delete_raises()
-    print("test_routed_scaffold_merged: ALL GREEN (8/8)")
+    print("test_routed_scaffold_merged: ALL GREEN (9/9)")

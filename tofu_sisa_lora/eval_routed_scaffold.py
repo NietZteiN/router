@@ -99,7 +99,7 @@ class OODAwareRoutedModel(nn.Module):
     """
 
     def __init__(self, model, tokenizer, q2author, k, num_authors=200, delete_shard=None,
-                 merged_adapter=None, reroute_to=None):
+                 merged_adapter=None, reroute_to=None, ood_route=None):
         """`delete_shard` accepts an int (legacy) or an iterable of shard ids — a per-author pool
         needs to delete twenty units to express TOFU's forget10.
 
@@ -132,8 +132,11 @@ class OODAwareRoutedModel(nn.Module):
                 raise ValueError(f"reroute_to={reroute_to} out of range [0,{k})")
             reroute_to = int(reroute_to)
         self.reroute_to = reroute_to
+        # ood_route: q_text -> surviving unit id, used ONLY when q2author misses. None keeps the
+        # oracle gate (OOD serves base+scaffold), which is what every published number assumes.
+        self.ood_route = ood_route
         self.merged_adapter = merged_adapter
-        self.stats = {"routed": 0, "ood": 0, "deleted": 0, "rerouted": 0}
+        self.stats = {"routed": 0, "ood": 0, "deleted": 0, "rerouted": 0, "ood_routed": 0}
 
     @property
     def config(self):
@@ -144,10 +147,20 @@ class OODAwareRoutedModel(nn.Module):
 
     def _shard_for(self, ids_1d):
         q = self.tokenizer.decode(ids_1d, skip_special_tokens=True)
-        author = self.q2author.get(_norm(_extract_question(q)))
+        q_raw = _extract_question(q)
+        author = self.q2author.get(_norm(q_raw))
         if author is None:
             self.stats["ood"] += 1
-            return None
+            if self.ood_route is None:
+                return None
+            # UNGATED: the q2author lookup that decides "is this about one of my sources" is an
+            # ORACLE no deployment has. With --ood_gate route, a general-knowledge query is
+            # handed to whichever surviving expert the real router picks — which is what happens
+            # when the gate is absent. Source routing stays oracle-exact, so the delta against
+            # the gated arm prices THIS oracle alone.
+            sid = int(self.ood_route(q_raw))
+            self.stats["ood_routed"] += 1
+            return sid
         sid = author // self.per_shard
         if sid in self.delete_shards:
             if self.reroute_to is not None:
@@ -302,6 +315,12 @@ def main():
                          "queries to this fixed SURVIVING expert instead of to base+scaffold. The "
                          "arm exists to ask whether TOFU's forget metric can distinguish 'the "
                          "source is gone' from 'a stranger answers for it'. Requires a delete set.")
+    ap.add_argument("--ood_gate", default="oracle", choices=["oracle", "route"],
+                    help="`oracle` (default, unchanged): a q2author miss serves base+scaffold — "
+                         "i.e. the system is TOLD which queries are out of domain. `route`: the "
+                         "miss is handed to the nearest surviving centroid instead, which is what "
+                         "happens without that oracle. Source routing stays exact either way, so "
+                         "the delta prices the OOD oracle alone.")
     ap.add_argument("--forget_author_ids", default=None,
                     help="Explicit forget authors for the METRICS, e.g. '180-199' (see "
                          "eval_tofu.split_eval_indices). At k=200 --forget_shard_id scores one "
@@ -397,9 +416,30 @@ def main():
                                       delete_shard=args.delete_shard, policy=args.embed_route,
                                       author_sentinels=author_sents, tombstone_tau=args.tombstone_tau)
     else:
+        ood_route = None
+        if args.ood_gate == "route":
+            if merged_name is not None:
+                raise SystemExit("--ood_gate route is a routing arm; --merged_label serves one "
+                                 "merged adapter and has no per-query destination")
+            cents_o, sids_o, embed_o = build_shard_centroids(
+                args.hf_home, args.k, list(range(args.k)),
+                "cuda" if torch.cuda.is_available() else "cpu",
+                encoder_name=args.router_encoder)
+            # the OOD fallback must only reach SURVIVING units — routing a stranger onto a
+            # deleted expert would resurrect it
+            drop = set()
+            if delete_arg is not None:
+                drop = {int(delete_arg)} if isinstance(delete_arg, int) else {
+                    int(x) for x in delete_arg}
+            keep = [i for i, sd in enumerate(sids_o) if sd not in drop]
+            cents_o, sids_o = cents_o[keep], [sids_o[i] for i in keep]
+
+            def ood_route(q_raw, _c=cents_o, _s=sids_o, _e=embed_o):
+                return _s[int(np.argmax(_c @ _e([q_raw])[0]))]
+
         eval_model = OODAwareRoutedModel(model, tokenizer, q2author, args.k,
                                          delete_shard=delete_arg, merged_adapter=merged_name,
-                                         reroute_to=args.reroute_to)
+                                         reroute_to=args.reroute_to, ood_route=ood_route)
 
     results_sub = "smoke" if args.smoke else ("extended" if args.extended else "")
     retain_tr_path = os.path.join(args.shards_dir, "results", results_sub, "retain_tr_scores.npy")
@@ -416,6 +456,8 @@ def main():
                      else f"embedrouted_{args.embed_route}_del{args.delete_shard}")
     elif args.merged_label:
         run_label = f"scafmerged_{args.merged_label}"
+    elif args.ood_gate == "route":
+        run_label = "routed_oracle_ungated_ood"
     elif args.reroute_to is not None:
         run_label = f"routed_reroute_s{args.reroute_to}"
     elif delete_set is not None:
