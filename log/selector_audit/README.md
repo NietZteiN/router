@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 7 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 8 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -95,6 +95,12 @@ re-measuring.
 - **TOFU's paraphrases keep the author's name** (coverage 0.900 vs 0.895), so the obvious
   "paraphrase robustness" experiment reports a near-null on this benchmark and means nothing.
   Name-stripping is the probe that bites.
+- **My route audit destroyed the arm it audited.** It compared a forward-pass counter (630) to a
+  question count (400) — wrong, because one question is forwarded several times per eval — and it
+  raised *before* `json.dump`, discarding 1h15m of computed metrics. Now audits the distinct
+  AUTHORS on each path, and writes the artifact before failing
+  ([defect](2026-08-07_route-audit-ate-its-own-arm.md)). An audit that destroys the artifact it
+  audits is worse than no audit.
 - **`_lora_b_norm` returned 0.0 for every non-resident adapter under the lazy cache** — it
   filtered on `lora_B` membership before activating, so zero hooks registered and
   `ActivationRouter.route` collapsed onto the resident shard. Caught by the audit's own
@@ -131,6 +137,7 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-07 — DEFECT: the route audit ate its own arm](2026-08-07_route-audit-ate-its-own-arm.md) — pass counters are not question counts; write before you raise.
 - [2026-08-07 — queries that belong to no source, and the OOD gate that is an oracle](2026-08-07_ood-queries-and-the-oracle-gate.md) — strangers are flat and detectable; one nameless author absorbs 68% of them.
 - [2026-08-07 — DEFECT: the lazy cache zeroed the serving norm](2026-08-07_lazy-cache-broke-the-serving-norm.md) — non-resident adapters scored 0.0; caught by self_check, fixed, arms resubmitted.
 - [2026-08-07 — H3 RESTATED: the granularity ladder is a lexical artifact](2026-08-07_h3-is-a-lexical-artifact.md) — strip the name and 0.991 → 0.623; `key_exact` hijacked 97.7% by one injected name.
