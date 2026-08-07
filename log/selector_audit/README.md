@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 3 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 4 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -38,10 +38,20 @@ re-measuring.
   3191702 ([correction](2026-08-07_h7-correction-feature-space-is-pool-independent.md)).
 - **[open]** H4 (E5): a reroute-only "method" that deletes nothing scores competitively on TOFU
   forget/utility/privacy. CONFIRM: forget_quality inside the published band.
-- **[open]** H5 (CSAR): cross-source attribution becomes common at per-author granularity.
-  CONFIRM: CSAR ≥ 0.20 at k=200. REFUTE: < 0.10.
+- **[resolved ✓ supported, PROVISIONAL]** H5 (CSAR): cross-source attribution becomes common at
+  per-author granularity — **CSAR 0.460** on both strategies against a 0.20 bar, and **refusal
+  0.000** across all 200 orphan answers ([csar pilot](2026-08-07_csar-pilot-h5.md)). Provisional
+  until the pre-registered ~300 hand labels are made; no CSAR goes in the paper before that.
+- **[open]** H8: CSAR is independent of destination concentration — `key_tfidf` funnels 42/100
+  orphans onto one survivor while `centroid_sbert` spreads over 37, and both give 0.460. One
+  observation, not a result.
 
 ## What worked
+- **The metric change matters more than the granularity change, and both are measurable on one
+  artifact.** ROUGE-L moves 0.181 → 0.317/0.381 across the k-jump, which would still read as
+  "mostly confabulation"; but of the answers ROUGE *still* files as confabulation at k=200, CSAR
+  finds cross-source attribution in **36/75** and **39/69**. Half the "no leak here" bucket is a
+  stranger's facts asserted about the deleted person — §4.10's claim, measured rather than argued.
 - `analyze_router_probe.py` reproduces `rl_family_leak_table.md`'s best-confidence AUC on **all 12
   comparable cells** (k=10 d9 ×9 strategies, k=200 forget10 ×3) — the reader is faithful before any
   new number is read off it.
@@ -65,6 +75,9 @@ re-measuring.
 - The probe's own headline is real but redundant with a threshold. Reported as such.
 
 ## Open ideas / next steps
+- Hand-label the 300 staged records before quoting any CSAR. The precision question they settle:
+  unarguable identity hits (`constance garnett award`, `aleksey ivanov`) versus rare attributes
+  (one row fired on `flight attendant`). Not to be settled by tuning `max_adf` after the fact.
 - The ladder has exactly **three** 7B rungs offline — k = 10, 50, 200 (`rl_family_*.npz` exist for
   no other k). A fourth would need the pool retrained: the 7B k=10 and k=50 dirs hold `results/`
   but **no shard weights**.
@@ -78,3 +91,4 @@ re-measuring.
 - [2026-08-07 — E1 router probe + E5/CSAR pre-registration](2026-08-07_e1-router-probe-and-preregistration.md) — probe fires (0.990) but adds +0.001 over confidence; the real axis is granularity.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
+- [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
