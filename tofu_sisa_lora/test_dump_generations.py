@@ -104,6 +104,26 @@ def test_generation_is_lazy_and_records_text():
     print("  [ok] lazy generation, whole deleted set excluded, raw text recorded")
 
 
+def test_random_control_strategy():
+    """`random` is the H17 control: a uniformly random SURVIVING unit, no router.
+
+    If CSAR under a random destination matches a real router's, cross-source attribution does not
+    depend on routing quality — any activated expert asserts its own facts — and the harm cannot
+    be engineered away by improving the selector. The control is only meaningful if it (a) never
+    lands on a deleted unit and (b) is seeded, so the arm is reproducible.
+    """
+    src = inspect.getsource(D.run_per_strategy)
+    assert 'if strat == "random"' in src, "the random control is not built"
+    assert "routers[strat] = None" in src, "random must bypass _build_routed_model"
+    assert "survivors[int(rng_rand.randint(len(survivors)))]" in src, "not drawn from survivors"
+    assert "rng_rand = np.random.RandomState(args.seed)" in src, "the control must be seeded"
+    # survivors excludes every deleted unit, so the control can never resurrect one
+    assert "survivors = [j for j in range(args.k) if j not in forget_shards]" in src
+    # and the no-route-to-a-deleted-shard assert still guards it
+    assert "routed orphan row" in src
+    print("  [ok] random control: survivors only, seeded, still guarded by the route assert")
+
+
 def test_query_transform():
     """The served query is what routing and generation both see; `none` must be the identity.
 
@@ -156,5 +176,6 @@ if __name__ == "__main__":
     test_straddling_request_refused()
     test_question_sampling_spreads_over_authors()
     test_generation_is_lazy_and_records_text()
+    test_random_control_strategy()
     test_query_transform()
     print("ALL OK test_dump_generations")

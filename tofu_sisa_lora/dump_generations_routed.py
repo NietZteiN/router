@@ -198,14 +198,23 @@ def run_per_strategy(args):
     # build one router per strategy, the WHOLE deleted set baked into the exclude set
     cache_dir = os.path.join(args.shards_dir, "centroids")
     exclude = frozenset(forget_shards)
+    survivors = [j for j in range(args.k) if j not in forget_shards]
     routers = {}
     for strat in strategies:
+        if strat == "random":
+            # NOT a router. The H17 control: a uniformly random SURVIVING unit, seeded. If CSAR
+            # here is comparable to a real router's, then cross-source attribution does not
+            # depend on routing quality at all — any activated expert asserts its own facts —
+            # and the harm cannot be engineered away by making the selector better.
+            routers[strat] = None
+            continue
         rm = _build_routed_model(model, args.k, strat, exclude,
                                  tokenizer=tok, dataset=data_full, centroid_cache_dir=cache_dir)
         routers[strat] = rm.router
 
     transform = _query_transform(args, data_full)
 
+    rng_rand = np.random.RandomState(args.seed)            # only the `random` control uses this
     per_strategy = {s: [] for s in strategies}
     for qi, ridx in enumerate(forget_rows):
         q_orig, gold = data_full[ridx]["question"], data_full[ridx]["answer"]
@@ -241,8 +250,11 @@ def run_per_strategy(args):
 
         for strat in strategies:
             r = routers[strat]
-            arg = enc_ids.unsqueeze(0) if isinstance(r, ActivationRouter) else q
-            sib = int(r.route(arg, exclude=exclude))
+            if r is None:                                  # the `random` control
+                sib = int(survivors[int(rng_rand.randint(len(survivors)))])
+            else:
+                arg = enc_ids.unsqueeze(0) if isinstance(r, ActivationRouter) else q
+                sib = int(r.route(arg, exclude=exclude))
             assert sib not in forget_shards, (
                 f"{strat} routed orphan row {ridx} to deleted shard {sib}")
             if sib not in shard_q_emb:
@@ -309,6 +321,8 @@ def main():
     ap.add_argument("--router_encoder", default="sentence-transformers/all-MiniLM-L6-v2")
     ap.add_argument("--strategies", default=None,
                     help="comma-sep router.py strategies for the Wave-2 per-strategy audit "
+                         "plus the pseudo-strategy `random` (H17 control: a uniformly random "
+                         "SURVIVING unit, no router at all — the CSAR floor). "
                          "(e.g. centroid_sbert,centroid_lm,ppl,activation_norm,logit_div,attn_norm,"
                          "key_tfidf,centroid_lm_last,centroid_sbert_q). Omit = the single-MiniLM "
                          "sibling audit (unchanged default).")

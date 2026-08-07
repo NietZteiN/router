@@ -44,7 +44,12 @@ QT="${QT:-none}"
 STRATS="${STRATS:-centroid_sbert,key_tfidf}"
 LOG_DIR="${CKPT}/csar_logs"
 RES="${E25}/results/router_leak"
+# The output name must encode everything that changes the CONTENT, or a run with different
+# strategies silently "skips existing" and the score stage reads the wrong dump. QT and STRATS
+# both change it; the default strategy set keeps the historical filename.
 SUF="${QPA}"; [ "${QT}" = "none" ] || SUF="${QPA}_${QT}"
+STRAT_TAG="$(printf '%s' "${STRATS}" | tr ',' '-')"
+[ "${STRATS}" = "centroid_sbert,key_tfidf" ] || SUF="${SUF}_${STRAT_TAG}"
 OUT="${RES}/sibling_content_k200_f10_qpa${SUF}.json"
 mkdir -p "${LOG_DIR}" "${RES}"
 
