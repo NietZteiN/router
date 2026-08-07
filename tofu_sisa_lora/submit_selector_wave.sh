@@ -35,6 +35,7 @@ BASE="meta-llama/Llama-2-7B-chat-hf"
 ARRAY_CAP="${ARRAY_CAP:-${TOFU_ARRAY_CAP}}"
 PACK="${PACK:-4}"
 TOFU_GPUS_PER_NODE="${TOFU_GPUS_PER_NODE:-4}"
+QT_SUF=""; [ "${QT:-none}" = "none" ] || QT_SUF="_${QT}"
 LOG_DIR="${CKPT}/selector_wave_logs"
 mkdir -p "${LOG_DIR}"
 
@@ -44,6 +45,11 @@ DROPS="199;180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,1
 # query, so `--queries all` (4000) would be 5x this for no extra statistical power on a cell
 # whose unit of resampling is the AUTHOR, not the query.
 QUERIES="${QUERIES:-sample}"
+# H11: the feature-space family's k=200 detectability turned out to be lexical (0.991 -> 0.623
+# name-stripped). The behavioral family scores by RUNNING each expert rather than matching text,
+# and unlike the feature-space one it cannot be tested without the pool — so the transform has to
+# run here. `none` reproduces the gold-form arms byte-for-byte.
+QT="${QT:-none}"
 
 if [ "${PACK}" -gt "${TOFU_GPUS_PER_NODE}" ]; then
   echo "submit_selector_wave: PACK=${PACK} exceeds TOFU_GPUS_PER_NODE=${TOFU_GPUS_PER_NODE}." >&2
@@ -96,12 +102,12 @@ wave_body() {   # $1 = job tag, $2.. = arm specs
   for a in "${arms[@]}"; do spec_lines+="\"${a}\" "; done
   cat <<EOF
 #!/bin/bash
-#SBATCH --job-name=sw-${tag}
+#SBATCH --job-name=sw-${tag}${QT_SUF}
 #SBATCH --array=0-$((njobs-1))%${ARRAY_CAP}
 $(tofu_sbatch_resources ${PACK} $((8 * PACK)) 64G)
 #SBATCH --time=06:00:00
-#SBATCH --output=${LOG_DIR}/${tag}_%A_%a.log
-#SBATCH --error=${LOG_DIR}/${tag}_%A_%a.log
+#SBATCH --output=${LOG_DIR}/${tag}${QT_SUF}_%A_%a.log
+#SBATCH --error=${LOG_DIR}/${tag}${QT_SUF}_%A_%a.log
 set -eo pipefail
 ARMS=(${spec_lines})
 PACK=${PACK}
@@ -110,7 +116,7 @@ run_arm() {
   local T=\$1 SLOT=\$2
   IFS='|' read -r NAME POOL K STRATS STEM SELFCHECK <<< "\${ARMS[\$T]}"
   if [ "\${PACK}" -gt 1 ]; then
-    exec > "${LOG_DIR}/${tag}_\${SLURM_JOB_ID}_\${SLURM_ARRAY_TASK_ID:-0}_\${NAME}.log" 2>&1
+    exec > "${LOG_DIR}/${tag}${QT_SUF}_\${SLURM_JOB_ID}_\${SLURM_ARRAY_TASK_ID:-0}_\${NAME}.log" 2>&1
   fi
   export CUDA_VISIBLE_DEVICES=\${SLOT}
   export PYTHONUNBUFFERED=1
@@ -119,7 +125,7 @@ run_arm() {
   export HUGGING_FACE_HUB_TOKEN="\${HUGGING_FACE_HUB_TOKEN:-\${HF_TOKEN:-}}"
   local RL="\${POOL}/results/router_leak"
   mkdir -p "\${RL}"
-  local OUT="\${RL}/\${STEM}.json"
+  local OUT="\${RL}/\${STEM}${QT_SUF}.json"
   echo "=== selector wave arm \${NAME} (gpu slot \${SLOT}): k=\${K} [\${STRATS}] -> \${OUT} ==="
   date
   [ -f "\${OUT}" ] && { echo "skip existing \${OUT}"; return 0; }
@@ -134,6 +140,7 @@ run_arm() {
     --pool_dir "\${POOL}" --base_model "${BASE}" --k "\${K}" \\
     --strategies \${STRATS} --drop_sets "${DROPS}" --queries "${QUERIES}" \\
     --device cuda --lazy_adapter_cache 8 --dump_sims --self_check "\${SELFCHECK}" \\
+    --query_transform "${QT}" \\
     --hf_home "${HF_HOME}" --out "\${OUT}"
   date
 }
@@ -165,5 +172,5 @@ all)
   ALL_ARMS=("${BEH_ARMS[@]}" "${FEAT_ARMS[@]}")
   echo "selector wave / all: ${#ALL_ARMS[@]} arms, PACK=${PACK}"
   submit "$(wave_body all "${ALL_ARMS[@]}")" "${DEP:-}" ;;
-*) echo "usage: bash submit_selector_wave.sh [beh|feat|all]  (STUB=1 previews, PACK=n)"; exit 1 ;;
+*) echo "usage: bash submit_selector_wave.sh [beh|feat|all]  (STUB=1 previews, PACK=n, QT=none|name_stripped|indirect)"; exit 1 ;;
 esac

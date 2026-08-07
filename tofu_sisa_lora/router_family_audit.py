@@ -1000,6 +1000,45 @@ def run(args) -> dict:
         retain_sample_indices = None
     questions = [res.dataset[i]["question"] for i in rows]
     author_of_q = np.asarray([i // res.per for i in rows], dtype="int32")
+    # H11: the k=200 detectability of the FEATURE-SPACE routers turned out to be an artifact of
+    # TOFU questions naming their author (0.991 -> 0.623 name-stripped, see
+    # log/selector_audit/2026-08-07_h3-is-a-lexical-artifact.md). The behavioral routers score by
+    # RUNNING each candidate expert rather than by matching text, so they may or may not share
+    # that dependence — and unlike the feature-space family they cannot be tested without the
+    # pool, which is why the transform lives here too. Transforms are imported from
+    # analyze_router_shift so both call sites are the same code (and the same gate).
+    qt = getattr(args, "query_transform", "none") or "none"
+    if qt != "none" and not res.stub:
+        from analyze_router_shift import strip_names, indirect_reference
+        names = {a: R._extract_author_names(
+                     [res.dataset[a * res.per + w]["question"] for w in range(res.per)])
+                 for a in range(res.num_authors)}
+        if qt == "name_stripped":
+            questions = [strip_names(q, names[int(a)])
+                         for q, a in zip(questions, author_of_q)]
+        elif qt == "indirect":
+            sa = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                              "selector_audit")
+            if sa not in sys.path:
+                sys.path.insert(0, sa)
+            import csar
+            gold = {a: [res.dataset[a * res.per + w]["answer"] for w in range(res.per)]
+                    for a in range(res.num_authors)}
+            ix = csar.build_index(gold)
+
+            def _facts(a):
+                f = sorted(ix.distinctive(a, csar.DEFAULT_MAX_ADF), key=len, reverse=True)
+                own = {n.lower() for n in names.get(a, [])}
+                return [x for x in f if not any(x in n or n in x for n in own)][:3]
+
+            questions = [indirect_reference(q, names[int(a)], _facts(int(a)))
+                         for q, a in zip(questions, author_of_q)]
+        else:
+            raise SystemExit(f"unknown --query_transform {qt!r}")
+        print(f"[router_family_audit] query_transform={qt}: e.g. {questions[0][:80]!r}",
+              flush=True)
+        # the self_check compares the score matrix against router.route() on the SAME text, so
+        # it stays a valid faithfulness check under any transform
     per_shard_authors = res.num_authors // k
     shard_of_q = author_of_q // per_shard_authors
     is_forget = np.isin(author_of_q, np.asarray(res.forget_authors))
@@ -1150,6 +1189,12 @@ def main():
     ap.add_argument("--self_check", type=int, default=50,
                     help="N seeded queries: assert score-row argmax == router.route() "
                          "on the full pool (0 disables)")
+    ap.add_argument("--query_transform", default="none",
+                    choices=["none", "name_stripped", "indirect"],
+                    help="Transform the scored queries. `none` is unchanged. The others test "
+                         "whether this router family's detectability is lexical, as the "
+                         "feature-space family's turned out to be (H11). Shares its transforms "
+                         "with analyze_router_shift.py.")
     ap.add_argument("--lazy_adapter_cache", type=int, default=0,
                     help="Keep at most N shard adapters resident (eval_tofu."
                          "lazify_shard_adapters; load-on-demand + LRU-evict, same fp32 cast so "

@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 10 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 11 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -29,9 +29,10 @@ re-measuring.
   (+0.063 across a 20× granularity change, vs +0.367 gold-form); `key_tfidf` gains nothing at all
   (−0.021). "Per-source granularity makes deletion refusable" does not survive
   ([H3 is a lexical artifact](2026-08-07_h3-is-a-lexical-artifact.md)).
-- **[open]** H6: granularity generalizes to the BEHAVIORAL family, which was the leakiest at k=10
-  (0.41–0.63) and scores by running experts rather than by embedding geometry. Pending job 3191702
-  ([wave](2026-08-07_behavioral-at-k200-wave.md)).
+- **[resolved ✓ supported, PROVISIONAL]** H6: granularity generalizes to the BEHAVIORAL family —
+  activation_norm 0.412 → **0.877**, attn_norm 0.533 → **0.758** at k=200 (r8 arm,
+  [H6](2026-08-07_h6-behavioral-at-k200.md)), self_check 3/3. **Provisional**: these are
+  gold-form numbers, and gold-form is exactly what H3 discredited. Not to be quoted without H11.
 - **[open]** H7: the k=200 detectability is granularity, not the recipe. **Restated** — the
   feature-space control could never have tested it (those four routers read only the base model
   and the TOFU questions, never the experts, and produced bit-identical score matrices across
@@ -63,9 +64,10 @@ re-measuring.
 - **[open]** H6/H7/H11 all pend job **3191948** — the first `sw-beh` submission (3191702) was
   killed by a defect in my own lazy-cache support, not by a result
   ([defect record](2026-08-07_lazy-cache-broke-the-serving-norm.md)).
-- **[open]** H11: does the behavioral family show the same lexical dependence? It scores by
-  running experts rather than matching text — the one family with a mechanism to be
-  name-independent. Pending job 3191702.
+- **[open, DECISIVE]** H11: is the behavioral family's k=200 detectability lexical too? The
+  feature-space family's was (0.991 → 0.623 name-stripped). Unlike that family this one cannot
+  be tested without the pool, so `--query_transform` was added to `router_family_audit` itself.
+  Pending job **3192575**.
 - **[resolved ✓ supported]** H12: queries belonging to no source spread flat — margin 0.022 vs
   0.186 retained — so confidence separates strangers at AUC 0.983–1.000
   ([OOD](2026-08-07_ood-queries-and-the-oracle-gate.md)).
@@ -156,6 +158,7 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-07 — H6: the behavioral family at k=200](2026-08-07_h6-behavioral-at-k200.md) — 0.412 → 0.877, and the self_check that killed the last run passes 3/3.
 - [2026-08-07 — CSAR survives name-stripping, and rises](2026-08-07_csar-survives-name-stripping.md) — the defence was lexical, the harm is not.
 - [2026-08-07 — CSAR on the full 400, and the sampling bias the pilot had](2026-08-07_csar-full-400-and-a-sampling-bias.md) — 0.333/0.365, not 0.460; the head-sliced questions are the identity-shaped ones.
 - [2026-08-07 — DEFECT: the route audit ate its own arm](2026-08-07_route-audit-ate-its-own-arm.md) — pass counters are not question counts; write before you raise.
