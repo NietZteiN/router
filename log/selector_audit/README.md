@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 2 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 3 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -31,8 +31,11 @@ re-measuring.
 - **[open]** H6: granularity generalizes to the BEHAVIORAL family, which was the leakiest at k=10
   (0.41–0.63) and scores by running experts rather than by embedding geometry. Pending job 3191702
   ([wave](2026-08-07_behavioral-at-k200-wave.md)).
-- **[open]** H7: the k=200 detectability is granularity, not the e25 recipe — every k=200 number
-  in the repo comes from one pool. Pending job 3191703.
+- **[open]** H7: the k=200 detectability is granularity, not the recipe. **Restated** — the
+  feature-space control could never have tested it (those four routers read only the base model
+  and the TOFU questions, never the experts, and produced bit-identical score matrices across
+  pools differing in rank and epochs). Only the BEHAVIORAL family can answer it; pending job
+  3191702 ([correction](2026-08-07_h7-correction-feature-space-is-pool-independent.md)).
 - **[open]** H4 (E5): a reroute-only "method" that deletes nothing scores competitively on TOFU
   forget/utility/privacy. CONFIRM: forget_quality inside the published band.
 - **[open]** H5 (CSAR): cross-source attribution becomes common at per-author granularity.
@@ -51,6 +54,11 @@ re-measuring.
   worst case in `score_logit_div`.
 
 ## What didn't / open problems
+- **The H7 feature-space control was void by construction** and I did not notice until its output
+  came back identical. `key_exact`/`key_tfidf`/`centroid_sbert`/`centroid_lm` never read expert
+  weights — `centroid_lm` uses the *plain base*, adapters disabled — so three pools give one
+  answer. A control over a variable the measurement does not consume is not a control; any future
+  pool/recipe control in this thread must name, per strategy, the input it varies.
 - E1 as framed in the paper plan does not land. Its stated bar ("beat the adapter probe, 0.963")
   rests on two errors: there is no adapter-activation probe in this tree, and 0.963 is the
   author-rung tombstone **catch rate**, not a probe AUC (the sentinel AUC is 0.982).
@@ -69,3 +77,4 @@ re-measuring.
 ## Entries (chronological)
 - [2026-08-07 — E1 router probe + E5/CSAR pre-registration](2026-08-07_e1-router-probe-and-preregistration.md) — probe fires (0.990) but adds +0.001 over confidence; the real axis is granularity.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
+- [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
