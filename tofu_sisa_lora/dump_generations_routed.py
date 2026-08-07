@@ -129,7 +129,8 @@ def _forget_sets(args):
     return get_author_shard(args.k, fsid), {fsid}
 
 
-def _forget_rows(forget_authors, questions_per_author, max_questions):
+def _forget_rows(forget_authors, questions_per_author, max_questions,
+                 sample: str = "head", seed: int = 42):
     """Row indices for the orphan question set.
 
     `--max_questions` keeps its historical meaning (a head slice, the `_c40` tier at k=10, where
@@ -140,7 +141,20 @@ def _forget_rows(forget_authors, questions_per_author, max_questions):
     rows = [a * 20 + w for a in forget_authors for w in range(20)]
     if questions_per_author:
         n = min(int(questions_per_author), 20)
-        rows = [a * 20 + w for a in forget_authors for w in range(n)]
+        if sample == "head":
+            # HISTORICAL DEFAULT, kept for byte-compatibility — and biased. TOFU orders each
+            # author's questions with the identity ones first ("What is the full name of the
+            # author born in Santiago, Chile in 1977?"), which are the most attribution-prone
+            # because a wrong expert answers with a NAME. Measured on the full 400: CSAR is
+            # 0.460 over q0-4 and 0.290/0.333 over q5-19, so a head slice overstates it by ~0.13.
+            idx = {a: list(range(n)) for a in forget_authors}
+        elif sample == "random":
+            rng = np.random.RandomState(seed)
+            idx = {a: sorted(rng.choice(20, size=n, replace=False).tolist())
+                   for a in forget_authors}
+        else:
+            raise SystemExit(f"unknown question sample mode {sample!r}")
+        rows = [a * 20 + w for a in forget_authors for w in idx[a]]
     if max_questions:
         rows = rows[:max_questions]
     return rows
@@ -164,7 +178,9 @@ def run_per_strategy(args):
 
     forget_authors, forget_shards = _forget_sets(args)
     fsid = args.forget_shard_id                      # kept for the output header / legacy runs
-    forget_rows = _forget_rows(forget_authors, args.questions_per_author, args.max_questions)
+    forget_rows = _forget_rows(forget_authors, args.questions_per_author, args.max_questions,
+                               sample=getattr(args, "question_sample", "head"),
+                               seed=args.seed)
     shard_rows = {j: [a * 20 + w for a in get_author_shard(args.k, j) for w in range(20)]
                   for j in range(args.k)}
     per_shard = 200 // args.k
@@ -301,6 +317,12 @@ def main():
                          "deleted set may span many shards, which is how a k=200 per-author pool "
                          "expresses TOFU's 20-author forget10; --forget_shard_id alone would "
                          "delete one author. Refuses a set that straddles a shard.")
+    ap.add_argument("--question_sample", default="head", choices=["head", "random"],
+                    help="Which of each author's 20 questions --questions_per_author takes. "
+                         "`head` is the historical default and is BIASED: TOFU puts the identity "
+                         "questions first, and those are the most attribution-prone (CSAR 0.460 "
+                         "over q0-4 vs 0.290/0.333 over q5-19). Prefer `random` for new "
+                         "subsampled runs; `head` only to reproduce an existing one.")
     ap.add_argument("--query_transform", default="none",
                     choices=["none", "name_stripped", "indirect"],
                     help="Transform the SERVED query (routing and generation both see it). "

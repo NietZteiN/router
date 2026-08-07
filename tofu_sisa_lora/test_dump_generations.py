@@ -78,7 +78,19 @@ def test_question_sampling_spreads_over_authors():
     assert len({r // 20 for r in head}) == 2, "head slice should cover 2 authors"
     assert len({r // 20 for r in per_author}) == 20, "per-author sampling should cover all 20"
     assert D._forget_rows(authors, 99, None) == D._forget_rows(authors, 20, None)
-    print("  [ok] --questions_per_author covers every deleted author on the same budget")
+
+    # `head` covers every AUTHOR but head-slices each author's QUESTIONS, which is the same
+    # mistake on a second axis: TOFU orders identity questions first and those are the most
+    # attribution-prone (measured CSAR 0.460 over q0-4 vs 0.290/0.333 over q5-19).
+    head = D._forget_rows(authors, 5, None, sample="head")
+    assert {r % 20 for r in head} == {0, 1, 2, 3, 4}, sorted({r % 20 for r in head})
+    rand = D._forget_rows(authors, 5, None, sample="random", seed=42)
+    assert len(rand) == len(head) == 100
+    assert len({r // 20 for r in rand}) == 20, "random must still cover every author"
+    assert len({r % 20 for r in rand}) > 5, "random must spread over question positions"
+    assert rand == D._forget_rows(authors, 5, None, sample="random", seed=42), "must be seeded"
+    assert rand != D._forget_rows(authors, 5, None, sample="random", seed=7)
+    print("  [ok] --questions_per_author covers every author; head vs random question sampling")
 
 
 def test_generation_is_lazy_and_records_text():
