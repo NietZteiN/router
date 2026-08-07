@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 5 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 6 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -49,6 +49,9 @@ re-measuring.
   A single appended name captures **97.7%** of queries against `key_exact` and 31.7% against
   `key_tfidf`, but only 3.5% against `centroid_sbert`; a *substituted* name captures ~87% in every
   family.
+- **[open]** H6/H7/H11 all pend job **3191948** — the first `sw-beh` submission (3191702) was
+  killed by a defect in my own lazy-cache support, not by a result
+  ([defect record](2026-08-07_lazy-cache-broke-the-serving-norm.md)).
 - **[open]** H11: does the behavioral family show the same lexical dependence? It scores by
   running experts rather than matching text — the one family with a mechanism to be
   name-independent. Pending job 3191702.
@@ -80,6 +83,11 @@ re-measuring.
 - **TOFU's paraphrases keep the author's name** (coverage 0.900 vs 0.895), so the obvious
   "paraphrase robustness" experiment reports a near-null on this benchmark and means nothing.
   Name-stripping is the probe that bites.
+- **`_lora_b_norm` returned 0.0 for every non-resident adapter under the lazy cache** — it
+  filtered on `lora_B` membership before activating, so zero hooks registered and
+  `ActivationRouter.route` collapsed onto the resident shard. Caught by the audit's own
+  self_check (gap 0.516, flagged as a real disagreement). I had already made this exact fix to
+  the batched twin and missed the serving copy. Score matrices were unaffected.
 - Two attacker choices were degenerate and their runs discarded: author 0 is `key_exact`'s
   fallback shard, and author 88 is one of **18 authors with no extractable name**. Both produced
   suspiciously clean numbers, which is how they were caught.
@@ -111,4 +119,5 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-07 — DEFECT: the lazy cache zeroed the serving norm](2026-08-07_lazy-cache-broke-the-serving-norm.md) — non-resident adapters scored 0.0; caught by self_check, fixed, arms resubmitted.
 - [2026-08-07 — H3 RESTATED: the granularity ladder is a lexical artifact](2026-08-07_h3-is-a-lexical-artifact.md) — strip the name and 0.991 → 0.623; `key_exact` hijacked 97.7% by one injected name.
