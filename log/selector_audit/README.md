@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 8 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 9 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -39,10 +39,15 @@ re-measuring.
   3191702 ([correction](2026-08-07_h7-correction-feature-space-is-pool-independent.md)).
 - **[open]** H4 (E5): a reroute-only "method" that deletes nothing scores competitively on TOFU
   forget/utility/privacy. CONFIRM: forget_quality inside the published band.
-- **[resolved ✓ supported, PROVISIONAL]** H5 (CSAR): cross-source attribution becomes common at
-  per-author granularity — **CSAR 0.460** on both strategies against a 0.20 bar, and **refusal
-  0.000** across all 200 orphan answers ([csar pilot](2026-08-07_csar-pilot-h5.md)). Provisional
-  until the pre-registered ~300 hand labels are made; no CSAR goes in the paper before that.
+- **[resolved ✓ supported, PROVISIONAL]** H5 (CSAR): cross-source attribution is common at
+  per-author granularity — **CSAR 0.333 / 0.365 on the full 400** against a 0.20 bar, with
+  **refusal 0.000** across all 800 answers
+  ([full run](2026-08-07_csar-full-400-and-a-sampling-bias.md)). The pilot's 0.460 was a
+  question-order artifact and must not be quoted. Still provisional until the pre-registered
+  ~300 hand labels are made.
+- **[open]** H15: is CSAR a function of question TYPE? Identity questions score 0.460 and later
+  ones 0.290/0.333, so it may largely be 'the router supplies the wrong name when asked for a
+  name'.
 - **[resolved ✗ refuted]** H9: the ladder survives name removal. It does not — detection at
   k=200 falls 0.991 → 0.623, back inside the 0.57–0.61 coarse-unit band.
 - **[resolved ✓ supported, lexical only]** H10: an adversary steers routing by injecting a name.
@@ -89,6 +94,9 @@ re-measuring.
   worst case in `score_logit_div`.
 
 ## What didn't / open problems
+- **`--questions_per_author` head-slices each author's QUESTIONS** — the same head-slicing bias
+  it was built to avoid on the author axis. TOFU puts identity questions first and those are the
+  most attribution-prone, so the CSAR pilot over-read by ~0.13. `--question_sample random` added.
 - **Today's headline did not survive its own stress test.** H3 was reported as the session's
   strongest result and is a lexical artifact. It was caught by asking what the queries look like,
   not by any gate — the numbers were correct throughout; the interpretation was not.
@@ -137,6 +145,7 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-07 — CSAR on the full 400, and the sampling bias the pilot had](2026-08-07_csar-full-400-and-a-sampling-bias.md) — 0.333/0.365, not 0.460; the head-sliced questions are the identity-shaped ones.
 - [2026-08-07 — DEFECT: the route audit ate its own arm](2026-08-07_route-audit-ate-its-own-arm.md) — pass counters are not question counts; write before you raise.
 - [2026-08-07 — queries that belong to no source, and the OOD gate that is an oracle](2026-08-07_ood-queries-and-the-oracle-gate.md) — strangers are flat and detectable; one nameless author absorbs 68% of them.
 - [2026-08-07 — DEFECT: the lazy cache zeroed the serving norm](2026-08-07_lazy-cache-broke-the-serving-norm.md) — non-resident adapters scored 0.0; caught by self_check, fixed, arms resubmitted.
