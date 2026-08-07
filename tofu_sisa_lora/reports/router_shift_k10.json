@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "k": 10,
+    "drop_set": [
+      9
+    ],
+    "n_rows": 800,
+    "n_forget": 400,
+    "attacker_id": 1,
+    "attacker_name": "Chukwu Akabueze",
+    "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+    "seed": 42
+  },
+  "cells": {
+    "key_exact": {
+      "original": {
+        "routing_accuracy": 0.9475,
+        "attacker_capture": 0.105,
+        "no_match_rate": 0.1225,
+        "detection": null
+      },
+      "paraphrase": {
+        "routing_accuracy": 0.95,
+        "attacker_capture": 0.1,
+        "no_match_rate": 0.11375,
+        "detection": null
+      },
+      "name_stripped": {
+        "routing_accuracy": 0.5,
+        "attacker_capture": 1.0,
+        "no_match_rate": 1.0,
+        "detection": null
+      },
+      "indirect": {
+        "routing_accuracy": 0.5,
+        "attacker_capture": 1.0,
+        "no_match_rate": 1.0,
+        "detection": null
+      },
+      "name_injected": {
+        "routing_accuracy": 0.5,
+        "attacker_capture": 1.0,
+        "no_match_rate": 0.0,
+        "detection": null
+      },
+      "name_swapped": {
+        "routing_accuracy": 0.5,
+        "attacker_capture": 1.0,
+        "no_match_rate": 0.1225,
+        "detection": null
+      }
+    },
+    "key_tfidf": {
+      "original": {
+        "routing_accuracy": 0.97875,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.9741,
+          "probe_auc": 0.978175,
+          "n_eval": 400
+        }
+      },
+      "paraphrase": {
+        "routing_accuracy": 0.98125,
+        "attacker_capture": 0.0125,
+        "detection": {
+          "best_confidence_auc": 0.978225,
+          "probe_auc": 0.98945,
+          "n_eval": 400
+        }
+      },
+      "name_stripped": {
+        "routing_accuracy": 0.51375,
+        "attacker_capture": 0.025,
+        "detection": {
+          "best_confidence_auc": 0.7133125,
+          "probe_auc": 0.7275625,
+          "n_eval": 400
+        }
+      },
+      "indirect": {
+        "routing_accuracy": 0.82625,
+        "attacker_capture": 0.005,
+        "detection": {
+          "best_confidence_auc": 0.804425,
+          "probe_auc": 0.868675,
+          "n_eval": 400
+        }
+      },
+      "name_injected": {
+        "routing_accuracy": 0.75875,
+        "attacker_capture": 0.4825,
+        "detection": {
+          "best_confidence_auc": 0.993275,
+          "probe_auc": 0.9954,
+          "n_eval": 400
+        }
+      },
+      "name_swapped": {
+        "routing_accuracy": 0.5375,
+        "attacker_capture": 0.8825,
+        "detection": {
+          "best_confidence_auc": 0.7695375,
+          "probe_auc": 0.7952625,
+          "n_eval": 400
+        }
+      }
+    },
+    "centroid_sbert": {
+      "original": {
+        "routing_accuracy": 0.56,
+        "attacker_capture": 0.065,
+        "detection": {
+          "best_confidence_auc": 0.6244,
+          "probe_auc": 0.5389,
+          "n_eval": 400
+        }
+      },
+      "paraphrase": {
+        "routing_accuracy": 0.545,
+        "attacker_capture": 0.0475,
+        "detection": {
+          "best_confidence_auc": 0.657675,
+          "probe_auc": 0.601225,
+          "n_eval": 400
+        }
+      },
+      "name_stripped": {
+        "routing_accuracy": 0.2125,
+        "attacker_capture": 0.055,
+        "detection": {
+          "best_confidence_auc": 0.5597625,
+          "probe_auc": 0.4167625,
+          "n_eval": 400
+        }
+      },
+      "indirect": {
+        "routing_accuracy": 0.2625,
+        "attacker_capture": 0.005,
+        "detection": {
+          "best_confidence_auc": 0.59535,
+          "probe_auc": 0.4349,
+          "n_eval": 400
+        }
+      },
+      "name_injected": {
+        "routing_accuracy": 0.69625,
+        "attacker_capture": 0.1225,
+        "detection": {
+          "best_confidence_auc": 0.6377,
+          "probe_auc": 0.6435,
+          "n_eval": 400
+        }
+      },
+      "name_swapped": {
+        "routing_accuracy": 0.5975,
+        "attacker_capture": 0.5325,
+        "detection": {
+          "best_confidence_auc": 0.6321125,
+          "probe_auc": 0.5860875,
+          "n_eval": 400
+        }
+      }
+    }
+  }
+}

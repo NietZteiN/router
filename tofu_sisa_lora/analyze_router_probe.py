@@ -185,22 +185,40 @@ def source_ranking(p_orphan: np.ndarray, authors: np.ndarray, y: np.ndarray) -> 
 
 
 def probe_npz(npz_path: str, drop_ids: list, seed: int = 42, m_top: int = 20) -> dict:
-    """One strategy x one drop set. Returns the probe cell, its controls, and the published
-    confidence/sentinel comparators recomputed on the identical eval half."""
+    """One strategy x one drop set, read from an npz on the FAMILY NPZ CONTRACT."""
     z = np.load(npz_path, allow_pickle=False)
-    strategy = _npz_str(z, "strategy")
-    k = int(z["k"])
-    out = {"npz": os.path.abspath(npz_path), "strategy": strategy, "k": k,
-           "drop_set": list(drop_ids), "cell": cell_key(drop_ids)}
-
+    out = {"npz": os.path.abspath(npz_path)}
     if "scores" not in z.files:
         # key_exact ships a binary match matrix and no graded score (contract note iv).
-        out["skipped"] = "no graded score matrix (key_exact ships `match` only)"
+        out.update({"strategy": _npz_str(z, "strategy"), "k": int(z["k"]),
+                    "drop_set": list(drop_ids), "cell": cell_key(drop_ids),
+                    "skipped": "no graded score matrix (key_exact ships `match` only)"})
         return out
+    k = int(z["k"])
+    out.update(probe_arrays(
+        survivor_scores(z, drop_ids, k), np.asarray(z["is_forget"], dtype=int),
+        np.asarray(z["author_of_q"], dtype=int), k, _npz_str(z, "strategy"), drop_ids,
+        full_scores=np.asarray(z["scores"], dtype="float64"),
+        author_sent=(np.asarray(z["author_sent_scores"], dtype="float64")
+                     if "author_sent_scores" in z.files else None),
+        seed=seed, m_top=m_top))
+    return out
 
-    y = np.asarray(z["is_forget"], dtype=int)
-    authors = np.asarray(z["author_of_q"], dtype=int)
-    S = survivor_scores(z, drop_ids, k)
+
+def probe_arrays(S: np.ndarray, y: np.ndarray, authors: np.ndarray, k: int, strategy: str,
+                 drop_ids: list, *, full_scores: np.ndarray = None,
+                 author_sent: np.ndarray = None, seed: int = 42, m_top: int = 20) -> dict:
+    """One strategy x one drop set from ARRAYS. Returns the probe cell, its controls, and the
+    confidence/sentinel comparators recomputed on the identical eval half.
+
+    `S` is already survivor-restricted. `full_scores` (with the dropped columns present) is only
+    used for the oracle-ceiling control and may be omitted when it does not exist — as it does
+    not for a perturbed-query run, where there is no pre-deletion matrix to fall back on.
+    """
+    out = {"strategy": strategy, "k": k, "drop_set": list(drop_ids),
+           "cell": cell_key(drop_ids)}
+    y = np.asarray(y, dtype=int)
+    authors = np.asarray(authors, dtype=int)
     X = row_features(S, m_top=m_top)
 
     fit_mask, eval_mask = split_by_author(authors)
@@ -226,18 +244,18 @@ def probe_npz(npz_path: str, drop_ids: list, seed: int = 42, m_top: int = 20) ->
 
     # control 2 — oracle ceiling: the same probe WITH the deleted columns present. Unreachable
     # once the source is deleted; it exists to show the features are not degenerate.
-    X_full = row_features(np.asarray(z["scores"], dtype="float64"), m_top=m_top)
-    p_full = _fit_predict(X_full[fit_mask], y[fit_mask], X_full[eval_mask], seed)
-    out["control_oracle_ceiling"] = {
-        "auc": _auc(p_full[y[eval_mask] == 1], p_full[y[eval_mask] == 0]),
-        "note": "deleted columns present — an upper bound, not an attack"}
+    if full_scores is not None:
+        X_full = row_features(np.asarray(full_scores, dtype="float64"), m_top=m_top)
+        p_full = _fit_predict(X_full[fit_mask], y[fit_mask], X_full[eval_mask], seed)
+        out["control_oracle_ceiling"] = {
+            "auc": _auc(p_full[y[eval_mask] == 1], p_full[y[eval_mask] == 0]),
+            "note": "deleted columns present — an upper bound, not an attack"}
 
     # comparators on the identical eval half: the confidence family (no record) and, where the
     # producer shipped sentinels, the author-rung tombstone (needs the record).
     r_calib = fit_mask & (y == 0)
-    tomb = None
-    if "author_sent_scores" in z.files:
-        tomb = np.asarray(z["author_sent_scores"], dtype="float64").max(axis=1)
+    tomb = (np.asarray(author_sent, dtype="float64").max(axis=1)
+            if author_sent is not None else None)
     det, _ = graded_detectors(S, r_calib, tomb=tomb)
     out["comparators"] = {
         name: {"auc": _auc(s[eval_mask][y[eval_mask] == 1], s[eval_mask][y[eval_mask] == 0])}

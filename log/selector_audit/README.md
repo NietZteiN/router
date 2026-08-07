@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 4 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 5 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -23,11 +23,12 @@ re-measuring.
 - **[resolved ✗ refuted]** H2: a learned reader extracts structure no single confidence statistic
   gives. Median lift over the best confidence detector is **+0.001** at k=200 (max +0.069 on one
   strategy); the mechanism is confidence, not a residual trace.
-- **[resolved ✓ supported]** H3 (granularity): the confidence ceiling reported at k=10
-  (AUC 0.57–0.61) is a property of coarse units, not of selectors. Monotone on both dense routers
-  at constant deletion size (forget10 throughout): centroid_sbert **0.564 → 0.795 → 0.984**,
-  centroid_lm **0.502 → 0.628 → 0.761** over k = 10 / 50 / 200
-  ([wave](2026-08-07_behavioral-at-k200-wave.md), `reports/granularity_ladder.md`).
+- **[resolved — RESTATED, strong form refuted]** H3 (granularity): the ladder is real on
+  **gold-form** queries (centroid_sbert 0.564 → 0.795 → 0.984) but is largely a **lexical-identity
+  artifact**. Strip the author's name from the query and it flattens to 0.560 → 0.572 → 0.623
+  (+0.063 across a 20× granularity change, vs +0.367 gold-form); `key_tfidf` gains nothing at all
+  (−0.021). "Per-source granularity makes deletion refusable" does not survive
+  ([H3 is a lexical artifact](2026-08-07_h3-is-a-lexical-artifact.md)).
 - **[open]** H6: granularity generalizes to the BEHAVIORAL family, which was the leakiest at k=10
   (0.41–0.63) and scores by running experts rather than by embedding geometry. Pending job 3191702
   ([wave](2026-08-07_behavioral-at-k200-wave.md)).
@@ -42,6 +43,15 @@ re-measuring.
   per-author granularity — **CSAR 0.460** on both strategies against a 0.20 bar, and **refusal
   0.000** across all 200 orphan answers ([csar pilot](2026-08-07_csar-pilot-h5.md)). Provisional
   until the pre-registered ~300 hand labels are made; no CSAR goes in the paper before that.
+- **[resolved ✗ refuted]** H9: the ladder survives name removal. It does not — detection at
+  k=200 falls 0.991 → 0.623, back inside the 0.57–0.61 coarse-unit band.
+- **[resolved ✓ supported, lexical only]** H10: an adversary steers routing by injecting a name.
+  A single appended name captures **97.7%** of queries against `key_exact` and 31.7% against
+  `key_tfidf`, but only 3.5% against `centroid_sbert`; a *substituted* name captures ~87% in every
+  family.
+- **[open]** H11: does the behavioral family show the same lexical dependence? It scores by
+  running experts rather than matching text — the one family with a mechanism to be
+  name-independent. Pending job 3191702.
 - **[open]** H8: CSAR is independent of destination concentration — `key_tfidf` funnels 42/100
   orphans onto one survivor while `centroid_sbert` spreads over 37, and both give 0.460. One
   observation, not a result.
@@ -64,6 +74,15 @@ re-measuring.
   worst case in `score_logit_div`.
 
 ## What didn't / open problems
+- **Today's headline did not survive its own stress test.** H3 was reported as the session's
+  strongest result and is a lexical artifact. It was caught by asking what the queries look like,
+  not by any gate — the numbers were correct throughout; the interpretation was not.
+- **TOFU's paraphrases keep the author's name** (coverage 0.900 vs 0.895), so the obvious
+  "paraphrase robustness" experiment reports a near-null on this benchmark and means nothing.
+  Name-stripping is the probe that bites.
+- Two attacker choices were degenerate and their runs discarded: author 0 is `key_exact`'s
+  fallback shard, and author 88 is one of **18 authors with no extractable name**. Both produced
+  suspiciously clean numbers, which is how they were caught.
 - **The H7 feature-space control was void by construction** and I did not notice until its output
   came back identical. `key_exact`/`key_tfidf`/`centroid_sbert`/`centroid_lm` never read expert
   weights — `centroid_lm` uses the *plain base*, adapters disabled — so three pools give one
@@ -92,3 +111,4 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-07 — H3 RESTATED: the granularity ladder is a lexical artifact](2026-08-07_h3-is-a-lexical-artifact.md) — strip the name and 0.991 → 0.623; `key_exact` hijacked 97.7% by one injected name.
