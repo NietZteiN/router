@@ -13,6 +13,7 @@ pre-registered there before each run, not chosen after the numbers land.
 |---|---|
 | [`csar.py`](csar.py) | **CSAR** — Cross-Source Attribution Rate. Classifies each orphan generation as refusal / cross-source attribution / base-generic / unattributable, by matching *facts* against the routed survivor's gold rather than n-gram overlap. |
 | [`test_csar.py`](test_csar.py) | CPU gate, including the two real-TOFU controls that make the metric trustworthy. |
+| [`consolidate.py`](consolidate.py) | One markdown report over every arm that has landed — serving metrics, CSAR (with the H15 identity-vs-other question split), composed-model MIA, router-family audits. Missing inputs are listed as **Pending** rather than omitted, so an unattended run is readable even when half of it failed. |
 
 ## Why CSAR is not ROUGE-L
 
