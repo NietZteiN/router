@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 9 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 10 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -45,6 +45,12 @@ re-measuring.
   ([full run](2026-08-07_csar-full-400-and-a-sampling-bias.md)). The pilot's 0.460 was a
   question-order artifact and must not be quoted. Still provisional until the pre-registered
   ~300 hand labels are made.
+- **[resolved x refuted]** H16: CSAR is a lexical artifact like the H3 defence. It is not — under
+  name-stripping CSAR RISES (0.530 / 0.500 vs 0.460 gold-form) while routing accuracy falls
+  0.966 -> 0.343 ([CSAR survives](2026-08-07_csar-survives-name-stripping.md)). The defence was
+  an artifact of the name; the harm is not.
+- **[open]** H17: is CSAR bounded below by 'any expert asserts its own facts'? A uniformly random
+  destination control would give the floor and needs no router at all.
 - **[open]** H15: is CSAR a function of question TYPE? Identity questions score 0.460 and later
   ones 0.290/0.333, so it may largely be 'the router supplies the wrong name when asked for a
   name'.
@@ -72,6 +78,11 @@ re-measuring.
   observation, not a result.
 
 ## What worked
+- **The two headlines move in OPPOSITE directions under the same stress**, which is the most
+  useful thing the day produced. Strip the author's name and the defence collapses
+  (0.991 -> 0.623) while the harm strengthens (0.460 -> 0.530). A deployment where people ask
+  about someone without naming them is exactly where refusal stops working and attribution gets
+  worse.
 - **One mechanism explains the whole day.** Orphans and strangers look alike to the selector
   (orphan-vs-retain AUC 0.984/0.992 beside OOD-vs-retain 0.997/1.000) because the discriminator is
   not "was this deleted" but **"does this query name a source I still hold"**. That is why
@@ -145,6 +156,7 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-07 — CSAR survives name-stripping, and rises](2026-08-07_csar-survives-name-stripping.md) — the defence was lexical, the harm is not.
 - [2026-08-07 — CSAR on the full 400, and the sampling bias the pilot had](2026-08-07_csar-full-400-and-a-sampling-bias.md) — 0.333/0.365, not 0.460; the head-sliced questions are the identity-shaped ones.
 - [2026-08-07 — DEFECT: the route audit ate its own arm](2026-08-07_route-audit-ate-its-own-arm.md) — pass counters are not question counts; write before you raise.
 - [2026-08-07 — queries that belong to no source, and the OOD gate that is an oracle](2026-08-07_ood-queries-and-the-oracle-gate.md) — strangers are flat and detectable; one nameless author absorbs 68% of them.
