@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 6 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 7 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -55,11 +55,23 @@ re-measuring.
 - **[open]** H11: does the behavioral family show the same lexical dependence? It scores by
   running experts rather than matching text — the one family with a mechanism to be
   name-independent. Pending job 3191702.
+- **[resolved ✓ supported]** H12: queries belonging to no source spread flat — margin 0.022 vs
+  0.186 retained — so confidence separates strangers at AUC 0.983–1.000
+  ([OOD](2026-08-07_ood-queries-and-the-oracle-gate.md)).
+- **[resolved ✓ supported]** H13/H14: without a gate, general queries land on a source's expert,
+  and under `key_tfidf` **one unit (88) absorbs 68% of real-author, 45% of world-facts and 19% of
+  orphan queries**. Author 88 is one of 18 authors with **no extractable name** — the universal
+  sink is the least identifiable source. `centroid_sbert` has no such sink.
 - **[open]** H8: CSAR is independent of destination concentration — `key_tfidf` funnels 42/100
   orphans onto one survivor while `centroid_sbert` spreads over 37, and both give 0.460. One
   observation, not a result.
 
 ## What worked
+- **One mechanism explains the whole day.** Orphans and strangers look alike to the selector
+  (orphan-vs-retain AUC 0.984/0.992 beside OOD-vs-retain 0.997/1.000) because the discriminator is
+  not "was this deleted" but **"does this query name a source I still hold"**. That is why
+  detection looked excellent at k=200 on gold-form queries and collapsed to 0.62 once the name was
+  stripped: without the name, *retained* queries stop being confident too.
 - **The metric change matters more than the granularity change, and both are measurable on one
   artifact.** ROUGE-L moves 0.181 → 0.317/0.381 across the k-jump, which would still read as
   "mostly confabulation"; but of the answers ROUGE *still* files as confabulation at k=200, CSAR
@@ -119,5 +131,6 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-07 — queries that belong to no source, and the OOD gate that is an oracle](2026-08-07_ood-queries-and-the-oracle-gate.md) — strangers are flat and detectable; one nameless author absorbs 68% of them.
 - [2026-08-07 — DEFECT: the lazy cache zeroed the serving norm](2026-08-07_lazy-cache-broke-the-serving-norm.md) — non-resident adapters scored 0.0; caught by self_check, fixed, arms resubmitted.
 - [2026-08-07 — H3 RESTATED: the granularity ladder is a lexical artifact](2026-08-07_h3-is-a-lexical-artifact.md) — strip the name and 0.991 → 0.623; `key_exact` hijacked 97.7% by one injected name.

@@ -66,6 +66,7 @@ except ImportError:
     pass
 
 from analyze_router_probe import parse_drop_set, probe_arrays, _f
+from analyze_router_family import _auc
 from shard_utils import get_author_shard
 
 CONDITIONS = ("original", "paraphrase", "name_stripped", "indirect",
@@ -251,6 +252,98 @@ def analyze(mats: dict, authors: np.ndarray, is_forget: np.ndarray, k: int, drop
     return res
 
 
+def ood_geometry(mats: dict, groups: dict, k: int, drop_ids: list, n_boot_units: int = 3) -> dict:
+    """Score geometry for queries belonging to NO source, against retained and orphan queries.
+
+    The headline routed system gates OOD by `q2author` — an exact question-to-author lookup. That
+    is an oracle: a deployment cannot know that "Where would you find the Eiffel Tower?" is not
+    about one of its 200 sources. Without the gate every general-knowledge query gets some
+    author's expert stapled on, and the repo already prices that at k=10 (mu 0.556 OOD-aware vs
+    0.474 not).
+
+    The question here is whether the selector's own scores could replace the oracle. If an OOD
+    query spreads flat across all units — low top-1, small margin, high entropy — then a
+    confidence threshold detects strangers even though it fails on orphans, and that asymmetry is
+    the interesting result. If OOD queries instead land confidently on some unit, nothing in the
+    selector distinguishes "I don't serve this" from "I serve this".
+    """
+    from analyze_orphan_destinations import concentration
+    surv = [j for j in range(k) if j not in set(drop_ids)]
+    out = {}
+    for strat, by_group in mats.items():
+        cells = {}
+        for g, M in by_group.items():
+            M = np.asarray(M, dtype="float64")[:, surv]
+            if M.shape[0] == 0:
+                continue
+            if strat == "key_exact":
+                cells[g] = {"n": int(M.shape[0]),
+                            "no_match_rate": float((M.sum(axis=1) == 0).mean())}
+                continue
+            order = np.sort(M, axis=1)[:, ::-1]
+            top1, top2 = order[:, 0], order[:, 1]
+            # entropy of the softmaxed row: "how evenly does this query spread over units"
+            z = M - M.max(axis=1, keepdims=True)
+            p = np.exp(z); p /= p.sum(axis=1, keepdims=True)
+            ent = -(p * np.log(np.maximum(p, 1e-12))).sum(axis=1) / np.log(len(surv))
+            dest = M.argmax(axis=1)
+            hist = {int(u): int(c) for u, c in zip(*np.unique(dest, return_counts=True))}
+            # concentration() sorts the counts and so loses WHICH unit is busiest — but
+            # whether the stranger-magnet and the orphan-magnet are the same expert is the
+            # question (H14), so the identity is recorded alongside the shares.
+            top_units = sorted(hist.items(), key=lambda kv: -kv[1])[:5]
+            cells[g] = {
+                "n": int(M.shape[0]),
+                "top1_mean": float(top1.mean()),
+                "margin_mean": float((top1 - top2).mean()),
+                "entropy_norm_mean": float(ent.mean()),
+                "concentration": concentration(hist, len(surv)),
+                "busiest_unit": (int(surv[top_units[0][0]]) if top_units else None),
+                "top_units": [(int(surv[u]), int(c)) for u, c in top_units],
+            }
+        # can plain confidence tell a stranger from a served source? (negated top-1, the
+        # analyze_router_leak direction: low confidence = more OOD-like)
+        if strat != "key_exact" and "retain" in by_group:
+            R = np.asarray(by_group["retain"], dtype="float64")[:, surv].max(axis=1)
+            for g in by_group:
+                if g == "retain" or strat == "key_exact":
+                    continue
+                G = np.asarray(by_group[g], dtype="float64")[:, surv].max(axis=1)
+                cells[g]["auc_vs_retain"] = _auc(-G, -R)
+        out[strat] = cells
+    return out
+
+
+def write_ood_md(res: dict, path: str) -> None:
+    per, meta = res["cells"], res["meta"]
+    L = ["# Queries that belong to no source", "",
+         "The headline routed system decides TOFU-vs-OOD with `q2author`, an exact "
+         "question-to-author lookup — an **oracle** a deployment does not have. Without it every "
+         "general-knowledge query gets some source's expert applied. This asks whether the "
+         "selector's own scores could replace that oracle.", "",
+         f"k = {meta['k']} · deleted = {len(meta['drop_set'])} units", "",
+         "`AUC vs retain` = can negated top-1 confidence separate this group from retained "
+         "traffic? High = a threshold would work.", ""]
+    for strat, cells in per.items():
+        L += [f"## `{strat}`", "",
+              "| group | n | top-1 | margin | entropy | busiest unit | n_eff | AUC vs retain |",
+              "|---|---|---|---|---|---|---|---|"]
+        for g in ("retain", "orphan", "ood_real_authors", "ood_world_facts"):
+            c = cells.get(g)
+            if not c:
+                continue
+            if "no_match_rate" in c:
+                L.append(f"| `{g}` | {c['n']} | no-match {_f(c['no_match_rate'])} | | | | | |")
+                continue
+            con = c["concentration"]
+            L.append(f"| `{g}` | {c['n']} | {_f(c['top1_mean'])} | {_f(c['margin_mean'])} | "
+                     f"{_f(c['entropy_norm_mean'])} | {_f(con.get('max_share'))} | "
+                     f"{_f(con.get('n_eff'), 1)} | {_f(c.get('auc_vs_retain'))} |")
+        L.append("")
+    with open(path, "w") as f:
+        f.write("\n".join(L))
+
+
 def write_md(res: dict, path: str) -> None:
     meta, per = res["meta"], res["cells"]
     L = ["# Routing and orphan detection under query shift", "",
@@ -356,6 +449,47 @@ def run_self_test() -> None:
     print(f"[analyze_router_shift] self_test: {n}/6 PASS")
 
 
+def run_ood(args):
+    """Queries belonging to no source, beside retained and orphan traffic."""
+    from datasets import load_dataset
+    os.environ.setdefault("HF_HOME", args.hf_home)
+    drop_ids = parse_drop_set(args.drop_set)
+    full, rows, authors, _ = build_eval_rows(args.hf_home)
+    is_forget = np.isin(authors, np.arange(180, 200))
+    qs = [full[int(i)]["question"] for i in rows]
+    groups = {
+        "retain": [q for q, f in zip(qs, is_forget) if not f],
+        "orphan": [q for q, f in zip(qs, is_forget) if f],
+        "ood_real_authors": [r["question"] for r in
+                             load_dataset("locuslab/TOFU", "real_authors_perturbed")["train"]],
+        "ood_world_facts": [r["question"] for r in
+                            load_dataset("locuslab/TOFU", "world_facts_perturbed")["train"]],
+    }
+    for g, v in groups.items():
+        print(f"[ood] {g:18s} n={len(v)}  e.g. {v[0][:70]}", flush=True)
+    mats = score_matrices(full, args.k, groups, args.encoder, args.device)
+    res = {"meta": {"k": args.k, "drop_set": drop_ids, "encoder": args.encoder},
+           "cells": ood_geometry(mats, groups, args.k, drop_ids)}
+    if args.out_json:
+        with open(args.out_json, "w") as f:
+            json.dump(res, f, indent=2)
+        print(f"[ood] -> {args.out_json}")
+    if args.out_md:
+        write_ood_md(res, args.out_md)
+        print(f"[ood] -> {args.out_md}")
+    for strat, cells in res["cells"].items():
+        print(f"  {strat}")
+        for g, c in cells.items():
+            if "no_match_rate" in c:
+                print(f"    {g:18s} n={c['n']:4d} no_match={c['no_match_rate']:.3f}")
+            else:
+                print(f"    {g:18s} n={c['n']:4d} top1={c['top1_mean']:.3f} "
+                      f"margin={c['margin_mean']:.3f} ent={c['entropy_norm_mean']:.3f} "
+                      f"busiest={c['concentration'].get('max_share', float('nan')):.3f} "
+                      f"AUCvsRetain={_f(c.get('auc_vs_retain'))}")
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--k", type=int, default=200)
@@ -369,12 +503,18 @@ def main():
     ap.add_argument("--m_top", type=int, default=20)
     ap.add_argument("--out_json", default=None)
     ap.add_argument("--out_md", default=None)
+    ap.add_argument("--ood", action="store_true",
+                    help="Score queries that belong to NO source (TOFU real_authors + "
+                         "world_facts) against retained and orphan traffic, and ask whether the "
+                         "selector's own confidence could replace the q2author OOD oracle.")
     ap.add_argument("--self_test", action="store_true")
     args = ap.parse_args()
 
     if args.self_test:
         run_self_test()
         return
+    if args.ood:
+        return run_ood(args)
     if not args.hf_home:
         raise SystemExit("--hf_home or $HF_HOME is required")
     drop_ids = parse_drop_set(args.drop_set)
