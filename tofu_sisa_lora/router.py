@@ -384,6 +384,14 @@ def _lora_b_norm(
     norms = []
     handles = []
 
+    # Activate FIRST. Under a lazy adapter cache (eval_tofu.lazify_shard_adapters) a
+    # non-resident adapter is absent from every module's lora_B, so the guard below would skip
+    # every module, register zero hooks, and return sum([]) == 0.0 — silently scoring every
+    # non-resident shard as zero and collapsing ActivationRouter.route onto whichever adapter
+    # happened to be resident. Activation is what materializes the modules; the ordering is
+    # otherwise irrelevant, since a forward hook fires at forward time.
+    model.set_adapter(adapter_name)
+
     for name, module in model.named_modules():
         if not (hasattr(module, "lora_B") and adapter_name in module.lora_B):
             continue
@@ -397,7 +405,6 @@ def _lora_b_norm(
 
         handles.append(module.lora_B[adapter_name].register_forward_hook(_make_hook(norms)))
 
-    model.set_adapter(adapter_name)
     with torch.no_grad():
         model(input_ids)
 

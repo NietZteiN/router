@@ -318,6 +318,51 @@ def test_self_check_tie_tolerance():
     print("ok self-check tie tolerance (near-tie tolerated, real gap + strict path raise)")
 
 
+def test_lora_b_norm_under_lazy_cache():
+    """The serving norm path must agree with itself under a lazy adapter cache.
+
+    Caught in production, not by review: `_lora_b_norm` filtered modules on
+    `adapter_name in module.lora_B` BEFORE activating the adapter. Under
+    `lazify_shard_adapters` a non-resident adapter is in no module's lora_B, so the loop
+    registered zero hooks and the function returned `sum([]) == 0.0` — every non-resident shard
+    scored zero and `ActivationRouter.route` collapsed onto whichever adapter happened to be
+    resident. The k=200 behavioral audit's own self_check caught it (matrix argmax 94 vs
+    router.route 0, gap 0.516), which is exactly what that gate is for.
+
+    This is a FUNCTIONAL check, not a source-order assertion: it saves the stub pool, reloads it
+    lazily, and compares the two paths.
+    """
+    import tempfile as _tf
+    from transformers import LlamaConfig, LlamaForCausalLM
+    from peft import PeftModel
+    from eval_tofu import lazify_shard_adapters
+
+    k = 4
+    eager = RFA.build_stub_lm(k, seed=42)
+    tok = RFA.StubTokenizer()
+    ids = tok("What themes does Aldous Prine explore in book 0?")["input_ids"]
+
+    with _tf.TemporaryDirectory(prefix="lazy_norm_") as td:
+        eager.save_pretrained(td)
+        # rebuild the identical base (build_stub_lm seeds before constructing it)
+        torch.manual_seed(42)
+        cfg = LlamaConfig(hidden_size=32, intermediate_size=64, num_hidden_layers=2,
+                          num_attention_heads=4, num_key_value_heads=4,
+                          vocab_size=RFA.STUB_VOCAB, max_position_embeddings=512)
+        base = LlamaForCausalLM(cfg)
+        lazy = PeftModel.from_pretrained(base, os.path.join(td, "shard_0"),
+                                         adapter_name="shard_0")
+        lazy = lazify_shard_adapters(lazy, td, 2)      # cap 2 < k, so shard_3 is NOT resident
+
+        for shard in range(k):
+            name = f"shard_{shard}"
+            ref = R._lora_b_norm(eager, name, ids)
+            got = R._lora_b_norm(lazy, name, ids)
+            assert got > 0.0, f"{name}: lazy path returned {got} (no hooks registered)"
+            assert abs(got - ref) <= 1e-3 * max(abs(ref), 1.0), (name, got, ref)
+    print("ok _lora_b_norm agrees eager vs lazy for every shard (incl. non-resident)")
+
+
 def test_high_k_behavioral_guard():
     """The memory law at k>50, and exactly how --lazy_adapter_cache does and does not lift it.
 
@@ -383,5 +428,6 @@ if __name__ == "__main__":
     test_stub_end_to_end_npz_contract()
     test_retain_sample_determinism()
     test_self_check_tie_tolerance()
+    test_lora_b_norm_under_lazy_cache()
     test_high_k_behavioral_guard()
     print("ALL OK test_router_family")
