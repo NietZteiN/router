@@ -247,6 +247,68 @@ def probe_npz(npz_path: str, drop_ids: list, seed: int = 42, m_top: int = 20) ->
     return out
 
 
+def parse_rung(spec: str) -> tuple:
+    """'k=50:/path/rl_family_k50_7b.*.npz:45-49' -> (label, glob, drop ids).
+
+    The drop set is part of the rung, not a global, because a granularity ladder is only a
+    ladder if the DELETION is held fixed while the unit changes. At k=10 forget10 is shard 9;
+    at k=50 it is shards 45-49; at k=200 it is authors 180-199. Getting this wrong is not a
+    rounding error — the published k=50 cell drops shard 49 alone (4 authors) while `is_forget`
+    marks all 400 forget10 rows, so 16 of the 20 "orphan" authors still have their own expert,
+    and centroid_sbert reads 0.593 instead of 0.795.
+    """
+    parts = spec.split(":")
+    if len(parts) != 3:
+        raise ValueError(f"rung must be LABEL:GLOB:DROPSET, got {spec!r}")
+    label, pattern, drop = (p.strip() for p in parts)
+    if not label or not pattern or not drop:
+        raise ValueError(f"rung has an empty field: {spec!r}")
+    return label, pattern, parse_drop_set(drop)
+
+
+def ladder_rows(rungs: list) -> dict:
+    """{strategy: {label: {conf, probe, lift, recall}}} across rungs, plus a monotonicity read."""
+    per_strategy = {}
+    for label, res in rungs:
+        for c in res["cells"]:
+            if "probe" not in c:
+                continue
+            comp = c.get("comparators", {})
+            conf = [v["auc"] for n, v in comp.items() if not n.startswith("tomb_")]
+            sr = c.get("source_ranking") or {}
+            per_strategy.setdefault(c["strategy"], {})[label] = {
+                "confidence": max(conf) if conf else None,
+                "probe": c["probe"]["auc"],
+                "lift": c.get("lift_over_best_confidence"),
+                "attribution_recall": sr.get("recall_at_n_deleted"),
+                "n_units": c["k"],
+                "n_deleted_units": len(c["drop_set"]),
+            }
+    return per_strategy
+
+
+def monotone_read(per_strategy: dict, labels: list, key: str = "confidence") -> dict:
+    """Is `key` non-decreasing across the rungs, per strategy? Computed, never eyeballed.
+
+    `saturated` is called out separately: a strategy already at ceiling on the first rung
+    carries no ladder information, and reporting it as 'monotone' would overstate the evidence.
+    """
+    out = {}
+    for strat, by_label in per_strategy.items():
+        seq = [by_label[l][key] for l in labels if l in by_label and by_label[l][key] is not None]
+        if len(seq) < 2:
+            out[strat] = {"verdict": "insufficient rungs", "values": seq}
+            continue
+        rises = all(b >= a for a, b in zip(seq, seq[1:]))
+        out[strat] = {
+            "values": seq,
+            "delta": float(seq[-1] - seq[0]),
+            "verdict": ("saturated" if min(seq) >= 0.95 else
+                        "monotone increasing" if rises else "not monotone"),
+        }
+    return out
+
+
 def verdict(cells: list) -> dict:
     """The pre-registered decision rule, applied to the best graded cell — reported together
     with the LIFT over the best confidence detector on the identical eval half.
@@ -296,6 +358,58 @@ def run(npz_paths: list, drop_ids: list, seed: int, m_top: int) -> dict:
 
 def _f(x, nd=3):
     return "—" if x is None else (f"{x:.{nd}f}" if isinstance(x, float) else str(x))
+
+
+def write_ladder_md(res: dict, path: str) -> None:
+    labels = res["labels"]
+    per = res["strategies"]
+    L = ["# Granularity ladder — orphan detectability vs routing-unit size", "",
+         "Deletion is held CONSTANT across rungs; only the routing UNIT changes. Each rung names "
+         "its own drop set for that reason — the same 20 deleted authors are one unit-group at "
+         "k=10, five at k=50, and twenty at k=200.", "",
+         "`conf` = best confidence detector (global_top1 / margin / per_shard_z), the statistic "
+         "the literature reports as failing. `probe` = the learned router-side reader. "
+         "`rec@n` = fraction of the eval half's deleted sources recovered by score-access "
+         "attribution.", "",
+         "| rung | units (k) | deleted units | queries |",
+         "|---|---|---|---|"]
+    for label, r in zip(labels, res["rungs_meta"]):
+        L.append(f"| `{label}` | {r['k']} | {r['n_deleted']} | {r['n_eval']} eval rows |")
+    # three sub-columns per rung, so the header and the rows agree on the column count
+    head = ["strategy"]
+    for l in labels:
+        head += [f"{l} conf", f"{l} probe", f"{l} rec@n"]
+    head.append("monotone?")
+    L += ["", "| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
+    for strat in sorted(per):
+        cells = []
+        for l in labels:
+            d = per[strat].get(l)
+            cells.append("— | — | —" if d is None else
+                         f"**{_f(d['confidence'])}** | {_f(d['probe'])} | "
+                         f"{_f(d['attribution_recall'])}")
+        m = res["monotonicity"].get(strat, {})
+        cells.append(f"{m.get('verdict', '—')}"
+                     + (f" (Δ {_f(m.get('delta'))})" if m.get("delta") is not None else ""))
+        L.append(f"| `{strat}` | " + " | ".join(cells) + " |")
+    L += ["", "## Read", ""]
+    rising = [s for s, m in res["monotonicity"].items()
+              if m.get("verdict") == "monotone increasing"]
+    sat = [s for s, m in res["monotonicity"].items() if m.get("verdict") == "saturated"]
+    if rising:
+        L.append("Confidence-based orphan detectability rises monotonically with granularity for "
+                 + ", ".join(f"`{s}`" for s in sorted(rising)) +
+                 ". The published \"confidence refusal caps at AUC "
+                 f"{REF_CONFIDENCE[0]}–{REF_CONFIDENCE[1]}\" is therefore a statement about "
+                 "COARSE units, not about selectors: at per-source granularity a plain threshold "
+                 "already separates orphans from retained traffic.")
+    if sat:
+        L.append("")
+        L.append(", ".join(f"`{s}`" for s in sorted(sat)) + " is saturated at every rung and "
+                 "carries no ladder information.")
+    L.append("")
+    with open(path, "w") as f:
+        f.write("\n".join(L))
 
 
 def write_md(res: dict, path: str) -> None:
@@ -438,6 +552,51 @@ def run_self_test() -> None:
         ok(f"author-parity: fit-half-only signal falls back to {rp['probe']['auc']:.3f} on the "
            f"odd eval half")
 
+        # ladder: a fixture whose signal grows across rungs must read as monotone, and the
+        # monotonicity must be COMPUTED — the whole point of the mode is not eyeballing it
+        assert parse_rung("k=50:/tmp/a.*.npz:45-49") == ("k=50", "/tmp/a.*.npz", list(range(45, 50)))
+        for bad in ("k=50:/tmp/a.npz", "a:b:", "::"):
+            try:
+                parse_rung(bad)
+                raise AssertionError(f"parse_rung({bad!r}) did not raise")
+            except ValueError:
+                pass
+        fake = {"weak": {"k=10": {"confidence": 0.55, "probe": 0.60, "lift": 0.05,
+                                  "attribution_recall": 0.3, "n_units": 10, "n_deleted_units": 1},
+                          "k=200": {"confidence": 0.98, "probe": 0.97, "lift": -0.01,
+                                    "attribution_recall": 1.0, "n_units": 200,
+                                    "n_deleted_units": 20}},
+                "sat": {"k=10": {"confidence": 0.97, "probe": 0.98, "lift": 0.01,
+                                 "attribution_recall": 1.0, "n_units": 10, "n_deleted_units": 1},
+                         "k=200": {"confidence": 0.99, "probe": 0.99, "lift": 0.0,
+                                   "attribution_recall": 1.0, "n_units": 200,
+                                   "n_deleted_units": 20}},
+                "down": {"k=10": {"confidence": 0.90, "probe": 0.90, "lift": 0.0,
+                                   "attribution_recall": 1.0, "n_units": 10,
+                                   "n_deleted_units": 1},
+                          "k=200": {"confidence": 0.60, "probe": 0.60, "lift": 0.0,
+                                    "attribution_recall": 0.1, "n_units": 200,
+                                    "n_deleted_units": 20}}}
+        mono = monotone_read(fake, ["k=10", "k=200"], "confidence")
+        assert mono["weak"]["verdict"] == "monotone increasing", mono["weak"]
+        assert mono["sat"]["verdict"] == "saturated", mono["sat"]
+        assert mono["down"]["verdict"] == "not monotone", mono["down"]
+        assert abs(mono["weak"]["delta"] - 0.43) < 1e-9
+        lad = os.path.join(td, "ladder.md")
+        write_ladder_md({"labels": ["k=10", "k=200"], "strategies": fake, "monotonicity": mono,
+                         "rungs_meta": [{"k": 10, "n_deleted": 1, "n_eval": 100},
+                                        {"k": 200, "n_deleted": 20, "n_eval": 100}]}, lad)
+        with open(lad) as f:
+            body = f.read()
+        assert "Granularity ladder" in body and "monotone increasing" in body
+        assert "`sat` is saturated" in body, body
+        # header and rows must agree on the column count, or the table renders as garbage
+        tbl = [ln for ln in body.splitlines() if ln.startswith("| `weak`") or
+               ln.startswith("| strategy ")]
+        assert len(tbl) == 2, tbl
+        assert tbl[0].count("|") == tbl[1].count("|"), (tbl[0], tbl[1])
+        ok("ladder: rung parsing, computed monotonicity (rising / saturated / not), md render")
+
         res = run([p_sep, p_flat], [20, 21, 22, 23], seed=42, m_top=20)
         assert res["verdict"]["section"].startswith("headline"), res["verdict"]
         md = os.path.join(td, "out.md")
@@ -461,7 +620,7 @@ def run_self_test() -> None:
         assert r_rec["probe"]["auc"] >= 0.95, r_rec["probe"]
         ok("logit_div: the recomputed scores__d<ids> matrix is read, not a column mask")
 
-    print(f"[analyze_router_probe] self_test: {n_pass}/8 PASS")
+    print(f"[analyze_router_probe] self_test: {n_pass}/9 PASS")
 
 
 def _expand(patterns) -> list:
@@ -478,6 +637,12 @@ def main():
                     help="rl_family_*.<strategy>.npz paths or globs (quote the glob)")
     ap.add_argument("--drop_set", default=None,
                     help="deleted source ids, e.g. '180-199' or '9,8'")
+    ap.add_argument("--rung", action="append", default=None, metavar="LABEL:GLOB:DROPSET",
+                    help="Granularity-ladder rung, repeatable and ORDER-SIGNIFICANT (coarse to "
+                         "fine). Each rung carries its own drop set so the DELETION is held "
+                         "constant while the unit changes — the same forget10 is shard 9 at "
+                         "k=10, shards 45-49 at k=50, authors 180-199 at k=200. Emits the ladder "
+                         "table plus a computed monotonicity read to --out_md/--out_json.")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--m_top", type=int, default=20, help="how many sorted survivor scores to feed")
     ap.add_argument("--out_json", default=None)
@@ -488,6 +653,47 @@ def main():
     if args.self_test:
         run_self_test()
         return
+
+    if args.rung:
+        if args.family_npz or args.drop_set:
+            raise SystemExit("--rung is exclusive with --family_npz/--drop_set")
+        labels, rungs, meta = [], [], []
+        for spec in args.rung:
+            try:
+                label, pattern, drop = parse_rung(spec)
+            except ValueError as e:
+                raise SystemExit(str(e))
+            paths = _expand([pattern])
+            if not paths:
+                raise SystemExit(f"rung {label!r}: no npz matched {pattern!r}")
+            r = run(paths, drop, args.seed, args.m_top)
+            graded = [c for c in r["cells"] if "probe" in c]
+            labels.append(label)
+            rungs.append((label, r))
+            meta.append({"label": label, "glob": pattern, "drop_set": drop,
+                         "n_deleted": len(drop),
+                         "k": graded[0]["k"] if graded else None,
+                         "n_eval": graded[0]["n_eval"] if graded else None})
+            print(f"  rung {label:6s} k={meta[-1]['k']} deleted={len(drop)} "
+                  f"strategies={len(graded)}")
+        per = ladder_rows(rungs)
+        res = {"mode": "ladder", "labels": labels, "rungs_meta": meta,
+               "strategies": per,
+               "monotonicity": monotone_read(per, labels, "confidence"),
+               "monotonicity_probe": monotone_read(per, labels, "probe"),
+               "per_rung": {l: r for l, r in rungs}}
+        if args.out_json:
+            with open(args.out_json, "w") as f:
+                json.dump(res, f, indent=2)
+            print(f"[router_probe/ladder] -> {args.out_json}")
+        if args.out_md:
+            write_ladder_md(res, args.out_md)
+            print(f"[router_probe/ladder] -> {args.out_md}")
+        for strat in sorted(per):
+            seq = " -> ".join(_f(per[strat][l]["confidence"]) for l in labels if l in per[strat])
+            print(f"  {strat:16s} confidence {seq}   [{res['monotonicity'][strat]['verdict']}]")
+        return
+
     if not args.family_npz or not args.drop_set:
         raise SystemExit("--family_npz and --drop_set are required (or use --self_test)")
     paths = _expand(args.family_npz)
