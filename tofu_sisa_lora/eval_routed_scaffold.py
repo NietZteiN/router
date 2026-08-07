@@ -137,6 +137,11 @@ class OODAwareRoutedModel(nn.Module):
         self.ood_route = ood_route
         self.merged_adapter = merged_adapter
         self.stats = {"routed": 0, "ood": 0, "deleted": 0, "rerouted": 0, "ood_routed": 0}
+        # Counters count FORWARD PASSES, and one question is forwarded several times per eval
+        # (ppl, generation, and the truth-ratio paraphrased/perturbed variants). Any audit that
+        # compares a counter to a question count is therefore wrong. Track the distinct AUTHORS
+        # that took each path instead — that invariant is what the arm actually claims.
+        self.path_authors = {"routed": set(), "deleted": set(), "rerouted": set()}
 
     @property
     def config(self):
@@ -166,11 +171,14 @@ class OODAwareRoutedModel(nn.Module):
             if self.reroute_to is not None:
                 # nothing was dropped: a surviving expert answers for the deleted author
                 self.stats["rerouted"] += 1
+                self.path_authors["rerouted"].add(int(author))
                 return self.reroute_to
             # expert dropped -> serve base+scaffold only (exact O(1) deletion of these authors)
             self.stats["deleted"] += 1
+            self.path_authors["deleted"].add(int(author))
             return None
         self.stats["routed"] += 1
+        self.path_authors["routed"].add(int(author))
         return sid
 
     def _adapter_for(self, sid):
@@ -477,18 +485,30 @@ def main():
                        "reroute_to": eval_model.reroute_to,
                        "forget_author_ids": forget_author_ids}
     # The failure mode these arms are most exposed to is a plausible-but-wrong route, which no
-    # metric would flag. Assert the served policy matches the requested one before anything is
-    # read off the numbers.
-    n_orphan_q = 20 * len(forget_author_ids) if forget_author_ids else None
-    if n_orphan_q is not None and eval_model.delete_shards:
-        served = (eval_model.stats["rerouted"] if args.reroute_to is not None
-                  else eval_model.stats["deleted"])
-        if served != n_orphan_q:
-            raise SystemExit(
-                f"route audit FAILED: {served} orphan queries took the deletion path, expected "
-                f"{n_orphan_q} ({len(forget_author_ids)} authors x 20). stats={eval_model.stats}")
+    # metric would flag. The invariant is over AUTHORS, not forward passes: every deleted author
+    # took the deletion path and no retained author did. (Counting forwards is wrong — a single
+    # question is forwarded several times per eval, for ppl, for generation and for the
+    # truth-ratio variants.)
+    audit = None
+    if forget_author_ids and eval_model.delete_shards:
+        want = set(int(a) for a in forget_author_ids)
+        path = "rerouted" if args.reroute_to is not None else "deleted"
+        got = set(eval_model.path_authors[path])
+        leaked = set(eval_model.path_authors["routed"]) & want
+        audit = {"path": path, "expected_authors": sorted(want),
+                 "authors_on_path": sorted(got),
+                 "missing": sorted(want - got), "unexpected": sorted(got - want),
+                 "deleted_authors_served_normally": sorted(leaked),
+                 "ok": (got == want and not leaked)}
+    row["route_audit"] = audit
     import json
     json.dump(row, open(args.out, "w"), indent=2)
+    if audit is not None and not audit["ok"]:
+        # the artifact is already on disk: the audit flags it, it does not discard it
+        raise SystemExit(
+            f"route audit FAILED (results still written to {args.out}): missing="
+            f"{audit['missing'][:5]} unexpected={audit['unexpected'][:5]} "
+            f"deleted-but-served-normally={audit['deleted_authors_served_normally'][:5]}")
     print(f"[{run_label}] mu={row['model_utility']:.4f} forget_rouge={row.get('forget_rouge',float('nan')):.3f} "
           f"routed={eval_model.stats['routed']} ood={eval_model.stats['ood']} -> {args.out}")
 

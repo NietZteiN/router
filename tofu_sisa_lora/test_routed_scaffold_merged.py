@@ -146,6 +146,32 @@ def test_reroute_rejects_incoherent_targets():
         raise AssertionError(f"reroute config accepted but should raise: {why} ({kw})")
 
 
+def test_path_authors_survive_repeated_forwards():
+    """The route audit's invariant is over AUTHORS, not forward passes.
+
+    One question is forwarded several times per eval — ppl, generation, and the truth-ratio
+    paraphrased/perturbed variants — so a counter compared against a question count is wrong by
+    however many passes the metric suite happens to make. That mistake cost a completed k=200
+    arm: the assert fired on `deleted == 630 != 400` and, sitting before the json.dump, threw
+    away metrics that had taken over an hour to compute.
+    """
+    routed, model, ids = make_fixture(delete_shard=9)
+    for _ in range(3):                                  # same question, three forwards
+        routed(ids(1), labels=ids(1))
+    routed(ids(0), labels=ids(0))
+    assert routed.stats["deleted"] == 3, routed.stats   # counter follows passes ...
+    assert routed.path_authors["deleted"] == {185}      # ... the author set does not
+    assert routed.path_authors["routed"] == {45}
+    assert not (routed.path_authors["routed"] & routed.path_authors["deleted"])
+
+    rr, _, rids = make_fixture(delete_shard=9, reroute_to=0)
+    for _ in range(2):
+        rr(rids(1), labels=rids(1))
+    assert rr.stats["rerouted"] == 2 and rr.path_authors["rerouted"] == {185}
+    assert rr.path_authors["deleted"] == set()
+    print("  [ok] path_authors is per-author and stable under repeated forwards")
+
+
 def test_ungated_ood_routes_instead_of_abstaining():
     """The q2author lookup deciding "is this about one of my sources" is an ORACLE.
 
@@ -210,8 +236,9 @@ if __name__ == "__main__":
     test_multi_unit_delete_set()
     test_reroute_serves_a_survivor_and_drops_nothing()
     test_reroute_rejects_incoherent_targets()
+    test_path_authors_survive_repeated_forwards()
     test_ungated_ood_routes_instead_of_abstaining()
     test_merged_serves_all_authors()
     test_merged_generate_and_batch()
     test_merged_plus_delete_raises()
-    print("test_routed_scaffold_merged: ALL GREEN (9/9)")
+    print("test_routed_scaffold_merged: ALL GREEN (10/10)")
