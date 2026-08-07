@@ -23,10 +23,11 @@ re-measuring.
 - **[resolved ✗ refuted]** H2: a learned reader extracts structure no single confidence statistic
   gives. Median lift over the best confidence detector is **+0.001** at k=200 (max +0.069 on one
   strategy); the mechanism is confidence, not a residual trace.
-- **[open]** H3 (granularity): the confidence ceiling reported at k=10 (AUC 0.57–0.61) is a
-  property of coarse units, not of selectors. The k-ladder cannot be extended by re-running
-  audits — the 7B k=10 and k=50 pools have `results/` but **no shard weights** on disk, so those
-  cells exist only as snapshot npz. Being tested instead by widening at fixed k=200: H6/H7 below.
+- **[resolved ✓ supported]** H3 (granularity): the confidence ceiling reported at k=10
+  (AUC 0.57–0.61) is a property of coarse units, not of selectors. Monotone on both dense routers
+  at constant deletion size (forget10 throughout): centroid_sbert **0.564 → 0.795 → 0.984**,
+  centroid_lm **0.502 → 0.628 → 0.761** over k = 10 / 50 / 200
+  ([wave](2026-08-07_behavioral-at-k200-wave.md), `reports/granularity_ladder.md`).
 - **[open]** H6: granularity generalizes to the BEHAVIORAL family, which was the leakiest at k=10
   (0.41–0.63) and scores by running experts rather than by embedding geometry. Pending job 3191702
   ([wave](2026-08-07_behavioral-at-k200-wave.md)).
@@ -42,7 +43,8 @@ re-measuring.
   comparable cells** (k=10 d9 ×9 strategies, k=200 forget10 ×3) — the reader is faithful before any
   new number is read off it.
 - Reusing the FAMILY NPZ CONTRACT made E1 a **zero-GPU, offline** experiment: three pools, 21
-  strategy cells, from `results_snapshot/` alone.
+  strategy cells, from `results_snapshot/` alone — and then the whole granularity ladder (H3) on
+  top of it, still with no GPU.
 - `--lazy_adapter_cache` makes the behavioral family reachable at k=200 for the first time. The
   machinery already existed (`eval_tofu.lazify_shard_adapters`); what was missing was noticing
   that `score_norm_ppl_family` is shard-outer, so an LRU cache sees its best case there and its
@@ -55,10 +57,14 @@ re-measuring.
 - The probe's own headline is real but redundant with a threshold. Reported as such.
 
 ## Open ideas / next steps
-- The granularity axis (H3) is the finding E1 actually surfaced and is cheap — the k-ladder npz
-  already exist for k ∈ {4,10,20,50,100,200} in `results_snapshot/`.
-- `--forget_author_ids`: `eval_tofu.split_eval_indices` scopes the forget set to one shard, so at
-  k=200 the published cells measure 20 questions, not TOFU's 400. Blocks E5 and CSAR.
+- The ladder has exactly **three** 7B rungs offline — k = 10, 50, 200 (`rl_family_*.npz` exist for
+  no other k). A fourth would need the pool retrained: the 7B k=10 and k=50 dirs hold `results/`
+  but **no shard weights**.
+- Fold the ladder into `analyze_router_probe.py` so the k axis is a first-class output rather than
+  three separate invocations reconciled by hand.
+- If H6 confirms, §4.6's defense section becomes a statement about *coarse* partitions
+  specifically: at per-source granularity a reject option is not needed, because plain confidence
+  already separates orphans.
 
 ## Entries (chronological)
 - [2026-08-07 — E1 router probe + E5/CSAR pre-registration](2026-08-07_e1-router-probe-and-preregistration.md) — probe fires (0.990) but adds +0.001 over confidence; the real axis is granularity.
