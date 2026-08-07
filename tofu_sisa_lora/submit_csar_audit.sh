@@ -34,13 +34,18 @@ MODEL="meta-llama/Llama-2-7B-chat-hf"
 E25="${CKPT}/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4"
 FORGET="180-199"
 QPA="${QPA:-5}"
+# Transform applied to the SERVED query (routing and generation both see it). `none` is the
+# gold-form arm; `name_stripped` asks whether the CSAR harm, like the H3 defence before it, is
+# an artifact of TOFU questions naming their author in ~90% of rows.
+QT="${QT:-none}"
 # Only feature-space routers. The behavioral family (ppl / activation_norm / attn_norm /
 # logit_div) scores by running EVERY candidate expert on EVERY query, which is impractical past
 # ~50 sources and would dominate this job's cost at k=200 for no CSAR-specific gain.
 STRATS="${STRATS:-centroid_sbert,key_tfidf}"
 LOG_DIR="${CKPT}/csar_logs"
 RES="${E25}/results/router_leak"
-OUT="${RES}/sibling_content_k200_f10_qpa${QPA}.json"
+SUF="${QPA}"; [ "${QT}" = "none" ] || SUF="${QPA}_${QT}"
+OUT="${RES}/sibling_content_k200_f10_qpa${SUF}.json"
 mkdir -p "${LOG_DIR}" "${RES}"
 
 submit() {
@@ -69,7 +74,7 @@ if [ -z "\${HF_TOKEN:-}" ] && [ -f "${HF_HOME}/token" ]; then export HF_TOKEN="\
 export HUGGING_FACE_HUB_TOKEN="\${HUGGING_FACE_HUB_TOKEN:-\${HF_TOKEN:-}}"
 export TOFU_METRICS_CACHE="${HF_HOME}/metrics_cache/\${SLURM_JOB_ID}"
 mkdir -p "\${TOFU_METRICS_CACHE}"
-echo "=== CSAR generation: k=200, delete ${FORGET}, ${QPA} q/author, strategies ${STRATS} ==="
+echo "=== CSAR generation: k=200, delete ${FORGET}, ${QPA} q/author, transform ${QT}, strategies ${STRATS} ==="
 date
 [ -f "${OUT}" ] && { echo "skip existing ${OUT}"; exit 0; }
 for i in \$(seq 0 199); do
@@ -78,6 +83,7 @@ done
 ${PYTHON} "${SCRIPT_DIR}/dump_generations_routed.py" \\
   --model_name "${MODEL}" --shards_dir "${E25}" --k 200 \\
   --forget_author_ids "${FORGET}" --questions_per_author ${QPA} \\
+  --query_transform "${QT}" \\
   --strategies "${STRATS}" --lazy_adapter_cache 8 \\
   --hf_home "${HF_HOME}" --out "${OUT}"
 date
@@ -101,19 +107,19 @@ date
 ${PYTHON} "${REPO_ROOT}/selector_audit/test_csar.py"
 ${PYTHON} "${REPO_ROOT}/selector_audit/csar.py" --audit_json "${OUT}" \\
   --hf_home "${HF_HOME}" \\
-  --out_json "${RES}/csar_k200_f10_qpa${QPA}.json" \\
-  --out_md "${RES}/csar_k200_f10_qpa${QPA}.md"
+  --out_json "${RES}/csar_k200_f10_qpa${SUF}.json" \\
+  --out_md "${RES}/csar_k200_f10_qpa${SUF}.md"
 # A CSAR quoted before the judge is checked against humans is not a result. Emit the sample now
 # so the labelling is not what blocks the write-up later.
 ${PYTHON} "${REPO_ROOT}/selector_audit/csar.py" --audit_json "${OUT}" \\
   --hf_home "${HF_HOME}" --sample_for_labeling 300 \\
-  --out_jsonl "${RES}/csar_k200_f10_qpa${QPA}.label_me.jsonl"
+  --out_jsonl "${RES}/csar_k200_f10_qpa${SUF}.label_me.jsonl"
 date
 EOF
 }
 
 case "${STAGE}" in
-gen)   echo "CSAR gen: k=200, ${QPA} q/author over 20 deleted authors, ${STRATS}"
+gen)   echo "CSAR gen: k=200, ${QPA} q/author over 20 deleted authors, transform=${QT}, ${STRATS}"
        submit "$(gen_body)" "${DEP:-}" ;;
 score) echo "CSAR score (CPU)"
        submit "$(score_body)" "${DEP:-}" ;;
@@ -128,5 +134,5 @@ all)
     echo "score job: ${SCORE_ID} (afterany:${GEN_ID})"
   fi
   ;;
-*) echo "usage: bash submit_csar_audit.sh [gen|score|all]  (STUB=1 previews, QPA=n)"; exit 1 ;;
+*) echo "usage: bash submit_csar_audit.sh [gen|score|all]  (STUB=1 previews, QPA=n, QT=none|name_stripped|indirect)"; exit 1 ;;
 esac

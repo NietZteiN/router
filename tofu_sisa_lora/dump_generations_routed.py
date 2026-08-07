@@ -65,6 +65,44 @@ def _rouge(pred: str, ref: str) -> float:
     return float(r["rougeL"][0].recall if hasattr(r["rougeL"][0], "recall") else r["rougeL"][0])
 
 
+def _query_transform(args, data_full):
+    """(question, author) -> the question actually SERVED.
+
+    `none` is the identity and leaves every existing arm byte-identical. The others exist
+    because the CSAR headline was measured on TOFU's gold-form questions, which name their
+    author in ~90% of rows — the same property that turned out to carry the H3 granularity
+    ladder (see log/selector_audit/2026-08-07_h3-is-a-lexical-artifact.md). A harm measured only
+    on queries that name the deleted person is worth exactly as much as a defence measured that
+    way, so the same stress test applies here.
+    """
+    mode = getattr(args, "query_transform", "none") or "none"
+    if mode == "none":
+        return lambda q, a: q
+
+    from analyze_router_shift import strip_names, indirect_reference
+    from router import _extract_author_names
+    names = {a: _extract_author_names([data_full[a * 20 + w]["question"] for w in range(20)])
+             for a in range(200)}
+    if mode == "name_stripped":
+        return lambda q, a: strip_names(q, names[a])
+    if mode == "indirect":
+        sa = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                          "selector_audit")
+        if sa not in sys.path:
+            sys.path.insert(0, sa)
+        import csar
+        gold = {a: [data_full[a * 20 + w]["answer"] for w in range(20)] for a in range(200)}
+        ix = csar.build_index(gold)
+
+        def _facts(a):
+            f = sorted(ix.distinctive(a, csar.DEFAULT_MAX_ADF), key=len, reverse=True)
+            own = {n.lower() for n in names.get(a, [])}
+            return [x for x in f if not any(x in n or n in x for n in own)][:3]
+
+        return lambda q, a: indirect_reference(q, names[a], _facts(a))
+    raise SystemExit(f"unknown --query_transform {mode!r}")
+
+
 def _forget_sets(args):
     """(forget_authors, forget_shards) — the deleted authors and the shards that host them.
 
@@ -150,12 +188,19 @@ def run_per_strategy(args):
                                  tokenizer=tok, dataset=data_full, centroid_cache_dir=cache_dir)
         routers[strat] = rm.router
 
+    transform = _query_transform(args, data_full)
+
     per_strategy = {s: [] for s in strategies}
     for qi, ridx in enumerate(forget_rows):
-        q, gold = data_full[ridx]["question"], data_full[ridx]["answer"]
+        q_orig, gold = data_full[ridx]["question"], data_full[ridx]["answer"]
         author = ridx // 20
         own_shard = author // per_shard
-        v = embed_fn([q])[0]
+        # The SERVED query. Routing and generation both see it, because that is what a user who
+        # does not name the person actually sends. `q_orig` is kept only for the record and for
+        # the nearest-survivor-question lookup, which asks "which of the survivor's questions is
+        # closest to what was really being asked".
+        q = transform(q_orig, author)
+        v = embed_fn([q_orig])[0]
         enc_ids = tok(q, return_tensors="pt").input_ids[0].to(
             next(model.parameters()).device)  # activation routers run a fwd → must be on-device
 
@@ -199,7 +244,8 @@ def run_per_strategy(args):
                 "sibling_vs_sibgold": _rouge(sib_gen, sib_gold),
                 # the raw text, so a fact-level classifier (selector_audit/csar.py) can read
                 # the same generations these ROUGE axes were computed from
-                "question": q, "gold": gold, "sibling_gold": sib_gold,
+                "question": q_orig, "question_served": q,
+                "gold": gold, "sibling_gold": sib_gold,
                 "gen_sibling": sib_gen, "gen_own": own_gen, "gen_base": base_gen,
             })
         if (qi + 1) % 25 == 0:
@@ -213,6 +259,7 @@ def run_per_strategy(args):
            "k": args.k, "forget_authors": [int(a) for a in forget_authors],
            "forget_shards": sorted(int(s) for s in forget_shards),
            "questions_per_author": args.questions_per_author,
+           "query_transform": getattr(args, "query_transform", "none") or "none",
            "seed": args.seed, "max_new_tokens": args.max_new_tokens,
            "router_encoder": args.router_encoder, "strategies": {}}
     for strat, rows in per_strategy.items():
@@ -254,6 +301,12 @@ def main():
                          "deleted set may span many shards, which is how a k=200 per-author pool "
                          "expresses TOFU's 20-author forget10; --forget_shard_id alone would "
                          "delete one author. Refuses a set that straddles a shard.")
+    ap.add_argument("--query_transform", default="none",
+                    choices=["none", "name_stripped", "indirect"],
+                    help="Transform the SERVED query (routing and generation both see it). "
+                         "`none` leaves every existing arm byte-identical. The others ask "
+                         "whether the CSAR harm, like the H3 defence before it, is an artifact "
+                         "of TOFU questions naming their author in ~90% of rows.")
     ap.add_argument("--questions_per_author", type=int, default=None,
                     help="Sample the first N questions of EVERY deleted author instead of a head "
                          "slice of the whole set. Across 20 authors --max_questions 40 would "

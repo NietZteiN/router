@@ -92,10 +92,57 @@ def test_generation_is_lazy_and_records_text():
     print("  [ok] lazy generation, whole deleted set excluded, raw text recorded")
 
 
+def test_query_transform():
+    """The served query is what routing and generation both see; `none` must be the identity.
+
+    CSAR was measured on gold-form questions, which name their author in ~90% of rows — the same
+    property that turned out to carry the H3 granularity ladder. A harm measured only on queries
+    that name the deleted person is worth as much as a defence measured that way, so the same
+    transforms apply here.
+    """
+    import argparse
+
+    # alphabetic names: _extract_author_names looks for capitalized word SEQUENCES appearing in
+    # >=50% of an author's questions, and a digit-bearing token is not one
+    def _name(a):
+        return f"{chr(65 + a % 26)}lark {chr(65 + (a // 26) % 26)}venn"
+
+    class _Stub:                       # data_full[i]['question'|'answer'] for 200x20
+        def __getitem__(self, i):
+            a = i // 20
+            return {"question": f"What did {_name(a)} write in book {i % 20}?",
+                    "answer": f"{_name(a)} wrote about a topic."}
+
+    data = _Stub()
+    ident = D._query_transform(argparse.Namespace(query_transform="none"), data)
+    q = f"What did {_name(7)} write?"
+    assert ident(q, 7) is q, "none must be the identity, not a copy"
+
+    strip = D._query_transform(argparse.Namespace(query_transform="name_stripped"), data)
+    out = strip(q, 7)
+    assert _name(7) not in out and "Hlark" not in out, out
+    assert "write" in out, out
+    # a different author's name is NOT stripped — the transform is per-subject, not global
+    assert _name(7) in strip(q, 3), strip(q, 3)
+
+    try:
+        D._query_transform(argparse.Namespace(query_transform="nope"), data)
+        raise AssertionError("unknown transform accepted")
+    except SystemExit:
+        pass
+
+    src = inspect.getsource(D.run_per_strategy)
+    assert "transform(q_orig, author)" in src, "the transform is not applied to the served query"
+    assert "\"question_served\": q" in src, "the served query is not recorded"
+    assert "_gen(model, tok, q," in src, "generation must see the SERVED query"
+    print("  [ok] query transform: none is identity, stripping is per-subject, served q recorded")
+
+
 if __name__ == "__main__":
     test_legacy_single_shard_unchanged()
     test_explicit_author_set_spans_shards()
     test_straddling_request_refused()
     test_question_sampling_spreads_over_authors()
     test_generation_is_lazy_and_records_text()
+    test_query_transform()
     print("ALL OK test_dump_generations")
