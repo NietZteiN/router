@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 1 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 2 (2026-08-07 → 2026-08-07)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -24,7 +24,14 @@ re-measuring.
   gives. Median lift over the best confidence detector is **+0.001** at k=200 (max +0.069 on one
   strategy); the mechanism is confidence, not a residual trace.
 - **[open]** H3 (granularity): the confidence ceiling reported at k=10 (AUC 0.57–0.61) is a
-  property of coarse units, not of selectors. Pending the K-scaling ladder at k ∈ {4,10,20,50,100,200}.
+  property of coarse units, not of selectors. The k-ladder cannot be extended by re-running
+  audits — the 7B k=10 and k=50 pools have `results/` but **no shard weights** on disk, so those
+  cells exist only as snapshot npz. Being tested instead by widening at fixed k=200: H6/H7 below.
+- **[open]** H6: granularity generalizes to the BEHAVIORAL family, which was the leakiest at k=10
+  (0.41–0.63) and scores by running experts rather than by embedding geometry. Pending job 3191702
+  ([wave](2026-08-07_behavioral-at-k200-wave.md)).
+- **[open]** H7: the k=200 detectability is granularity, not the e25 recipe — every k=200 number
+  in the repo comes from one pool. Pending job 3191703.
 - **[open]** H4 (E5): a reroute-only "method" that deletes nothing scores competitively on TOFU
   forget/utility/privacy. CONFIRM: forget_quality inside the published band.
 - **[open]** H5 (CSAR): cross-source attribution becomes common at per-author granularity.
@@ -36,6 +43,10 @@ re-measuring.
   new number is read off it.
 - Reusing the FAMILY NPZ CONTRACT made E1 a **zero-GPU, offline** experiment: three pools, 21
   strategy cells, from `results_snapshot/` alone.
+- `--lazy_adapter_cache` makes the behavioral family reachable at k=200 for the first time. The
+  machinery already existed (`eval_tofu.lazify_shard_adapters`); what was missing was noticing
+  that `score_norm_ppl_family` is shard-outer, so an LRU cache sees its best case there and its
+  worst case in `score_logit_div`.
 
 ## What didn't / open problems
 - E1 as framed in the paper plan does not land. Its stated bar ("beat the adapter probe, 0.963")
@@ -51,3 +62,4 @@ re-measuring.
 
 ## Entries (chronological)
 - [2026-08-07 — E1 router probe + E5/CSAR pre-registration](2026-08-07_e1-router-probe-and-preregistration.md) — probe fires (0.990) but adds +0.001 over confidence; the real axis is granularity.
+- [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.

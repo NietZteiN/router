@@ -345,9 +345,14 @@ def lora_b_norms_batch(model, adapter_name: str, input_ids, attention_mask=None,
     if attention_mask is None:
         attention_mask = torch.ones_like(input_ids)
     holder = {"mask": attention_mask, "norms": {}}
+    # Activate BEFORE registering hooks: under a lazy adapter cache the adapter's lora_B
+    # modules do not exist until set_adapter loads them, and _register_persample_hooks
+    # indexes lora_B[adapter_name] directly. Order is otherwise irrelevant — a forward hook
+    # fires at forward time — so this matches score_norm_ppl_family's order and is numerically
+    # identical to the eager path.
+    model.set_adapter(adapter_name)
     handles, is_attn = _register_persample_hooks(model, adapter_name, holder)
     try:
-        model.set_adapter(adapter_name)
         with torch.no_grad():
             model(input_ids=input_ids, attention_mask=attention_mask)
     finally:
@@ -701,11 +706,34 @@ def build_real_resources(args, strategies: list) -> Resources:
     need_lm = any(s in ("centroid_lm", "centroid_lm_last") or s in BEHAVIORAL
                   for s in strategies)
     need_adapters = any(s in BEHAVIORAL for s in strategies)
+    lazy = int(getattr(args, "lazy_adapter_cache", 0) or 0)
     if need_adapters and args.k > 50:
         # k=200 x r32 adapters fp32-cast ~65 GiB (CLAUDE.md eval memory law) — the
-        # pre-registration restricts k=200 to feature-space strategies for this reason.
-        raise SystemExit(f"behavioral strategies at k={args.k} violate the high-k eval "
-                         "memory law (feature-space only at k>50)")
+        # pre-registration restricted k=200 to feature-space strategies for this reason.
+        #
+        # `--lazy_adapter_cache N` lifts that for the norm/ppl family ONLY, and the split is
+        # about the ACCESS PATTERN, not just resident bytes:
+        #   score_norm_ppl_family loops shards OUTER, queries inner — each shard is activated
+        #     exactly once, which is the best case an LRU cache can have (k loads total).
+        #   score_logit_div loops query batches outer and ALL k shards inner, so a cache of N
+        #     would reload every shard on every batch (~k x n_batches loads); worse, it holds
+        #     one logits tensor PER SHARD for the batch, which at k=200 is ~50 GiB of
+        #     activations before any adapter memory is counted. No cache size fixes that.
+        if not lazy:
+            raise SystemExit(
+                f"behavioral strategies at k={args.k} violate the high-k eval memory law "
+                f"(feature-space only at k>50). Pass --lazy_adapter_cache N to run the "
+                f"norm/ppl family anyway (shard-outer loop, k loads total).")
+        blocked = [s for s in strategies if s == "logit_div"]
+        if blocked:
+            raise SystemExit(
+                f"logit_div at k={args.k} is not a memory-law question a lazy cache can "
+                f"answer: it activates every shard per query batch (~k x n_batches loads) "
+                f"and caches one logits tensor per shard (~50 GiB at k=200). Drop it from "
+                f"--strategies; ppl/activation_norm/attn_norm share one shard-outer pass.")
+        print(f"[router_family_audit] k={args.k} behavioral run with lazy_adapter_cache="
+              f"{lazy}: {args.k} adapter loads total (shard-outer). Numerics identical to "
+              f"the eager path — same fp32 cast (eval_tofu.lazify_shard_adapters).", flush=True)
     if need_lm:
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -735,9 +763,13 @@ def build_real_resources(args, strategies: list) -> Resources:
                     raise SystemExit(f"missing shard dir for behavioral audit: {sp}")
             model = PeftModel.from_pretrained(
                 base, os.path.join(args.pool_dir, "shard_0"), adapter_name="shard_0")
-            for i in range(1, args.k):
-                model.load_adapter(os.path.join(args.pool_dir, f"shard_{i}"),
-                                   adapter_name=f"shard_{i}")
+            if lazy:
+                from eval_tofu import lazify_shard_adapters
+                model = lazify_shard_adapters(model, args.pool_dir, lazy)
+            else:
+                for i in range(1, args.k):
+                    model.load_adapter(os.path.join(args.pool_dir, f"shard_{i}"),
+                                       adapter_name=f"shard_{i}")
             model.eval()
             res.lm = model
         else:
@@ -1118,6 +1150,12 @@ def main():
     ap.add_argument("--self_check", type=int, default=50,
                     help="N seeded queries: assert score-row argmax == router.route() "
                          "on the full pool (0 disables)")
+    ap.add_argument("--lazy_adapter_cache", type=int, default=0,
+                    help="Keep at most N shard adapters resident (eval_tofu."
+                         "lazify_shard_adapters; load-on-demand + LRU-evict, same fp32 cast so "
+                         "numerics are identical). Required to run ppl/activation_norm/attn_norm "
+                         "at k>50 — their loop is shard-outer, so the whole run costs k loads. "
+                         "Does NOT enable logit_div at high k; see the guard for why.")
     ap.add_argument("--bs", type=int, default=16, help="behavioral norm/ppl batch size")
     ap.add_argument("--logitdiv_bs", type=int, default=8,
                     help="logit_div query batch (k full-vocab logit tensors cached)")

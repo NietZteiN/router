@@ -318,6 +318,61 @@ def test_self_check_tie_tolerance():
     print("ok self-check tie tolerance (near-tie tolerated, real gap + strict path raise)")
 
 
+def test_high_k_behavioral_guard():
+    """The memory law at k>50, and exactly how --lazy_adapter_cache does and does not lift it.
+
+    The split is about the ACCESS PATTERN. ppl/activation_norm/attn_norm loop shards OUTER, so a
+    lazy cache costs k loads for the whole run. logit_div loops query batches outer and every
+    shard inner, and holds one logits tensor per shard — no cache size makes that fit, so it must
+    stay refused rather than run into an OOM two hours in.
+    """
+    import argparse
+    import inspect
+
+    def _res(k, strategies, lazy=0):
+        args = argparse.Namespace(k=k, pool_dir="/nonexistent", base_model=None,
+                                  device="cpu", lazy_adapter_cache=lazy, hf_home=os.environ.get(
+                                      "HF_HOME", ""), stub=False)
+        return RFA.build_real_resources(args, strategies)
+
+    # no lazy cache -> the historical refusal, unchanged
+    try:
+        _res(200, ["ppl"])
+        raise AssertionError("k=200 behavioral without a lazy cache did not raise")
+    except SystemExit as e:
+        assert "memory law" in str(e), e
+
+    # lazy cache -> logit_div still refused, and for its own stated reason
+    try:
+        _res(200, ["ppl", "logit_div"], lazy=8)
+        raise AssertionError("logit_div at k=200 accepted under a lazy cache")
+    except SystemExit as e:
+        assert "logit_div" in str(e) and "per query batch" in str(e), e
+
+    # feature-space at high k is untouched by any of this
+    src = inspect.getsource(RFA.build_real_resources)
+    assert "need_adapters and args.k > 50" in src
+
+    # the two loops really do have the access patterns the guard claims
+    npp = inspect.getsource(RFA.score_norm_ppl_family)
+    ld = inspect.getsource(RFA.score_logit_div)
+    assert npp.index("for shard in range(k)") < npp.index("for lo in range(0, n_q, bs)"), \
+        "norm/ppl is no longer shard-outer — the lazy-cache justification is stale"
+    assert ld.index("for lo in range(0, n_q, bs)") < ld.index("for shard in range(k)"), \
+        "logit_div is no longer batch-outer — re-examine the guard"
+
+    # hooks are registered AFTER activation, or a lazy adapter's lora_B would not exist yet
+    # match the CALL sites, not any prose mentioning them
+    lb = inspect.getsource(RFA.lora_b_norms_batch)
+    assert lb.index("model.set_adapter(adapter_name)") < \
+        lb.index("handles, is_attn = _register_persample_hooks"), \
+        "lora_b_norms_batch registers hooks before set_adapter — breaks under a lazy cache"
+    npp2 = inspect.getsource(RFA.score_norm_ppl_family)
+    assert npp2.index("model.set_adapter(aname)") < npp2.index("_register_persample_hooks"), \
+        "score_norm_ppl_family registers hooks before set_adapter"
+    print("ok high-k behavioral guard (norm/ppl lazy-enabled, logit_div refused, hook order)")
+
+
 if __name__ == "__main__":
     test_lora_b_norm_per_sample()
     test_masking_invariant()
@@ -328,4 +383,5 @@ if __name__ == "__main__":
     test_stub_end_to_end_npz_contract()
     test_retain_sample_determinism()
     test_self_check_tie_tolerance()
+    test_high_k_behavioral_guard()
     print("ALL OK test_router_family")
