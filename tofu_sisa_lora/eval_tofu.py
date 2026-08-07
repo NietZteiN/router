@@ -15,7 +15,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from eval_progress import ProgressLogger
 from merge_lora import activate_label, default_eval_labels, label_requires_data
-from shard_utils import get_author_shard
+from shard_utils import get_author_shard, parse_author_ids
 
 
 # ── site env bootstrap (added on export) ─────────────────────────────────────────────────────
@@ -449,7 +449,8 @@ def tr_nonforget_agg(tr):
     return float(np.mean(np.maximum(0.0, 1.0 - tr)))
 
 
-def split_eval_indices(shards, forget_shard_id, eval_shard_id, retain_author_ids, n_rows):
+def split_eval_indices(shards, forget_shard_id, eval_shard_id, retain_author_ids, n_rows,
+                       forget_author_ids=None):
     """Forget/retain row split for evaluate_model — factored out so the row math is
     testable offline (test_eval_rows.py). Returns (forget_indices, retain_indices,
     retain_excl_set).
@@ -464,9 +465,21 @@ def split_eval_indices(shards, forget_shard_id, eval_shard_id, retain_author_ids
         rids == the probe author an EMPTY retain pool (ValueError); the probe
         author's own rows must stay available to the retain restriction while
         forget_* keeps measuring the measure shard.
+
+    `forget_author_ids` (selector_audit, 2026-08-07) replaces the measure shard's authors with
+    an EXPLICIT set, so the forget split can stay TOFU's forget10 while the deletion unit varies
+    with k. Without it, k=200 measures one author's 20 questions where k=10 measures 400, and
+    the two are not comparable. None = unchanged legacy behavior, bit-identical. It is mutually
+    exclusive with eval_shard_id, which is a different way of choosing the same thing.
     """
-    measure_id = eval_shard_id if eval_shard_id is not None else forget_shard_id
-    forget_authors = shards[measure_id]
+    if forget_author_ids is not None and eval_shard_id is not None:
+        raise ValueError("--forget_author_ids and --eval_shard_id both choose the measure set; "
+                         "pass only one")
+    if forget_author_ids is not None:
+        forget_authors = sorted(forget_author_ids)
+    else:
+        measure_id = eval_shard_id if eval_shard_id is not None else forget_shard_id
+        forget_authors = shards[measure_id]
     forget_indices = [r for a in forget_authors for r in range(a * 20, a * 20 + 20)]
     forget_set = set(forget_indices)
     if eval_shard_id is not None and retain_author_ids is not None:
@@ -494,11 +507,15 @@ def evaluate_model(
     real_authors, world_facts, retain_ref_tr_scores=None, rouge_max_samples=None, prog=None,
     smoke=False, extended=False, retain_max_samples=500, truth_max_rows=None,
     full_pert=None, real_authors_pert=None, world_facts_pert=None,
-    eval_shard_id=None, retain_author_ids=None,
+    eval_shard_id=None, retain_author_ids=None, forget_author_ids=None,
 ):
     forget_indices, retain_indices, retain_excl_set = split_eval_indices(
-        shards, forget_shard_id, eval_shard_id, retain_author_ids, len(full_ds))
+        shards, forget_shard_id, eval_shard_id, retain_author_ids, len(full_ds),
+        forget_author_ids=forget_author_ids)
     forget_ds = full_ds.select(forget_indices)
+    if forget_author_ids is not None:
+        print(f"[eval] forget set = {len(forget_author_ids)} explicit authors "
+              f"({len(forget_indices)} rows)", flush=True)
     if retain_author_ids is not None:
         print(f"[eval] retain restricted to {len(retain_author_ids)} authors "
               f"({len(retain_indices)} rows)", flush=True)
@@ -773,6 +790,12 @@ def parse_args():
                         "(get_author_shard(k, eval_shard_id)) instead of --forget_shard_id's. "
                         "For the merge-mechanism isolated-vs-merged drop study; retain split and "
                         "the forget_quality KS reference are otherwise unchanged.")
+    p.add_argument("--forget_author_ids", default=None,
+                   help="Explicit forget authors, e.g. '180-199' (inclusive ranges and commas). "
+                        "Scores forget_* on exactly these authors instead of a shard's, so the "
+                        "TOFU forget10 split can be held fixed while the deletion UNIT varies "
+                        "with k — at k=200 --forget_shard_id measures one author's 20 questions, "
+                        "not the benchmark's 400. Mutually exclusive with --eval_shard_id.")
     p.add_argument("--out", required=True)
     p.add_argument("--retain_author_ids", default=None,
                    help="Comma-separated author ids: score the retain_* metrics ONLY on "
@@ -1071,6 +1094,13 @@ def main():
         retain_author_ids = sorted({int(x) for x in args.retain_author_ids.split(",") if x.strip()})
         if any(not (0 <= a < 200) for a in retain_author_ids):
             raise SystemExit(f"--retain_author_ids out of range [0,200): {retain_author_ids}")
+    try:
+        forget_author_ids = parse_author_ids(args.forget_author_ids)
+    except ValueError as e:
+        raise SystemExit(f"--forget_author_ids: {e}")
+    if forget_author_ids is not None and args.eval_shard_id is not None:
+        raise SystemExit("--forget_author_ids and --eval_shard_id both choose the measure set; "
+                         "pass only one")
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     progress_path = args.out.replace(".json", ".progress.json")
 
@@ -1129,6 +1159,7 @@ def main():
         world_facts_pert=data["world_facts_pert"],
         eval_shard_id=args.eval_shard_id,
         retain_author_ids=retain_author_ids,
+        forget_author_ids=forget_author_ids,
     )
     row["model_name"] = args.model_name
     row["adapter"] = adapter_name

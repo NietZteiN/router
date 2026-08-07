@@ -119,12 +119,79 @@ def test_wiring_and_baseline_flag():
           "eval_baseline --eval_shard_id present")
 
 
+def test_forget_author_ids_override():
+    """(e) selector_audit: an EXPLICIT forget-author set holds TOFU's forget10 split fixed while
+    the deletion unit varies with k. Without it, k=200 --forget_shard_id 199 measures 20
+    questions where k=10 --forget_shard_id 9 measures 400, and the two are not comparable."""
+    from shard_utils import parse_author_ids
+
+    assert parse_author_ids("180-199") == list(range(180, 200))
+    assert parse_author_ids("0,5-7") == [0, 5, 6, 7]
+    assert parse_author_ids(None) is None
+    for bad in ("200", "-1", "5-3", ""):
+        try:
+            parse_author_ids(bad)
+            raise AssertionError(f"parse_author_ids({bad!r}) did not raise")
+        except ValueError:
+            pass
+
+    # the problem it solves: at k=200 the shard path measures ONE author
+    f_shard, _, _ = split_eval_indices(SHARDS, 199, None, None, N_ROWS)
+    assert len(f_shard) == 20, len(f_shard)
+
+    # the override restores TOFU's 400-question forget10 on the same k=200 pool …
+    f_expl, r_expl, excl = split_eval_indices(SHARDS, 199, None, None, N_ROWS,
+                                              forget_author_ids=list(range(180, 200)))
+    assert len(f_expl) == 400, len(f_expl)
+    assert f_expl == [a * 20 + w for a in range(180, 200) for w in range(20)]
+    # … and the retain pool excludes exactly those rows, nothing more
+    assert excl == set(f_expl)
+    assert set(r_expl).isdisjoint(excl) and len(r_expl) == N_ROWS - 400
+
+    # … matching what k=10 shard 9 gives on the same benchmark split
+    shards_k10 = {i: get_author_shard(10, i) for i in range(10)}
+    f_k10, r_k10, _ = split_eval_indices(shards_k10, 9, None, None, N_ROWS)
+    assert f_k10 == f_expl and r_k10 == r_expl
+
+    # None is bit-identical to the legacy call on every path
+    for fid, sid, rids in ((199, None, None), (199, 82, [82]), (0, None, [1, 2])):
+        legacy = split_eval_indices(SHARDS, fid, sid, rids, N_ROWS)
+        explicit_none = split_eval_indices(SHARDS, fid, sid, rids, N_ROWS,
+                                           forget_author_ids=None)
+        assert legacy == explicit_none, (fid, sid, rids)
+
+    # mutually exclusive with --eval_shard_id: both choose the measure set
+    try:
+        split_eval_indices(SHARDS, 199, 82, None, N_ROWS, forget_author_ids=[180])
+        raise AssertionError("eval_shard_id + forget_author_ids did not raise")
+    except ValueError as e:
+        assert "only one" in str(e), e
+
+    # wiring: the CLI flag exists and reaches evaluate_model
+    import eval_tofu
+    src = inspect.getsource(eval_tofu.main)
+    assert "forget_author_ids=forget_author_ids" in src, "flag not passed to evaluate_model"
+    assert "forget_author_ids" in inspect.signature(evaluate_model).parameters
+    argv = sys.argv
+    sys.argv = ["eval_tofu.py", "--model_name", "m", "--output_dir", "o", "--label", "l",
+                "--out", "x.json", "--k", "200", "--forget_shard_id", "199",
+                "--forget_author_ids", "180-199"]
+    try:
+        args = eval_tofu.parse_args()
+    finally:
+        sys.argv = argv
+    assert args.forget_author_ids == "180-199"
+    print("  [ok] --forget_author_ids: 400-row forget10 at k=200, k=10-identical, "
+          "legacy paths byte-identical, exclusive with --eval_shard_id")
+
+
 def main():
     tests = [
         test_combined_probe_row_fixed,
         test_own_convention_unchanged,
         test_legacy_paths_unchanged,
         test_wiring_and_baseline_flag,
+        test_forget_author_ids_override,
     ]
     print(f"Running {len(tests)} eval-row CPU micro-tests...")
     for t in tests:

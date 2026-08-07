@@ -31,7 +31,7 @@ import torch
 import eval_tofu as et
 from eval_tofu import _build_qa_prompt, _get_rouge_metric, load_all_shard_adapters
 from eval_routed_scaffold import build_shard_centroids
-from shard_utils import get_author_shard
+from shard_utils import get_author_shard, parse_author_ids
 
 import sys
 
@@ -65,6 +65,49 @@ def _rouge(pred: str, ref: str) -> float:
     return float(r["rougeL"][0].recall if hasattr(r["rougeL"][0], "recall") else r["rougeL"][0])
 
 
+def _forget_sets(args):
+    """(forget_authors, forget_shards) — the deleted authors and the shards that host them.
+
+    Legacy path (`--forget_shard_id` alone) is unchanged: one shard, its own authors. With
+    `--forget_author_ids` the deleted set is explicit and may span many shards, which is what
+    a per-author pool (k=200) needs to express TOFU's 20-author forget10.
+    """
+    if args.forget_author_ids:
+        authors = parse_author_ids(args.forget_author_ids)
+        per_shard = 200 // args.k
+        shards = {a // per_shard for a in authors}
+        # a shard hosting BOTH deleted and retained authors cannot be dropped without taking
+        # retained data with it — the partition/request mismatch, and silently dropping it
+        # would misreport the retain side. Refuse rather than fudge.
+        straddling = sorted(s for s in shards
+                            if not set(get_author_shard(args.k, s)).issubset(set(authors)))
+        if straddling:
+            raise SystemExit(
+                f"--forget_author_ids straddles shard(s) {straddling} at k={args.k}: the shard "
+                f"also hosts retained authors, so it cannot be deleted as a unit. Use a k whose "
+                f"shards align with the requested authors.")
+        return authors, shards
+    fsid = args.forget_shard_id
+    return get_author_shard(args.k, fsid), {fsid}
+
+
+def _forget_rows(forget_authors, questions_per_author, max_questions):
+    """Row indices for the orphan question set.
+
+    `--max_questions` keeps its historical meaning (a head slice, the `_c40` tier at k=10, where
+    one shard's 400 rows all belong to the same deleted unit). Across a 20-author set a head
+    slice would cover only the first author or two, so `--questions_per_author` samples the head
+    of EVERY deleted author instead — the same budget, spread over the sources being deleted.
+    """
+    rows = [a * 20 + w for a in forget_authors for w in range(20)]
+    if questions_per_author:
+        n = min(int(questions_per_author), 20)
+        rows = [a * 20 + w for a in forget_authors for w in range(n)]
+    if max_questions:
+        rows = rows[:max_questions]
+    return rows
+
+
 def run_per_strategy(args):
     """Wave-2: sibling-content audit for EVERY router strategy in ONE pass. Generate each
     orphan question's answer under own / base / *every surviving shard* once (cached), then for
@@ -79,16 +122,17 @@ def run_per_strategy(args):
     os.environ["HF_HOME"] = args.hf_home
     torch.manual_seed(args.seed)
     data_full = et.load_tofu_data(args.hf_home)["full"]
-    fsid = args.forget_shard_id
     strategies = [s.strip() for s in args.strategies.split(",") if s.strip()]
 
-    forget_rows = [a * 20 + w for a in get_author_shard(args.k, fsid) for w in range(20)]
-    if args.max_questions:
-        forget_rows = forget_rows[:args.max_questions]
+    forget_authors, forget_shards = _forget_sets(args)
+    fsid = args.forget_shard_id                      # kept for the output header / legacy runs
+    forget_rows = _forget_rows(forget_authors, args.questions_per_author, args.max_questions)
     shard_rows = {j: [a * 20 + w for a in get_author_shard(args.k, j) for w in range(20)]
                   for j in range(args.k)}
+    per_shard = 200 // args.k
 
-    model, tok = load_all_shard_adapters(args.model_name, args.shards_dir, args.k)
+    model, tok = load_all_shard_adapters(args.model_name, args.shards_dir, args.k,
+                                         lazy_cache=args.lazy_adapter_cache)
     model.eval()
 
     # one embed_fn (MiniLM) for the vs_sibgold nearest-question lookup, cache dir on the pool
@@ -97,48 +141,66 @@ def run_per_strategy(args):
                                            encoder_name=args.router_encoder)
     shard_q_emb = {}
 
-    # build one router per strategy, forget shard baked into the exclude set
+    # build one router per strategy, the WHOLE deleted set baked into the exclude set
     cache_dir = os.path.join(args.shards_dir, "centroids")
+    exclude = frozenset(forget_shards)
     routers = {}
     for strat in strategies:
-        rm = _build_routed_model(model, args.k, strat, frozenset({fsid}),
+        rm = _build_routed_model(model, args.k, strat, exclude,
                                  tokenizer=tok, dataset=data_full, centroid_cache_dir=cache_dir)
         routers[strat] = rm.router
-    survivors = [j for j in range(args.k) if j != fsid]
 
     per_strategy = {s: [] for s in strategies}
     for qi, ridx in enumerate(forget_rows):
         q, gold = data_full[ridx]["question"], data_full[ridx]["answer"]
+        author = ridx // 20
+        own_shard = author // per_shard
         v = embed_fn([q])[0]
         enc_ids = tok(q, return_tensors="pt").input_ids[0].to(
             next(model.parameters()).device)  # activation routers run a fwd → must be on-device
 
-        # generate own(fsid) + base + every survivor shard, once, cache by shard/-1(base)
+        # LAZY generation: own + base up front, then only the shards a router actually picks.
+        # The original eager sweep over every survivor amortized across 9 strategies at k=10;
+        # at k=200 it would be ~200 generations per question, and with --lazy_adapter_cache it
+        # would also thrash the adapter LRU on every one of them.
         gens = {}
-        model.set_adapter(f"shard_{fsid}")
-        gens[fsid] = _gen(model, tok, q, args.max_new_tokens)
-        with model.disable_adapter():
-            gens[-1] = _gen(model, tok, q, args.max_new_tokens)
-        for j in survivors:
-            model.set_adapter(f"shard_{j}")
-            gens[j] = _gen(model, tok, q, args.max_new_tokens)
+
+        def _gen_for(shard_id):
+            if shard_id not in gens:
+                if shard_id == -1:
+                    with model.disable_adapter():
+                        gens[-1] = _gen(model, tok, q, args.max_new_tokens)
+                else:
+                    model.set_adapter(f"shard_{shard_id}")
+                    gens[shard_id] = _gen(model, tok, q, args.max_new_tokens)
+            return gens[shard_id]
+
+        own_gen = _gen_for(own_shard)
+        base_gen = _gen_for(-1)
 
         for strat in strategies:
             r = routers[strat]
             arg = enc_ids.unsqueeze(0) if isinstance(r, ActivationRouter) else q
-            sib = int(r.route(arg, exclude=frozenset({fsid})))
+            sib = int(r.route(arg, exclude=exclude))
+            assert sib not in forget_shards, (
+                f"{strat} routed orphan row {ridx} to deleted shard {sib}")
             if sib not in shard_q_emb:
                 shard_q_emb[sib] = embed_fn([data_full[x]["question"] for x in shard_rows[sib]])
             near = shard_rows[sib][int(np.argmax(shard_q_emb[sib] @ v))]
             sib_gold = data_full[near]["answer"]
-            sib_gen = gens[sib]
+            sib_gen = _gen_for(sib)
             per_strategy[strat].append({
-                "row": int(ridx), "author": int(ridx // 20), "sibling_shard": sib,
+                "row": int(ridx), "author": int(author), "own_shard": int(own_shard),
+                "sibling_shard": sib,
                 "sibling_vs_gold": _rouge(sib_gen, gold),
-                "own_vs_gold": _rouge(gens[fsid], gold),
-                "base_vs_gold": _rouge(gens[-1], gold),
-                "sibling_vs_basegen": _rouge(sib_gen, gens[-1]),
+                "own_vs_gold": _rouge(own_gen, gold),
+                "base_vs_gold": _rouge(base_gen, gold),
+                "sibling_vs_basegen": _rouge(sib_gen, base_gen),
                 "sibling_vs_sibgold": _rouge(sib_gen, sib_gold),
+                # the raw text, so a fact-level classifier (selector_audit/csar.py) can read
+                # the same generations these ROUGE axes were computed from
+                "question": q, "gold": gold, "sibling_gold": sib_gold,
+                "gen_sibling": sib_gen, "gen_own": own_gen, "gen_base": base_gen,
             })
         if (qi + 1) % 25 == 0:
             print(f"[content_audit/per_strategy] {qi+1}/{len(forget_rows)}", flush=True)
@@ -148,6 +210,9 @@ def run_per_strategy(args):
         return {"mean": float(np.mean(vv)), "median": float(np.median(vv)), "n": len(vv)}
 
     out = {"mode": "per_strategy", "forget_shard_id": fsid, "n_questions": len(forget_rows),
+           "k": args.k, "forget_authors": [int(a) for a in forget_authors],
+           "forget_shards": sorted(int(s) for s in forget_shards),
+           "questions_per_author": args.questions_per_author,
            "seed": args.seed, "max_new_tokens": args.max_new_tokens,
            "router_encoder": args.router_encoder, "strategies": {}}
     for strat, rows in per_strategy.items():
@@ -184,6 +249,19 @@ def main():
                          "(e.g. centroid_sbert,centroid_lm,ppl,activation_norm,logit_div,attn_norm,"
                          "key_tfidf,centroid_lm_last,centroid_sbert_q). Omit = the single-MiniLM "
                          "sibling audit (unchanged default).")
+    ap.add_argument("--forget_author_ids", default=None,
+                    help="Explicit deleted authors, e.g. '180-199' (per-strategy mode only). The "
+                         "deleted set may span many shards, which is how a k=200 per-author pool "
+                         "expresses TOFU's 20-author forget10; --forget_shard_id alone would "
+                         "delete one author. Refuses a set that straddles a shard.")
+    ap.add_argument("--questions_per_author", type=int, default=None,
+                    help="Sample the first N questions of EVERY deleted author instead of a head "
+                         "slice of the whole set. Across 20 authors --max_questions 40 would "
+                         "cover only the first two; --questions_per_author 2 covers all twenty "
+                         "for the same budget.")
+    ap.add_argument("--lazy_adapter_cache", type=int, default=0,
+                    help="Keep at most N shard adapters resident (eval_tofu.lazify_shard_"
+                         "adapters). Required at k=200 r32: PEFT fp32-casts every adapter.")
     ap.add_argument("--max_questions", type=int, default=None, help="smoke cap")
     ap.add_argument("--max_new_tokens", type=int, default=64)
     ap.add_argument("--hf_home", default=os.environ.get("HF_HOME", os.environ["HF_HOME"]))
@@ -192,6 +270,10 @@ def main():
     args = ap.parse_args()
     if args.strategies:
         return run_per_strategy(args)
+    for flag in ("forget_author_ids", "questions_per_author"):
+        if getattr(args, flag):
+            raise SystemExit(f"--{flag} is per-strategy mode only; pass --strategies. The "
+                             f"single-MiniLM default arm is single-shard by construction.")
     os.environ["HF_HOME"] = args.hf_home
     torch.manual_seed(args.seed)
 

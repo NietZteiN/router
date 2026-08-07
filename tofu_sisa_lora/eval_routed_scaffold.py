@@ -22,7 +22,7 @@ from eval_tofu import (load_tofu_data, load_all_shard_adapters, evaluate_model,
                        SMOKE_ROUGE_MAX, SMOKE_RETAIN_MAX, SMOKE_TRUTH_MAX,
                        EXTENDED_ROUGE_MAX, EXTENDED_RETAIN_MAX, EXTENDED_TRUTH_MAX)
 from eval_progress import ProgressLogger
-from shard_utils import get_author_shard
+from shard_utils import get_author_shard, parse_author_ids
 from legonet_tofu import build_q2author, _norm
 
 import sys
@@ -99,7 +99,16 @@ class OODAwareRoutedModel(nn.Module):
     """
 
     def __init__(self, model, tokenizer, q2author, k, num_authors=200, delete_shard=None,
-                 merged_adapter=None):
+                 merged_adapter=None, reroute_to=None):
+        """`delete_shard` accepts an int (legacy) or an iterable of shard ids — a per-author pool
+        needs to delete twenty units to express TOFU's forget10.
+
+        `reroute_to` turns the deletion into a **reassignment**: instead of the deleted authors'
+        queries falling through to base+scaffold (which is what a weight-absent model would
+        serve), they are answered by one fixed SURVIVING expert. Nothing is dropped. This is the
+        E5 arm — a "method" that deletes nothing and only edits the serving policy — and it
+        exists to measure whether TOFU's forget metric can tell the two apart.
+        """
         super().__init__()
         if merged_adapter is not None and delete_shard is not None:
             raise ValueError("merged_adapter and delete_shard are mutually exclusive")
@@ -107,9 +116,24 @@ class OODAwareRoutedModel(nn.Module):
         self.tokenizer = tokenizer
         self.q2author = q2author
         self.per_shard = num_authors // k
-        self.delete_shard = delete_shard  # exact deletion: this shard's expert is "dropped"
+        if delete_shard is None:
+            self.delete_shards = frozenset()
+        elif isinstance(delete_shard, int):
+            self.delete_shards = frozenset({delete_shard})
+        else:
+            self.delete_shards = frozenset(int(s) for s in delete_shard)
+        self.delete_shard = delete_shard  # kept for callers/labels that read it back
+        if reroute_to is not None:
+            if not self.delete_shards:
+                raise ValueError("reroute_to needs a non-empty delete set")
+            if int(reroute_to) in self.delete_shards:
+                raise ValueError(f"reroute_to={reroute_to} is itself deleted")
+            if not (0 <= int(reroute_to) < k):
+                raise ValueError(f"reroute_to={reroute_to} out of range [0,{k})")
+            reroute_to = int(reroute_to)
+        self.reroute_to = reroute_to
         self.merged_adapter = merged_adapter
-        self.stats = {"routed": 0, "ood": 0, "deleted": 0}
+        self.stats = {"routed": 0, "ood": 0, "deleted": 0, "rerouted": 0}
 
     @property
     def config(self):
@@ -125,7 +149,11 @@ class OODAwareRoutedModel(nn.Module):
             self.stats["ood"] += 1
             return None
         sid = author // self.per_shard
-        if self.delete_shard is not None and sid == self.delete_shard:
+        if sid in self.delete_shards:
+            if self.reroute_to is not None:
+                # nothing was dropped: a surviving expert answers for the deleted author
+                self.stats["rerouted"] += 1
+                return self.reroute_to
             # expert dropped -> serve base+scaffold only (exact O(1) deletion of these authors)
             self.stats["deleted"] += 1
             return None
@@ -265,6 +293,19 @@ def main():
                     help="Exact O(1) deletion demo: drop this shard's expert -> its authors serve "
                          "base+scaffold only (== a model that never trained on them). Set = forget_shard_id "
                          "and read forget_quality on those authors.")
+    ap.add_argument("--delete_shards", default=None,
+                    help="Multi-unit deletion, e.g. '180-199' (inclusive ranges and commas). A "
+                         "per-author pool (k=200) needs 20 units to express TOFU's forget10, "
+                         "which --delete_shard cannot. Mutually exclusive with --delete_shard.")
+    ap.add_argument("--reroute_to", type=int, default=None,
+                    help="E5 (selector_audit): delete NOTHING and send the deleted authors' "
+                         "queries to this fixed SURVIVING expert instead of to base+scaffold. The "
+                         "arm exists to ask whether TOFU's forget metric can distinguish 'the "
+                         "source is gone' from 'a stranger answers for it'. Requires a delete set.")
+    ap.add_argument("--forget_author_ids", default=None,
+                    help="Explicit forget authors for the METRICS, e.g. '180-199' (see "
+                         "eval_tofu.split_eval_indices). At k=200 --forget_shard_id scores one "
+                         "author's 20 questions; forget10 is 400.")
     ap.add_argument("--merged_label", default=None,
                     help="scaffold-x-composition control (arm B): build this merge label over the "
                          "loaded shard experts (merged_*/remerge_* via merge_lora.activate_label) and "
@@ -296,6 +337,23 @@ def main():
     args = ap.parse_args()
     if args.lazy_adapter_cache and args.merged_label is not None:
         raise SystemExit("--lazy_adapter_cache is incompatible with --merged_label")
+    if args.delete_shards is not None and args.delete_shard is not None:
+        raise SystemExit("--delete_shard and --delete_shards are mutually exclusive")
+    try:
+        delete_set = parse_author_ids(args.delete_shards) if args.delete_shards else None
+        forget_author_ids = parse_author_ids(args.forget_author_ids)
+    except ValueError as e:
+        raise SystemExit(str(e))
+    if delete_set is not None and any(s >= args.k for s in delete_set):
+        raise SystemExit(f"--delete_shards has ids >= k={args.k}: "
+                         f"{[s for s in delete_set if s >= args.k]}")
+    delete_arg = delete_set if delete_set is not None else args.delete_shard
+    if args.reroute_to is not None:
+        if delete_arg is None:
+            raise SystemExit("--reroute_to needs --delete_shard or --delete_shards")
+        if args.embed_route is not None:
+            raise SystemExit("--reroute_to is an oracle-route arm; --embed_route already "
+                             "reassigns orphans by nearest surviving centroid")
     os.environ["HF_HOME"] = args.hf_home
     forget_id = args.forget_shard_id if args.forget_shard_id is not None else args.k - 1
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
@@ -340,7 +398,8 @@ def main():
                                       author_sentinels=author_sents, tombstone_tau=args.tombstone_tau)
     else:
         eval_model = OODAwareRoutedModel(model, tokenizer, q2author, args.k,
-                                         delete_shard=args.delete_shard, merged_adapter=merged_name)
+                                         delete_shard=delete_arg, merged_adapter=merged_name,
+                                         reroute_to=args.reroute_to)
 
     results_sub = "smoke" if args.smoke else ("extended" if args.extended else "")
     retain_tr_path = os.path.join(args.shards_dir, "results", results_sub, "retain_tr_scores.npy")
@@ -357,6 +416,10 @@ def main():
                      else f"embedrouted_{args.embed_route}_del{args.delete_shard}")
     elif args.merged_label:
         run_label = f"scafmerged_{args.merged_label}"
+    elif args.reroute_to is not None:
+        run_label = f"routed_reroute_s{args.reroute_to}"
+    elif delete_set is not None:
+        run_label = f"routed_oracle_del{len(delete_set)}units"
     else:
         run_label = "routed_scaffold_ood"
     row = evaluate_model(
@@ -366,8 +429,22 @@ def main():
         retain_ref_tr_scores=retain_ref, rouge_max_samples=rouge_n, prog=prog,
         smoke=args.smoke, extended=args.extended, retain_max_samples=retain_n, truth_max_rows=truth_n,
         full_pert=data["full_pert"], real_authors_pert=data["real_authors_pert"],
-        world_facts_pert=data["world_facts_pert"])
+        world_facts_pert=data["world_facts_pert"], forget_author_ids=forget_author_ids)
     row["route_stats"] = eval_model.stats
+    row["deletion"] = {"delete_shards": sorted(eval_model.delete_shards),
+                       "reroute_to": eval_model.reroute_to,
+                       "forget_author_ids": forget_author_ids}
+    # The failure mode these arms are most exposed to is a plausible-but-wrong route, which no
+    # metric would flag. Assert the served policy matches the requested one before anything is
+    # read off the numbers.
+    n_orphan_q = 20 * len(forget_author_ids) if forget_author_ids else None
+    if n_orphan_q is not None and eval_model.delete_shards:
+        served = (eval_model.stats["rerouted"] if args.reroute_to is not None
+                  else eval_model.stats["deleted"])
+        if served != n_orphan_q:
+            raise SystemExit(
+                f"route audit FAILED: {served} orphan queries took the deletion path, expected "
+                f"{n_orphan_q} ({len(forget_author_ids)} authors x 20). stats={eval_model.stats}")
     import json
     json.dump(row, open(args.out, "w"), indent=2)
     print(f"[{run_label}] mu={row['model_utility']:.4f} forget_rouge={row.get('forget_rouge',float('nan')):.3f} "

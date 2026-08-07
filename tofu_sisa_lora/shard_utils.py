@@ -13,6 +13,38 @@ def get_author_shard(k: int, shard_id: int) -> list:
     return list(range(start, start + authors_per_shard))
 
 
+def parse_author_ids(spec) -> list:
+    """'180-199' / '180,181' / '0-9,190' -> sorted unique author ids. Ranges are INCLUSIVE.
+
+    Exists because the forget set is otherwise shard-scoped: at k=10 shard 9 *is* forget10
+    (authors 180-199), which is why every published cell routes through --forget_shard_id, but
+    at k=200 a shard is one author, so the same flag measures 20 questions instead of TOFU's
+    400. An explicit author set is the only way to hold the benchmark's forget split fixed
+    while varying the deletion UNIT — which is exactly what a granularity comparison needs.
+    """
+    if spec is None:
+        return None
+    ids = set()
+    for part in str(spec).split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if "-" in part:
+            lo, hi = part.split("-", 1)
+            lo, hi = int(lo), int(hi)
+            if hi < lo:
+                raise ValueError(f"descending range {part!r} in author spec {spec!r}")
+            ids.update(range(lo, hi + 1))
+        else:
+            ids.add(int(part))
+    if not ids:
+        raise ValueError(f"empty author set from {spec!r}")
+    bad = sorted(a for a in ids if not (0 <= a < 200))
+    if bad:
+        raise ValueError(f"author ids out of range [0,200): {bad}")
+    return sorted(ids)
+
+
 # ── S³T (Bourtoule-style slices inside SISA shards; ICLR'25 S3T) ─────────────
 #
 # Each S3T shard's authors are split into L natural slices; training proceeds in

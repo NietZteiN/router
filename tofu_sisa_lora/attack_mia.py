@@ -129,6 +129,15 @@ def parse_args():
                    help="sibling = deleted centroid removed (the leak); tombstone = kept as an "
                         "identity sentinel (the seal)")
     p.add_argument("--delete_shard", type=int, default=None)
+    p.add_argument("--delete_shards", default=None,
+                   help="Multi-unit deletion, e.g. '180-199' — 20 per-author units at k=200 are "
+                        "one forget10. Oracle-routed arm (no --embed_route).")
+    p.add_argument("--reroute_to", type=int, default=None,
+                   help="E5 privacy column: delete NOTHING and serve the deleted authors from "
+                        "this fixed surviving expert. Built via OODAwareRoutedModel so the MIA "
+                        "and eval_routed_scaffold's forget_quality describe the same model.")
+    p.add_argument("--lazy_adapter_cache", type=int, default=0,
+                   help="Keep at most N shard adapters resident — required at k=200 r32.")
     p.add_argument("--router_encoder", default="sentence-transformers/all-MiniLM-L6-v2")
     p.add_argument("--hf_home", default=os.environ.get("HF_HOME", os.environ["HF_HOME"]))
     # MIA-specific
@@ -188,12 +197,34 @@ def main():
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
 
     data = et.load_tofu_data(args.hf_home)
-    if args.shards_dir or args.embed_route:
+    if args.reroute_to is not None or args.delete_shards:
+        # E5 privacy column (selector_audit): the ORACLE-routed reroute arm, built exactly as
+        # eval_routed_scaffold builds it so the MIA and the forget_quality describe one model.
+        from eval_routed_scaffold import OODAwareRoutedModel
+        from legonet_tofu import build_q2author
+        from shard_utils import parse_author_ids
+        if not args.shards_dir:
+            raise SystemExit("--reroute_to / --delete_shards need --shards_dir")
+        if args.embed_route:
+            raise SystemExit("--reroute_to is an oracle-route arm; --embed_route already "
+                             "reassigns orphans by nearest surviving centroid")
+        delete_set = parse_author_ids(args.delete_shards) if args.delete_shards else None
+        model, tokenizer = et.load_all_shard_adapters(args.model_name, args.shards_dir, args.k,
+                                                      lazy_cache=args.lazy_adapter_cache)
+        q2a = build_q2author(data["full"], 200, 200 // args.k)
+        eval_model = OODAwareRoutedModel(model, tokenizer, q2a, args.k,
+                                         delete_shard=delete_set if delete_set is not None
+                                         else args.delete_shard,
+                                         reroute_to=args.reroute_to)
+        adapter_name = (f"routed_reroute_s{args.reroute_to}" if args.reroute_to is not None
+                        else f"routed_oracle_del{len(delete_set)}units")
+    elif args.shards_dir or args.embed_route:
         if not (args.shards_dir and args.embed_route):
             raise SystemExit("--shards_dir and --embed_route must be given together")
         from eval_routed_scaffold import build_shard_centroids, EmbedRoutedModel
         from legonet_tofu import build_q2author
-        model, tokenizer = et.load_all_shard_adapters(args.model_name, args.shards_dir, args.k)
+        model, tokenizer = et.load_all_shard_adapters(args.model_name, args.shards_dir, args.k,
+                                                      lazy_cache=args.lazy_adapter_cache)
         q2a = build_q2author(data["full"], 200, 200 // args.k)
         dev = "cuda" if torch.cuda.is_available() else "cpu"
         cents, sids, embed_fn = build_shard_centroids(
