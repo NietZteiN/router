@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 13 (2026-08-07 → 2026-08-10)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 14 (2026-08-07 → 2026-08-10)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -33,11 +33,12 @@ re-measuring.
   activation_norm 0.412 → **0.877**, attn_norm 0.533 → **0.758** at k=200 (r8 arm,
   [H6](2026-08-07_h6-behavioral-at-k200.md)), self_check 3/3. **Provisional**: these are
   gold-form numbers, and gold-form is exactly what H3 discredited. Not to be quoted without H11.
-- **[open]** H7: the k=200 detectability is granularity, not the recipe. **Restated** — the
-  feature-space control could never have tested it (those four routers read only the base model
-  and the TOFU questions, never the experts, and produced bit-identical score matrices across
-  pools differing in rank and epochs). Only the BEHAVIORAL family can answer it; pending job
-  3191702 ([correction](2026-08-07_h7-correction-feature-space-is-pool-independent.md)).
+- **[resolved ✓ supported]** H7/H18: the behavioral family IS recipe-dependent —
+  `activation_norm` reads **0.877 on r8 but 0.608 on the headline e25 pool**, `attn_norm` 0.758 vs
+  0.554 ([H18](2026-08-10_h18-recipe-dependence-and-a-consolidator-bug.md)). And **H11 replicates
+  on both pools** (name-stripped → 0.495/0.498 and 0.519/0.507, i.e. chance). So H6's strong form
+  was an r8 artifact on top of a gold-form artifact: on the headline pool the behavioral family
+  never had good detectability even with names.
 - **[resolved ✓ supported]** H4 (E5): a reroute-only "method" that deletes nothing scores
   **better** forget_quality than genuine deletion — **0.6789 vs 0.5789** at identical
   model_utility (0.7921) and forget_rouge within 0.02. TOFU's forget metric prefers the stranger
@@ -123,6 +124,11 @@ re-measuring.
   worst case in `score_logit_div`.
 
 ## What didn't / open problems
+- **`consolidate.py` mispaired CSAR files with generation dumps** (`stem.split("_centroid")[0]`
+  sent the `-random` runs to the gold-form dump), so the H15 rows for those runs described
+  another run's questions and the `random` strategy silently vanished from the table. Fixed by
+  exact-stem matching plus a refusal when the two strategy sets disagree. Fourth silent-numbers
+  defect of the campaign, and like the others it produced a plausible table rather than an error.
 - **The MIA privacy column is not trustworthy.** All three arms report byte-identical AUCs
   despite serving different models, and `attack_mia` records no route statistics — most likely
   every query fell to the OOD path and all three measured the base model. Needs a route-stats
@@ -181,6 +187,7 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-10 — H18: recipe dependence, and a consolidator bug](2026-08-10_h18-recipe-dependence-and-a-consolidator-bug.md) — H11 replicates; H6's 0.877 was r8-specific; the H15 table was reading the wrong dump.
 - [2026-08-10 — magnet saturation refuted; locality is lexical too](2026-08-10_magnet-saturation-and-rdr.md) — RDR 0.000 gold-form vs 0.092 name-stripped; the magnet forms only for a lexical router on name-free queries.
 - [2026-08-10 — the overnight campaign: H11, H17, H4](2026-08-10_overnight-campaign-results.md) — detection is lexical in EVERY family; a reroute-only method out-scores real deletion.
 - [2026-08-07 — H6: the behavioral family at k=200](2026-08-07_h6-behavioral-at-k200.md) — 0.412 → 0.877, and the self_check that killed the last run passes 3/3.

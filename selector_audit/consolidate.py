@@ -62,13 +62,24 @@ def question_type_breakdown(rl_dir: str) -> list:
     for p in sorted(glob.glob(os.path.join(rl_dir, "csar_*.json"))):
         c = _load(p)
         stem = os.path.basename(p)[len("csar_"):-len(".json")]
-        dump = os.path.join(rl_dir, "sibling_content_" + stem.split("_centroid")[0] + ".json")
-        if not c or not os.path.exists(dump):
-            # the strategy-tagged dumps carry the tag too; try the exact sibling name
-            alt = os.path.join(rl_dir, "sibling_content_" + stem + ".json")
-            dump = alt if os.path.exists(alt) else dump
+        # The dump is named for the SAME stem as its csar output. Preferring an approximate
+        # match over the exact one silently paired `..._centroid_sbert-random` with the
+        # gold-form dump, whose questions belong to a different run — the H15 rows then
+        # duplicated the gold-form row and the `random` strategy vanished from the table
+        # because none of its rows could be found. Exact name first, always.
+        dump = os.path.join(rl_dir, "sibling_content_" + stem + ".json")
+        if not os.path.exists(dump):
+            dump = os.path.join(rl_dir,
+                                "sibling_content_" + stem.split("_centroid")[0] + ".json")
         a = _load(dump)
         if not c or not a:
+            continue
+        # and refuse to score a pair whose strategy sets disagree: that means the wrong dump,
+        # not a partial one, and it would produce numbers computed from another run's text
+        if set(c["strategies"]) != set(a.get("strategies", {})):
+            print(f"[consolidate] SKIP question-type for {stem}: strategies "
+                  f"{sorted(c['strategies'])} != dump {sorted(a.get('strategies', {}))} "
+                  f"({os.path.basename(dump)})")
             continue
         qtext = {(s, r["row"]): r.get("question", "")
                  for s, b in a.get("strategies", {}).items() for r in b.get("per_question", [])}
