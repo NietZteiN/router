@@ -55,28 +55,37 @@ run() {  # run() <label> <cmd...>
   if "\$@"; then echo "    ok"; else echo "    FAILED (rc=\$?)"; FAILS="\${FAILS} \${label}"; fi
 }
 
-# 1. H18 — the probe on every behavioral matrix that exists, both transforms, all pools.
+# 1. H18/H22 — the probe on every matrix that exists: BOTH families x THREE transforms x all
+#    three pools. The family suffix is part of the npz stem ("_beh" or empty for feature-space)
+#    and must also be part of the REPORT name — writing both families to probe_<pool>.json would
+#    have one silently overwrite the other.
 for pool in Llama-2-7B-chat-hf_k200_r32_e25_lr1e4 \\
             Llama-2-7B-chat-hf_k200_r32_e5_lr1e4 \\
             Llama-2-7B-chat-hf_k200_r8_e5_lr1e4; do
   RL="${CKPT}/\${pool}/results/router_leak"
-  for variant in "" "_name_stripped"; do
-    stem="rl_family_k200_beh\${variant}"
-    # a strategy npz is <stem>.<strategy>.npz; skip the cell entirely if none landed
-    if ls "\${RL}/\${stem}."*.npz >/dev/null 2>&1; then
-      run "probe \${pool}\${variant:-_goldform}" \\
-        ${PYTHON} analyze_router_probe.py --family_npz "\${RL}/\${stem}.*.npz" \\
-          --drop_set 180-199 \\
-          --out_json "${REPORTS}/probe_beh_\${pool}\${variant}.json" \\
-          --out_md   "${REPORTS}/probe_beh_\${pool}\${variant}.md"
-      run "seqdel \${pool}\${variant:-_goldform}" \\
-        ${PYTHON} analyze_sequential_deletion.py --family_npz "\${RL}/\${stem}.*.npz" \\
-          --delete_order 180-199 \\
-          --out_json "${REPORTS}/seqdel_beh_\${pool}\${variant}.json" \\
-          --out_md   "${REPORTS}/seqdel_beh_\${pool}\${variant}.md"
-    else
-      echo "--- probe \${pool}\${variant:-_goldform}: no npz, skipping"
-    fi
+  for fam in "_beh:beh" ":feat"; do
+    fam_stem="\${fam%%:*}"; fam_tag="\${fam##*:}"
+    for variant in "" "_name_stripped" "_indirect"; do
+      stem="rl_family_k200\${fam_stem}\${variant}"
+      # a strategy npz is <stem>.<strategy>.npz; skip the cell entirely if none landed.
+      # NOTE the guard has to exclude the OTHER family's files: for fam_stem="" the glob
+      # rl_family_k200.*.npz does not match rl_family_k200_beh.*.npz (the separator differs),
+      # which is why the feature stem is the empty one and not a shared prefix.
+      if ls "\${RL}/\${stem}."*.npz >/dev/null 2>&1; then
+        run "probe \${fam_tag} \${pool}\${variant:-_goldform}" \\
+          ${PYTHON} analyze_router_probe.py --family_npz "\${RL}/\${stem}.*.npz" \\
+            --drop_set 180-199 \\
+            --out_json "${REPORTS}/probe_\${fam_tag}_\${pool}\${variant}.json" \\
+            --out_md   "${REPORTS}/probe_\${fam_tag}_\${pool}\${variant}.md"
+        run "seqdel \${fam_tag} \${pool}\${variant:-_goldform}" \\
+          ${PYTHON} analyze_sequential_deletion.py --family_npz "\${RL}/\${stem}.*.npz" \\
+            --delete_order 180-199 \\
+            --out_json "${REPORTS}/seqdel_\${fam_tag}_\${pool}\${variant}.json" \\
+            --out_md   "${REPORTS}/seqdel_\${fam_tag}_\${pool}\${variant}.md"
+      else
+        echo "--- probe \${fam_tag} \${pool}\${variant:-_goldform}: no npz, skipping"
+      fi
+    done
   done
 done
 
@@ -89,8 +98,8 @@ run "consolidate" ${PYTHON} "${REPO_ROOT}/selector_audit/consolidate.py" \\
   --out_json "${REPORTS}/SELECTOR_AUDIT_OVERNIGHT.json"
 
 echo
-echo "=== H18: does 'detection is lexical' hold on the r32 pools? ==="
-for f in ${REPORTS}/probe_beh_*.md; do
+echo "=== H18/H22: does 'detection is lexical' hold across pools, families and transforms? ==="
+for f in ${REPORTS}/probe_beh_*.md ${REPORTS}/probe_feat_*.md; do
   [ -f "\$f" ] || continue
   echo "--- \$(basename "\$f")"
   # write_md emits "| activation_norm | 200 | **0.972** | ..." — NO backticks around the

@@ -82,21 +82,38 @@ BEH_ARMS=(
   "beh_e5r32|${POOL_E5R32}|200|${BEH_STRATS}|rl_family_k200_beh|3"
   "beh_e5r8|${POOL_E5R8}|200|${BEH_STRATS}|rl_family_k200_beh|3"
 )
-# ONLY= a comma-separated list of arm names, e.g. ONLY=beh_e25,beh_e5r32 — for requeueing the
-# arms that timed out without redoing the one that finished (every stage self-skips anyway,
-# but a skipped arm still costs a model load).
-if [ -n "${ONLY:-}" ]; then
-  _filtered=()
-  for a in "${BEH_ARMS[@]}"; do
-    case ",${ONLY}," in *",${a%%|*},"*) _filtered+=("$a") ;; esac
-  done
-  BEH_ARMS=("${_filtered[@]}")
-  [ ${#BEH_ARMS[@]} -gt 0 ] || { echo "ONLY=${ONLY} matched no arm" >&2; exit 1; }
-fi
+# feat_e25 added 2026-08-10. The battery originally covered only the two pools that had never
+# been audited, on the assumption the e25 pool was already done — but the e25 audit predates the
+# FAMILY NPZ CONTRACT and left no rl_family_k200.*.npz on disk, so the HEADLINE pool was the one
+# pool with no feature-space matrices. Every cross-family table therefore had to compare the e25
+# behavioral numbers against feature numbers from a different recipe.
 FEAT_ARMS=(
+  "feat_e25|${POOL_E25}|200|${FEAT_STRATS}|rl_family_k200|50"
   "feat_e5r32|${POOL_E5R32}|200|${FEAT_STRATS}|rl_family_k200|50"
   "feat_e5r8|${POOL_E5R8}|200|${FEAT_STRATS}|rl_family_k200|50"
 )
+
+# ONLY= a comma-separated list of arm names, e.g. ONLY=beh_e25,feat_e25 — for requeueing the
+# arms that timed out without redoing the one that finished (every stage self-skips anyway,
+# but a skipped arm still costs a model load).
+#
+# This filters BOTH arrays. It used to filter only BEH_ARMS, which meant `ONLY=beh_e25 ... all`
+# silently ran all three feature arms as well — the filter appeared to work because the beh
+# stage obeyed it and the feat stage's extra arms self-skipped on existing output. With
+# feat_e25 and the query transforms there is now feature work that does NOT self-skip, so the
+# half-applied filter would submit real unintended arms.
+if [ -n "${ONLY:-}" ]; then
+  _filter_arms() {   # echoes the matching arm specs, one per line
+    local a
+    for a in "$@"; do
+      case ",${ONLY}," in *",${a%%|*},"*) printf '%s\n' "$a" ;; esac
+    done
+  }
+  mapfile -t BEH_ARMS < <(_filter_arms "${BEH_ARMS[@]}")
+  mapfile -t FEAT_ARMS < <(_filter_arms "${FEAT_ARMS[@]}")
+  [ $(( ${#BEH_ARMS[@]} + ${#FEAT_ARMS[@]} )) -gt 0 ] || {
+    echo "ONLY=${ONLY} matched no arm" >&2; exit 1; }
+fi
 
 submit() {
   if [ "${STUB:-0}" = "1" ]; then
