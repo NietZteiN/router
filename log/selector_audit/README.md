@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 11 (2026-08-07 → 2026-08-07)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 12 (2026-08-07 → 2026-08-10)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -38,8 +38,10 @@ re-measuring.
   and the TOFU questions, never the experts, and produced bit-identical score matrices across
   pools differing in rank and epochs). Only the BEHAVIORAL family can answer it; pending job
   3191702 ([correction](2026-08-07_h7-correction-feature-space-is-pool-independent.md)).
-- **[open]** H4 (E5): a reroute-only "method" that deletes nothing scores competitively on TOFU
-  forget/utility/privacy. CONFIRM: forget_quality inside the published band.
+- **[resolved ✓ supported]** H4 (E5): a reroute-only "method" that deletes nothing scores
+  **better** forget_quality than genuine deletion — **0.6789 vs 0.5789** at identical
+  model_utility (0.7921) and forget_rouge within 0.02. TOFU's forget metric prefers the stranger
+  ([overnight](2026-08-10_overnight-campaign-results.md)). The §4.10 result.
 - **[resolved ✓ supported, PROVISIONAL]** H5 (CSAR): cross-source attribution is common at
   per-author granularity — **CSAR 0.333 / 0.365 on the full 400** against a 0.20 bar, with
   **refusal 0.000** across all 800 answers
@@ -50,8 +52,10 @@ re-measuring.
   name-stripping CSAR RISES (0.530 / 0.500 vs 0.460 gold-form) while routing accuracy falls
   0.966 -> 0.343 ([CSAR survives](2026-08-07_csar-survives-name-stripping.md)). The defence was
   an artifact of the name; the harm is not.
-- **[open]** H17: is CSAR bounded below by 'any expert asserts its own facts'? A uniformly random
-  destination control would give the floor and needs no router at all.
+- **[resolved ✓ supported, qualified]** H17: a uniformly random surviving expert still produces
+  **CSAR 0.220** against a real router's 0.333 (400 questions). The harm cannot be engineered to
+  zero by improving the selector, but two thirds — not all — of it survives with no router. This
+  retires H8's stronger "independent of the router" form.
 - **[open]** H15: is CSAR a function of question TYPE? Identity questions score 0.460 and later
   ones 0.290/0.333, so it may largely be 'the router supplies the wrong name when asked for a
   name'.
@@ -64,10 +68,12 @@ re-measuring.
 - **[open]** H6/H7/H11 all pend job **3191948** — the first `sw-beh` submission (3191702) was
   killed by a defect in my own lazy-cache support, not by a result
   ([defect record](2026-08-07_lazy-cache-broke-the-serving-norm.md)).
-- **[open, DECISIVE]** H11: is the behavioral family's k=200 detectability lexical too? The
-  feature-space family's was (0.991 → 0.623 name-stripped). Unlike that family this one cannot
-  be tested without the pool, so `--query_transform` was added to `router_family_audit` itself.
-  Pending job **3192575**.
+- **[resolved ✓ supported]** H11: the behavioral family's detectability is lexical too —
+  activation_norm **0.877 → 0.495**, attn_norm **0.758 → 0.519**, ppl **0.993 → 0.647** under
+  name-stripping ([overnight](2026-08-10_overnight-campaign-results.md)). Two of three at chance.
+  **This completes the picture: no selector family — lexical, dense or behavioral — detects
+  orphans once the query stops naming the deleted source.** H6's 0.877 was a gold-form artifact,
+  as its entry warned.
 - **[resolved ✓ supported]** H12: queries belonging to no source spread flat — margin 0.022 vs
   0.186 retained — so confidence separates strangers at AUC 0.983–1.000
   ([OOD](2026-08-07_ood-queries-and-the-oracle-gate.md)).
@@ -75,6 +81,8 @@ re-measuring.
   and under `key_tfidf` **one unit (88) absorbs 68% of real-author, 45% of world-facts and 19% of
   orphan queries**. Author 88 is one of 18 authors with **no extractable name** — the universal
   sink is the least identifiable source. `centroid_sbert` has no such sink.
+- **[open]** H18: does H11 replicate on the `r32 e25` pool? The r8 pool is the weakest of the
+  three and both r32 arms timed out. This is H7 restated with the arm that can answer it.
 - **[open]** H8: CSAR is independent of destination concentration — `key_tfidf` funnels 42/100
   orphans onto one survivor while `centroid_sbert` spreads over 37, and both give 0.460. One
   observation, not a result.
@@ -107,6 +115,13 @@ re-measuring.
   worst case in `score_logit_div`.
 
 ## What didn't / open problems
+- **The MIA privacy column is not trustworthy.** All three arms report byte-identical AUCs
+  despite serving different models, and `attack_mia` records no route statistics — most likely
+  every query fell to the OOD path and all three measured the base model. Needs a route-stats
+  assert like `eval_routed_scaffold` has before it is run again, and must not be quoted.
+- **Two behavioral waves timed out at their 6 h wall** (r32 arms only; r8 finished both times).
+  Three arms each pulling 200 r32 adapters over NFS concurrently is the bottleneck — the fix is
+  one arm per job, not more GPUs.
 - **`--questions_per_author` head-slices each author's QUESTIONS** — the same head-slicing bias
   it was built to avoid on the author axis. TOFU puts identity questions first and those are the
   most attribution-prone, so the CSAR pilot over-read by ~0.13. `--question_sample random` added.
@@ -158,6 +173,7 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-10 — the overnight campaign: H11, H17, H4](2026-08-10_overnight-campaign-results.md) — detection is lexical in EVERY family; a reroute-only method out-scores real deletion.
 - [2026-08-07 — H6: the behavioral family at k=200](2026-08-07_h6-behavioral-at-k200.md) — 0.412 → 0.877, and the self_check that killed the last run passes 3/3.
 - [2026-08-07 — CSAR survives name-stripping, and rises](2026-08-07_csar-survives-name-stripping.md) — the defence was lexical, the harm is not.
 - [2026-08-07 — CSAR on the full 400, and the sampling bias the pilot had](2026-08-07_csar-full-400-and-a-sampling-bias.md) — 0.333/0.365, not 0.460; the head-sliced questions are the identity-shaped ones.
