@@ -1,0 +1,733 @@
+{
+  "meta": {
+    "delete_order": [
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ]
+  },
+  "strategies": {
+    "activation_norm": {
+      "k": 200,
+      "curve": [
+        {
+          "step": 1,
+          "deleted_source": 180,
+          "n_deleted": 1,
+          "n_orphans": 20,
+          "busiest_unit": 136,
+          "busiest_share": 0.65,
+          "busiest_n": 13,
+          "n_eff": 2.1505376344086016,
+          "RDR": 0.0
+        },
+        {
+          "step": 2,
+          "deleted_source": 181,
+          "n_deleted": 2,
+          "n_orphans": 40,
+          "busiest_unit": 136,
+          "busiest_share": 0.5,
+          "busiest_n": 20,
+          "n_eff": 3.278688524590164,
+          "RDR": 0.0
+        },
+        {
+          "step": 3,
+          "deleted_source": 182,
+          "n_deleted": 3,
+          "n_orphans": 60,
+          "busiest_unit": 136,
+          "busiest_share": 0.5166666666666667,
+          "busiest_n": 31,
+          "n_eff": 3.2028469750889674,
+          "RDR": 0.0
+        },
+        {
+          "step": 4,
+          "deleted_source": 183,
+          "n_deleted": 4,
+          "n_orphans": 80,
+          "busiest_unit": 136,
+          "busiest_share": 0.4875,
+          "busiest_n": 39,
+          "n_eff": 3.2921810699588474,
+          "RDR": 0.0
+        },
+        {
+          "step": 5,
+          "deleted_source": 184,
+          "n_deleted": 5,
+          "n_orphans": 100,
+          "busiest_unit": 136,
+          "busiest_share": 0.49,
+          "busiest_n": 49,
+          "n_eff": 3.3444816053511706,
+          "RDR": 0.0
+        },
+        {
+          "step": 6,
+          "deleted_source": 185,
+          "n_deleted": 6,
+          "n_orphans": 120,
+          "busiest_unit": 136,
+          "busiest_share": 0.5083333333333333,
+          "busiest_n": 61,
+          "n_eff": 3.1454783748361734,
+          "RDR": 0.0014705882352941176
+        },
+        {
+          "step": 7,
+          "deleted_source": 186,
+          "n_deleted": 7,
+          "n_orphans": 140,
+          "busiest_unit": 136,
+          "busiest_share": 0.5357142857142857,
+          "busiest_n": 75,
+          "n_eff": 2.9562594268476623,
+          "RDR": 0.0015151515151515152
+        },
+        {
+          "step": 8,
+          "deleted_source": 187,
+          "n_deleted": 8,
+          "n_orphans": 160,
+          "busiest_unit": 136,
+          "busiest_share": 0.51875,
+          "busiest_n": 83,
+          "n_eff": 3.0895486362539217,
+          "RDR": 0.0015625
+        },
+        {
+          "step": 9,
+          "deleted_source": 188,
+          "n_deleted": 9,
+          "n_orphans": 180,
+          "busiest_unit": 136,
+          "busiest_share": 0.5111111111111111,
+          "busiest_n": 92,
+          "n_eff": 3.1677747360187722,
+          "RDR": 0.0016129032258064516
+        },
+        {
+          "step": 10,
+          "deleted_source": 189,
+          "n_deleted": 10,
+          "n_orphans": 200,
+          "busiest_unit": 136,
+          "busiest_share": 0.475,
+          "busiest_n": 95,
+          "n_eff": 3.544842254519674,
+          "RDR": 0.0016666666666666668
+        },
+        {
+          "step": 11,
+          "deleted_source": 190,
+          "n_deleted": 11,
+          "n_orphans": 220,
+          "busiest_unit": 136,
+          "busiest_share": 0.4772727272727273,
+          "busiest_n": 105,
+          "n_eff": 3.4900490337467542,
+          "RDR": 0.0017241379310344827
+        },
+        {
+          "step": 12,
+          "deleted_source": 191,
+          "n_deleted": 12,
+          "n_orphans": 240,
+          "busiest_unit": 136,
+          "busiest_share": 0.475,
+          "busiest_n": 114,
+          "n_eff": 3.5285469247733396,
+          "RDR": 0.0017857142857142857
+        },
+        {
+          "step": 13,
+          "deleted_source": 192,
+          "n_deleted": 13,
+          "n_orphans": 260,
+          "busiest_unit": 136,
+          "busiest_share": 0.49230769230769234,
+          "busiest_n": 128,
+          "n_eff": 3.3618460314302765,
+          "RDR": 0.001851851851851852
+        },
+        {
+          "step": 14,
+          "deleted_source": 193,
+          "n_deleted": 14,
+          "n_orphans": 280,
+          "busiest_unit": 136,
+          "busiest_share": 0.5035714285714286,
+          "busiest_n": 141,
+          "n_eff": 3.2751274124822465,
+          "RDR": 0.0019230769230769232
+        },
+        {
+          "step": 15,
+          "deleted_source": 194,
+          "n_deleted": 15,
+          "n_orphans": 300,
+          "busiest_unit": 136,
+          "busiest_share": 0.5133333333333333,
+          "busiest_n": 154,
+          "n_eff": 3.1200166400887475,
+          "RDR": 0.02
+        },
+        {
+          "step": 16,
+          "deleted_source": 195,
+          "n_deleted": 16,
+          "n_orphans": 320,
+          "busiest_unit": 136,
+          "busiest_share": 0.525,
+          "busiest_n": 168,
+          "n_eff": 3.009994121105232,
+          "RDR": 0.025
+        },
+        {
+          "step": 17,
+          "deleted_source": 196,
+          "n_deleted": 17,
+          "n_orphans": 340,
+          "busiest_unit": 136,
+          "busiest_share": 0.5352941176470588,
+          "busiest_n": 182,
+          "n_eff": 2.9402787669142336,
+          "RDR": 0.02608695652173913
+        },
+        {
+          "step": 18,
+          "deleted_source": 197,
+          "n_deleted": 18,
+          "n_orphans": 360,
+          "busiest_unit": 136,
+          "busiest_share": 0.5416666666666666,
+          "busiest_n": 195,
+          "n_eff": 2.8810243642183893,
+          "RDR": 0.02727272727272727
+        },
+        {
+          "step": 19,
+          "deleted_source": 198,
+          "n_deleted": 19,
+          "n_orphans": 380,
+          "busiest_unit": 136,
+          "busiest_share": 0.5342105263157895,
+          "busiest_n": 203,
+          "n_eff": 2.959258955652103,
+          "RDR": 0.02857142857142857
+        },
+        {
+          "step": 20,
+          "deleted_source": 199,
+          "n_deleted": 20,
+          "n_orphans": 400,
+          "busiest_unit": 136,
+          "busiest_share": 0.5325,
+          "busiest_n": 213,
+          "n_eff": 2.9623046730356224,
+          "RDR": 0.0225
+        }
+      ],
+      "verdict": {
+        "first_share": 0.65,
+        "last_share": 0.5325,
+        "delta_share": -0.11750000000000005,
+        "final_busiest_unit": 136,
+        "tail_stability": 1.0,
+        "final_n_eff": 2.9623046730356224,
+        "final_RDR": 0.0225,
+        "verdict": "saturated \u2014 one survivor already holds most orphans"
+      }
+    },
+    "attn_norm": {
+      "k": 200,
+      "curve": [
+        {
+          "step": 1,
+          "deleted_source": 180,
+          "n_deleted": 1,
+          "n_orphans": 20,
+          "busiest_unit": 136,
+          "busiest_share": 0.3,
+          "busiest_n": 6,
+          "n_eff": 4.166666666666667,
+          "RDR": 0.0
+        },
+        {
+          "step": 2,
+          "deleted_source": 181,
+          "n_deleted": 2,
+          "n_orphans": 40,
+          "busiest_unit": 135,
+          "busiest_share": 0.35,
+          "busiest_n": 14,
+          "n_eff": 4.347826086956522,
+          "RDR": 0.0
+        },
+        {
+          "step": 3,
+          "deleted_source": 182,
+          "n_deleted": 3,
+          "n_orphans": 60,
+          "busiest_unit": 135,
+          "busiest_share": 0.3333333333333333,
+          "busiest_n": 20,
+          "n_eff": 4.3269230769230775,
+          "RDR": 0.0
+        },
+        {
+          "step": 4,
+          "deleted_source": 183,
+          "n_deleted": 4,
+          "n_orphans": 80,
+          "busiest_unit": 135,
+          "busiest_share": 0.3875,
+          "busiest_n": 31,
+          "n_eff": 4.092071611253197,
+          "RDR": 0.0
+        },
+        {
+          "step": 5,
+          "deleted_source": 184,
+          "n_deleted": 5,
+          "n_orphans": 100,
+          "busiest_unit": 135,
+          "busiest_share": 0.36,
+          "busiest_n": 36,
+          "n_eff": 4.424778761061948,
+          "RDR": 0.0
+        },
+        {
+          "step": 6,
+          "deleted_source": 185,
+          "n_deleted": 6,
+          "n_orphans": 120,
+          "busiest_unit": 135,
+          "busiest_share": 0.39166666666666666,
+          "busiest_n": 47,
+          "n_eff": 4.029099048684946,
+          "RDR": 0.025
+        },
+        {
+          "step": 7,
+          "deleted_source": 186,
+          "n_deleted": 7,
+          "n_orphans": 140,
+          "busiest_unit": 135,
+          "busiest_share": 0.40714285714285714,
+          "busiest_n": 57,
+          "n_eff": 3.962798220784472,
+          "RDR": 0.025757575757575757
+        },
+        {
+          "step": 8,
+          "deleted_source": 187,
+          "n_deleted": 8,
+          "n_orphans": 160,
+          "busiest_unit": 135,
+          "busiest_share": 0.4,
+          "busiest_n": 64,
+          "n_eff": 4.0353089533417394,
+          "RDR": 0.025
+        },
+        {
+          "step": 9,
+          "deleted_source": 188,
+          "n_deleted": 9,
+          "n_orphans": 180,
+          "busiest_unit": 135,
+          "busiest_share": 0.37222222222222223,
+          "busiest_n": 67,
+          "n_eff": 4.294803817603394,
+          "RDR": 0.025806451612903226
+        },
+        {
+          "step": 10,
+          "deleted_source": 189,
+          "n_deleted": 10,
+          "n_orphans": 200,
+          "busiest_unit": 135,
+          "busiest_share": 0.37,
+          "busiest_n": 74,
+          "n_eff": 4.2900042900042905,
+          "RDR": 0.023333333333333334
+        },
+        {
+          "step": 11,
+          "deleted_source": 190,
+          "n_deleted": 11,
+          "n_orphans": 220,
+          "busiest_unit": 135,
+          "busiest_share": 0.37727272727272726,
+          "busiest_n": 83,
+          "n_eff": 4.250087811731648,
+          "RDR": 0.02413793103448276
+        },
+        {
+          "step": 12,
+          "deleted_source": 191,
+          "n_deleted": 12,
+          "n_orphans": 240,
+          "busiest_unit": 135,
+          "busiest_share": 0.37083333333333335,
+          "busiest_n": 89,
+          "n_eff": 4.332781706032796,
+          "RDR": 0.025
+        },
+        {
+          "step": 13,
+          "deleted_source": 192,
+          "n_deleted": 13,
+          "n_orphans": 260,
+          "busiest_unit": 135,
+          "busiest_share": 0.36923076923076925,
+          "busiest_n": 96,
+          "n_eff": 4.285533155826042,
+          "RDR": 0.025925925925925925
+        },
+        {
+          "step": 14,
+          "deleted_source": 193,
+          "n_deleted": 14,
+          "n_orphans": 280,
+          "busiest_unit": 135,
+          "busiest_share": 0.3678571428571429,
+          "busiest_n": 103,
+          "n_eff": 4.302963776070253,
+          "RDR": 0.026923076923076925
+        },
+        {
+          "step": 15,
+          "deleted_source": 194,
+          "n_deleted": 15,
+          "n_orphans": 300,
+          "busiest_unit": 135,
+          "busiest_share": 0.37666666666666665,
+          "busiest_n": 113,
+          "n_eff": 4.256124089662348,
+          "RDR": 0.026
+        },
+        {
+          "step": 16,
+          "deleted_source": 195,
+          "n_deleted": 16,
+          "n_orphans": 320,
+          "busiest_unit": 135,
+          "busiest_share": 0.41875,
+          "busiest_n": 134,
+          "n_eff": 3.5493934142114383,
+          "RDR": 0.15625
+        },
+        {
+          "step": 17,
+          "deleted_source": 196,
+          "n_deleted": 17,
+          "n_orphans": 340,
+          "busiest_unit": 135,
+          "busiest_share": 0.4117647058823529,
+          "busiest_n": 140,
+          "n_eff": 3.5613062230437458,
+          "RDR": 0.1608695652173913
+        },
+        {
+          "step": 18,
+          "deleted_source": 197,
+          "n_deleted": 18,
+          "n_orphans": 360,
+          "busiest_unit": 135,
+          "busiest_share": 0.4222222222222222,
+          "busiest_n": 152,
+          "n_eff": 3.4816247582205038,
+          "RDR": 0.15681818181818183
+        },
+        {
+          "step": 19,
+          "deleted_source": 198,
+          "n_deleted": 19,
+          "n_orphans": 380,
+          "busiest_unit": 135,
+          "busiest_share": 0.4236842105263158,
+          "busiest_n": 161,
+          "n_eff": 3.5341915903862158,
+          "RDR": 0.15476190476190477
+        },
+        {
+          "step": 20,
+          "deleted_source": 199,
+          "n_deleted": 20,
+          "n_orphans": 400,
+          "busiest_unit": 135,
+          "busiest_share": 0.425,
+          "busiest_n": 170,
+          "n_eff": 3.5006344900013135,
+          "RDR": 0.145
+        }
+      ],
+      "verdict": {
+        "first_share": 0.3,
+        "last_share": 0.425,
+        "delta_share": 0.125,
+        "final_busiest_unit": 135,
+        "tail_stability": 1.0,
+        "final_n_eff": 3.5006344900013135,
+        "final_RDR": 0.145,
+        "verdict": "saturating \u2014 one survivor takes a growing share"
+      }
+    },
+    "ppl": {
+      "k": 200,
+      "curve": [
+        {
+          "step": 1,
+          "deleted_source": 180,
+          "n_deleted": 1,
+          "n_orphans": 20,
+          "busiest_unit": 117,
+          "busiest_share": 0.65,
+          "busiest_n": 13,
+          "n_eff": 2.1276595744680846,
+          "RDR": 0.0
+        },
+        {
+          "step": 2,
+          "deleted_source": 181,
+          "n_deleted": 2,
+          "n_orphans": 40,
+          "busiest_unit": 117,
+          "busiest_share": 0.5,
+          "busiest_n": 20,
+          "n_eff": 3.4934497816593892,
+          "RDR": 0.0
+        },
+        {
+          "step": 3,
+          "deleted_source": 182,
+          "n_deleted": 3,
+          "n_orphans": 60,
+          "busiest_unit": 117,
+          "busiest_share": 0.4,
+          "busiest_n": 24,
+          "n_eff": 4.7368421052631575,
+          "RDR": 0.006756756756756757
+        },
+        {
+          "step": 4,
+          "deleted_source": 183,
+          "n_deleted": 4,
+          "n_orphans": 80,
+          "busiest_unit": 117,
+          "busiest_share": 0.3,
+          "busiest_n": 24,
+          "n_eff": 6.015037593984963,
+          "RDR": 0.011111111111111112
+        },
+        {
+          "step": 5,
+          "deleted_source": 184,
+          "n_deleted": 5,
+          "n_orphans": 100,
+          "busiest_unit": 117,
+          "busiest_share": 0.32,
+          "busiest_n": 32,
+          "n_eff": 5.549389567147614,
+          "RDR": 0.011428571428571429
+        },
+        {
+          "step": 6,
+          "deleted_source": 185,
+          "n_deleted": 6,
+          "n_orphans": 120,
+          "busiest_unit": 117,
+          "busiest_share": 0.31666666666666665,
+          "busiest_n": 38,
+          "n_eff": 5.82053354890865,
+          "RDR": 0.010294117647058823
+        },
+        {
+          "step": 7,
+          "deleted_source": 186,
+          "n_deleted": 7,
+          "n_orphans": 140,
+          "busiest_unit": 117,
+          "busiest_share": 0.32142857142857145,
+          "busiest_n": 45,
+          "n_eff": 5.90717299578059,
+          "RDR": 0.010606060606060607
+        },
+        {
+          "step": 8,
+          "deleted_source": 187,
+          "n_deleted": 8,
+          "n_orphans": 160,
+          "busiest_unit": 117,
+          "busiest_share": 0.2875,
+          "busiest_n": 46,
+          "n_eff": 6.441872169099145,
+          "RDR": 0.0109375
+        },
+        {
+          "step": 9,
+          "deleted_source": 188,
+          "n_deleted": 9,
+          "n_orphans": 180,
+          "busiest_unit": 117,
+          "busiest_share": 0.2777777777777778,
+          "busiest_n": 50,
+          "n_eff": 6.696982224059529,
+          "RDR": 0.01129032258064516
+        },
+        {
+          "step": 10,
+          "deleted_source": 189,
+          "n_deleted": 10,
+          "n_orphans": 200,
+          "busiest_unit": 117,
+          "busiest_share": 0.305,
+          "busiest_n": 61,
+          "n_eff": 6.17283950617284,
+          "RDR": 0.015
+        },
+        {
+          "step": 11,
+          "deleted_source": 190,
+          "n_deleted": 11,
+          "n_orphans": 220,
+          "busiest_unit": 117,
+          "busiest_share": 0.2818181818181818,
+          "busiest_n": 62,
+          "n_eff": 6.1987704918032795,
+          "RDR": 0.015517241379310345
+        },
+        {
+          "step": 12,
+          "deleted_source": 191,
+          "n_deleted": 12,
+          "n_orphans": 240,
+          "busiest_unit": 117,
+          "busiest_share": 0.2791666666666667,
+          "busiest_n": 67,
+          "n_eff": 6.349206349206348,
+          "RDR": 0.014285714285714285
+        },
+        {
+          "step": 13,
+          "deleted_source": 192,
+          "n_deleted": 13,
+          "n_orphans": 260,
+          "busiest_unit": 117,
+          "busiest_share": 0.27307692307692305,
+          "busiest_n": 71,
+          "n_eff": 6.513779148198112,
+          "RDR": 0.014814814814814815
+        },
+        {
+          "step": 14,
+          "deleted_source": 193,
+          "n_deleted": 14,
+          "n_orphans": 280,
+          "busiest_unit": 117,
+          "busiest_share": 0.2785714285714286,
+          "busiest_n": 78,
+          "n_eff": 6.583809203896542,
+          "RDR": 0.013461538461538462
+        },
+        {
+          "step": 15,
+          "deleted_source": 194,
+          "n_deleted": 15,
+          "n_orphans": 300,
+          "busiest_unit": 117,
+          "busiest_share": 0.27,
+          "busiest_n": 81,
+          "n_eff": 6.712410501193316,
+          "RDR": 0.012
+        },
+        {
+          "step": 16,
+          "deleted_source": 195,
+          "n_deleted": 16,
+          "n_orphans": 320,
+          "busiest_unit": 117,
+          "busiest_share": 0.2625,
+          "busiest_n": 84,
+          "n_eff": 6.883570852379672,
+          "RDR": 0.0125
+        },
+        {
+          "step": 17,
+          "deleted_source": 196,
+          "n_deleted": 17,
+          "n_orphans": 340,
+          "busiest_unit": 117,
+          "busiest_share": 0.26176470588235295,
+          "busiest_n": 89,
+          "n_eff": 6.937109937590013,
+          "RDR": 0.013043478260869565
+        },
+        {
+          "step": 18,
+          "deleted_source": 197,
+          "n_deleted": 18,
+          "n_orphans": 360,
+          "busiest_unit": 117,
+          "busiest_share": 0.25,
+          "busiest_n": 90,
+          "n_eff": 7.1554770318021195,
+          "RDR": 0.011363636363636364
+        },
+        {
+          "step": 19,
+          "deleted_source": 198,
+          "n_deleted": 19,
+          "n_orphans": 380,
+          "busiest_unit": 117,
+          "busiest_share": 0.2631578947368421,
+          "busiest_n": 100,
+          "n_eff": 6.747663551401869,
+          "RDR": 0.011904761904761904
+        },
+        {
+          "step": 20,
+          "deleted_source": 199,
+          "n_deleted": 20,
+          "n_orphans": 400,
+          "busiest_unit": 117,
+          "busiest_share": 0.2525,
+          "busiest_n": 101,
+          "n_eff": 6.820119352088661,
+          "RDR": 0.0125
+        }
+      ],
+      "verdict": {
+        "first_share": 0.65,
+        "last_share": 0.2525,
+        "delta_share": -0.3975,
+        "final_busiest_unit": 117,
+        "tail_stability": 1.0,
+        "final_n_eff": 6.820119352088661,
+        "final_RDR": 0.0125,
+        "verdict": "dispersing \u2014 orphan mass spreads as more sources go"
+      }
+    }
+  }
+}

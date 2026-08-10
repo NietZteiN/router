@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "drop_set": [
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "seed": 42,
+    "m_top": 20,
+    "n_npz": 3,
+    "protocol": "author-parity split (even fit / odd eval); permutation-invariant row features; deleted columns removed before any feature is computed"
+  },
+  "cells": [
+    {
+      "npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/router_leak/rl_family_k200_beh.activation_norm.npz",
+      "strategy": "activation_norm",
+      "k": 200,
+      "drop_set": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ],
+      "cell": "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199",
+      "n_fit": 392,
+      "n_eval": 408,
+      "n_orphan_eval": 200,
+      "n_features": 26,
+      "probe": {
+        "auc": 0.9724759615384615,
+        "tau": 0.6538467221200415,
+        "orphan_catch": 0.9,
+        "retain_fpr": 0.08173076923076923
+      },
+      "source_ranking": {
+        "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
+        "n_sources": 91,
+        "n_deleted": 10,
+        "top1_is_deleted": true,
+        "recall_at_n_deleted": 0.8,
+        "auc": 0.9876543209876543
+      },
+      "control_shuffled": {
+        "auc": 0.43200399709302323
+      },
+      "control_oracle_ceiling": {
+        "auc": 0.5909615384615384,
+        "note": "deleted columns present \u2014 an upper bound, not an attack"
+      },
+      "comparators": {
+        "global_top1": {
+          "auc": 0.5603365384615384
+        },
+        "margin": {
+          "auc": 0.9339663461538461
+        },
+        "per_shard_z": {
+          "auc": 0.7144471153846154
+        }
+      },
+      "lift_over_best_confidence": 0.03850961538461539
+    },
+    {
+      "npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/router_leak/rl_family_k200_beh.attn_norm.npz",
+      "strategy": "attn_norm",
+      "k": 200,
+      "drop_set": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ],
+      "cell": "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199",
+      "n_fit": 392,
+      "n_eval": 408,
+      "n_orphan_eval": 200,
+      "n_features": 26,
+      "probe": {
+        "auc": 0.7642788461538461,
+        "tau": 0.2666442250851564,
+        "orphan_catch": 0.9,
+        "retain_fpr": 0.46153846153846156
+      },
+      "source_ranking": {
+        "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
+        "n_sources": 91,
+        "n_deleted": 10,
+        "top1_is_deleted": false,
+        "recall_at_n_deleted": 0.2,
+        "auc": 0.8012345679012346
+      },
+      "control_shuffled": {
+        "auc": 0.41960392441860467
+      },
+      "control_oracle_ceiling": {
+        "auc": 0.5828605769230769,
+        "note": "deleted columns present \u2014 an upper bound, not an attack"
+      },
+      "comparators": {
+        "global_top1": {
+          "auc": 0.45252403846153844
+        },
+        "margin": {
+          "auc": 0.6791826923076923
+        },
+        "per_shard_z": {
+          "auc": 0.7000480769230769
+        }
+      },
+      "lift_over_best_confidence": 0.0642307692307692
+    },
+    {
+      "npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/router_leak/rl_family_k200_beh.ppl.npz",
+      "strategy": "ppl",
+      "k": 200,
+      "drop_set": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199
+      ],
+      "cell": "d180_181_182_183_184_185_186_187_188_189_190_191_192_193_194_195_196_197_198_199",
+      "n_fit": 392,
+      "n_eval": 408,
+      "n_orphan_eval": 200,
+      "n_features": 26,
+      "probe": {
+        "auc": 0.9999278846153846,
+        "tau": 0.9655290828792186,
+        "orphan_catch": 0.9,
+        "retain_fpr": 0.0
+      },
+      "source_ranking": {
+        "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
+        "n_sources": 91,
+        "n_deleted": 10,
+        "top1_is_deleted": true,
+        "recall_at_n_deleted": 1.0,
+        "auc": 1.0
+      },
+      "control_shuffled": {
+        "auc": 0.43886264534883723
+      },
+      "control_oracle_ceiling": {
+        "auc": 0.5196875,
+        "note": "deleted columns present \u2014 an upper bound, not an attack"
+      },
+      "comparators": {
+        "global_top1": {
+          "auc": 0.9371394230769231
+        },
+        "margin": {
+          "auc": 0.9999038461538462
+        },
+        "per_shard_z": {
+          "auc": 0.9371153846153846
+        }
+      },
+      "lift_over_best_confidence": 2.4038461538422595e-05
+    }
+  ],
+  "verdict": {
+    "best_probe_auc": 0.9999278846153846,
+    "best_strategy": "ppl",
+    "headline_bar": 0.85,
+    "subsection_bar": 0.65,
+    "section": "headline (\u00a74.9)",
+    "ref_confidence": [
+      0.57,
+      0.61
+    ],
+    "ref_sentinel": 0.982,
+    "best_lift_over_confidence": 0.0642307692307692,
+    "best_lift_strategy": "attn_norm",
+    "median_lift_over_confidence": 0.03850961538461539,
+    "mechanism": "confidence \u2014 the probe adds little a threshold does not already give"
+  }
+}

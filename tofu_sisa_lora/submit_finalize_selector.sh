@@ -93,7 +93,10 @@ echo "=== H18: does 'detection is lexical' hold on the r32 pools? ==="
 for f in ${REPORTS}/probe_beh_*.md; do
   [ -f "\$f" ] || continue
   echo "--- \$(basename "\$f")"
-  grep -E "^\| \`(ppl|activation_norm|attn_norm)\`" "\$f" 2>/dev/null | head -3 || true
+  # write_md emits "| activation_norm | 200 | **0.972** | ..." — NO backticks around the
+  # strategy. The backticked pattern this used to carry matched nothing, so every run printed
+  # bare filenames and the summary looked empty rather than broken.
+  grep -E "^\| (ppl|activation_norm|attn_norm|logit_div) \|" "\$f" 2>/dev/null | head -4 || true
 done
 
 echo

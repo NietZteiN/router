@@ -26,7 +26,14 @@ export TOFU_SUPPORTS_MEM="${TOFU_SUPPORTS_MEM:-0}"
 # Drained / bad xe8545 nodes: these hang GPU jobs with "unspecified launch failure" inside
 # torch.cuda init and leak GPUs for hours. Kept non-empty so drivers that emit
 # "--exclude=${TOFU_EXCLUDE}" still produce a valid line.
-export TOFU_EXCLUDE="${TOFU_EXCLUDE:-xe8545-a100-03,xe8545-a100-05,xe8545-a100-12,xe8545-a100-16,xe8545-a100-17}"
+#
+# -22 added 2026-08-10: job 3200588_3 (E5 reroute42) ran 4h to TIMEOUT having produced ZERO
+# forward passes — its log holds 3087 "NVML: Failed to get usage(999)" lines and the progress
+# file never advanced past "forget_ppl 0/400". Sibling arms of the SAME array on -10 and -21
+# finished the identical workload in 23-27 min with no NVML line at all, so this is the node,
+# not the arm. SLURM still reports -22 as `idle` with no drain reason, which is precisely why
+# the exclude list has to carry it: the scheduler will keep handing it out.
+export TOFU_EXCLUDE="${TOFU_EXCLUDE:-xe8545-a100-03,xe8545-a100-05,xe8545-a100-12,xe8545-a100-16,xe8545-a100-17,xe8545-a100-22}"
 export TOFU_ALLOWED_NODES="${TOFU_ALLOWED_NODES:-${TOFU_PARTITION}}"
 
 # Association: account=testing, GrpTRES gres/gpu=16 PER USER (so using it fully does not starve
