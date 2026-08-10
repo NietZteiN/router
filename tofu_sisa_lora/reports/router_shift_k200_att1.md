@@ -24,7 +24,7 @@ k = 200 · deleted = 20 units · 800 rows (400 forget / 400 retain) · attacker 
 | `original` | 0.973 | 0.000 | 0.993 | 0.990 |
 | `paraphrase` | 0.989 | 0.000 | 0.991 | 0.989 |
 | `name_stripped` | 0.560 | 0.001 | 0.692 | 0.446 |
-| `indirect` | 0.720 | 0.000 | 0.762 | 0.715 |
+| `indirect` | 0.719 | 0.000 | 0.738 | 0.713 |
 | `name_injected` | 0.691 | 0.317 | 0.842 | 0.966 |
 | `name_swapped` | 0.121 | 0.873 | 0.706 | 0.661 |
 
@@ -35,7 +35,7 @@ k = 200 · deleted = 20 units · 800 rows (400 forget / 400 retain) · attacker 
 | `original` | 0.966 | 0.000 | 0.991 | 0.981 |
 | `paraphrase` | 0.974 | 0.000 | 0.990 | 0.987 |
 | `name_stripped` | 0.343 | 0.000 | 0.623 | 0.433 |
-| `indirect` | 0.517 | 0.000 | 0.718 | 0.543 |
+| `indirect` | 0.507 | 0.000 | 0.729 | 0.561 |
 | `name_injected` | 0.958 | 0.035 | 0.978 | 0.965 |
 | `name_swapped` | 0.128 | 0.859 | 0.595 | 0.479 |
 
@@ -43,8 +43,8 @@ k = 200 · deleted = 20 units · 800 rows (400 forget / 400 retain) · attacker 
 
 - `key_exact` / adversarial injection: attacker capture 0.000 → **0.977**.
 - `key_tfidf` / `name_stripped`: routing 0.973 → 0.560, detection 0.993 → 0.692 (Δ -0.301).
-- `key_tfidf` / `indirect`: routing 0.973 → 0.720, detection 0.993 → 0.762 (Δ -0.231).
+- `key_tfidf` / `indirect`: routing 0.973 → 0.719, detection 0.993 → 0.738 (Δ -0.255).
 - `key_tfidf` / adversarial injection: attacker capture 0.000 → **0.317**.
 - `centroid_sbert` / `name_stripped`: routing 0.966 → 0.343, detection 0.991 → 0.623 (Δ -0.368).
-- `centroid_sbert` / `indirect`: routing 0.966 → 0.517, detection 0.991 → 0.718 (Δ -0.273).
+- `centroid_sbert` / `indirect`: routing 0.966 → 0.507, detection 0.991 → 0.729 (Δ -0.262).
 - `centroid_sbert` / adversarial injection: attacker capture 0.000 → **0.035**.

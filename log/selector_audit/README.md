@@ -1,6 +1,6 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 12 (2026-08-07 → 2026-08-10)
+**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 13 (2026-08-07 → 2026-08-10)
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by
@@ -88,6 +88,14 @@ re-measuring.
   observation, not a result.
 
 ## What worked
+- **Third instance of one pattern**: detectability (H3/H11) and now LOCALITY are reassuring only
+  while the query names the source, while attribution (H16) is not. RDR is 0.000 at k=200 on
+  gold-form queries and **0.092** name-stripped — worse than the 5.8% published at k=10 that fine
+  units were supposed to improve on ([magnet/RDR](2026-08-10_magnet-saturation-and-rdr.md)).
+- **§4.2's magnet saturation is REFUTED** as a general claim — the busiest share FALLS as more
+  sources are deleted (0.550 → 0.130), because each deleted author has a different nearest
+  survivor. It holds in exactly one regime: `key_tfidf` on name-free descriptive queries
+  saturates at **0.902, n_eff 1.2**, onto the same nameless unit 88 that absorbs OOD traffic.
 - **The two headlines move in OPPOSITE directions under the same stress**, which is the most
   useful thing the day produced. Strip the author's name and the defence collapses
   (0.991 -> 0.623) while the harm strengthens (0.460 -> 0.530). A deployment where people ask
@@ -173,6 +181,7 @@ re-measuring.
 - [2026-08-07 — behavioral at k=200 + a recipe control](2026-08-07_behavioral-at-k200-wave.md) — the memory law lifted for the shard-outer family only; logit_div stays refused for its access pattern, not its bytes.
 - [2026-08-07 — CORRECTION: the feature-space recipe control cannot test H7](2026-08-07_h7-correction-feature-space-is-pool-independent.md) — bit-identical matrices across pools; H7 restated for the behavioral arm.
 - [2026-08-07 — CSAR pilot](2026-08-07_csar-pilot-h5.md) — CSAR 0.460, refusal 0.000; half of what ROUGE calls confabulation is a named stranger's facts.
+- [2026-08-10 — magnet saturation refuted; locality is lexical too](2026-08-10_magnet-saturation-and-rdr.md) — RDR 0.000 gold-form vs 0.092 name-stripped; the magnet forms only for a lexical router on name-free queries.
 - [2026-08-10 — the overnight campaign: H11, H17, H4](2026-08-10_overnight-campaign-results.md) — detection is lexical in EVERY family; a reroute-only method out-scores real deletion.
 - [2026-08-07 — H6: the behavioral family at k=200](2026-08-07_h6-behavioral-at-k200.md) — 0.412 → 0.877, and the self_check that killed the last run passes 3/3.
 - [2026-08-07 — CSAR survives name-stripping, and rises](2026-08-07_csar-survives-name-stripping.md) — the defence was lexical, the harm is not.

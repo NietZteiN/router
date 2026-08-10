@@ -31,6 +31,13 @@ from torch.utils.data import Dataset
 import eval_tofu as et
 import mia_attacks as mia
 
+# build_q2author's third argument is RECORDS PER AUTHOR (TOFU: 20), not the shard size. Both
+# call sites here used `200 // k`, which equals 20 only at k=10 — the k this file was written
+# for. At k=200 it evaluates to 1, so every question mapped to its ROW index instead of its
+# author, every lookup missed, every query took the OOD path, and all arms silently scored the
+# BASE model. Three arms reporting byte-identical AUCs is what surfaced it (2026-08-10).
+RECORDS_PER_AUTHOR = 20
+
 import sys
 
 # ── site env bootstrap (added on export) ─────────────────────────────────────────────────────
@@ -211,7 +218,7 @@ def main():
         delete_set = parse_author_ids(args.delete_shards) if args.delete_shards else None
         model, tokenizer = et.load_all_shard_adapters(args.model_name, args.shards_dir, args.k,
                                                       lazy_cache=args.lazy_adapter_cache)
-        q2a = build_q2author(data["full"], 200, 200 // args.k)
+        q2a = build_q2author(data["full"], 200, RECORDS_PER_AUTHOR)
         eval_model = OODAwareRoutedModel(model, tokenizer, q2a, args.k,
                                          delete_shard=delete_set if delete_set is not None
                                          else args.delete_shard,
@@ -225,7 +232,7 @@ def main():
         from legonet_tofu import build_q2author
         model, tokenizer = et.load_all_shard_adapters(args.model_name, args.shards_dir, args.k,
                                                       lazy_cache=args.lazy_adapter_cache)
-        q2a = build_q2author(data["full"], 200, 200 // args.k)
+        q2a = build_q2author(data["full"], 200, RECORDS_PER_AUTHOR)
         dev = "cuda" if torch.cuda.is_available() else "cpu"
         cents, sids, embed_fn = build_shard_centroids(
             args.hf_home, args.k, list(range(args.k)), dev, encoder_name=args.router_encoder)
@@ -236,6 +243,7 @@ def main():
     else:
         eval_model, tokenizer, adapter_name = et.build_served_model(args, data, forget_id)
     eval_model.eval()
+    _route_stats_before = dict(getattr(eval_model, "stats", {}) or {})
 
     member_raw = load_dataset("locuslab/TOFU", args.member_split)["train"]
     holdout_raw = load_dataset("locuslab/TOFU", args.holdout_split)["train"]
@@ -264,6 +272,7 @@ def main():
         "label_scope": args.mia_label_scope, "min_k_frac": args.min_k_frac,
         "batch_size": args.batch_size, "seed": args.seed,
         "n_member": len(member_ds), "n_holdout": len(holdout_ds),
+        "route_stats": (dict(getattr(eval_model, "stats", {}) or {}) or None),
         "per_attack": per_attack,
         "metrics_version": "mia-2026-07-03",
         "attack_mia_sha": _git_or_sha(os.path.abspath(__file__)),

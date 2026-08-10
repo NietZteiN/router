@@ -98,11 +98,11 @@
         }
       },
       "indirect": {
-        "routing_accuracy": 0.72,
+        "routing_accuracy": 0.71875,
         "attacker_capture": 0.0,
         "detection": {
-          "best_confidence_auc": 0.761975,
-          "probe_auc": 0.715025,
+          "best_confidence_auc": 0.737675,
+          "probe_auc": 0.71285,
           "n_eval": 400
         }
       },
@@ -154,11 +154,11 @@
         }
       },
       "indirect": {
-        "routing_accuracy": 0.5175,
+        "routing_accuracy": 0.5075,
         "attacker_capture": 0.0,
         "detection": {
-          "best_confidence_auc": 0.718175,
-          "probe_auc": 0.543475,
+          "best_confidence_auc": 0.7292,
+          "probe_auc": 0.56105,
           "n_eval": 400
         }
       },

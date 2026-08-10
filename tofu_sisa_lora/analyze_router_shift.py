@@ -503,6 +503,11 @@ def main():
     ap.add_argument("--m_top", type=int, default=20)
     ap.add_argument("--out_json", default=None)
     ap.add_argument("--out_md", default=None)
+    ap.add_argument("--dump_npz", default=None, metavar="DIR",
+                    help="Write each (strategy, condition) score matrix as a FAMILY NPZ CONTRACT "
+                         "file, so downstream readers (analyze_sequential_deletion, "
+                         "analyze_router_probe) work on perturbed queries without duplicating "
+                         "the scoring. Named <strategy>__<condition>.npz.")
     ap.add_argument("--ood", action="store_true",
                     help="Score queries that belong to NO source (TOFU real_authors + "
                          "world_facts) against retained and orphan traffic, and ask whether the "
@@ -530,6 +535,17 @@ def main():
         print(f"    {c:14s} e.g. {cond[c][0][:88]}", flush=True)
 
     mats = score_matrices(full, args.k, cond, args.encoder, args.device)
+    if args.dump_npz:
+        os.makedirs(args.dump_npz, exist_ok=True)
+        for strat, by_cond in mats.items():
+            for c, M in by_cond.items():
+                key = "match" if strat == "key_exact" else "scores"
+                np.savez(os.path.join(args.dump_npz, f"{strat}__{c}.npz"),
+                         **{key: np.asarray(M)},
+                         is_forget=is_forget, author_of_q=authors.astype("int32"),
+                         k=np.int64(args.k), strategy=np.str_(strat),
+                         drop_sets=np.str_(json.dumps([list(drop_ids)])))
+        print(f"[shift] npz -> {args.dump_npz}", flush=True)
     cells = analyze(mats, authors, is_forget, args.k, drop_ids, args.attacker_id,
                     args.seed, args.m_top)
     res = {"meta": {"k": args.k, "drop_set": drop_ids, "n_rows": int(len(rows)),

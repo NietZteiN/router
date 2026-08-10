@@ -33,7 +33,12 @@ HF_HOME="${HF_HOME:?set HF_HOME, or source the site layer (see PORTING.md)}"
 CKPT="${TOFU_CKPT_ROOT}"
 BASE="meta-llama/Llama-2-7B-chat-hf"
 ARRAY_CAP="${ARRAY_CAP:-${TOFU_ARRAY_CAP}}"
-PACK="${PACK:-4}"
+PACK="${PACK:-1}"
+# 2026-08-10: both 6h waves timed out with only their r8 arms finished. The bottleneck is NFS —
+# three arms each streaming 200 r32 adapters at once — not GPU. So the default is now ONE arm per
+# job and one job at a time, with a wall long enough for the r32 pools.
+WAVE_TIME="${WAVE_TIME:-12:00:00}"
+WAVE_THROTTLE="${WAVE_THROTTLE:-1}"
 TOFU_GPUS_PER_NODE="${TOFU_GPUS_PER_NODE:-4}"
 QT_SUF=""; [ "${QT:-none}" = "none" ] || QT_SUF="_${QT}"
 LOG_DIR="${CKPT}/selector_wave_logs"
@@ -77,6 +82,17 @@ BEH_ARMS=(
   "beh_e5r32|${POOL_E5R32}|200|${BEH_STRATS}|rl_family_k200_beh|3"
   "beh_e5r8|${POOL_E5R8}|200|${BEH_STRATS}|rl_family_k200_beh|3"
 )
+# ONLY= a comma-separated list of arm names, e.g. ONLY=beh_e25,beh_e5r32 — for requeueing the
+# arms that timed out without redoing the one that finished (every stage self-skips anyway,
+# but a skipped arm still costs a model load).
+if [ -n "${ONLY:-}" ]; then
+  _filtered=()
+  for a in "${BEH_ARMS[@]}"; do
+    case ",${ONLY}," in *",${a%%|*},"*) _filtered+=("$a") ;; esac
+  done
+  BEH_ARMS=("${_filtered[@]}")
+  [ ${#BEH_ARMS[@]} -gt 0 ] || { echo "ONLY=${ONLY} matched no arm" >&2; exit 1; }
+fi
 FEAT_ARMS=(
   "feat_e5r32|${POOL_E5R32}|200|${FEAT_STRATS}|rl_family_k200|50"
   "feat_e5r8|${POOL_E5R8}|200|${FEAT_STRATS}|rl_family_k200|50"
@@ -103,9 +119,9 @@ wave_body() {   # $1 = job tag, $2.. = arm specs
   cat <<EOF
 #!/bin/bash
 #SBATCH --job-name=sw-${tag}${QT_SUF}
-#SBATCH --array=0-$((njobs-1))%${ARRAY_CAP}
+#SBATCH --array=0-$((njobs-1))%${WAVE_THROTTLE}
 $(tofu_sbatch_resources ${PACK} $((8 * PACK)) 64G)
-#SBATCH --time=06:00:00
+#SBATCH --time=${WAVE_TIME}
 #SBATCH --output=${LOG_DIR}/${tag}${QT_SUF}_%A_%a.log
 #SBATCH --error=${LOG_DIR}/${tag}${QT_SUF}_%A_%a.log
 set -eo pipefail

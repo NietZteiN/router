@@ -263,5 +263,32 @@ def _direct_loss(model, batch):
     return float((losses / ntok)[0])
 
 
+def test_attack_mia_q2author_arity():
+    """attack_mia's q2author must be built with RECORDS PER AUTHOR, not the shard size.
+
+    Both call sites passed `200 // k`, which equals 20 only at k=10 — the k the file was written
+    for. At k=200 it is 1, so every question maps to its ROW index instead of its author, every
+    lookup misses, every query takes the OOD path, and the arm silently scores the BASE model.
+    It surfaced as three different arms reporting byte-identical AUCs (2026-08-10).
+    """
+    import inspect
+    import attack_mia as am
+    from legonet_tofu import build_q2author
+
+    assert am.RECORDS_PER_AUTHOR == 20
+    src = inspect.getsource(am)
+    assert "200 // args.k" not in src, "the shard-size arity is back in attack_mia"
+    assert src.count("build_q2author(data[\"full\"], 200, RECORDS_PER_AUTHOR)") == 2
+
+    # the arity actually matters: a synthetic 3-author x 4-question corpus
+    rows = [{"question": f"q{a}_{w}", "answer": "x"} for a in range(3) for w in range(4)]
+    right = build_q2author(rows, 3, 4)          # records per author
+    wrong = build_q2author(rows, 3, 1)          # shard size at k == num_authors
+    assert right["q2_3"] == 2, right            # last author's last question -> author 2
+    assert "q2_3" not in wrong, "the wrong arity must not resolve the later rows"
+    assert len(right) == 12 and len(wrong) == 3
+    print("ok attack_mia q2author arity (records-per-author, not shard size)")
+
+
 if __name__ == "__main__":
     main()
