@@ -516,19 +516,46 @@ def build_centroids_cached(embed_batch_fn, texts_per_shard: list, cache_dir: str
                            embed_label: str) -> list:
     """Batched sibling of router.build_centroids with the IDENTICAL cache layout
     ({cache_dir}/{embed_label}/shard_{i}.npy) and mean math. embed_label must be a NEW
-    rfa_* dir — existing centroid caches are never touched."""
+    rfa_* dir — existing centroid caches are never touched.
+
+    CONCURRENCY-SAFE (2026-08-10). Centroids are built from each shard's TRAINING text, so they
+    do not depend on the query transform — which means arms differing only in --query_transform
+    legitimately share one cache path, and running them at once is the normal case, not an abuse.
+    The original write was `np.save(cp, c)` straight to the final path: np.save creates the file
+    and *then* writes into it, so a second process calling os.path.exists() in that window sees
+    the file, loads 0 bytes, and dies with "cannot reshape array of size 0 into shape (4096,)".
+    That is exactly how job 3201979 lost its feat_e25 arm while two sibling jobs were building
+    the same e25 centroids. Publishing via a process-unique temp + os.replace (atomic within a
+    filesystem) means a reader sees either no file or a complete one — never a half-written one.
+    """
     cents = []
     for sid, texts in enumerate(texts_per_shard):
         cp = None
         if cache_dir is not None:
             cp = os.path.join(cache_dir, embed_label, f"shard_{sid}.npy")
             if os.path.exists(cp):
-                cents.append(np.load(cp))
-                continue
+                try:
+                    cents.append(np.load(cp))
+                    continue
+                except (ValueError, OSError, EOFError) as e:
+                    # A partial file from a concurrent writer on a non-atomic filesystem, or a
+                    # truncated one left by a killed job. Recomputing costs one shard's
+                    # embeddings; aborting costs the whole arm.
+                    print(f"[router_family_audit] unreadable centroid cache {cp} ({e}) — "
+                          f"recomputing", file=sys.stderr)
         c = np.asarray(embed_batch_fn(texts)).mean(axis=0)
         if cp is not None:
             os.makedirs(os.path.dirname(cp), exist_ok=True)
-            np.save(cp, c)
+            # np.save() appends '.npy' to a *path* that lacks it, which would defeat the rename;
+            # passing an open file object keeps the temp name exactly as written.
+            tmp = f"{cp}.tmp.{os.getpid()}"
+            try:
+                with open(tmp, "wb") as fh:
+                    np.save(fh, c)
+                os.replace(tmp, cp)
+            finally:
+                if os.path.exists(tmp):
+                    os.unlink(tmp)
         cents.append(c)
     return cents
 

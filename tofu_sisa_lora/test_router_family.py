@@ -24,6 +24,7 @@ import os
 os.environ["CUDA_VISIBLE_DEVICES"] = ""   # CPU-only; never touch a (login-node) GPU
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
+import inspect
 import json
 import tempfile
 
@@ -418,6 +419,64 @@ def test_high_k_behavioral_guard():
     print("ok high-k behavioral guard (norm/ppl lazy-enabled, logit_div refused, hook order)")
 
 
+def test_centroid_cache_is_concurrency_safe():
+    """A half-written cache entry must never reach the final path, and an already-corrupt one
+    must be recomputed rather than kill the arm.
+
+    Regression for job 3201979 (2026-08-10): three wave arms differing only in
+    --query_transform share one centroid cache (centroids come from shard TRAINING text, so
+    they are transform-independent), and `np.save(final_path, c)` created the file before
+    filling it. A sibling arm's os.path.exists() hit that window and read 0 bytes:
+    "cannot reshape array of size 0 into shape (4096,)".
+    """
+    calls = {"n": 0}
+
+    def embed(texts):
+        calls["n"] += 1
+        return np.full((len(texts), 4), float(len(texts)), dtype="float32")
+
+    texts = [["a", "b"], ["c"]]
+
+    with tempfile.TemporaryDirectory() as d:
+        # 1. cold build populates the cache, and publishes NOTHING but complete files
+        c1 = RFA.build_centroids_cached(embed, texts, d, "rfa_test")
+        assert calls["n"] == 2, calls
+        cdir = os.path.join(d, "rfa_test")
+        files = sorted(os.listdir(cdir))
+        assert files == ["shard_0.npy", "shard_1.npy"], files
+        assert all(os.path.getsize(os.path.join(cdir, f)) > 0 for f in files), "empty cache file"
+
+        # 2. warm read uses the cache (no new embed calls) and returns the same vectors
+        c2 = RFA.build_centroids_cached(embed, texts, d, "rfa_test")
+        assert calls["n"] == 2, f"warm path recomputed: {calls}"
+        for a, b in zip(c1, c2):
+            assert np.allclose(a, b), (a, b)
+
+        # 3. THE BUG: a zero-byte entry is exactly what a reader saw mid-write. It must be
+        #    recomputed, not raised on — and the recomputed value must be correct.
+        poisoned = os.path.join(cdir, "shard_0.npy")
+        open(poisoned, "wb").close()
+        assert os.path.getsize(poisoned) == 0
+        c3 = RFA.build_centroids_cached(embed, texts, d, "rfa_test")
+        assert calls["n"] == 3, f"poisoned entry was not recomputed: {calls}"
+        assert np.allclose(c3[0], c1[0]), (c3[0], c1[0])
+        assert np.allclose(c3[1], c1[1]), "intact sibling entry was disturbed"
+        assert os.path.getsize(poisoned) > 0, "poisoned entry not repaired"
+
+        # 4. no .tmp.<pid> droppings left behind, ever — they would accumulate on NFS
+        leftovers = [f for f in os.listdir(cdir) if ".tmp." in f]
+        assert not leftovers, leftovers
+
+    # 5. the publish is a rename, not a write-in-place. Asserted on the source because the
+    #    race window is a timing property no single-process test can observe directly.
+    #    The docstring quotes the old buggy call, so strip it before matching on code.
+    src = inspect.getsource(RFA.build_centroids_cached)
+    body = src.split('"""')[2] if src.count('"""') >= 2 else src
+    assert "os.replace(" in body, "centroid cache no longer publishes atomically"
+    assert "np.save(cp" not in body, "centroid cache writes straight to the final path again"
+    print("ok centroid cache concurrency-safe (atomic publish, poisoned entry recovered)")
+
+
 if __name__ == "__main__":
     test_lora_b_norm_per_sample()
     test_masking_invariant()
@@ -430,4 +489,5 @@ if __name__ == "__main__":
     test_self_check_tie_tolerance()
     test_lora_b_norm_under_lazy_cache()
     test_high_k_behavioral_guard()
+    test_centroid_cache_is_concurrency_safe()
     print("ALL OK test_router_family")
