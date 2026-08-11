@@ -92,8 +92,19 @@ stage_hf_cache.sh               APA:stage_hf_cache.sh
 #
 # ── the selector_audit follow-up (2026-08-07). Authored HERE, in this repo, not vendored from
 #    the working tree — so a `--pull` must never overwrite them. See log/selector_audit/.
-# selector_audit/                              (csar.py, test_csar.py, README.md)
+# selector_audit/                              (csar.py, consolidate.py, test_csar.py, README.md)
 # tofu_sisa_lora/analyze_router_probe.py
 # tofu_sisa_lora/test_router_probe.py
 # tofu_sisa_lora/test_dump_generations.py
 # tofu_sisa_lora/submit_e5_reroute.sh
+#    ── added 2026-08-10/11 as the campaign grew. These were authored here too and were missing
+#       from this list, i.e. a --pull would have silently reverted them.
+# tofu_sisa_lora/analyze_router_shift.py       (query transforms: name_stripped / indirect / ...)
+# tofu_sisa_lora/analyze_sequential_deletion.py (magnet saturation + RDR)
+# tofu_sisa_lora/analyze_selector_cost.py      (H24 defense frontier)
+# tofu_sisa_lora/submit_selector_wave.sh
+# tofu_sisa_lora/submit_finalize_selector.sh
+# tofu_sisa_lora/submit_ood_gate.sh
+# tofu_sisa_lora/submit_csar_audit.sh
+# tofu_sisa_lora/submit_overnight_selector.sh
+# tofu_sisa_lora/submit_e5_destination_sweep.sh (H23 destination sweep)
