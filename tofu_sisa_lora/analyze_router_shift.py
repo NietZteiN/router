@@ -103,6 +103,37 @@ def swap_name(q: str, names: list, attacker_name: str) -> str:
     return q
 
 
+def descriptive_facts(index, author_id: int, names: list, n: int = 3) -> list:
+    """The author's distinctive facts, longest first, in a REPRODUCIBLE order.
+
+    `FactIndex.distinctive` returns a set, and `sorted(set, key=len)` leaves equal-length facts
+    in set-iteration order — which for strings depends on PYTHONHASHSEED and therefore varies
+    between processes. That made the whole `indirect` condition unreproducible: the same pool
+    scored on different days got different queries, which is visible as a real difference in the
+    score matrices (up to 0.27 absolute) where the gold-form and name_stripped matrices agree to
+    0.0. Sorting by (-len, text) is a TOTAL order, so ties resolve identically everywhere.
+
+    Facts that merely restate the author's name are dropped — a description that names the
+    person is not an indirect reference.
+    """
+    own = {n.lower() for n in (names or [])}
+    facts = index.distinctive(author_id, csar_max_adf())
+    ordered = sorted(facts, key=lambda x: (-len(x), x))
+    return [x for x in ordered if not any(x in o or o in x for o in own)][:n]
+
+
+def csar_max_adf() -> int:
+    """DEFAULT_MAX_ADF, imported lazily so this module stays importable without selector_audit."""
+    import os
+    import sys
+    sa = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                      "selector_audit")
+    if sa not in sys.path:
+        sys.path.insert(0, sa)
+    import csar
+    return csar.DEFAULT_MAX_ADF
+
+
 def indirect_reference(q: str, names: list, facts: list) -> str:
     """Name removed, replaced by a definite description from the author's distinctive facts.
 
@@ -165,10 +196,7 @@ def build_conditions(full, rows, authors, paras, attacker_id: int, hf_home: str)
     ix = csar.build_index(gold)
 
     def _facts(a):
-        f = sorted(ix.distinctive(a, csar.DEFAULT_MAX_ADF), key=len, reverse=True)
-        own = {n.lower() for n in names.get(a, [])}
-        # a description that just restates the name is not an indirect reference
-        return [x for x in f if not any(x in n or n in x for n in own)][:3]
+        return descriptive_facts(ix, a, names.get(a, []))
 
     orig = [full[int(i)]["question"] for i in rows]
     cond = {"original": orig, "paraphrase": list(paras)}
@@ -422,6 +450,31 @@ def run_self_test() -> None:
     assert indirect_reference(q, names, []) == strip_names(q, names)
     ok("indirect reference: no name, identifying description, degrades to stripped")
 
+    # descriptive_facts must impose a TOTAL order. The old `sorted(set, key=len, reverse=True)`
+    # left equal-length facts in set-iteration order, which is hash-randomized per process, so
+    # the whole `indirect` condition scored different queries on different runs. Feeding the
+    # same facts in several different iteration orders must give one answer.
+    class _Ix:
+        def __init__(self, facts):
+            self._f = facts
+
+        def distinctive(self, author_id, max_adf):
+            return set(self._f)
+
+    tied = ["bbbb", "aaaa", "cccc", "dddd"]            # all length 4: pure tie-break
+    outs = {tuple(descriptive_facts(_Ix(list(perm)), 0, [], n=3))
+            for perm in (tied, tied[::-1], sorted(tied), ["cccc", "aaaa", "dddd", "bbbb"])}
+    assert len(outs) == 1, f"tie-break is order-dependent: {outs}"
+    assert next(iter(outs)) == ("aaaa", "bbbb", "cccc"), outs
+    ok("descriptive_facts: equal-length facts resolve by a total order, not set iteration")
+
+    # longer facts still win, and name-restating facts are still dropped
+    mixed = _Ix(["short", "a much longer distinctive fact", "medium fact"])
+    assert descriptive_facts(mixed, 0, [], n=1) == ["a much longer distinctive fact"]
+    assert "kalkidan abera" not in descriptive_facts(
+        _Ix(["kalkidan abera", "runs a nutrition clinic"]), 0, ["Kalkidan Abera"])
+    ok("descriptive_facts: length priority kept, name-restating facts still dropped")
+
     # analyze(): a planted matrix where every query is routed to the attacker must read
     # capture ~1.0 and routing ~0, and the reverse for a perfect router
     k, n_q = 4, 40
@@ -446,7 +499,8 @@ def run_self_test() -> None:
     assert r2["key_exact"]["original"]["no_match_rate"] == 1.0
     ok("key_exact: no graded detection, no-match rate reported instead")
 
-    print(f"[analyze_router_shift] self_test: {n}/6 PASS")
+    # {n}/{n}: the denominator used to be hardcoded, so adding checks printed "8/6 PASS"
+    print(f"[analyze_router_shift] self_test: {n}/{n} PASS")
 
 
 def run_ood(args):

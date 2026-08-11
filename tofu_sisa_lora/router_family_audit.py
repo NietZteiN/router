@@ -1052,11 +1052,12 @@ def run(args) -> dict:
             gold = {a: [res.dataset[a * res.per + w]["answer"] for w in range(res.per)]
                     for a in range(res.num_authors)}
             ix = csar.build_index(gold)
+            # Shared with analyze_router_shift so the two call sites cannot drift — and so the
+            # total-order fix for the hash-randomized tie-break lives in exactly one place.
+            from analyze_router_shift import descriptive_facts
 
             def _facts(a):
-                f = sorted(ix.distinctive(a, csar.DEFAULT_MAX_ADF), key=len, reverse=True)
-                own = {n.lower() for n in names.get(a, [])}
-                return [x for x in f if not any(x in n or n in x for n in own)][:3]
+                return descriptive_facts(ix, a, names.get(a, []))
 
             questions = [indirect_reference(q, names[int(a)], _facts(int(a)))
                          for q, a in zip(questions, author_of_q)]
