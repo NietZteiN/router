@@ -508,6 +508,7 @@ def evaluate_model(
     smoke=False, extended=False, retain_max_samples=500, truth_max_rows=None,
     full_pert=None, real_authors_pert=None, world_facts_pert=None,
     eval_shard_id=None, retain_author_ids=None, forget_author_ids=None,
+    dump_forget_tr=None,
 ):
     forget_indices, retain_indices, retain_excl_set = split_eval_indices(
         shards, forget_shard_id, eval_shard_id, retain_author_ids, len(full_ds),
@@ -596,6 +597,15 @@ def evaluate_model(
     forget_truth_ratio = tr_forget_agg(forget_tr)          # closer_to_1_better ∈ [0,1]
     if prog:
         prog.metric("forget_truth_ratio", round(forget_truth_ratio, 4))
+    # forget_quality collapses this array to ONE KS p-value, and that p-value is a step function
+    # of a discrete statistic: at the smoke caps it can take 34 distinct values, so adjacent rungs
+    # sit ~0.10 apart and the 4 decimals every table reports are spurious. Keeping the raw array
+    # is what lets a bootstrap put an interval on the cell afterwards, on CPU, without re-serving
+    # the model -- which otherwise costs a GPU-hour per arm to recover a number we already had.
+    if dump_forget_tr:
+        os.makedirs(os.path.dirname(os.path.abspath(dump_forget_tr)) or ".", exist_ok=True)
+        np.save(dump_forget_tr, np.asarray(forget_tr, dtype=np.float64))
+        print(f"[eval] forget truth-ratio array -> {dump_forget_tr} ({len(forget_tr)} rows)")
 
     # Retain set: truth ratio needs paraphrased+perturbed answers, which only exist in the
     # *_perturbed splits, so compute over the retain portion of full_pert (= retain_perturbed,

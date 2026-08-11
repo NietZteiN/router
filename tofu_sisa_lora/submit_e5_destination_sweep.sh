@@ -60,7 +60,13 @@ case "${TIER}" in
   *) echo "TIER must be smoke or extended (got '${TIER}')" >&2; exit 1 ;;
 esac
 LOG_DIR="${CKPT}/e5_sweep_logs"
-RES="${E25}/results/${TIER}"
+# RES_TAG re-points ONLY the output dir. The KS reference is loaded by eval_routed_scaffold from
+# results/<TIER>/retain_tr_scores.npy off the tier FLAG, never off --out, so a tagged rerun scores
+# against the byte-identical reference the untagged arms used -- which is the whole point: it lets
+# a rerun land beside the published cells instead of on top of them. Use it when re-running arms
+# that already have results (RES_TAG=_ci), so the originals stay readable and the reproduced
+# forget_quality doubles as a determinism check on the spine table.
+RES="${E25}/results/${TIER}${RES_TAG:-}"
 mkdir -p "${LOG_DIR}" "${RES}"
 
 if [ "${PACK}" -gt "${TOFU_GPUS_PER_NODE}" ]; then
@@ -73,14 +79,18 @@ fi
 #   prepare_eval.py --${TIER} --output_dir <a pool with a retain90/> --k 200
 # and copy it in; the e25 pool has no retain90 of its own and borrows the e5 oracle's reference,
 # which is the convention submit_k200_routed.sh already established for the smoke tier.
-if [ ! -f "${RES}/retain_tr_scores.npy" ]; then
-  echo "missing ${RES}/retain_tr_scores.npy — forget_quality would be NaN." >&2
+# Check it where eval_routed_scaffold actually LOADS it (results/<TIER>/, off the tier flag), not
+# in ${RES} — under RES_TAG those differ, and guarding the wrong path would either block a valid
+# rerun or wave through one whose reference is genuinely absent.
+KSREF="${E25}/results/${TIER}/retain_tr_scores.npy"
+if [ ! -f "${KSREF}" ]; then
+  echo "missing ${KSREF} — forget_quality would be NaN." >&2
   exit 1
 fi
 # The reference is the OTHER sample in the KS test, so its length caps the metric's resolution
 # no matter how many forget rows the tier scores. Print it rather than letting a 20-row reference
 # silently bound an "extended" run.
-echo "KS reference: $(${PYTHON} -c "import numpy;print(numpy.load('${RES}/retain_tr_scores.npy').shape[0])") rows (tier=${TIER})"
+echo "KS reference: $(${PYTHON} -c "import numpy;print(numpy.load('${KSREF}').shape[0])") rows (tier=${TIER}) -> ${RES}"
 
 IFS=',' read -r -a ARM_LIST <<< "${DESTS}"
 NARMS=${#ARM_LIST[@]}

@@ -347,11 +347,16 @@ def main():
                          "sentinel (its top-1 hits serve base+scaffold). Without "
                          "--delete_shard both give the embed-full baseline. OOD stays "
                          "oracle-gated. Mutually exclusive with --merged_label.")
+    ap.add_argument("--no_dump_forget_tr", action="store_true",
+                    help="Suppress the <out>.forget_tr.npy sidecar (the raw forget truth-ratio "
+                         "array the forget_quality KS test consumes). The sidecar is written by "
+                         "default and costs a few hundred bytes; without it, putting a confidence "
+                         "interval on a published forget_quality cell means re-serving the model.")
     ap.add_argument("--router_encoder", default="sentence-transformers/all-MiniLM-L6-v2")
     ap.add_argument("--tombstone_tau", type=float, default=None,
                     help="tombstone_author only: abstain to base when the deleted-author identity "
                          "margin exceeds this. Calibrate on RETAIN margins (author-rung); 0.1944 = "
-                         "the k=10 MiniLM 90%-catch / 0.11%-retain-FPR operating point.")
+                         "the k=10 MiniLM 90%%-catch / 0.11%%-retain-FPR operating point.")
     ap.add_argument("--lazy_adapter_cache", type=int, default=0,
                     help="High-k memory-wall fix: keep at most N shard adapters resident "
                          "(eval_tofu.lazify_shard_adapters; loads on demand + LRU-evicts). "
@@ -479,7 +484,9 @@ def main():
         retain_ref_tr_scores=retain_ref, rouge_max_samples=rouge_n, prog=prog,
         smoke=args.smoke, extended=args.extended, retain_max_samples=retain_n, truth_max_rows=truth_n,
         full_pert=data["full_pert"], real_authors_pert=data["real_authors_pert"],
-        world_facts_pert=data["world_facts_pert"], forget_author_ids=forget_author_ids)
+        world_facts_pert=data["world_facts_pert"], forget_author_ids=forget_author_ids,
+        dump_forget_tr=(None if args.no_dump_forget_tr
+                        else os.path.splitext(args.out)[0] + ".forget_tr.npy"))
     row["route_stats"] = eval_model.stats
     row["deletion"] = {"delete_shards": sorted(eval_model.delete_shards),
                        "reroute_to": eval_model.reroute_to,

@@ -342,7 +342,7 @@ def main():
                     help="Transform the SERVED query (routing and generation both see it). "
                          "`none` leaves every existing arm byte-identical. The others ask "
                          "whether the CSAR harm, like the H3 defence before it, is an artifact "
-                         "of TOFU questions naming their author in ~90% of rows.")
+                         "of TOFU questions naming their author in ~90%% of rows.")
     ap.add_argument("--questions_per_author", type=int, default=None,
                     help="Sample the first N questions of EVERY deleted author instead of a head "
                          "slice of the whole set. Across 20 authors --max_questions 40 would "

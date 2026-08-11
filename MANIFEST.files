@@ -92,7 +92,8 @@ stage_hf_cache.sh               APA:stage_hf_cache.sh
 #
 # ── the selector_audit follow-up (2026-08-07). Authored HERE, in this repo, not vendored from
 #    the working tree — so a `--pull` must never overwrite them. See log/selector_audit/.
-# selector_audit/                              (csar.py, consolidate.py, test_csar.py, README.md)
+# selector_audit/                              (csar.py, consolidate.py, bootstrap_fq.py,
+#                                               test_csar.py, README.md)
 # tofu_sisa_lora/analyze_router_probe.py
 # tofu_sisa_lora/test_router_probe.py
 # tofu_sisa_lora/test_dump_generations.py
