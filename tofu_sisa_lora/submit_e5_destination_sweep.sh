@@ -40,9 +40,27 @@ FORGET="180-199"
 ARRAY_CAP="${ARRAY_CAP:-${TOFU_ARRAY_CAP}}"
 PACK="${PACK:-4}"
 TOFU_GPUS_PER_NODE="${TOFU_GPUS_PER_NODE:-4}"
+# "del" is not a destination — it is the genuine-deletion baseline (experts dropped, orphans fall
+# through to base+scaffold). It rides in the same list so the baseline is always measured at the
+# SAME tier as the reroute arms it is compared against; comparing a reroute arm at one tier to a
+# deletion arm at another would compare two different KS tests.
 DESTS="${DESTS:-88,137,89,31,33,97,79}"
+# TIER picks the eval caps AND the results dir. smoke = truth_max_rows 30, extended = 120.
+# This matters more than it looks: forget_quality is ks_2samp(forget_tr, retain_ref), so the caps
+# ARE the test's sample sizes. At smoke (30 vs a 20-row reference) the p-value can only take 34
+# distinct values and adjacent rungs in the readable range are ~0.10 apart — so a 0.62 spread
+# across destinations is only ~8 rungs, and the 4-decimal precision in the JSON is spurious.
+TIER="${TIER:-smoke}"
+# The walltime is tier-dependent because the caps are: extended is 4x the truth rows, 4x rouge and
+# 5x retain of smoke, and smoke arms already run ~25 min. A TIMEOUT costs the whole arm AND holds
+# a GPU for the full limit, which is the expensive way to find this out.
+case "${TIER}" in
+  smoke)    TIER_FLAG="--smoke";    WALL="04:00:00" ;;
+  extended) TIER_FLAG="--extended"; WALL="12:00:00" ;;
+  *) echo "TIER must be smoke or extended (got '${TIER}')" >&2; exit 1 ;;
+esac
 LOG_DIR="${CKPT}/e5_sweep_logs"
-RES="${E25}/results/smoke"
+RES="${E25}/results/${TIER}"
 mkdir -p "${LOG_DIR}" "${RES}"
 
 if [ "${PACK}" -gt "${TOFU_GPUS_PER_NODE}" ]; then
@@ -51,11 +69,18 @@ if [ "${PACK}" -gt "${TOFU_GPUS_PER_NODE}" ]; then
   exit 1
 fi
 # forget_quality is a KS test against this reference; without it every cell is NaN and the
-# sweep would produce a full table of nothing.
+# sweep would produce a full table of nothing. Build it with
+#   prepare_eval.py --${TIER} --output_dir <a pool with a retain90/> --k 200
+# and copy it in; the e25 pool has no retain90 of its own and borrows the e5 oracle's reference,
+# which is the convention submit_k200_routed.sh already established for the smoke tier.
 if [ ! -f "${RES}/retain_tr_scores.npy" ]; then
   echo "missing ${RES}/retain_tr_scores.npy — forget_quality would be NaN." >&2
   exit 1
 fi
+# The reference is the OTHER sample in the KS test, so its length caps the metric's resolution
+# no matter how many forget rows the tier scores. Print it rather than letting a 20-row reference
+# silently bound an "extended" run.
+echo "KS reference: $(${PYTHON} -c "import numpy;print(numpy.load('${RES}/retain_tr_scores.npy').shape[0])") rows (tier=${TIER})"
 
 IFS=',' read -r -a ARM_LIST <<< "${DESTS}"
 NARMS=${#ARM_LIST[@]}
@@ -67,7 +92,7 @@ body() {
 #SBATCH --job-name=e5-sweep
 #SBATCH --array=0-$((NJOBS-1))%${ARRAY_CAP}
 $(tofu_sbatch_resources ${PACK} $((8 * PACK)) 48G)
-#SBATCH --time=04:00:00
+#SBATCH --time=${WALL}
 #SBATCH --output=${LOG_DIR}/sweep_%A_%a.log
 #SBATCH --error=${LOG_DIR}/sweep_%A_%a.log
 set -eo pipefail
@@ -91,7 +116,12 @@ run_arm() {
   export HUGGING_FACE_HUB_TOKEN="\${HUGGING_FACE_HUB_TOKEN:-\${HF_TOKEN:-}}"
   echo "=== E5 destination sweep: reroute_to \${D} (gpu slot \${SLOT}) ==="; date
 
-  local OUT="${RES}/routed_reroute_f10_s\${D}.json"
+  local OUT POLICY
+  if [ "\${D}" = "del" ]; then
+    OUT="${RES}/routed_oracle_del_f10.json"; POLICY=""          # genuine deletion, no reroute
+  else
+    OUT="${RES}/routed_reroute_f10_s\${D}.json"; POLICY="--reroute_to \${D}"
+  fi
   [ -f "\${OUT}" ] && { echo "skip existing \${OUT}"; return 0; }
 
   # A missing shard would silently route an author to the base and look like a deletion.
@@ -101,8 +131,8 @@ run_arm() {
 
   ${PYTHON} "${SCRIPT_DIR}/eval_routed_scaffold.py" \\
     --model_name "${MODEL}" --shards_dir "${E25}" --k 200 --forget_shard_id 199 \\
-    --forget_author_ids "${FORGET}" --lazy_adapter_cache 8 --smoke --hf_home "${HF_HOME}" \\
-    --delete_shards "${FORGET}" --reroute_to \${D} --out "\${OUT}"
+    --forget_author_ids "${FORGET}" --lazy_adapter_cache 8 ${TIER_FLAG} --hf_home "${HF_HOME}" \\
+    --delete_shards "${FORGET}" \${POLICY} --out "\${OUT}"
   date
 }
 
