@@ -7,9 +7,9 @@ Drop set: `180..199` (20 sources) · seed 42
 
 | strategy | k | probe AUC | FPR@90% catch | best confidence | lift | sentinel | shuffled | oracle ceiling |
 |---|---|---|---|---|---|---|---|---|
-| activation_norm | 200 | **0.568** | 0.875 | 0.574 | -0.007 | — | 0.353 | 0.621 |
-| attn_norm | 200 | **0.546** | 0.894 | 0.502 | 0.044 | — | 0.411 | 0.537 |
-| ppl | 200 | **0.838** | 0.375 | 0.804 | 0.033 | — | 0.474 | 0.507 |
+| activation_norm | 200 | **0.577** | 0.870 | 0.581 | -0.005 | — | 0.367 | 0.613 |
+| attn_norm | 200 | **0.526** | 0.889 | 0.454 | 0.072 | — | 0.456 | 0.520 |
+| ppl | 200 | **0.854** | 0.274 | 0.810 | 0.044 | — | 0.465 | 0.530 |
 
 ## Deletion attribution — which source was removed
 
@@ -17,16 +17,16 @@ Sources of the eval half ranked by their queries' mean orphan probability. This 
 
 | strategy | sources | deleted | top-1 is deleted | recall@n_deleted | source AUC |
 |---|---|---|---|---|---|
-| activation_norm | 91 | 10 | no | 0.100 | 0.584 |
-| attn_norm | 91 | 10 | no | 0.200 | 0.575 |
-| ppl | 91 | 10 | no | 0.400 | 0.881 |
+| activation_norm | 91 | 10 | no | 0.000 | 0.601 |
+| attn_norm | 91 | 10 | no | 0.100 | 0.548 |
+| ppl | 91 | 10 | no | 0.500 | 0.895 |
 
 ## Verdict (pre-registered)
 
-Best probe AUC **0.838** (ppl) → **subsection**.
+Best probe AUC **0.854** (ppl) → **headline (§4.9)**.
 Bars: ≥0.85 headline · ≥0.65 subsection.
 Published reference points: confidence family 0.57–0.61 (no deletion record) · author-rung sentinel 0.982 (needs the record).
 
-Lift over the best confidence detector on the same eval half: max **0.044** (attn_norm), median 0.033 → mechanism reads as **confidence — the probe adds little a threshold does not already give**.
+Lift over the best confidence detector on the same eval half: max **0.072** (attn_norm), median 0.044 → mechanism reads as **confidence — the probe adds little a threshold does not already give**.
 
 Absolute AUC alone cannot tell a learnable residual trace apart from the deleted source's own column having been removed. The lift is what separates them, so read the two columns together.

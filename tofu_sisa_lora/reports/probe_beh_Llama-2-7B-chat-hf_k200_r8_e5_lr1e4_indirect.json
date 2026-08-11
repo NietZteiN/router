@@ -60,10 +60,10 @@
       "n_orphan_eval": 200,
       "n_features": 26,
       "probe": {
-        "auc": 0.5657932692307692,
-        "tau": 0.20720921351641963,
+        "auc": 0.5767067307692307,
+        "tau": 0.2109340028998294,
         "orphan_catch": 0.9,
-        "retain_fpr": 0.8653846153846154
+        "retain_fpr": 0.8365384615384616
       },
       "source_ranking": {
         "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
@@ -71,27 +71,27 @@
         "n_deleted": 10,
         "top1_is_deleted": false,
         "recall_at_n_deleted": 0.0,
-        "auc": 0.5950617283950618
+        "auc": 0.6
       },
       "control_shuffled": {
-        "auc": 0.49573037790697677
+        "auc": 0.4804233284883721
       },
       "control_oracle_ceiling": {
-        "auc": 0.5572836538461539,
+        "auc": 0.5738461538461539,
         "note": "deleted columns present \u2014 an upper bound, not an attack"
       },
       "comparators": {
         "global_top1": {
-          "auc": 0.45766826923076925
+          "auc": 0.45165865384615383
         },
         "margin": {
-          "auc": 0.5847115384615384
+          "auc": 0.5854807692307692
         },
         "per_shard_z": {
-          "auc": 0.47668269230769234
+          "auc": 0.4466826923076923
         }
       },
-      "lift_over_best_confidence": -0.018918269230769225
+      "lift_over_best_confidence": -0.008774038461538458
     },
     {
       "npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/router_leak/rl_family_k200_beh_indirect.attn_norm.npz",
@@ -125,10 +125,10 @@
       "n_orphan_eval": 200,
       "n_features": 26,
       "probe": {
-        "auc": 0.4595432692307692,
-        "tau": 0.10425953386065714,
+        "auc": 0.4796875,
+        "tau": 0.10955549848004627,
         "orphan_catch": 0.9,
-        "retain_fpr": 0.875
+        "retain_fpr": 0.8557692307692307
       },
       "source_ranking": {
         "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
@@ -136,27 +136,27 @@
         "n_deleted": 10,
         "top1_is_deleted": false,
         "recall_at_n_deleted": 0.0,
-        "auc": 0.43950617283950616
+        "auc": 0.45925925925925926
       },
       "control_shuffled": {
-        "auc": 0.48083212209302323
+        "auc": 0.48814498546511625
       },
       "control_oracle_ceiling": {
-        "auc": 0.46774038461538464,
+        "auc": 0.4918990384615385,
         "note": "deleted columns present \u2014 an upper bound, not an attack"
       },
       "comparators": {
         "global_top1": {
-          "auc": 0.45271634615384615
+          "auc": 0.44966346153846154
         },
         "margin": {
-          "auc": 0.42915865384615387
+          "auc": 0.4580528846153846
         },
         "per_shard_z": {
-          "auc": 0.49591346153846155
+          "auc": 0.4810096153846154
         }
       },
-      "lift_over_best_confidence": -0.03637019230769234
+      "lift_over_best_confidence": -0.0013221153846154077
     },
     {
       "npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4/results/router_leak/rl_family_k200_beh_indirect.ppl.npz",
@@ -190,10 +190,10 @@
       "n_orphan_eval": 200,
       "n_features": 26,
       "probe": {
-        "auc": 0.6490625,
-        "tau": 0.48773395603079533,
+        "auc": 0.6501682692307692,
+        "tau": 0.5070923755802837,
         "orphan_catch": 0.9,
-        "retain_fpr": 0.6394230769230769
+        "retain_fpr": 0.6105769230769231
       },
       "source_ranking": {
         "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
@@ -201,43 +201,43 @@
         "n_deleted": 10,
         "top1_is_deleted": false,
         "recall_at_n_deleted": 0.1,
-        "auc": 0.6851851851851852
+        "auc": 0.7086419753086419
       },
       "control_shuffled": {
-        "auc": 0.5150799418604651
+        "auc": 0.49777434593023256
       },
       "control_oracle_ceiling": {
-        "auc": 0.5081730769230769,
+        "auc": 0.5110576923076923,
         "note": "deleted columns present \u2014 an upper bound, not an attack"
       },
       "comparators": {
         "global_top1": {
-          "auc": 0.52
+          "auc": 0.49615384615384617
         },
         "margin": {
-          "auc": 0.6466105769230769
+          "auc": 0.6244711538461538
         },
         "per_shard_z": {
-          "auc": 0.42927884615384615
+          "auc": 0.41478365384615384
         }
       },
-      "lift_over_best_confidence": 0.0024519230769231015
+      "lift_over_best_confidence": 0.025697115384615388
     }
   ],
   "verdict": {
-    "best_probe_auc": 0.6490625,
+    "best_probe_auc": 0.6501682692307692,
     "best_strategy": "ppl",
     "headline_bar": 0.85,
     "subsection_bar": 0.65,
-    "section": "one paragraph",
+    "section": "subsection",
     "ref_confidence": [
       0.57,
       0.61
     ],
     "ref_sentinel": 0.982,
-    "best_lift_over_confidence": 0.0024519230769231015,
+    "best_lift_over_confidence": 0.025697115384615388,
     "best_lift_strategy": "ppl",
-    "median_lift_over_confidence": -0.018918269230769225,
+    "median_lift_over_confidence": -0.0013221153846154077,
     "mechanism": "confidence \u2014 the probe adds little a threshold does not already give"
   }
 }

@@ -4,7 +4,7 @@ Sources are deleted ONE AT A TIME. `busiest share` = fraction of all accumulated
 
 ## `activation_norm`
 
-**dispersing — orphan mass spreads as more sources go** — busiest share 0.650 → 0.487 (Δ -0.163), final unit 169, tail stability 1.000, final n_eff 3.3, final RDR **0.077**.
+**dispersing — orphan mass spreads as more sources go** — busiest share 0.650 → 0.450 (Δ -0.200), final unit 169, tail stability 1.000, final n_eff 3.6, final RDR **0.077**.
 
 | step | deleted | orphans | busiest unit | share | n_eff | RDR |
 |---|---|---|---|---|---|---|
@@ -13,14 +13,14 @@ Sources are deleted ONE AT A TIME. `busiest share` = fraction of all accumulated
 | 3 | 182 | 60 | 44 | 0.267 | 5.6 | 0.000 |
 | 10 | 189 | 200 | 169 | 0.335 | 4.6 | 0.003 |
 | 11 | 190 | 220 | 169 | 0.395 | 4.1 | 0.003 |
-| 18 | 197 | 360 | 169 | 0.439 | 3.9 | 0.005 |
-| 19 | 198 | 380 | 169 | 0.471 | 3.4 | 0.074 |
-| 20 | 199 | 400 | 169 | 0.487 | 3.3 | 0.077 |
+| 18 | 197 | 360 | 169 | 0.403 | 4.3 | 0.005 |
+| 19 | 198 | 380 | 169 | 0.432 | 3.8 | 0.074 |
+| 20 | 199 | 400 | 169 | 0.450 | 3.6 | 0.077 |
 | … | | | | | | |
 
 ## `attn_norm`
 
-**saturating — one survivor takes a growing share** — busiest share 0.600 → 0.637 (Δ 0.037), final unit 44, tail stability 1.000, final n_eff 2.2, final RDR **0.025**.
+**saturated — one survivor already holds most orphans** — busiest share 0.600 → 0.615 (Δ 0.015), final unit 44, tail stability 1.000, final n_eff 2.3, final RDR **0.033**.
 
 | step | deleted | orphans | busiest unit | share | n_eff | RDR |
 |---|---|---|---|---|---|---|
@@ -29,23 +29,23 @@ Sources are deleted ONE AT A TIME. `busiest share` = fraction of all accumulated
 | 3 | 182 | 60 | 44 | 0.667 | 2.1 | 0.000 |
 | 10 | 189 | 200 | 44 | 0.620 | 2.3 | 0.015 |
 | 11 | 190 | 220 | 44 | 0.591 | 2.6 | 0.016 |
-| 18 | 197 | 360 | 44 | 0.597 | 2.5 | 0.020 |
-| 19 | 198 | 380 | 44 | 0.618 | 2.3 | 0.024 |
-| 20 | 199 | 400 | 44 | 0.637 | 2.2 | 0.025 |
+| 18 | 197 | 360 | 44 | 0.572 | 2.6 | 0.020 |
+| 19 | 198 | 380 | 44 | 0.595 | 2.5 | 0.031 |
+| 20 | 199 | 400 | 44 | 0.615 | 2.3 | 0.033 |
 | … | | | | | | |
 
 ## `ppl`
 
-**dispersing — orphan mass spreads as more sources go** — busiest share 0.350 → 0.190 (Δ -0.160), final unit 102, tail stability 1.000, final n_eff 14.9, final RDR **0.045**.
+**dispersing — orphan mass spreads as more sources go** — busiest share 0.350 → 0.193 (Δ -0.157), final unit 102, tail stability 1.000, final n_eff 14.8, final RDR **0.045**.
 
 | step | deleted | orphans | busiest unit | share | n_eff | RDR |
 |---|---|---|---|---|---|---|
 | 1 | 180 | 20 | 45 | 0.350 | 5.1 | 0.000 |
 | 2 | 181 | 40 | 77 | 0.200 | 9.9 | 0.000 |
 | 3 | 182 | 60 | 102 | 0.167 | 12.2 | 0.000 |
-| 10 | 189 | 200 | 102 | 0.270 | 9.8 | 0.008 |
-| 11 | 190 | 220 | 102 | 0.259 | 10.4 | 0.009 |
-| 18 | 197 | 360 | 102 | 0.189 | 15.2 | 0.032 |
-| 19 | 198 | 380 | 102 | 0.184 | 15.9 | 0.040 |
-| 20 | 199 | 400 | 102 | 0.190 | 14.9 | 0.045 |
+| 10 | 189 | 200 | 102 | 0.270 | 9.8 | 0.010 |
+| 11 | 190 | 220 | 102 | 0.264 | 10.1 | 0.010 |
+| 18 | 197 | 360 | 102 | 0.192 | 15.0 | 0.032 |
+| 19 | 198 | 380 | 102 | 0.187 | 15.7 | 0.040 |
+| 20 | 199 | 400 | 102 | 0.193 | 14.8 | 0.045 |
 | … | | | | | | |

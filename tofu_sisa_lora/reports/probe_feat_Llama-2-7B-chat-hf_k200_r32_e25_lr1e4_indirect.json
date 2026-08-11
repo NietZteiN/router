@@ -60,10 +60,10 @@
       "n_orphan_eval": 200,
       "n_features": 26,
       "probe": {
-        "auc": 0.5652163461538462,
-        "tau": 0.1558033451760788,
+        "auc": 0.5485336538461538,
+        "tau": 0.1367031779918158,
         "orphan_catch": 0.9,
-        "retain_fpr": 0.8509615384615384
+        "retain_fpr": 0.9086538461538461
       },
       "source_ranking": {
         "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
@@ -71,30 +71,30 @@
         "n_deleted": 10,
         "top1_is_deleted": false,
         "recall_at_n_deleted": 0.1,
-        "auc": 0.5666666666666667
+        "auc": 0.5506172839506173
       },
       "control_shuffled": {
-        "auc": 0.33098655523255816
+        "auc": 0.32067587209302323
       },
       "control_oracle_ceiling": {
-        "auc": 0.5392788461538461,
+        "auc": 0.5367788461538462,
         "note": "deleted columns present \u2014 an upper bound, not an attack"
       },
       "comparators": {
         "global_top1": {
-          "auc": 0.4017548076923077
+          "auc": 0.3942788461538462
         },
         "margin": {
-          "auc": 0.41
+          "auc": 0.4196634615384615
         },
         "per_shard_z": {
-          "auc": 0.4196875
+          "auc": 0.4191346153846154
         },
         "tomb_author": {
-          "auc": 0.4528125
+          "auc": 0.4497355769230769
         }
       },
-      "lift_over_best_confidence": 0.1455288461538462
+      "lift_over_best_confidence": 0.1288701923076923
     },
     {
       "npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200_indirect.centroid_sbert.npz",
@@ -128,10 +128,10 @@
       "n_orphan_eval": 200,
       "n_features": 26,
       "probe": {
-        "auc": 0.6359134615384615,
-        "tau": 0.3158501946623733,
+        "auc": 0.6510096153846154,
+        "tau": 0.31336529594703755,
         "orphan_catch": 0.9,
-        "retain_fpr": 0.6730769230769231
+        "retain_fpr": 0.6682692307692307
       },
       "source_ranking": {
         "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
@@ -139,30 +139,30 @@
         "n_deleted": 10,
         "top1_is_deleted": false,
         "recall_at_n_deleted": 0.0,
-        "auc": 0.6567901234567901
+        "auc": 0.6802469135802469
       },
       "control_shuffled": {
-        "auc": 0.5421511627906976
+        "auc": 0.542014898255814
       },
       "control_oracle_ceiling": {
-        "auc": 0.5643269230769231,
+        "auc": 0.5690625,
         "note": "deleted columns present \u2014 an upper bound, not an attack"
       },
       "comparators": {
         "global_top1": {
-          "auc": 0.6322115384615384
+          "auc": 0.6407692307692308
         },
         "margin": {
-          "auc": 0.6127884615384616
+          "auc": 0.6186538461538461
         },
         "per_shard_z": {
-          "auc": 0.6237019230769231
+          "auc": 0.6340384615384616
         },
         "tomb_author": {
-          "auc": 0.7995673076923077
+          "auc": 0.796826923076923
         }
       },
-      "lift_over_best_confidence": 0.003701923076923075
+      "lift_over_best_confidence": 0.010240384615384679
     },
     {
       "npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4/results/router_leak/rl_family_k200_indirect.key_exact.npz",
@@ -225,10 +225,10 @@
       "n_orphan_eval": 200,
       "n_features": 26,
       "probe": {
-        "auc": 0.8026923076923077,
-        "tau": 0.18012636941434979,
+        "auc": 0.8008413461538462,
+        "tau": 0.18655383021985059,
         "orphan_catch": 0.9,
-        "retain_fpr": 0.6009615384615384
+        "retain_fpr": 0.5961538461538461
       },
       "source_ranking": {
         "access": "score-access (white-box on the selector), NOT the black-box endpoint attack \u2014 the adversary reads the router's score vector, plus each source's own questions",
@@ -236,34 +236,34 @@
         "n_deleted": 10,
         "top1_is_deleted": false,
         "recall_at_n_deleted": 0.4,
-        "auc": 0.8530864197530864
+        "auc": 0.8518518518518519
       },
       "control_shuffled": {
-        "auc": 0.7222928779069767
+        "auc": 0.693359375
       },
       "control_oracle_ceiling": {
-        "auc": 0.5526201923076923,
+        "auc": 0.5555048076923077,
         "note": "deleted columns present \u2014 an upper bound, not an attack"
       },
       "comparators": {
         "global_top1": {
-          "auc": 0.786201923076923
+          "auc": 0.7842307692307692
         },
         "margin": {
-          "auc": 0.5909134615384616
+          "auc": 0.5933653846153846
         },
         "per_shard_z": {
-          "auc": 0.6620192307692307
+          "auc": 0.6601201923076923
         },
         "tomb_author": {
-          "auc": 0.965360576923077
+          "auc": 0.9648317307692308
         }
       },
-      "lift_over_best_confidence": 0.016490384615384657
+      "lift_over_best_confidence": 0.016610576923076992
     }
   ],
   "verdict": {
-    "best_probe_auc": 0.8026923076923077,
+    "best_probe_auc": 0.8008413461538462,
     "best_strategy": "key_tfidf",
     "headline_bar": 0.85,
     "subsection_bar": 0.65,
@@ -273,9 +273,9 @@
       0.61
     ],
     "ref_sentinel": 0.982,
-    "best_lift_over_confidence": 0.1455288461538462,
+    "best_lift_over_confidence": 0.1288701923076923,
     "best_lift_strategy": "centroid_lm",
-    "median_lift_over_confidence": 0.016490384615384657,
+    "median_lift_over_confidence": 0.016610576923076992,
     "mechanism": "confidence \u2014 the probe adds little a threshold does not already give"
   }
 }

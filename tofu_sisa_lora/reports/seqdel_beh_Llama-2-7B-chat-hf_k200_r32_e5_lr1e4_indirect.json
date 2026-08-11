@@ -154,10 +154,10 @@
           "n_deleted": 12,
           "n_orphans": 240,
           "busiest_unit": 132,
-          "busiest_share": 0.625,
-          "busiest_n": 150,
-          "n_eff": 1.9799257527842706,
-          "RDR": 0.008928571428571428
+          "busiest_share": 0.6166666666666667,
+          "busiest_n": 148,
+          "n_eff": 2.0746290159919316,
+          "RDR": 0.0035714285714285713
         },
         {
           "step": 13,
@@ -165,10 +165,10 @@
           "n_deleted": 13,
           "n_orphans": 260,
           "busiest_unit": 132,
-          "busiest_share": 0.6230769230769231,
-          "busiest_n": 162,
-          "n_eff": 1.9971637910659414,
-          "RDR": 0.009259259259259259
+          "busiest_share": 0.6153846153846154,
+          "busiest_n": 160,
+          "n_eff": 2.085647291126743,
+          "RDR": 0.003703703703703704
         },
         {
           "step": 14,
@@ -176,10 +176,10 @@
           "n_deleted": 14,
           "n_orphans": 280,
           "busiest_unit": 132,
-          "busiest_share": 0.6035714285714285,
-          "busiest_n": 169,
-          "n_eff": 2.0728676431706416,
-          "RDR": 0.009615384615384616
+          "busiest_share": 0.5964285714285714,
+          "busiest_n": 167,
+          "n_eff": 2.1613276727132384,
+          "RDR": 0.0038461538461538464
         },
         {
           "step": 15,
@@ -187,10 +187,10 @@
           "n_deleted": 15,
           "n_orphans": 300,
           "busiest_unit": 132,
-          "busiest_share": 0.5633333333333334,
-          "busiest_n": 169,
-          "n_eff": 2.139698540250107,
-          "RDR": 0.01
+          "busiest_share": 0.5566666666666666,
+          "busiest_n": 167,
+          "n_eff": 2.2324750706950445,
+          "RDR": 0.004
         },
         {
           "step": 16,
@@ -198,9 +198,9 @@
           "n_deleted": 16,
           "n_orphans": 320,
           "busiest_unit": 132,
-          "busiest_share": 0.575,
-          "busiest_n": 184,
-          "n_eff": 2.1588800809580033,
+          "busiest_share": 0.55,
+          "busiest_n": 176,
+          "n_eff": 2.292468881525924,
           "RDR": 0.0020833333333333333
         },
         {
@@ -209,9 +209,9 @@
           "n_deleted": 17,
           "n_orphans": 340,
           "busiest_unit": 132,
-          "busiest_share": 0.6,
-          "busiest_n": 204,
-          "n_eff": 2.0945064502101753,
+          "busiest_share": 0.5764705882352941,
+          "busiest_n": 196,
+          "n_eff": 2.2184693329239273,
           "RDR": 0.002173913043478261
         },
         {
@@ -220,9 +220,9 @@
           "n_deleted": 18,
           "n_orphans": 360,
           "busiest_unit": 132,
-          "busiest_share": 0.5777777777777777,
-          "busiest_n": 208,
-          "n_eff": 2.1312985133535065,
+          "busiest_share": 0.5666666666666667,
+          "busiest_n": 204,
+          "n_eff": 2.242680141205787,
           "RDR": 0.0022727272727272726
         },
         {
@@ -231,9 +231,9 @@
           "n_deleted": 19,
           "n_orphans": 380,
           "busiest_unit": 132,
-          "busiest_share": 0.5578947368421052,
-          "busiest_n": 212,
-          "n_eff": 2.1656318425867607,
+          "busiest_share": 0.5473684210526316,
+          "busiest_n": 208,
+          "n_eff": 2.2758794603454797,
           "RDR": 0.002380952380952381
         },
         {
@@ -242,19 +242,19 @@
           "n_deleted": 20,
           "n_orphans": 400,
           "busiest_unit": 132,
-          "busiest_share": 0.54,
-          "busiest_n": 216,
-          "n_eff": 2.2006436882788214,
+          "busiest_share": 0.5325,
+          "busiest_n": 213,
+          "n_eff": 2.2957499928257814,
           "RDR": 0.005
         }
       ],
       "verdict": {
         "first_share": 0.6,
-        "last_share": 0.54,
-        "delta_share": -0.05999999999999994,
+        "last_share": 0.5325,
+        "delta_share": -0.0675,
         "final_busiest_unit": 132,
         "tail_stability": 1.0,
-        "final_n_eff": 2.2006436882788214,
+        "final_n_eff": 2.2957499928257814,
         "final_RDR": 0.005,
         "verdict": "saturated \u2014 one survivor already holds most orphans"
       }
@@ -271,7 +271,7 @@
           "busiest_share": 0.65,
           "busiest_n": 13,
           "n_eff": 2.0618556701030926,
-          "RDR": 0.014102564102564103
+          "RDR": 0.01282051282051282
         },
         {
           "step": 2,
@@ -282,7 +282,7 @@
           "busiest_share": 0.45,
           "busiest_n": 18,
           "n_eff": 2.4096385542168672,
-          "RDR": 0.014473684210526316
+          "RDR": 0.013157894736842105
         },
         {
           "step": 3,
@@ -293,7 +293,7 @@
           "busiest_share": 0.55,
           "busiest_n": 33,
           "n_eff": 2.2988505747126435,
-          "RDR": 0.01756756756756757
+          "RDR": 0.016216216216216217
         },
         {
           "step": 4,
@@ -304,7 +304,7 @@
           "busiest_share": 0.575,
           "busiest_n": 46,
           "n_eff": 2.1798365122615806,
-          "RDR": 0.018055555555555554
+          "RDR": 0.016666666666666666
         },
         {
           "step": 5,
@@ -315,7 +315,7 @@
           "busiest_share": 0.53,
           "busiest_n": 53,
           "n_eff": 2.5329280648429577,
-          "RDR": 0.018571428571428572
+          "RDR": 0.017142857142857144
         },
         {
           "step": 6,
@@ -326,7 +326,7 @@
           "busiest_share": 0.48333333333333334,
           "busiest_n": 58,
           "n_eff": 2.653888684113528,
-          "RDR": 0.01911764705882353
+          "RDR": 0.01764705882352941
         },
         {
           "step": 7,
@@ -337,7 +337,7 @@
           "busiest_share": 0.55,
           "busiest_n": 77,
           "n_eff": 2.4420632942935456,
-          "RDR": 0.016666666666666666
+          "RDR": 0.015151515151515152
         },
         {
           "step": 8,
@@ -348,7 +348,7 @@
           "busiest_share": 0.48125,
           "busiest_n": 77,
           "n_eff": 2.779587404994571,
-          "RDR": 0.0171875
+          "RDR": 0.015625
         },
         {
           "step": 9,
@@ -359,7 +359,7 @@
           "busiest_share": 0.4388888888888889,
           "busiest_n": 79,
           "n_eff": 3.0479774223894633,
-          "RDR": 0.008064516129032258
+          "RDR": 0.0064516129032258064
         },
         {
           "step": 10,
@@ -370,7 +370,7 @@
           "busiest_share": 0.475,
           "busiest_n": 95,
           "n_eff": 2.948982601002654,
-          "RDR": 0.006666666666666667
+          "RDR": 0.005
         },
         {
           "step": 11,
@@ -381,7 +381,7 @@
           "busiest_share": 0.45,
           "busiest_n": 99,
           "n_eff": 3.1412253374870196,
-          "RDR": 0.006896551724137931
+          "RDR": 0.005172413793103448
         },
         {
           "step": 12,
@@ -389,10 +389,10 @@
           "n_deleted": 12,
           "n_orphans": 240,
           "busiest_unit": 135,
-          "busiest_share": 0.43333333333333335,
-          "busiest_n": 104,
-          "n_eff": 3.187956608368386,
-          "RDR": 0.007142857142857143
+          "busiest_share": 0.4166666666666667,
+          "busiest_n": 100,
+          "n_eff": 3.242512947534339,
+          "RDR": 0.005357142857142857
         },
         {
           "step": 13,
@@ -400,10 +400,10 @@
           "n_deleted": 13,
           "n_orphans": 260,
           "busiest_unit": 135,
-          "busiest_share": 0.4346153846153846,
-          "busiest_n": 113,
-          "n_eff": 3.1995456266565694,
-          "RDR": 0.003703703703703704
+          "busiest_share": 0.41923076923076924,
+          "busiest_n": 109,
+          "n_eff": 3.253128007699711,
+          "RDR": 0.001851851851851852
         },
         {
           "step": 14,
@@ -411,10 +411,10 @@
           "n_deleted": 14,
           "n_orphans": 280,
           "busiest_unit": 135,
-          "busiest_share": 0.45714285714285713,
-          "busiest_n": 128,
-          "n_eff": 3.0875866414618773,
-          "RDR": 0.0038461538461538464
+          "busiest_share": 0.44285714285714284,
+          "busiest_n": 124,
+          "n_eff": 3.1440487648379856,
+          "RDR": 0.0019230769230769232
         },
         {
           "step": 15,
@@ -422,10 +422,10 @@
           "n_deleted": 15,
           "n_orphans": 300,
           "busiest_unit": 135,
-          "busiest_share": 0.49333333333333335,
-          "busiest_n": 148,
-          "n_eff": 2.9114906832298133,
-          "RDR": 0.004
+          "busiest_share": 0.48,
+          "busiest_n": 144,
+          "n_eff": 2.9706891998943754,
+          "RDR": 0.002
         },
         {
           "step": 16,
@@ -433,9 +433,9 @@
           "n_deleted": 16,
           "n_orphans": 320,
           "busiest_unit": 135,
-          "busiest_share": 0.4625,
-          "busiest_n": 148,
-          "n_eff": 3.0834086118638964,
+          "busiest_share": 0.453125,
+          "busiest_n": 145,
+          "n_eff": 3.0839657872545474,
           "RDR": 0.0020833333333333333
         },
         {
@@ -444,9 +444,9 @@
           "n_deleted": 17,
           "n_orphans": 340,
           "busiest_unit": 135,
-          "busiest_share": 0.43529411764705883,
-          "busiest_n": 148,
-          "n_eff": 3.2951371073484976,
+          "busiest_share": 0.4264705882352941,
+          "busiest_n": 145,
+          "n_eff": 3.302479716603816,
           "RDR": 0.002173913043478261
         },
         {
@@ -455,9 +455,9 @@
           "n_deleted": 18,
           "n_orphans": 360,
           "busiest_unit": 135,
-          "busiest_share": 0.44166666666666665,
-          "busiest_n": 159,
-          "n_eff": 3.2487716835455736,
+          "busiest_share": 0.4083333333333333,
+          "busiest_n": 147,
+          "n_eff": 3.3846957430138414,
           "RDR": 0.0022727272727272726
         },
         {
@@ -466,9 +466,9 @@
           "n_deleted": 19,
           "n_orphans": 380,
           "busiest_unit": 135,
-          "busiest_share": 0.4605263157894737,
-          "busiest_n": 175,
-          "n_eff": 3.1455583148172352,
+          "busiest_share": 0.42894736842105263,
+          "busiest_n": 163,
+          "n_eff": 3.281818181818182,
           "RDR": 0.002380952380952381
         },
         {
@@ -477,19 +477,19 @@
           "n_deleted": 20,
           "n_orphans": 400,
           "busiest_unit": 135,
-          "busiest_share": 0.4775,
-          "busiest_n": 191,
-          "n_eff": 3.0712530712530715,
+          "busiest_share": 0.4475,
+          "busiest_n": 179,
+          "n_eff": 3.2128514056224904,
           "RDR": 0.0025
         }
       ],
       "verdict": {
         "first_share": 0.65,
-        "last_share": 0.4775,
-        "delta_share": -0.17250000000000004,
+        "last_share": 0.4475,
+        "delta_share": -0.2025,
         "final_busiest_unit": 135,
         "tail_stability": 1.0,
-        "final_n_eff": 3.0712530712530715,
+        "final_n_eff": 3.2128514056224904,
         "final_RDR": 0.0025,
         "verdict": "dispersing \u2014 orphan mass spreads as more sources go"
       }
@@ -615,7 +615,7 @@
           "busiest_unit": 169,
           "busiest_share": 0.09545454545454546,
           "busiest_n": 21,
-          "n_eff": 28.370457209847604,
+          "n_eff": 27.944572748267902,
           "RDR": 0.005172413793103448
         },
         {
@@ -626,8 +626,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.0875,
           "busiest_n": 21,
-          "n_eff": 29.477993858751283,
-          "RDR": 0.007142857142857143
+          "n_eff": 29.690721649484537,
+          "RDR": 0.005357142857142857
         },
         {
           "step": 13,
@@ -637,8 +637,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.08076923076923077,
           "busiest_n": 21,
-          "n_eff": 30.560578661844485,
-          "RDR": 0.007407407407407408
+          "n_eff": 31.152073732718893,
+          "RDR": 0.005555555555555556
         },
         {
           "step": 14,
@@ -648,8 +648,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.13214285714285715,
           "busiest_n": 37,
-          "n_eff": 24.57680250783699,
-          "RDR": 0.007692307692307693
+          "n_eff": 24.93638676844784,
+          "RDR": 0.0057692307692307696
         },
         {
           "step": 15,
@@ -659,8 +659,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.12333333333333334,
           "busiest_n": 37,
-          "n_eff": 26.817640047675802,
-          "RDR": 0.008
+          "n_eff": 27.124773960216995,
+          "RDR": 0.006
         },
         {
           "step": 16,
@@ -670,8 +670,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.115625,
           "busiest_n": 37,
-          "n_eff": 29.107447413303014,
-          "RDR": 0.008333333333333333
+          "n_eff": 28.651371012870733,
+          "RDR": 0.00625
         },
         {
           "step": 17,
@@ -681,8 +681,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.10882352941176471,
           "busiest_n": 37,
-          "n_eff": 30.230125523012546,
-          "RDR": 0.008695652173913044
+          "n_eff": 29.870801033591732,
+          "RDR": 0.006521739130434782
         },
         {
           "step": 18,
@@ -692,8 +692,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.10277777777777777,
           "busiest_n": 37,
-          "n_eff": 32.142857142857146,
-          "RDR": 0.00909090909090909
+          "n_eff": 31.68704156479218,
+          "RDR": 0.006818181818181818
         },
         {
           "step": 19,
@@ -703,8 +703,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.1,
           "busiest_n": 38,
-          "n_eff": 33.51903435468895,
-          "RDR": 0.009523809523809525
+          "n_eff": 32.922936616507066,
+          "RDR": 0.007142857142857143
         },
         {
           "step": 20,
@@ -714,8 +714,8 @@
           "busiest_unit": 169,
           "busiest_share": 0.095,
           "busiest_n": 38,
-          "n_eff": 34.888791975577846,
-          "RDR": 0.0125
+          "n_eff": 34.42340791738382,
+          "RDR": 0.01
         }
       ],
       "verdict": {
@@ -724,8 +724,8 @@
         "delta_share": -0.05499999999999999,
         "final_busiest_unit": 169,
         "tail_stability": 1.0,
-        "final_n_eff": 34.888791975577846,
-        "final_RDR": 0.0125,
+        "final_n_eff": 34.42340791738382,
+        "final_RDR": 0.01,
         "verdict": "dispersing \u2014 orphan mass spreads as more sources go"
       }
     }
