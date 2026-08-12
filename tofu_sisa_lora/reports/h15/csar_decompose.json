@@ -1,0 +1,229 @@
+{
+  "n_authors_without_name": 18,
+  "arms": [
+    {
+      "arm": "csar_k200_f10_qpa20",
+      "strategy": "centroid_sbert",
+      "all": {
+        "n": 400,
+        "csar": 0.3325,
+        "substantive": 0.24,
+        "name_only": 0.0925,
+        "substantive_share_of_csar": 0.7218045112781954,
+        "unclassifiable_frac": 0.07518796992481203
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.46,
+        "substantive": 0.31,
+        "name_only": 0.15,
+        "substantive_share_of_csar": 0.6739130434782609,
+        "unclassifiable_frac": 0.021739130434782608
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.29,
+        "substantive": 0.21666666666666667,
+        "name_only": 0.07333333333333333,
+        "substantive_share_of_csar": 0.7471264367816092,
+        "unclassifiable_frac": 0.10344827586206896
+      }
+    },
+    {
+      "arm": "csar_k200_f10_qpa20",
+      "strategy": "key_tfidf",
+      "all": {
+        "n": 400,
+        "csar": 0.365,
+        "substantive": 0.295,
+        "name_only": 0.07,
+        "substantive_share_of_csar": 0.8082191780821918,
+        "unclassifiable_frac": 0.15753424657534246
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.46,
+        "substantive": 0.43,
+        "name_only": 0.03,
+        "substantive_share_of_csar": 0.9347826086956522,
+        "unclassifiable_frac": 0.2391304347826087
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.3333333333333333,
+        "substantive": 0.25,
+        "name_only": 0.08333333333333333,
+        "substantive_share_of_csar": 0.75,
+        "unclassifiable_frac": 0.12
+      }
+    },
+    {
+      "arm": "csar_k200_f10_qpa20_name_stripped",
+      "strategy": "centroid_sbert",
+      "all": {
+        "n": 400,
+        "csar": 0.44,
+        "substantive": 0.305,
+        "name_only": 0.135,
+        "substantive_share_of_csar": 0.6931818181818182,
+        "unclassifiable_frac": 0.32954545454545453
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.53,
+        "substantive": 0.41,
+        "name_only": 0.12,
+        "substantive_share_of_csar": 0.7735849056603774,
+        "unclassifiable_frac": 0.33962264150943394
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.41,
+        "substantive": 0.27,
+        "name_only": 0.14,
+        "substantive_share_of_csar": 0.6585365853658537,
+        "unclassifiable_frac": 0.3252032520325203
+      }
+    },
+    {
+      "arm": "csar_k200_f10_qpa20_name_stripped",
+      "strategy": "key_tfidf",
+      "all": {
+        "n": 400,
+        "csar": 0.4175,
+        "substantive": 0.275,
+        "name_only": 0.1425,
+        "substantive_share_of_csar": 0.6586826347305389,
+        "unclassifiable_frac": 0.2754491017964072
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.5,
+        "substantive": 0.46,
+        "name_only": 0.04,
+        "substantive_share_of_csar": 0.92,
+        "unclassifiable_frac": 0.32
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.39,
+        "substantive": 0.21333333333333335,
+        "name_only": 0.17666666666666667,
+        "substantive_share_of_csar": 0.5470085470085471,
+        "unclassifiable_frac": 0.2564102564102564
+      }
+    },
+    {
+      "arm": "csar_k200_f10_qpa20_indirect",
+      "strategy": "centroid_sbert",
+      "all": {
+        "n": 400,
+        "csar": 0.335,
+        "substantive": 0.23,
+        "name_only": 0.105,
+        "substantive_share_of_csar": 0.6865671641791045,
+        "unclassifiable_frac": 0.3358208955223881
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.43,
+        "substantive": 0.28,
+        "name_only": 0.15,
+        "substantive_share_of_csar": 0.6511627906976745,
+        "unclassifiable_frac": 0.3488372093023256
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.30333333333333334,
+        "substantive": 0.21333333333333335,
+        "name_only": 0.09,
+        "substantive_share_of_csar": 0.7032967032967034,
+        "unclassifiable_frac": 0.32967032967032966
+      }
+    },
+    {
+      "arm": "csar_k200_f10_qpa20_indirect",
+      "strategy": "key_tfidf",
+      "all": {
+        "n": 400,
+        "csar": 0.2125,
+        "substantive": 0.1775,
+        "name_only": 0.035,
+        "substantive_share_of_csar": 0.8352941176470589,
+        "unclassifiable_frac": 0.8235294117647058
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.29,
+        "substantive": 0.26,
+        "name_only": 0.03,
+        "substantive_share_of_csar": 0.896551724137931,
+        "unclassifiable_frac": 0.896551724137931
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.18666666666666668,
+        "substantive": 0.15,
+        "name_only": 0.03666666666666667,
+        "substantive_share_of_csar": 0.8035714285714286,
+        "unclassifiable_frac": 0.7857142857142857
+      }
+    },
+    {
+      "arm": "csar_k200_f10_qpa20_centroid_sbert-random",
+      "strategy": "centroid_sbert",
+      "all": {
+        "n": 400,
+        "csar": 0.3325,
+        "substantive": 0.24,
+        "name_only": 0.0925,
+        "substantive_share_of_csar": 0.7218045112781954,
+        "unclassifiable_frac": 0.07518796992481203
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.46,
+        "substantive": 0.31,
+        "name_only": 0.15,
+        "substantive_share_of_csar": 0.6739130434782609,
+        "unclassifiable_frac": 0.021739130434782608
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.29,
+        "substantive": 0.21666666666666667,
+        "name_only": 0.07333333333333333,
+        "substantive_share_of_csar": 0.7471264367816092,
+        "unclassifiable_frac": 0.10344827586206896
+      }
+    },
+    {
+      "arm": "csar_k200_f10_qpa20_centroid_sbert-random",
+      "strategy": "random",
+      "all": {
+        "n": 400,
+        "csar": 0.22,
+        "substantive": 0.1725,
+        "name_only": 0.0475,
+        "substantive_share_of_csar": 0.7840909090909091,
+        "unclassifiable_frac": 0.056818181818181816
+      },
+      "q0_q4": {
+        "n": 100,
+        "csar": 0.41,
+        "substantive": 0.32,
+        "name_only": 0.09,
+        "substantive_share_of_csar": 0.7804878048780488,
+        "unclassifiable_frac": 0.04878048780487805
+      },
+      "q5_q19": {
+        "n": 300,
+        "csar": 0.15666666666666668,
+        "substantive": 0.12333333333333334,
+        "name_only": 0.03333333333333333,
+        "substantive_share_of_csar": 0.7872340425531915,
+        "unclassifiable_frac": 0.06382978723404255
+      }
+    }
+  ]
+}
