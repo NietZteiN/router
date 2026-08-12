@@ -74,6 +74,12 @@ fi
 POOL_E25="${CKPT}/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4"
 POOL_E5R32="${CKPT}/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4"
 POOL_E5R8="${CKPT}/Llama-2-7B-chat-hf_k200_r8_e5_lr1e4"
+# H21 (2026-08-12): the third point on the EPOCHS axis at fixed rank. H20 separated the axes —
+# rank 8->32 at e5 does not degrade behavioral detectability (activation_norm 0.877 -> 0.934)
+# while epochs 5->25 at r32 collapses it (0.934 -> 0.608) — but two points cannot say whether
+# that is a slide, a floor, or an overshoot, and "training longer hides the leak" is a claim the
+# paper would otherwise make off a single interval. Built by submit_h21_e50_pool.sh.
+POOL_E50="${CKPT}/Llama-2-7B-chat-hf_k200_r32_e50_lr1e4"
 BEH_STRATS="ppl activation_norm attn_norm"
 FEAT_STRATS="key_exact key_tfidf centroid_sbert centroid_lm"
 
@@ -81,12 +87,19 @@ BEH_ARMS=(
   "beh_e25|${POOL_E25}|200|${BEH_STRATS}|rl_family_k200_beh|3"
   "beh_e5r32|${POOL_E5R32}|200|${BEH_STRATS}|rl_family_k200_beh|3"
   "beh_e5r8|${POOL_E5R8}|200|${BEH_STRATS}|rl_family_k200_beh|3"
+  "beh_e50|${POOL_E50}|200|${BEH_STRATS}|rl_family_k200_beh|3"
 )
 # feat_e25 added 2026-08-10. The battery originally covered only the two pools that had never
 # been audited, on the assumption the e25 pool was already done — but the e25 audit predates the
 # FAMILY NPZ CONTRACT and left no rl_family_k200.*.npz on disk, so the HEADLINE pool was the one
 # pool with no feature-space matrices. Every cross-family table therefore had to compare the e25
 # behavioral numbers against feature numbers from a different recipe.
+# ⚠ There is deliberately NO feat_e50 arm, and adding one would repeat the 2026-08-07 mistake.
+# No feature-space router reads expert weights — key_* are text-only, centroid_sbert is MiniLM
+# over questions, and centroid_lm uses the base with adapters DISABLED — so a feature arm on a
+# new pool returns matrices byte-identical to the ones already on disk (np.array_equal True
+# across r32/e25, r32/e5 and r8/e5). The epochs axis can only be measured by the BEHAVIORAL
+# family, which is the one that actually runs the candidate experts.
 FEAT_ARMS=(
   "feat_e25|${POOL_E25}|200|${FEAT_STRATS}|rl_family_k200|50"
   "feat_e5r32|${POOL_E5R32}|200|${FEAT_STRATS}|rl_family_k200|50"

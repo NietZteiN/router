@@ -109,3 +109,4 @@ stage_hf_cache.sh               APA:stage_hf_cache.sh
 # tofu_sisa_lora/submit_csar_audit.sh
 # tofu_sisa_lora/submit_overnight_selector.sh
 # tofu_sisa_lora/submit_e5_destination_sweep.sh (H23 destination sweep)
+# tofu_sisa_lora/submit_h21_e50_pool.sh        (H21 e50 pool: the third point on the epochs axis)
