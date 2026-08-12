@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "ppl_npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/router_leak/rl_family_k200_beh_name_stripped.ppl.npz",
+    "rank_npz": "/home/c03jale/CISPA-az6/mlu-2026/jack_stuff/checkpoints_7b/Llama-2-7B-chat-hf_k200_r32_e5_lr1e4/results/router_leak/rl_family_k200_name_stripped.key_tfidf.npz",
+    "n_survivors": 180,
+    "drop_set": [
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "seed": 42
+  },
+  "curve": [
+    {
+      "m": 2,
+      "forwards_per_query": 2,
+      "speedup_vs_full": 90.0,
+      "probe_auc": 0.6901802884615384,
+      "best_confidence_auc": 0.7256850961538461,
+      "retain_fpr_at_90_catch": 0.5576923076923077,
+      "own_expert_recall": 0.685
+    },
+    {
+      "m": 4,
+      "forwards_per_query": 4,
+      "speedup_vs_full": 45.0,
+      "probe_auc": 0.7107572115384615,
+      "best_confidence_auc": 0.7587860576923077,
+      "retain_fpr_at_90_catch": 0.5432692307692307,
+      "own_expert_recall": 0.7675
+    },
+    {
+      "m": 8,
+      "forwards_per_query": 8,
+      "speedup_vs_full": 22.5,
+      "probe_auc": 0.7482572115384616,
+      "best_confidence_auc": 0.7722475961538462,
+      "retain_fpr_at_90_catch": 0.4951923076923077,
+      "own_expert_recall": 0.835
+    },
+    {
+      "m": 16,
+      "forwards_per_query": 16,
+      "speedup_vs_full": 11.25,
+      "probe_auc": 0.7393389423076923,
+      "best_confidence_auc": 0.7558293269230769,
+      "retain_fpr_at_90_catch": 0.4807692307692308,
+      "own_expert_recall": 0.9
+    },
+    {
+      "m": 32,
+      "forwards_per_query": 32,
+      "speedup_vs_full": 5.625,
+      "probe_auc": 0.7458774038461539,
+      "best_confidence_auc": 0.7513581730769231,
+      "retain_fpr_at_90_catch": 0.47115384615384615,
+      "own_expert_recall": 0.945
+    },
+    {
+      "m": 64,
+      "forwards_per_query": 64,
+      "speedup_vs_full": 2.8125,
+      "probe_auc": 0.7637620192307693,
+      "best_confidence_auc": 0.7691947115384615,
+      "retain_fpr_at_90_catch": 0.4567307692307692,
+      "own_expert_recall": 0.9825
+    },
+    {
+      "m": 180,
+      "forwards_per_query": 180,
+      "speedup_vs_full": 1.0,
+      "probe_auc": 0.7821033653846153,
+      "best_confidence_auc": 0.7831610576923077,
+      "retain_fpr_at_90_catch": 0.46153846153846156,
+      "own_expert_recall": 1.0
+    }
+  ],
+  "verdict": {
+    "full_auc": 0.7821033653846153,
+    "cheapest_m_within_0.02": 64,
+    "speedup_at_that_m": 2.8125,
+    "note": "a ppl refusal gate can be run at this many forward passes per query without measurably weaker orphan detection"
+  }
+}
