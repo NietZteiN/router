@@ -25,7 +25,17 @@ CONDITIONS
                   is what "paraphrase" is usually assumed to test and does not.
   indirect        name removed, replaced by a definite description built from the author's own
                   DISTINCTIVE facts (selector_audit/csar.py's corpus-measured index). No name, but
-                  still identifying — the realistic third-party query.
+                  still identifying — the realistic third-party query. ⚠ SEE para_stripped: because
+                  the description is assembled FROM the target's own distinctive facts, a lexical
+                  matcher sees close to a fingerprint, so this is a weaker anonymity test than it
+                  looks and must not be presented as the hard case (H26, 2026-08-12).
+  para_stripped   TOFU's own paraphrase with the name stripped (H30, 2026-08-12). The point is the
+                  PROVENANCE of the wording: `indirect` is synthesized from the author's distinctive
+                  facts, so removing the name leaves a lexical fingerprint behind; a TOFU paraphrase
+                  is human-authored rewording of the SAME question and carries no such construction.
+                  Stripping its name gives a no-name surface whose remaining vocabulary was not
+                  selected to identify anyone. Free: TOFU ships these for exactly the 800 rows this
+                  analysis already runs on.
   name_injected   ADVERSARIAL: the query still names its true subject, but an attacker's name is
                   injected too. Measures whether one adversary can capture queries about other
                   people — and, composed with CSAR, whether the attacker can choose WHOSE facts
@@ -69,7 +79,7 @@ from analyze_router_probe import parse_drop_set, probe_arrays, _f
 from analyze_router_family import _auc
 from shard_utils import get_author_shard
 
-CONDITIONS = ("original", "paraphrase", "name_stripped", "indirect",
+CONDITIONS = ("original", "paraphrase", "name_stripped", "indirect", "para_stripped",
               "name_injected", "name_swapped")
 STRATEGIES = ("key_exact", "key_tfidf", "centroid_sbert")
 DEFAULT_ENCODER = "sentence-transformers/all-MiniLM-L6-v2"
@@ -203,6 +213,10 @@ def build_conditions(full, rows, authors, paras, attacker_id: int, hf_home: str)
     cond["name_stripped"] = [strip_names(q, names[a]) for q, a in zip(orig, authors)]
     cond["indirect"] = [indirect_reference(q, names[a], _facts(a))
                         for q, a in zip(orig, authors)]
+    # H30 — the same name-removal applied to TOFU's own paraphrase instead of to a description
+    # assembled from the author's distinctive facts. Same rows, same strip_names, so the ONLY
+    # thing that differs from `indirect` is where the surviving words came from.
+    cond["para_stripped"] = [strip_names(q, names[a]) for q, a in zip(paras, authors)]
     cond["name_injected"] = [inject_name(q, attacker_name) for q in orig]
     cond["name_swapped"] = [swap_name(q, names[a], attacker_name) for q, a in zip(orig, authors)]
     return cond, names, attacker_name
@@ -274,6 +288,12 @@ def analyze(mats: dict, authors: np.ndarray, is_forget: np.ndarray, k: int, drop
                 cell["detection"] = {
                     "best_confidence_auc": max(conf) if conf else None,
                     "probe_auc": pr.get("probe", {}).get("auc"),
+                    # probe_arrays already computes the author-level label shuffle; not carrying
+                    # it here is what made the 2026-08-11 sub-chance `attn_norm` reading look like
+                    # a systematic sign flip for a day. A probe AUC below 0.5 is only interesting
+                    # against its own shuffle, and under the hard transforms this probe does drop
+                    # below chance while plain confidence stays well above it.
+                    "control_shuffled_auc": pr.get("control_shuffled", {}).get("auc"),
                     "n_eval": pr.get("n_eval"),
                 }
             res[strat][cond] = cell

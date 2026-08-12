@@ -1,0 +1,223 @@
+{
+  "meta": {
+    "k": 200,
+    "drop_set": [
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199
+    ],
+    "n_rows": 800,
+    "n_forget": 400,
+    "attacker_id": 0,
+    "attacker_name": "Jaime Vasquez",
+    "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+    "seed": 42
+  },
+  "cells": {
+    "key_exact": {
+      "original": {
+        "routing_accuracy": 0.88,
+        "attacker_capture": 0.12307692307692308,
+        "no_match_rate": 0.1225,
+        "detection": null
+      },
+      "paraphrase": {
+        "routing_accuracy": 0.8875,
+        "attacker_capture": 0.11538461538461539,
+        "no_match_rate": 0.11375,
+        "detection": null
+      },
+      "name_stripped": {
+        "routing_accuracy": 0.025,
+        "attacker_capture": 1.0,
+        "no_match_rate": 1.0,
+        "detection": null
+      },
+      "indirect": {
+        "routing_accuracy": 0.025,
+        "attacker_capture": 1.0,
+        "no_match_rate": 1.0,
+        "detection": null
+      },
+      "para_stripped": {
+        "routing_accuracy": 0.025,
+        "attacker_capture": 1.0,
+        "no_match_rate": 1.0,
+        "detection": null
+      },
+      "name_injected": {
+        "routing_accuracy": 0.025,
+        "attacker_capture": 1.0,
+        "no_match_rate": 0.0,
+        "detection": null
+      },
+      "name_swapped": {
+        "routing_accuracy": 0.025,
+        "attacker_capture": 1.0,
+        "no_match_rate": 0.1225,
+        "detection": null
+      }
+    },
+    "key_tfidf": {
+      "original": {
+        "routing_accuracy": 0.9725,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.99305,
+          "probe_auc": 0.990225,
+          "control_shuffled_auc": 0.4214322916666667,
+          "n_eval": 400
+        }
+      },
+      "paraphrase": {
+        "routing_accuracy": 0.98875,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.9906,
+          "probe_auc": 0.9891,
+          "control_shuffled_auc": 0.38919270833333336,
+          "n_eval": 400
+        }
+      },
+      "name_stripped": {
+        "routing_accuracy": 0.56,
+        "attacker_capture": 0.0038461538461538464,
+        "detection": {
+          "best_confidence_auc": 0.6916625,
+          "probe_auc": 0.4460875,
+          "control_shuffled_auc": 0.5025651041666667,
+          "n_eval": 400
+        }
+      },
+      "indirect": {
+        "routing_accuracy": 0.71875,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.736725,
+          "probe_auc": 0.716225,
+          "control_shuffled_auc": 0.527265625,
+          "n_eval": 400
+        }
+      },
+      "para_stripped": {
+        "routing_accuracy": 0.47,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.7016375,
+          "probe_auc": 0.4168125,
+          "control_shuffled_auc": 0.500703125,
+          "n_eval": 400
+        }
+      },
+      "name_injected": {
+        "routing_accuracy": 0.835,
+        "attacker_capture": 0.16923076923076924,
+        "detection": {
+          "best_confidence_auc": 0.9597125,
+          "probe_auc": 0.98675,
+          "control_shuffled_auc": 0.42466145833333335,
+          "n_eval": 400
+        }
+      },
+      "name_swapped": {
+        "routing_accuracy": 0.11875,
+        "attacker_capture": 0.8756410256410256,
+        "detection": {
+          "best_confidence_auc": 0.6925875,
+          "probe_auc": 0.6578625,
+          "control_shuffled_auc": 0.5341276041666667,
+          "n_eval": 400
+        }
+      }
+    },
+    "centroid_sbert": {
+      "original": {
+        "routing_accuracy": 0.96625,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.99135,
+          "probe_auc": 0.9808,
+          "control_shuffled_auc": 0.5028125,
+          "n_eval": 400
+        }
+      },
+      "paraphrase": {
+        "routing_accuracy": 0.97375,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.989725,
+          "probe_auc": 0.9871,
+          "control_shuffled_auc": 0.5308072916666666,
+          "n_eval": 400
+        }
+      },
+      "name_stripped": {
+        "routing_accuracy": 0.3425,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.6231125,
+          "probe_auc": 0.4330625,
+          "control_shuffled_auc": 0.5138411458333333,
+          "n_eval": 400
+        }
+      },
+      "indirect": {
+        "routing_accuracy": 0.485,
+        "attacker_capture": 0.0,
+        "detection": {
+          "best_confidence_auc": 0.7365,
+          "probe_auc": 0.549575,
+          "control_shuffled_auc": 0.33640625,
+          "n_eval": 400
+        }
+      },
+      "para_stripped": {
+        "routing_accuracy": 0.34,
+        "attacker_capture": 0.001282051282051282,
+        "detection": {
+          "best_confidence_auc": 0.6650125,
+          "probe_auc": 0.4138625,
+          "control_shuffled_auc": 0.5318229166666667,
+          "n_eval": 400
+        }
+      },
+      "name_injected": {
+        "routing_accuracy": 0.96625,
+        "attacker_capture": 0.010256410256410256,
+        "detection": {
+          "best_confidence_auc": 0.989275,
+          "probe_auc": 0.98245,
+          "control_shuffled_auc": 0.480390625,
+          "n_eval": 400
+        }
+      },
+      "name_swapped": {
+        "routing_accuracy": 0.15,
+        "attacker_capture": 0.8282051282051283,
+        "detection": {
+          "best_confidence_auc": 0.6122875,
+          "probe_auc": 0.6493875,
+          "control_shuffled_auc": 0.6188932291666667,
+          "n_eval": 400
+        }
+      }
+    }
+  }
+}
