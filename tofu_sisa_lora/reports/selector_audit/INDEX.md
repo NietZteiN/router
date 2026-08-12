@@ -56,6 +56,17 @@ byte-identical reference.
 ⚠ The published k=50 ladder cells are `d49`/`d49_48` (4 and 8 authors) while `is_forget` marks all
 400 forget10 rows — those cells label 16 of 20 authors as orphans with their expert still present.
 
+## §4.21 — the epochs axis
+
+| Artifact | Answers | Regenerate |
+|---|---|---|
+| `../h21/epochs_axis.{json,md}` | Detection AUC per strategy × transform across r32/e5, e25, **e50** and r8/e5 — the three-point epochs axis. Reproduces the published e5/e25/r8 cells on the same code path, so e50 is comparable | `analyze_router_probe.probe_arrays` over each pool's `rl_family_k200_beh*.{ppl,activation_norm,attn_norm}.npz` |
+| `<e50 pool>/results/router_leak/rl_family_k200_beh*.npz` | The e50 behavioral matrices | `bash submit_h21_e50_pool.sh all`, then `ONLY=beh_e50 QT=<transform> bash submit_selector_wave.sh beh` |
+
+⚠ Read the **decomposition**, not the trend: `activation_norm` falls to chance (0.515) while `ppl`
+holds 0.996. Duration blinds the magnitude-reading selectors and leaves the loss-reading one
+intact, so "train longer" is not a defense.
+
 ## Cross-cutting
 
 | Artifact | Answers |

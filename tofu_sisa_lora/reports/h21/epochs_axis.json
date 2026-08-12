@@ -1,0 +1,185 @@
+{
+  "protocol": "best-confidence AUC, survivor-restricted, author-parity eval half, seed 42",
+  "cells": {
+    "r32/e5|gold|ppl": {
+      "best_confidence_auc": 0.9999038461538462,
+      "probe_auc": 0.9999278846153846,
+      "control_shuffled_auc": 0.43886264534883723
+    },
+    "r32/e5|gold|activation_norm": {
+      "best_confidence_auc": 0.9339663461538461,
+      "probe_auc": 0.9724759615384615,
+      "control_shuffled_auc": 0.43200399709302323
+    },
+    "r32/e5|gold|attn_norm": {
+      "best_confidence_auc": 0.7000480769230769,
+      "probe_auc": 0.7642788461538461,
+      "control_shuffled_auc": 0.41960392441860467
+    },
+    "r32/e5|name_stripped|ppl": {
+      "best_confidence_auc": 0.7831610576923077,
+      "probe_auc": 0.7821033653846153,
+      "control_shuffled_auc": 0.5280023619186046
+    },
+    "r32/e5|name_stripped|activation_norm": {
+      "best_confidence_auc": 0.5613221153846154,
+      "probe_auc": 0.6608894230769231,
+      "control_shuffled_auc": 0.5484647529069767
+    },
+    "r32/e5|name_stripped|attn_norm": {
+      "best_confidence_auc": 0.5022716346153846,
+      "probe_auc": 0.62234375,
+      "control_shuffled_auc": 0.5133766351744186
+    },
+    "r32/e5|indirect|ppl": {
+      "best_confidence_auc": 0.8849399038461538,
+      "probe_auc": 0.894375,
+      "control_shuffled_auc": 0.5088571947674418
+    },
+    "r32/e5|indirect|activation_norm": {
+      "best_confidence_auc": 0.5557932692307692,
+      "probe_auc": 0.6699519230769231,
+      "control_shuffled_auc": 0.6484375
+    },
+    "r32/e5|indirect|attn_norm": {
+      "best_confidence_auc": 0.5902163461538461,
+      "probe_auc": 0.6441105769230769,
+      "control_shuffled_auc": 0.4913699127906977
+    },
+    "r32/e25|gold|ppl": {
+      "best_confidence_auc": 0.999423076923077,
+      "probe_auc": 0.9999278846153846,
+      "control_shuffled_auc": 0.458984375
+    },
+    "r32/e25|gold|activation_norm": {
+      "best_confidence_auc": 0.6077163461538462,
+      "probe_auc": 0.6918990384615384,
+      "control_shuffled_auc": 0.5330668604651163
+    },
+    "r32/e25|gold|attn_norm": {
+      "best_confidence_auc": 0.5543509615384615,
+      "probe_auc": 0.6588461538461539,
+      "control_shuffled_auc": 0.48410247093023256
+    },
+    "r32/e25|name_stripped|ppl": {
+      "best_confidence_auc": 0.7693629807692308,
+      "probe_auc": 0.79859375,
+      "control_shuffled_auc": 0.44147438226744184
+    },
+    "r32/e25|name_stripped|activation_norm": {
+      "best_confidence_auc": 0.49787259615384616,
+      "probe_auc": 0.6055288461538462,
+      "control_shuffled_auc": 0.49709302325581395
+    },
+    "r32/e25|name_stripped|attn_norm": {
+      "best_confidence_auc": 0.5070072115384615,
+      "probe_auc": 0.6121274038461538,
+      "control_shuffled_auc": 0.5179642078488372
+    },
+    "r32/e25|indirect|ppl": {
+      "best_confidence_auc": 0.8103365384615384,
+      "probe_auc": 0.8544711538461538,
+      "control_shuffled_auc": 0.46520712209302323
+    },
+    "r32/e25|indirect|activation_norm": {
+      "best_confidence_auc": 0.5814663461538462,
+      "probe_auc": 0.5766586538461539,
+      "control_shuffled_auc": 0.36691497093023256
+    },
+    "r32/e25|indirect|attn_norm": {
+      "best_confidence_auc": 0.4539903846153846,
+      "probe_auc": 0.5262259615384616,
+      "control_shuffled_auc": 0.455577761627907
+    },
+    "r32/e50|gold|ppl": {
+      "best_confidence_auc": 0.9961538461538462,
+      "probe_auc": 0.9994711538461538,
+      "control_shuffled_auc": 0.4836936773255814
+    },
+    "r32/e50|gold|activation_norm": {
+      "best_confidence_auc": 0.5151442307692308,
+      "probe_auc": 0.6458413461538461,
+      "control_shuffled_auc": 0.5249364098837209
+    },
+    "r32/e50|gold|attn_norm": {
+      "best_confidence_auc": 0.5691105769230769,
+      "probe_auc": 0.6648798076923077,
+      "control_shuffled_auc": 0.4883266715116279
+    },
+    "r32/e50|name_stripped|ppl": {
+      "best_confidence_auc": 0.7369110576923077,
+      "probe_auc": 0.7994110576923077,
+      "control_shuffled_auc": 0.49348201308139533
+    },
+    "r32/e50|name_stripped|activation_norm": {
+      "best_confidence_auc": 0.4600360576923077,
+      "probe_auc": 0.611610576923077,
+      "control_shuffled_auc": 0.47320130813953487
+    },
+    "r32/e50|name_stripped|attn_norm": {
+      "best_confidence_auc": 0.5344831730769231,
+      "probe_auc": 0.6142668269230769,
+      "control_shuffled_auc": 0.5281386264534884
+    },
+    "r32/e50|indirect|ppl": {
+      "best_confidence_auc": 0.8155769230769231,
+      "probe_auc": 0.8370192307692308,
+      "control_shuffled_auc": 0.4702943313953488
+    },
+    "r32/e50|indirect|activation_norm": {
+      "best_confidence_auc": 0.5752884615384616,
+      "probe_auc": 0.6626923076923077,
+      "control_shuffled_auc": 0.5428324854651163
+    },
+    "r32/e50|indirect|attn_norm": {
+      "best_confidence_auc": 0.49764423076923076,
+      "probe_auc": 0.530625,
+      "control_shuffled_auc": 0.4050236191860465
+    },
+    "r8/e5|gold|ppl": {
+      "best_confidence_auc": 0.9929326923076923,
+      "probe_auc": 0.9991346153846153,
+      "control_shuffled_auc": 0.4284156976744186
+    },
+    "r8/e5|gold|activation_norm": {
+      "best_confidence_auc": 0.8767548076923077,
+      "probe_auc": 0.9144711538461539,
+      "control_shuffled_auc": 0.4309138808139535
+    },
+    "r8/e5|gold|attn_norm": {
+      "best_confidence_auc": 0.7581490384615385,
+      "probe_auc": 0.7927884615384615,
+      "control_shuffled_auc": 0.5277979651162791
+    },
+    "r8/e5|name_stripped|ppl": {
+      "best_confidence_auc": 0.6469711538461539,
+      "probe_auc": 0.6295793269230769,
+      "control_shuffled_auc": 0.5562545421511628
+    },
+    "r8/e5|name_stripped|activation_norm": {
+      "best_confidence_auc": 0.49544471153846154,
+      "probe_auc": 0.5942788461538462,
+      "control_shuffled_auc": 0.5110374273255814
+    },
+    "r8/e5|name_stripped|attn_norm": {
+      "best_confidence_auc": 0.5194591346153846,
+      "probe_auc": 0.6200600961538462,
+      "control_shuffled_auc": 0.5050644985465116
+    },
+    "r8/e5|indirect|ppl": {
+      "best_confidence_auc": 0.6244711538461538,
+      "probe_auc": 0.6501682692307692,
+      "control_shuffled_auc": 0.49777434593023256
+    },
+    "r8/e5|indirect|activation_norm": {
+      "best_confidence_auc": 0.5854807692307692,
+      "probe_auc": 0.5767067307692307,
+      "control_shuffled_auc": 0.4804233284883721
+    },
+    "r8/e5|indirect|attn_norm": {
+      "best_confidence_auc": 0.4810096153846154,
+      "probe_auc": 0.4796875,
+      "control_shuffled_auc": 0.48814498546511625
+    }
+  }
+}

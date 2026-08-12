@@ -22,7 +22,7 @@ per-author LoRA experts, TOFU forget10 = authors 180–199 = 400 questions.
 | **4.6** | A record-free refusal gate is cheap but not deployable | **Established (negative)** | 45–90× cheaper than full scoring, yet **41.8%** of legitimate traffic refused to catch 90% of orphans | Bounds `ppl`-as-gate on 3 pools under one transform family; does not prove no defense exists |
 | **4.9** | A learned probe on the router's own geometry adds nothing over plain confidence | **Established (negative)** | median lift **+0.001** at k=200 | The real axis turned out to be granularity, not the probe |
 | — | Detection is a **lexical artifact** in every selector family except `ppl` | **Established** | `activation_norm`/`attn_norm` 0.495–0.561 name-stripped across all three pools | `ppl` is the exception and the §4.6 defense rests on it |
-| **4.21** | Epochs, not rank, blunt the behavioral leak | **In flight** | e5→e25 at r32: 0.934 → 0.608 | Two points; the e50 pool is built and its audit is running (H21). Confound filed as H31 |
+| **4.21** | Training duration moves the leak rather than removing it | **Established** | `activation_norm` 0.934 → 0.608 → **0.515** (chance) across e5/e25/e50, while `ppl` holds **1.000 → 0.999 → 0.996** | "Train longer" is not a defense: it blinds the magnitude-reading selectors and leaves the loss-reading one intact |
 
 ---
 
@@ -205,12 +205,35 @@ written down.
 
 ---
 
+## 6b. The epochs axis — duration moves the leak, it does not remove it
+
+At fixed rank 32, gold-form, as training length rises (`reports/h21/epochs_axis.md`):
+
+| strategy | e5 | e25 | **e50** | reads |
+|---|---|---|---|---|
+| `ppl` | 1.000 | 0.999 | **0.996** | the expert's **loss** |
+| `activation_norm` | 0.934 | 0.608 | **0.515** | **magnitudes** |
+| `attn_norm` | 0.700 | 0.554 | **0.569** | **magnitudes** |
+
+`activation_norm` falls monotonically to **chance**; `ppl` is untouched. All three selectors run
+the candidate experts — the two that collapse read magnitudes, the one that survives reads loss.
+
+**"Train longer" is therefore not a defense**, and should not be offered as mitigation: it makes
+deletion undetectable by the weak probes and no less detectable by the strong one. It also makes
+`ppl` the exception on **two independent axes** — query transform (H22) and training duration
+(H21) — which is why §4.6 rests on `ppl` specifically and not on "behavioral selectors" as a class.
+
+Counter-current: name-stripped `ppl` declines gently across the axis (0.783 → 0.769 → 0.737), so
+the exception is far more robust, not immune.
+
+---
+
 ## 7. Open, blocked, and in flight
 
 | Item | Kind | State |
 |---|---|---|
-| **H21** — e50 pool, third point on the epochs axis | GPU | Pool **complete and verified 200/200** (50/50 tasks `COMPLETED`); the 3 behavioral audit arms (gold / name_stripped / indirect) are running. Result not yet read |
-| **H31** — same-recipe replicate pool to separate "duration" from "a different pool" | GPU | Filed, not submitted. e25 and e50 adapters for one author have **near-orthogonal effective deltas** (median cosine 0.0139), so H20's axis may be confounded. Trigger: submit only if e50 lands anomalously |
+| **H21** — e50 pool, third point on the epochs axis | GPU | **Done.** Monotone: `activation_norm` 0.934 → 0.608 → 0.515 (chance) while `ppl` holds 0.996. See §7b |
+| **H31** — same-recipe replicate pool to separate "duration" from "a different pool" | GPU | **Not triggered**, by its own pre-registered rule. e50 landed monotone, not anomalous; a three-point monotone fall in one strategy while another holds at 0.996 is not run-to-run variance. Stays filed for any future claim needing per-pool variance quantified rather than bounded |
 | Behavioral family under `para_stripped` | GPU | Filed; needs the transform wired into `router_family_audit`, queued behind H21 |
 | **300 hand labels** validating CSAR | Human | **Blocking §4.3.** Cannot be done by me |
 | Claims audit (§4.7) | Reading | Not started |
