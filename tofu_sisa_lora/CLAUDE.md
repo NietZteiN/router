@@ -656,6 +656,19 @@ Models in rotation (slugs): `TinyLlama-1.1B-Chat-v1.0`, `phi-2`, `Llama-3.2-1B-I
   the shard-0 fallback. No `routed_*` label ever produced a result JSON before 2026-06-11, so
   no prior numbers are affected. Expected `routed_key_exact` accuracy ≈ 0.86 at every k: TOFU's
   name-free questions ("Who is the notable author born in…") legitimately fall back to shard 0.
+- **18 of the 200 TOFU authors have NO extractable name** (`router._extract_author_names` returns
+  empty), and they are a recurring measurement hazard rather than a curiosity — they have
+  distorted three separate results: the H3 attacker choice (author 0 is `key_exact`'s fallback
+  shard, and a nameless attacker makes capture unreadable), the `key_tfidf` OOD sink (author **88**
+  has the most generic centroid and absorbs 68% of real-author, 45% of world-facts and 19% of
+  orphan queries; `analyze_sequential_deletion` sees it take 0.902 of orphans on name-free
+  descriptive queries), and the H15 CSAR decomposition (a fact hit on a nameless survivor cannot be
+  classified as name-vs-substantive, so it silently defaults one way — 82.4% of the
+  `indirect`/`key_tfidf` cells). **The magnet and the missing-name artifact are the same authors**,
+  so any statistic conditioned on the ROUTED SURVIVOR is least trustworthy exactly in the name-free
+  conditions the campaign most wants to report. Rule: exclude or explicitly flag them in any
+  per-survivor statistic, and report the unclassifiable/degenerate fraction beside the number
+  (`selector_audit/csar_decompose.py` prints `unclassifiable_frac` per cell for this reason).
 - `activate_label` never returns `None` — it either returns a valid adapter name/RoutedModel or raises.
 - Routing labels return `RoutedModel`, not a string. All callers must handle both with `isinstance(result, str)`.
 - `_sanitize(name)` replaces `.` with `p` in adapter names (PEFT disallows dots).
