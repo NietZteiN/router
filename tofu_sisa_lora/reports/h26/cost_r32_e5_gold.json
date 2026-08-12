@@ -35,7 +35,45 @@
       "probe_auc": 0.999951923076923,
       "best_confidence_auc": 0.9983173076923076,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 0.9975
+      "own_expert_recall": 0.9975,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9834843680934175,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9663868395250692,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9475401776035719,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.905727142835287,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.8531212347895948,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.7167207059707467,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 4,
@@ -44,7 +82,45 @@
       "probe_auc": 1.0,
       "best_confidence_auc": 0.9993990384615384,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9925005975857559,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9799148392698348,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9684529218635559,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9341277393552166,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9055328307974206,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.7041129484787068,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 8,
@@ -53,7 +129,45 @@
       "probe_auc": 0.9999759615384616,
       "best_confidence_auc": 0.9996394230769231,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9954873385366103,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9899579948252957,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9778327641497976,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9483164076793361,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.8969602250906907,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.7489155895280516,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 16,
@@ -62,7 +176,45 @@
       "probe_auc": 0.999951923076923,
       "best_confidence_auc": 0.9997355769230769,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9967054925486241,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9918181095947523,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9853480669353387,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9507756270752745,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9129410522588581,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.7034352778396372,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 32,
@@ -71,7 +223,45 @@
       "probe_auc": 1.0,
       "best_confidence_auc": 0.9998317307692308,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9948293206615804,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.988891933684946,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9816114816755525,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.962493298471131,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9087909760785489,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.6793605158194256,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 64,
@@ -80,7 +270,45 @@
       "probe_auc": 0.9999759615384616,
       "best_confidence_auc": 0.9998798076923077,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9937372461451223,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9864988821700696,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9826355115523324,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.970550027582441,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9364785476657205,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.7723360872147169,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 180,
@@ -89,7 +317,45 @@
       "probe_auc": 0.9999278846153846,
       "best_confidence_auc": 0.9999038461538462,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9908904636142565,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.983634850057415,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9776998642826727,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9655290828792186,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9338255210573041,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.8703004497200127,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     }
   ],
   "verdict": {

@@ -207,13 +207,21 @@ def probe_npz(npz_path: str, drop_ids: list, seed: int = 42, m_top: int = 20) ->
 
 def probe_arrays(S: np.ndarray, y: np.ndarray, authors: np.ndarray, k: int, strategy: str,
                  drop_ids: list, *, full_scores: np.ndarray = None,
-                 author_sent: np.ndarray = None, seed: int = 42, m_top: int = 20) -> dict:
+                 author_sent: np.ndarray = None, seed: int = 42, m_top: int = 20,
+                 scores_sink: dict = None) -> dict:
     """One strategy x one drop set from ARRAYS. Returns the probe cell, its controls, and the
     confidence/sentinel comparators recomputed on the identical eval half.
 
     `S` is already survivor-restricted. `full_scores` (with the dropped columns present) is only
     used for the oracle-ceiling control and may be omitted when it does not exist — as it does
     not for a perturbed-query run, where there is no pre-deletion matrix to fall back on.
+
+    `scores_sink` is an optional dict filled with the eval-half probe scores split by class
+    ({"pos", "neg"}), the same additive-sink convention `eval_tofu`'s `per_example` uses. It
+    exists because a summary at ONE operating point cannot answer "is this gate deployable" —
+    that needs the whole catch/false-refusal trade-off, and the alternative is refitting the
+    probe in the caller, which would silently drift from this one. Default None leaves every
+    existing call byte-identical.
     """
     out = {"strategy": strategy, "k": k, "drop_set": list(drop_ids),
            "cell": cell_key(drop_ids)}
@@ -232,6 +240,8 @@ def probe_arrays(S: np.ndarray, y: np.ndarray, authors: np.ndarray, k: int, stra
 
     p = _fit_predict(X[fit_mask], y[fit_mask], X[eval_mask], seed)
     pos, neg = p[y[eval_mask] == 1], p[y[eval_mask] == 0]
+    if scores_sink is not None:
+        scores_sink["pos"], scores_sink["neg"] = np.asarray(pos), np.asarray(neg)
     out["probe"] = {"auc": _auc(pos, neg), **fpr_at_catch(pos, neg)}
     out["source_ranking"] = source_ranking(p, authors[eval_mask], y[eval_mask])
 

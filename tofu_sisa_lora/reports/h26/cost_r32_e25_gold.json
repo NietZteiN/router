@@ -35,7 +35,45 @@
       "probe_auc": 0.9998557692307692,
       "best_confidence_auc": 0.9969471153846153,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 0.9975
+      "own_expert_recall": 0.9975,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.998708972485213,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9936687043499224,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9875450397887983,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9555395724444514,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.8957765283198681,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.6655955515463987,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.009615384615384616
+        }
+      ]
     },
     {
       "m": 4,
@@ -44,7 +82,45 @@
       "probe_auc": 0.9999759615384616,
       "best_confidence_auc": 0.9987740384615384,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9990508243744487,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9961507102237241,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9891966452605963,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9718562610169538,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9435318330360176,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.7919231344360239,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 8,
@@ -53,7 +129,45 @@
       "probe_auc": 0.9999278846153846,
       "best_confidence_auc": 0.9987980769230769,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.998908340354644,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9948931543725543,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9884366183246993,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9616058173293085,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9400483949862718,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.7982196166273103,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.004807692307692308
+        }
+      ]
     },
     {
       "m": 16,
@@ -62,7 +176,45 @@
       "probe_auc": 0.999951923076923,
       "best_confidence_auc": 0.9989663461538462,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9991663483617848,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9963921592826831,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9914845513367501,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.980439116423767,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9619630122033883,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.8117884993822594,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 32,
@@ -71,7 +223,45 @@
       "probe_auc": 0.9999759615384616,
       "best_confidence_auc": 0.9990144230769231,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9986435785985275,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9963556175585374,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9923197487964472,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9831383710166725,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9609038144572541,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.830339430604435,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 64,
@@ -80,7 +270,45 @@
       "probe_auc": 0.9999759615384616,
       "best_confidence_auc": 0.9993990384615384,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9976398458260035,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9939388065596424,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9906443843266489,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.975567674058468,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9530484047935731,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.8060593343331172,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.0
+        }
+      ]
     },
     {
       "m": 180,
@@ -89,7 +317,45 @@
       "probe_auc": 0.9999278846153846,
       "best_confidence_auc": 0.999423076923077,
       "retain_fpr_at_90_catch": 0.0,
-      "own_expert_recall": 1.0
+      "own_expert_recall": 1.0,
+      "operating_points": [
+        {
+          "catch": 0.5,
+          "tau": 0.9970339298618005,
+          "orphan_catch": 0.5,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.7,
+          "tau": 0.9937057114177832,
+          "orphan_catch": 0.7,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.8,
+          "tau": 0.9875349439002183,
+          "orphan_catch": 0.8,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.9,
+          "tau": 0.9681787121529708,
+          "orphan_catch": 0.9,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.95,
+          "tau": 0.9466661433859197,
+          "orphan_catch": 0.95,
+          "retain_fpr": 0.0
+        },
+        {
+          "catch": 0.99,
+          "tau": 0.8316933242267912,
+          "orphan_catch": 0.99,
+          "retain_fpr": 0.004807692307692308
+        }
+      ]
     }
   ],
   "verdict": {

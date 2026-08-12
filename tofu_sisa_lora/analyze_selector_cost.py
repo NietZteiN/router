@@ -41,8 +41,12 @@ except ImportError:
     pass
 
 from analyze_router_probe import parse_drop_set, probe_arrays, _f
+from analyze_router_family import fpr_at_catch
 
 DEFAULT_M = (2, 4, 8, 16, 32, 64)
+# The catch rates a deployer would actually consider. 0.90 is kept because every
+# earlier table in this thread reports retain-FPR at 0.90, so the curve stays joinable.
+CATCH_RATES = (0.50, 0.70, 0.80, 0.90, 0.95, 0.99)
 
 
 def prefilter_topm(scores_rank: np.ndarray, scores_score: np.ndarray, m: int):
@@ -97,15 +101,17 @@ def cost_curve(ppl_npz: str, rank_npz: str, drop_ids: list, m_values=DEFAULT_M,
     Sp_s, Sr_s = Sp[:, surv], Sr[:, surv]
 
     rows = []
-    full = probe_arrays(Sp_s, y, au, len(surv), "ppl_full", [], seed=seed)
+    full_sink = {}
+    full = probe_arrays(Sp_s, y, au, len(surv), "ppl_full", [], seed=seed, scores_sink=full_sink)
     for m in list(m_values) + [len(surv)]:
         if m > len(surv):
             continue
+        sink = {}
         if m == len(surv):
-            r, keep = full, 1.0
+            r, keep, sink = full, 1.0, full_sink
         else:
             Sm, idx = prefilter_topm(Sr_s, Sp_s, m)
-            r = probe_arrays(Sm, y, au, m, f"ppl_top{m}", [], seed=seed)
+            r = probe_arrays(Sm, y, au, m, f"ppl_top{m}", [], seed=seed, scores_sink=sink)
             keep = own_expert_recall(idx, au, surv)
         rows.append({
             "m": int(m), "forwards_per_query": int(m),
@@ -114,6 +120,13 @@ def cost_curve(ppl_npz: str, rank_npz: str, drop_ids: list, m_values=DEFAULT_M,
             "best_confidence_auc": float(max(x["auc"] for x in r["comparators"].values())),
             "retain_fpr_at_90_catch": float(r["probe"]["retain_fpr"]),
             "own_expert_recall": float(keep),
+            # H27 -- an AUC does not say whether a gate is deployable; a refusal gate is only
+            # usable if the traffic it wrongly refuses is tolerable, so carry the whole
+            # catch/false-refusal trade-off rather than one pre-chosen point.
+            "operating_points": ([
+                {"catch": c, **{k2: float(v) for k2, v in
+                                fpr_at_catch(sink["pos"], sink["neg"], catch=c).items()}}
+                for c in CATCH_RATES] if sink else []),
         })
     fa = full["probe"]["auc"]
     # "cheapest m within 0.02 AUC of scoring every survivor" — 0.02 is the tolerance the E1
