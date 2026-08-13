@@ -1,6 +1,12 @@
 # selector_audit — auditing deletion-under-a-selector as a design pattern
 
-**Status:** active · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 14 (2026-08-07 → 2026-08-10)
+**Status:** complete · **Project:** [`tofu_sisa_lora/`](../../tofu_sisa_lora/) (+ `selector_audit/` for the released harness) · **Entries:** 26 (2026-08-07 → 2026-08-12)
+
+> **Read the master report first.** [`../../SELECTOR_AUDIT_REPORT.md`](../../SELECTOR_AUDIT_REPORT.md)
+> is self-contained, carries every result with its caveats, and holds the **complete hypothesis
+> ledger** (31 filed, 28 adjudicated) — the bullet list below stops at H18 and is kept as the
+> contemporaneous record, not as the current state. The manuscript drafted from it is
+> [`../../paper/followup/`](../../paper/followup/).
 
 The follow-up paper to MUSR. `router_leak/` asked what happens to MUSR's comparators when a source
 is deleted; this thread asks the generic question — **constructive unlearning methods delete by

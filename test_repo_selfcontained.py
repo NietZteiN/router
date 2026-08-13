@@ -295,6 +295,13 @@ def test_upstream_pins_are_full_shas() -> None:
           len(pins) == 3 and all(len(p) == 40 for p in pins), str(pins))
 
 
+# The ONE place under paper/ where LaTeX is allowed: the follow-up draft
+# ("Deleted from the Router, Not from the Model"). It is our own unsubmitted work, carries no
+# distribution notice, and cites only results already public in reports/. Everything else under
+# paper/ stays banned. See test_manuscript_absent for what still guards this directory.
+FOLLOWUP_DIR = "paper/followup/"
+
+
 def test_manuscript_absent() -> None:
     """The AAAI submission must NEVER be committed to this repo.
 
@@ -306,18 +313,39 @@ def test_manuscript_absent() -> None:
 
     Checked on disk AND in the index, because .gitignore does not apply to a file that is
     already tracked — which is exactly how these got committed in the first place.
+
+    NARROWED 2026-08-13, deliberately and with the hole named. `paper/followup/` holds the
+    follow-up draft and is exempt from the .tex ban, so this check would have gone from
+    "no LaTeX under paper/, ever" to "no LaTeX except in one directory" — which is a weaker
+    invariant that an accidental `cp` into that directory could defeat. Three things keep it
+    strong instead of merely narrower:
+      * .pdf is still banned EVERYWHERE under paper/, exempt directory included. A built PDF is
+        not a source file, and the AAAI artifact most likely to be copied around is a PDF.
+      * the exempt directory's own .tex files are read and rejected if they carry the
+        submission's prohibition notice or its filename marker.
+      * everything outside the exempt directory is unchanged.
     """
-    strays = []
+    strays, notices = [], []
     for root, _dirs, files in os.walk(os.path.join(HERE, "paper")):
         for f in files:
-            if f.endswith((".pdf", ".tex")) or "p_unlearn" in f.lower():
-                strays.append(os.path.relpath(os.path.join(root, f), HERE))
+            rel = os.path.relpath(os.path.join(root, f), HERE)
+            exempt = rel.replace(os.sep, "/").startswith(FOLLOWUP_DIR)
+            if f.endswith(".pdf") or "p_unlearn" in f.lower():
+                strays.append(rel)                      # banned everywhere, exemption included
+            elif f.endswith(".tex") and not exempt:
+                strays.append(rel)
+            elif f.endswith(".tex"):
+                body = open(os.path.join(root, f), encoding="utf-8", errors="replace").read()
+                if "strictly prohibited" in body or "p_unlearn" in body.lower():
+                    notices.append(rel)                 # the submission wearing a new path
     r = subprocess.run(["git", "-C", HERE, "ls-files"], capture_output=True, text=True)
     tracked = [l for l in r.stdout.splitlines()
-               if (l.startswith("paper/") and l != "paper/README.md")
+               if (l.startswith("paper/") and l != "paper/README.md"
+                   and not l.startswith(FOLLOWUP_DIR))
                or "p_unlearn" in l.lower()]
-    check("the manuscript is absent from disk and from the index", not strays and not tracked,
-          f"on disk: {strays[:3]}  tracked: {tracked[:3]}")
+    check("the manuscript is absent from disk and from the index",
+          not strays and not tracked and not notices,
+          f"on disk: {strays[:3]}  tracked: {tracked[:3]}  carries the notice: {notices[:3]}")
 
 
 def main() -> int:

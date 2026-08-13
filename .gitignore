@@ -38,3 +38,14 @@ logs_*/
 paper/pdf/
 paper/tex/
 *p_unlearn*
+
+# ── LaTeX build artifacts for the follow-up draft ────────────────────────────────────────────
+# paper/followup/ IS committed (it is our own unsubmitted work, unlike paper/tex/), but only its
+# sources. test_repo_selfcontained.py additionally bans *.pdf everywhere under paper/, so build
+# out-of-tree -- see paper/followup/README.md.
+paper/followup/*.aux
+paper/followup/*.bbl
+paper/followup/*.blg
+paper/followup/*.log
+paper/followup/*.toc
+paper/followup/*.synctex.gz
