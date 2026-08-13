@@ -300,6 +300,40 @@ def test_upstream_pins_are_full_shas() -> None:
 # distribution notice, and cites only results already public in reports/. Everything else under
 # paper/ stays banned. See test_manuscript_absent for what still guards this directory.
 FOLLOWUP_DIR = "paper/followup/"
+# ...and the ONE .pdf, which is that draft built. Identified by content, not by path: see
+# _pdf_carries_title.
+FOLLOWUP_PDF = "paper/followup/main.pdf"
+FOLLOWUP_TITLE = "Deleted from the Router, Not from the Model"
+
+
+def _pdf_carries_title(path: str, title: str) -> bool:
+    """True if `title` appears in the PDF's metadata or text. Standard library only.
+
+    A path allow-list alone would let ANY pdf be committed as paper/followup/main.pdf, which is
+    exactly the hole this gate exists to close. So the exempt PDF has to prove it is the draft:
+    main.tex stamps the title into the Info dict via \\hypersetup{pdftitle=...}, and this reads it
+    back. pdflatex/xdvipdfmx write that string hex-encoded UTF-16BE and usually inside a
+    zlib-compressed object stream, so all three encodings are searched, in the raw bytes and in
+    every stream that decompresses.
+    """
+    import binascii
+    import zlib
+
+    raw = open(path, "rb").read()
+    needles = [title.encode(),
+               b"\xfe\xff" + title.encode("utf-16-be"),
+               b"feff" + binascii.hexlify(title.encode("utf-16-be"))]
+    buffers = [raw]
+    for m in re.finditer(rb"stream\r?\n", raw):
+        start = m.end()
+        end = raw.find(b"endstream", start)
+        if end < 0:
+            continue
+        try:
+            buffers.append(zlib.decompress(raw[start:end]))
+        except zlib.error:
+            continue                                    # not a flate stream; nothing to read
+    return any(n in b or n in b.lower() for b in buffers for n in needles)
 
 
 def test_manuscript_absent() -> None:
@@ -315,27 +349,34 @@ def test_manuscript_absent() -> None:
     already tracked — which is exactly how these got committed in the first place.
 
     NARROWED 2026-08-13, deliberately and with the hole named. `paper/followup/` holds the
-    follow-up draft and is exempt from the .tex ban, so this check would have gone from
-    "no LaTeX under paper/, ever" to "no LaTeX except in one directory" — which is a weaker
-    invariant that an accidental `cp` into that directory could defeat. Three things keep it
-    strong instead of merely narrower:
-      * .pdf is still banned EVERYWHERE under paper/, exempt directory included. A built PDF is
-        not a source file, and the AAAI artifact most likely to be copied around is a PDF.
-      * the exempt directory's own .tex files are read and rejected if they carry the
-        submission's prohibition notice or its filename marker.
+    follow-up draft — our own unsubmitted work, under no distribution notice — and is exempt for
+    its .tex sources and for exactly one built .pdf. That turns "no LaTeX under paper/, ever" into
+    "no LaTeX except in one directory", a weaker invariant that a stray `cp` could defeat. Three
+    things keep it strong rather than merely narrower:
+      * .pdf is banned everywhere under paper/ EXCEPT the single path FOLLOWUP_PDF, and that one
+        file must prove by its own metadata that it is the draft (_pdf_carries_title). A path
+        allow-list on its own would accept any PDF renamed to sit there.
+      * the exempt directory's .tex files are read and rejected if they carry the submission's
+        prohibition notice or its filename marker.
       * everything outside the exempt directory is unchanged.
     """
-    strays, notices = [], []
+    strays, notices, unidentified = [], [], []
     for root, _dirs, files in os.walk(os.path.join(HERE, "paper")):
         for f in files:
-            rel = os.path.relpath(os.path.join(root, f), HERE)
-            exempt = rel.replace(os.sep, "/").startswith(FOLLOWUP_DIR)
-            if f.endswith(".pdf") or "p_unlearn" in f.lower():
-                strays.append(rel)                      # banned everywhere, exemption included
+            abs_path = os.path.join(root, f)
+            rel = os.path.relpath(abs_path, HERE).replace(os.sep, "/")
+            exempt = rel.startswith(FOLLOWUP_DIR)
+            if "p_unlearn" in f.lower():
+                strays.append(rel)
+            elif f.endswith(".pdf"):
+                if rel != FOLLOWUP_PDF:
+                    strays.append(rel)                  # the one allowed pdf is allowed by PATH...
+                elif not _pdf_carries_title(abs_path, FOLLOWUP_TITLE):
+                    unidentified.append(rel)            # ...and only if its CONTENT agrees
             elif f.endswith(".tex") and not exempt:
                 strays.append(rel)
             elif f.endswith(".tex"):
-                body = open(os.path.join(root, f), encoding="utf-8", errors="replace").read()
+                body = open(abs_path, encoding="utf-8", errors="replace").read()
                 if "strictly prohibited" in body or "p_unlearn" in body.lower():
                     notices.append(rel)                 # the submission wearing a new path
     r = subprocess.run(["git", "-C", HERE, "ls-files"], capture_output=True, text=True)
@@ -344,8 +385,9 @@ def test_manuscript_absent() -> None:
                    and not l.startswith(FOLLOWUP_DIR))
                or "p_unlearn" in l.lower()]
     check("the manuscript is absent from disk and from the index",
-          not strays and not tracked and not notices,
-          f"on disk: {strays[:3]}  tracked: {tracked[:3]}  carries the notice: {notices[:3]}")
+          not strays and not tracked and not notices and not unidentified,
+          f"on disk: {strays[:3]}  tracked: {tracked[:3]}  carries the notice: {notices[:3]}"
+          f"  unidentified pdf: {unidentified[:3]}")
 
 
 def main() -> int:

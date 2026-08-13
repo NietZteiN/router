@@ -92,6 +92,7 @@ stage_hf_cache.sh               APA:stage_hf_cache.sh
 # .gitignore). This draft is our own unsubmitted work under no such notice, so it lives with the
 # numbers it cites. Moving the directory to paper/tex/ would gitignore it, if that is ever wanted.
 # paper/followup/main.tex                      (the draft)
+# paper/followup/main.pdf                      (the draft, built; the ONE pdf allowed under paper/)
 # paper/followup/refs.bib                      (transcribed from papers/RELATED_WORK.md)
 # paper/followup/README.md                     (build, claim -> artifact map, what is missing)
 # paper/followup/tools/check_tex.py            (structural check: no TeX is installed here)

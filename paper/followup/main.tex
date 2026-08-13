@@ -19,7 +19,20 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{natbib}
+\usepackage{microtype}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
+
+% This title is stamped into the PDF Info dict, and test_repo_selfcontained.py reads it back out
+% of the built PDF's raw bytes. paper/ bans .pdf everywhere except this one build, and that check
+% is what stops the exemption from being a path any other PDF could be copied into. Change the
+% string here and the repo gate fails until the check is changed to match -- deliberately.
+\hypersetup{pdftitle={Deleted from the Router, Not from the Model},
+            pdfauthor={Anonymous Submission}}
+
+% The prose is dense with long unbreakable \texttt{selector_name} tokens, which is what produces
+% overfull lines here rather than genuinely bad line breaks. Let TeX stretch a little further
+% before it gives up; without this the draft ships four overfull boxes it does not need.
+\setlength{\emergencystretch}{3em}
 
 % Draft-only marker. Anything wearing this is NOT yet supported by a completed measurement, and
 % the macro is loud on purpose: a claim that quietly loses its caveat is the failure mode this
@@ -27,9 +40,11 @@
 \newcommand{\blocked}[1]{\textcolor{red}{\textbf{[BLOCKED: #1]}}}
 \newcommand{\todonote}[1]{\textcolor{blue}{\textbf{[TODO: #1]}}}
 
-\newcommand{\csar}{\textsc{csar}}
-\newcommand{\orr}{\textsc{orr}}
-\newcommand{\rdr}{\textsc{rdr}}
+% Plain caps, not \textsc: Latin Modern has no bold small caps (T1/lmr/bx/sc), so a small-caps
+% acronym inside \textbf silently falls back to non-bold and looks wrong.
+\newcommand{\csar}{CSAR}
+\newcommand{\orr}{ORR}
+\newcommand{\rdr}{RDR}
 % NOT \mu -- that is the Greek letter and \newcommand on it errors out.
 \newcommand{\fq}{\texttt{forget\_quality}}
 \newcommand{\util}{\texttt{model\_utility}}
@@ -235,15 +250,16 @@ learn ``perturbed $\Rightarrow$ deleted''.
 
 \begin{table}[t]
 \centering
-\begin{tabular}{@{}lll@{}}
+\small
+\begin{tabular}{@{}lp{0.36\textwidth}p{0.31\textwidth}@{}}
 \toprule
 Transform & Construction & Role \\
 \midrule
-\texttt{gold}          & TOFU's question verbatim (names the author in ${\sim}90\%$ of rows) & anchor \\
-\texttt{paraphrase}    & TOFU's own paraphrase & \textbf{null by construction} --- keeps the name \\
-\texttt{name\_stripped}& all name forms removed & \textbf{the hard case} \\
-\texttt{indirect}      & name replaced by a description built from the author's own facts & weaker than it looks (\S\ref{sec:indirect}) \\
-\texttt{para\_stripped}& TOFU's paraphrase, name removed & the independent hard surface \\
+\texttt{gold}           & TOFU's question verbatim (names the author in ${\sim}90\%$ of rows) & anchor \\
+\texttt{paraphrase}     & TOFU's own paraphrase & \textbf{null by construction} --- keeps the name \\
+\texttt{name\_stripped} & all name forms removed & \textbf{the hard case} \\
+\texttt{indirect}       & name replaced by a description built from the author's own facts & weaker than it looks (\S\ref{sec:indirect}) \\
+\texttt{para\_stripped} & TOFU's paraphrase, name removed & the independent hard surface \\
 \bottomrule
 \end{tabular}
 \caption{The query-transform axis. \texttt{paraphrase} is included because it is the obvious
@@ -294,6 +310,7 @@ against the same held-fixed KS reference, so all eight cells are the same statis
 
 \begin{table}[t]
 \centering
+\small
 \begin{tabular}{@{}lcccccccc@{}}
 \toprule
 Destination & s89 & s137 & s31 & s97 & \textbf{DELETE} & s33 & s79 & s88 \\

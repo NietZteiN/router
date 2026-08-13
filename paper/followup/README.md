@@ -13,24 +13,35 @@ prose stay in one history.
 | file | what it is |
 |---|---|
 | `main.tex` | the draft. `article` class on purpose, so it builds with no venue `.sty` present |
+| `main.pdf` | the built draft, 14 pages. Rebuild it after any `main.tex` change — nothing does that automatically |
 | `refs.bib` | 23 entries transcribed from [`../../papers/RELATED_WORK.md`](../../papers/RELATED_WORK.md) — edit both or they drift |
 
 ## Building
 
-**Build out-of-tree.** `test_repo_selfcontained.py` bans `.pdf` *everywhere* under `paper/`,
-including this directory — that ban is what keeps the LaTeX exemption from becoming a hole the
-AAAI artifact could slip through (see `test_manuscript_absent`). So a build that writes `main.pdf`
-next to `main.tex` will fail the repo gate. Write it somewhere else:
+```bash
+pdflatex main && bibtex main && pdflatex main && pdflatex main
+```
+
+**There is no TeX distribution on this cluster.** `main.pdf` was built with a
+[Tectonic](https://tectonic-typesetting.github.io/) static binary fetched into a scratch
+directory, which needs no install and pulls the packages it needs on demand:
 
 ```bash
-OUT=$(mktemp -d)
-cp refs.bib "$OUT/"
-pdflatex -output-directory="$OUT" main.tex \
-  && (cd "$OUT" && bibtex main) \
-  && pdflatex -output-directory="$OUT" main.tex \
-  && pdflatex -output-directory="$OUT" main.tex
-echo "$OUT/main.pdf"
+curl -sL -o tectonic.tar.gz \
+  'https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.17.0/tectonic-0.17.0-x86_64-unknown-linux-musl.tar.gz'
+tar xzf tectonic.tar.gz
+./tectonic -X compile main.tex          # runs bibtex and reruns to convergence by itself
 ```
+
+Current build: **14 pages**, 0 undefined citations, 0 undefined references, 0 overfull boxes, one
+cosmetic underfull line.
+
+**`main.pdf` is the only `.pdf` allowed anywhere under `paper/`**, and the repo gate identifies it
+by *content*, not by path — `main.tex` stamps the title into the PDF Info dict via
+`\hypersetup{pdftitle=...}` and `test_manuscript_absent` reads it back out (stdlib zlib, no
+dependency). A different PDF renamed to `main.pdf` fails the gate. If you change the title in
+`main.tex`, change `FOLLOWUP_TITLE` in `test_repo_selfcontained.py` to match; the gate fails until
+you do, deliberately.
 
 **No TeX distribution is installed on this cluster**, so the draft has never been compiled. It has
 been checked structurally instead — environments balanced, braces balanced, every `\cite` key
