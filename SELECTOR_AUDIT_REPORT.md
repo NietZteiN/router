@@ -46,7 +46,7 @@ meant to read it front to back.
 |---|---|
 | the four findings and nothing else | [Part 0](#part-0--the-four-findings) — about two pages |
 | to understand the setting well enough to argue with us | [Part I](#part-i--what-is-being-audited) then Part 0 |
-| to know exactly what a number means | [Part II](#part-ii--how-we-measure), which defines all six metrics from scratch |
+| to know what a specific number means | **nothing — every table in Part III defines its own columns in a box directly underneath it.** [Part II](#part-ii--how-we-measure) is the fuller reference if you want it |
 | one specific finding in full | its section in [Part III](#part-iii--what-we-found) — each is self-contained |
 | to judge how much to trust this | [Part IV](#part-iv--how-much-to-trust-this) — the caveats, the bugs we found in ourselves, the full ledger |
 | to re-run it | [§22](#22-reproducing) |
@@ -552,13 +552,26 @@ included because the obvious explanation for any good score is "we picked a simi
 | expert affinity | .3044 | .3382 | .2840 | .2267 | *(genuine deletion)* | .2663 | .2193 | .3970 |
 | **`forget_quality`** | **.8958** | .8002 | .6288 | .6288 | **.5140** | .5140 | .5140 | .3615 |
 
+> **How to read this table.** Each column is one complete evaluation of the system. `DEL` genuinely
+> deletes the 20 people. The other seven delete nobody and redirect all 400 of their questions to the
+> one survivor named in the header.
+>
+> | row | what it is | direction |
+> |---|---|---|
+> | **expert affinity** | How similar that survivor is to the deleted people, 0 to 1. Included only to test the obvious objection *"you picked a similar author, so of course the answers pass"*. | — |
+> | **`forget_quality`** | The benchmark's own forgetting score: **the p-value of a statistical test asking whether the system's behaviour on the deleted people is distinguishable from a system that never learned them.** 0 = clearly still knows them. 1 = indistinguishable from never having learned them. | **higher = the benchmark says forgetting worked better** |
+>
+> So every column to the left of `DEL` is a system that **deleted nothing** and that the benchmark
+> scores as forgetting *better* than real deletion.
+
 Three things to read off it:
 
 - **`model_utility` is identical at 0.8009 in all eight arms.** Nothing was traded away.
 - **Six of the seven arms that delete nothing score at or above genuine deletion.** Experts 33 and 79
   land exactly on it; 89, 137, 31 and 97 land above it. Only 88 lands below.
-- The routing audits confirm the arms did what they claim: `deleted: 0` / `rerouted: 1320` in every
-  reroute arm, against `deleted: 1320` / `rerouted: 0` in the genuine-deletion baseline.
+- The routing audits confirm the arms did what they claim: in every reroute arm the audit logs
+  `deleted: 0` and `rerouted: 1320`, against `deleted: 1320` and `rerouted: 0` in the
+  genuine-deletion baseline.
 
 **We tested the obvious explanation and it failed.** If these arms scored well because they picked a
 *similar* author — so the answers still look roughly right — then affinity should predict
@@ -581,6 +594,13 @@ this a paired comparison. We resample the row indices once and apply that same r
 | probability the spread exceeds 0.25 | **0.961** |
 | arms scoring at or above genuine deletion | **6 of 7 observed, 95% CI [2, 7]** |
 | independent reruns reproducing the published cells | **8 of 8** |
+
+> **How to read this table.** **Spread** = highest `forget_quality` minus lowest, across the eight
+> columns above. It is how much the score moves for a reason that has nothing to do with forgetting.
+> The **paired confidence interval** comes from re-drawing the evaluation questions 
+> thousands of times and recomputing the spread each time — *the same re-draw applied to all eight
+> arms at once*, because they are scored on the same questions. The interval is where the true spread
+> lives 95% of the time. **It does not include zero**, which is the point.
 
 Even at the pessimistic end of that interval, **at least two arms that delete nothing match or beat
 real deletion.**
@@ -615,15 +635,39 @@ field's evidence that deletion worked.
 **The question.** We stop measuring routing and read the text. When an orphan gets an answer, does
 that answer assert a specific surviving author's facts about the deleted person?
 
-**The result.** 400 orphan questions per router, every answer classified fact-by-fact
-(CSAR is defined in [§8](#8-the-three-scores-we-had-to-add)):
+**The result.** 400 orphan questions per router, every answer classified fact-by-fact.
 
-| question phrasing | CSAR, `centroid_sbert` | CSAR, `key_tfidf` | own-disclosure | refusal |
-|---|---|---|---|---|
-| `gold` (names the author) | 0.3325 | 0.3650 | 0.913 / 0.933 | 0.000 |
-| `name_stripped` | **0.4400** | 0.4175 | 0.273 | ≤0.010 |
-| `indirect` | 0.3350 | 0.2125 | 0.383 / 0.393 | ≤0.013 |
-| random destination *(no router)* | 0.2200 | — | 0.953 | 0.003 |
+| question phrasing | router | refusal | base-generic | unattributable | **cross-source = CSAR** | own-disclosure |
+|---|---|---|---|---|---|---|
+| `gold` (names the author) | `centroid_sbert` | 0.0000 | 0.2275 | 0.4400 | **0.3325** | 0.9125 |
+| `gold` | `key_tfidf` | 0.0000 | 0.2700 | 0.3650 | **0.3650** | 0.9325 |
+| `name_stripped` | `centroid_sbert` | 0.0025 | 0.2825 | 0.2750 | **0.4400** | 0.2725 |
+| `name_stripped` | `key_tfidf` | 0.0100 | 0.2650 | 0.3075 | **0.4175** | 0.2725 |
+| `indirect` | `centroid_sbert` | 0.0100 | 0.2225 | 0.4325 | **0.3350** | 0.3825 |
+| `indirect` | `key_tfidf` | 0.0125 | 0.2175 | 0.5575 | **0.2125** | 0.3925 |
+| *(any)* | **random destination — no router at all** | 0.0025 | 0.2850 | 0.4925 | **0.2200** | 0.9525 |
+
+> **How to read this table.** Each row is 400 orphan answers under one question phrasing and one
+> router. Every answer is put into **exactly one** of the four middle categories, so those four
+> columns sum to 1.000 across each row. **Own-disclosure is separate** and overlaps them, because it
+> asks a different question about the same answers.
+>
+> | column | the question it answers | what a high number means |
+> |---|---|---|
+> | **refusal** | Did the system decline to answer? | Good. The system noticed it had nothing to say. |
+> | **base-generic** | Was the answer just the frozen base model's own generic knowledge? | Harmless. No expert contributed anything. |
+> | **unattributable** | Did it make something up that belongs to nobody in the collection? | Confabulation. Wrong, but it does not put a real person's life on someone else. |
+> | **cross-source = CSAR** | Did it assert facts that really belong to the **specific surviving person the question got routed to**? | **The harm.** Bob's book titles and birthplace, served as though they were the deleted Alice's. |
+> | **own-disclosure** | Separately: did the answer contain the **deleted person's own** real facts? | A *different, worse* failure — the deleted data is still coming out. It is kept out of CSAR deliberately, so the two are never confused. |
+>
+> The last row is the control: substitute a **uniformly random** surviving expert instead of using a
+> router at all. That is the floor any router has to beat.
+>
+> **Why own-disclosure is high on `gold` and low on `name_stripped`.** A `gold` question names the
+> deleted author, so the answer echoes that name and the author's own details right back — 0.91
+> to 0.93. Strip the name and the system no longer knows who is being asked about, so it stops
+> reciting their details (0.27) and starts reciting somebody else's instead (CSAR 0.33 → 0.44).
+> That trade is the subject of [§12.2](#122-anonymising-the-question-does-not-reduce-the-harm--it-changes-its-character).
 
 Four things come out of this table.
 
@@ -641,7 +685,7 @@ A refusal path exists in the architecture; nothing uses it.
 
 Strip the name and two things move in opposite directions:
 
-- The system leaks **less of the deleted person's own content**: own-disclosure 0.913 → 0.273.
+- The system leaks **less of the deleted person's own content**: own-disclosure 0.91–0.93 → 0.27.
 - The system attributes **more of a stranger's content** to them: CSAR 0.3325 → 0.4400.
 
 The mechanism is worth stating because it is counterintuitive. Attribution does not require the
@@ -664,13 +708,19 @@ routed survivor:
 | `key_tfidf` | 0.3650 | **0.2950** | 0.0700 |
 | random-destination floor | 0.2200 | **0.1725** | 0.0475 |
 
+> **How to read this table.** The CSAR column from the main table, split in two. **Name-only** =
+> the *only* thing borrowed from the survivor was their name. **Substantive** = at least one real
+> fact was borrowed — a book title, a city, an award, an occupation. The two add up to CSAR.
+> Substantive is the column that matters: it is the difference between the system garbling a name
+> and the system narrating a stranger's life under the deleted person's.
+
 **Two thirds to four fifths of it carries a real fact** — a book title, a city, an award, an
 occupation. Actual examples: *Kaleidoscope City*, *Faulkner award*, *flight attendant*, *Turkish*.
 
 It also survives the sharpest objection to it. TOFU's first few questions per author are identity
 questions ("Who is X?"), where a wrongly-routed expert answers with a name by construction. Drop that
-slice entirely and score only the 300 non-identity questions: substantive CSAR is still 0.217 / 0.250,
-comfortably above the floor.
+slice entirely and score only the 300 non-identity questions: substantive CSAR is still 0.217 for
+`centroid_sbert` and 0.250 for `key_tfidf`, comfortably above the 0.1725 floor.
 
 ### 12.4 The floor is high, and it is not the router's fault
 
@@ -694,7 +744,7 @@ harm, not an absent one.
 Two biases we know about and have not removed:
 
 - **Question ordering.** TOFU puts identity questions first and those are the most attribution-prone.
-  A head-sliced sample gives 0.460; the full 400 gives 0.333 / 0.365. The
+  A head-sliced sample gives 0.460; the full 400 gives 0.333 and 0.365 for the two routers. The
   `--question_sample {head,random}` flag exists because of this. `head` stays the default only for
   byte-compatibility with earlier runs, and is documented as biased wherever it appears.
 - **18 of 200 authors have no extractable name**, so any fact matched on those survivors defaults to
@@ -748,6 +798,15 @@ the answerer for a growing share of the corpus — a routing magnet. This seems 
 | `indirect` | `centroid_sbert` | 0.550 → 0.113 | 23.0 | 0.020 | dispersing |
 | **`indirect`** | **`key_tfidf`** | **0.850 → 0.902** | **1.2** | 0.000 | **saturating** |
 
+> **How to read this table.** We delete the 20 people **one at a time** and watch where their
+> questions pile up.
+>
+> | column | meaning |
+> |---|---|
+> | **busiest share, 1 → 20 deletions** | The fraction of orphaned questions landing on whichever single survivor is receiving the most. Left number: after 1 deletion. Right number: after all 20. **Falling = the load is spreading out. Rising = one expert is becoming a magnet.** |
+> | **final n_eff** | "Effective number of destinations" after all 20 deletions. If the load were spread evenly over N experts you would get N. **23.0 means the orphans are spread across the equivalent of 23 experts; 1.2 means essentially all of them land on one.** |
+> | **RDR** | Collateral damage: the fraction of **retained** people's questions that get sent to a *different* expert than before, purely because somebody else was deleted. 0.000 = deletion disturbed nobody. 0.092 = it silently moved 9.2% of everyone else's traffic. |
+
 **The mechanism is obvious in hindsight.** With *one* author deleted, all 20 of their questions go to
 that author's single nearest survivor — hence a share of 0.55–0.75. With *twenty* deleted, each of
 them has a *different* nearest survivor, so the pooled share falls and the effective number of
@@ -791,7 +850,8 @@ It is not solved. Measurements on that problem:
 
 - Questions about nobody in the collection have nearly flat router scores — margin 0.022 versus 0.186
   for retained questions — and confidence separates them at AUC 0.983–1.000. So far so good.
-- **But orphans look exactly the same** (0.984 / 0.992).
+- **But orphans look exactly the same** — AUC 0.984 and 0.992 for the two routers, i.e. the same
+  near-perfect separation, produced by the same signal.
 
 That single fact explains all of [§14](#14-finding-4-orphans-are-only-detectable-because-of-the-name).
 The thing confidence detects is not *was this person deleted*; it is **does this question name a
@@ -820,6 +880,12 @@ routers. Hold the deletion size fixed and vary only how finely the data is split
 | `centroid_lm` | 0.502 | 0.628 | 0.761 | monotone increasing |
 | `key_tfidf` | 0.973 | 0.989 | 0.989 | already saturated |
 
+> **How to read this table.** Every number is a **detection AUC**: hand the detector one orphaned
+> question and one normal question, and this is how often it correctly picks out the orphan.
+> **0.5 = a coin flip. 1.0 = perfect.** No record of who was deleted is consulted — the detector sees
+> only the surviving router's scores. The columns vary how finely the training data was split: 10
+> experts means 20 authors bundled together per expert; 200 means one author each.
+
 Attribution recall — not just *is this an orphan* but *which deleted person is it about* — rises
 0.300 → 0.700 → 1.000 across the same ladder.
 
@@ -835,6 +901,11 @@ Remove the name from the question and the ladder flattens:
 | `gold` | 0.564 | 0.795 | 0.984 | **+0.367** |
 | `name_stripped` | 0.560 | 0.572 | 0.623 | **+0.063** |
 
+> **How to read this table.** Same detection AUC as above (0.5 = coin flip), for `centroid_sbert`,
+> with one thing changed: the bottom row removes the author's name from the question. The last column
+> is the *whole benefit* of splitting the data 20× more finely. Keep the name and it is worth +0.367.
+> Remove it and the same 20× buys you +0.063 — i.e. essentially nothing.
+
 `key_tfidf` gains nothing at all (−0.021). At 200 experts, detection falls **0.991 → 0.623** — back
 inside the coarse-expert band that granularity was supposed to escape. Routing accuracy collapses
 alongside it, 0.966 → 0.343, and `key_exact` routes correctly **2.5% of the time on every name-free
@@ -847,15 +918,15 @@ control moves nothing (0.900 vs 0.895). The drop is caused by removing the name,
 
 Name-stripped, on both 200-expert rank-32 systems:
 
-- `activation_norm`: 0.877 → **0.495**
-- `attn_norm`: 0.758 → **0.519**
+- `activation_norm`: 0.877 with the name → **0.495** without it
+- `attn_norm`: 0.758 with the name → **0.519** without it
 
-Both land at chance.
+Both land at chance (0.5), on both rank-32 systems.
 
 ### 14.4 The one exception, and what separates it
 
-`ppl` does not collapse: **0.783 / 0.769** name-stripped on the rank-32 systems (0.647 on the smaller
-rank-8 one).
+`ppl` does not collapse. Name-stripped, it holds at **0.783** on the 5-epoch rank-32 system and
+**0.769** on the 25-epoch one (0.647 on the smaller rank-8 system).
 
 This is a clean natural experiment. All three reaction-based routers *actually run* the candidate
 experts. The two that collapse read **magnitudes** — how hard the internals react. The one that
@@ -870,8 +941,9 @@ defense built on `ppl` — see [§16](#16-finding-6-the-one-defense-that-survive
 
 We tried to do better than a plain confidence threshold by fitting a small classifier over
 permutation-invariant functions of the surviving scores ([§10](#10-three-rules-every-number-here-obeys),
-rule 2). With no deletion record consulted, it reaches AUC **0.990** at 200 experts (0.976 and 0.830
-on the other routers; shuffled control 0.45–0.50).
+rule 2). With no deletion record consulted, it reaches AUC **0.990** at 200 experts using `centroid_sbert`
+(0.976 with `key_tfidf`, 0.830 with `centroid_lm`; the shuffled-label control sits at 0.45–0.50, as
+it should).
 
 But its **median improvement over plain confidence is +0.001** (best case +0.069 on one router).
 
@@ -894,7 +966,8 @@ signal at all.
 
 [§16.4](#164-the-apparent-hard-case-was-not-hard) shows `indirect` is not really a hard phrasing. Its
 replacement — TOFU's own paraphrase with names stripped, median 12 words, and **0 of 800 retaining any
-name form** — gives best-confidence AUC **0.702 / 0.665**, against `name_stripped`'s 0.692 / 0.623.
+name form** — gives best-confidence AUC **0.702** on the 5-epoch rank-32 system and **0.665** on the
+25-epoch one, against `name_stripped`'s 0.692 and 0.623 on the same two.
 
 Slightly *higher*, despite much worse routing. That is not a contradiction: detection does not track
 routing, for the same reason the prefilter in [§16.2](#162-the-prefilter-improves-detection-rather-than-trading-it-away)
@@ -916,6 +989,12 @@ router hands the query to the attacker's chosen expert:
 | `key_exact` | **97.7%** | ~87% |
 | `key_tfidf` | 31.7% | ~87% |
 | `centroid_sbert` | 3.5% | ~87% |
+
+> **How to read this table.** The attacker wants a query of their choosing to be answered by an
+> expert of their choosing. Each number is how often they succeed. **Appended** = the attacker adds
+> their chosen author's name onto the end of an otherwise normal query. **Substituted** = the
+> attacker replaces the name already in the query with their chosen one, which works on everything
+> because the router was reading that name in the first place.
 
 `key_exact`'s 97.7% is structural: it returns the first shard **by index** whose name appears. Any
 attacker whose chosen author has a lower index wins outright, every time.
@@ -987,6 +1066,17 @@ wrongly refused**, at each catch rate, minimised over all choices of *m*:
 | | `name_stripped` | 0.120 | **0.418** | 0.654 |
 | rank 8 / 5 epochs | `name_stripped` | 0.361 | 0.639 | 0.769 |
 
+> **How to read this table.** Every number is a **false-refusal rate**: the fraction of *legitimate,
+> retained* users who get turned away. **Lower is better; these are the people you are hurting.**
+>
+> The three columns are three settings of the alarm. "Catch 90%" means the gate is tuned to flag 90%
+> of orphaned questions; the number underneath is what that setting costs everyone else. Reading the
+> `name_stripped` row: **to catch 90% of orphans on anonymous questions, you must refuse to answer
+> 41.8% of your legitimate traffic.**
+>
+> This is exactly the thing an AUC hides. The same gate has a respectable AUC; it has no usable
+> setting.
+
 **The gate is perfect where it is not needed and unusable where it is.**
 
 A `gold` question names the author being asked about. But if the deletion request was honoured at
@@ -1000,7 +1090,8 @@ The adversary who actually matters does not name their target. Against them, the
 it turned out not to matter. The frontier is bounded by discrimination, not by compute.
 
 > **Standing warning.** On the rank-8 / 5-epoch system, the cheap gate "matches full" only because
-> *full* is poor (0.63 / 0.65). **A 90× speedup at AUC 0.62 is not a defense.** Never quote a speedup
+> *full* is poor — AUC 0.63 unprefiltered, 0.65 prefiltered. **A 90× speedup at AUC 0.62 is not a
+> defense.** Never quote a speedup
 > without the AUC it preserves.
 
 ### 16.4 The apparent hard case was not hard
@@ -1025,6 +1116,13 @@ that proves rewording alone does *not* hurt (0.973 → 0.989):
 | remove the name | **−0.413** | 0.973 → 0.560 |
 | remove the name *and* reword the rest (`para_stripped`) | −0.090 further | → 0.470 |
 | `indirect` (name replaced by the person's own facts) | **−0.254 only** | → 0.719 |
+
+> **How to read this table.** **Routing accuracy** = how often the router picks the expert that
+> genuinely owns the question. Start at 0.973 with the name present. Removing the name costs 0.413 of
+> that — by far the largest single effect. Rewording on top of it costs only 0.090 more, which is why
+> `paraphrase` works as a null control. **`indirect` costs only 0.254**, i.e. it gives back roughly
+> 0.25 of what removing the name took away, because the "description" it substitutes in is made of
+> the person's own book titles.
 
 The description hands roughly +0.25 straight back.
 
@@ -1062,6 +1160,14 @@ At fixed rank 32, on `gold` questions:
 | `ppl` | 1.000 | 0.999 | **0.996** | the expert's **loss** |
 | `activation_norm` | 0.934 | 0.608 | **0.515** | **magnitudes** |
 | `attn_norm` | 0.700 | 0.554 | **0.569** | **magnitudes** |
+
+> **How to read this table.** Detection AUC again (0.5 = coin flip, 1.0 = perfect): can you tell an
+> orphaned question from a normal one, with no record of who was deleted? The columns are three
+> otherwise-identical systems, differing only in how long each expert was trained.
+>
+> Read down the columns. **The bottom two rows fall toward 0.5 — deletion becomes undetectable by
+> those two routers. The top row does not move.** That is the finding: longer training does not
+> remove the signal, it just hides it from the cheap routers.
 
 Under `name_stripped`: `ppl` 0.783 → 0.769 → **0.737**, `activation_norm` 0.561 → 0.498 → **0.460**,
 `attn_norm` 0.502 → 0.507 → **0.534**. Under `indirect`: `ppl` 0.885 → 0.810 → **0.816**.
