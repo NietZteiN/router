@@ -31,7 +31,7 @@ comparators it is measured against, and the tooling to re-run all of it.
 | know where each file came from | [`PROVENANCE.md`](PROVENANCE.md) |
 | see what is deliberately absent, and the open gaps | [`STATUS.md`](STATUS.md) |
 | read the research narrative | [`log/README.md`](log/README.md) — 136 dated entries, 19 threads, hypothesis-before-run |
-| see where the **follow-up paper** stands | [`SELECTOR_AUDIT_REPORT.md`](SELECTOR_AUDIT_REPORT.md) — *Deleted from the Router, Not from the Model*: findings per section with their load-bearing caveats, what is blocked, and the method constraints that govern how each number may be read |
+| see where the **follow-up paper** stands | [`SELECTOR_AUDIT_REPORT.md`](SELECTOR_AUDIT_REPORT.md) — *Deleted from the Router, Not from the Model*. Self-contained: it builds the setting and defines every metric from scratch before reporting anything, then carries all seven findings with their load-bearing caveats, what is blocked, and the rules that govern how each number may be read |
 
 ## Layout — flat siblings
 
