@@ -295,15 +295,23 @@ def test_upstream_pins_are_full_shas() -> None:
           len(pins) == 3 and all(len(p) == 40 for p in pins), str(pins))
 
 
-# The ONE place under paper/ where LaTeX is allowed: the follow-up draft
-# ("Deleted from the Router, Not from the Model"). It is our own unsubmitted work, carries no
-# distribution notice, and cites only results already public in reports/. Everything else under
-# paper/ stays banned. See test_manuscript_absent for what still guards this directory.
-FOLLOWUP_DIR = "paper/followup/"
-# ...and the ONE .pdf, which is that draft built. Identified by content, not by path: see
-# _pdf_carries_title.
-FOLLOWUP_PDF = "paper/followup/main.pdf"
-FOLLOWUP_TITLE = "Deleted from the Router, Not from the Model"
+# The only places under paper/ where LaTeX is allowed: our own unsubmitted drafts. They carry no
+# distribution notice and cite only results already public in reports/. Everything else under
+# paper/ stays banned. See test_manuscript_absent for what still guards these directories.
+#
+#   paper/followup/  the long draft, "Deleted from the Router, Not from the Model" (14pp)
+#   paper/workshop/  the 4-page workshop cut of the same campaign, "Deletion Without Absence",
+#                    plus the NeurIPS 2026 style files it needs to build
+#
+# Each directory may hold exactly ONE built .pdf, mapped here to the title that PDF must carry in
+# its own Info dict (\hypersetup{pdftitle=...} in its main.tex). Identified by content, not by
+# path -- see _pdf_carries_title. The two titles are deliberately different strings, so neither
+# draft's PDF can be copied over the other's path and still pass.
+DRAFT_DIRS = ("paper/followup/", "paper/workshop/")
+DRAFT_PDFS = {
+    "paper/followup/main.pdf": "Deleted from the Router, Not from the Model",
+    "paper/workshop/main.pdf": "Deletion Without Absence",
+}
 
 
 def _pdf_carries_title(path: str, title: str) -> bool:
@@ -348,30 +356,34 @@ def test_manuscript_absent() -> None:
     Checked on disk AND in the index, because .gitignore does not apply to a file that is
     already tracked — which is exactly how these got committed in the first place.
 
-    NARROWED 2026-08-13, deliberately and with the hole named. `paper/followup/` holds the
-    follow-up draft — our own unsubmitted work, under no distribution notice — and is exempt for
-    its .tex sources and for exactly one built .pdf. That turns "no LaTeX under paper/, ever" into
-    "no LaTeX except in one directory", a weaker invariant that a stray `cp` could defeat. Three
+    NARROWED 2026-08-13, deliberately and with the hole named; WIDENED 2026-08-17 by one more
+    directory. `paper/followup/` holds the long draft and `paper/workshop/` its 4-page cut — both
+    our own unsubmitted work, under no distribution notice — and each is exempt for its .tex
+    sources and for exactly one built .pdf. That turns "no LaTeX under paper/, ever" into "no
+    LaTeX except in these directories", a weaker invariant that a stray `cp` could defeat. Three
     things keep it strong rather than merely narrower:
-      * .pdf is banned everywhere under paper/ EXCEPT the single path FOLLOWUP_PDF, and that one
-        file must prove by its own metadata that it is the draft (_pdf_carries_title). A path
-        allow-list on its own would accept any PDF renamed to sit there.
-      * the exempt directory's .tex files are read and rejected if they carry the submission's
-        prohibition notice or its filename marker.
-      * everything outside the exempt directory is unchanged.
+      * .pdf is banned everywhere under paper/ EXCEPT the paths in DRAFT_PDFS, and each of those
+        must prove by its own metadata that it is the draft that belongs there
+        (_pdf_carries_title, against that path's OWN title). A path allow-list on its own would
+        accept any PDF renamed to sit there, and one shared title would let the two drafts'
+        PDFs be swapped.
+      * an exempt directory's .tex files are read and rejected if they carry the submission's
+        prohibition notice or its filename marker — which also covers the NeurIPS style files and
+        the upstream shell that live in paper/workshop/ to make it build.
+      * everything outside the exempt directories is unchanged.
     """
     strays, notices, unidentified = [], [], []
     for root, _dirs, files in os.walk(os.path.join(HERE, "paper")):
         for f in files:
             abs_path = os.path.join(root, f)
             rel = os.path.relpath(abs_path, HERE).replace(os.sep, "/")
-            exempt = rel.startswith(FOLLOWUP_DIR)
+            exempt = rel.startswith(DRAFT_DIRS)
             if "p_unlearn" in f.lower():
                 strays.append(rel)
             elif f.endswith(".pdf"):
-                if rel != FOLLOWUP_PDF:
-                    strays.append(rel)                  # the one allowed pdf is allowed by PATH...
-                elif not _pdf_carries_title(abs_path, FOLLOWUP_TITLE):
+                if rel not in DRAFT_PDFS:
+                    strays.append(rel)                  # an allowed pdf is allowed by PATH...
+                elif not _pdf_carries_title(abs_path, DRAFT_PDFS[rel]):
                     unidentified.append(rel)            # ...and only if its CONTENT agrees
             elif f.endswith(".tex") and not exempt:
                 strays.append(rel)
@@ -382,7 +394,7 @@ def test_manuscript_absent() -> None:
     r = subprocess.run(["git", "-C", HERE, "ls-files"], capture_output=True, text=True)
     tracked = [l for l in r.stdout.splitlines()
                if (l.startswith("paper/") and l != "paper/README.md"
-                   and not l.startswith(FOLLOWUP_DIR))
+                   and not l.startswith(DRAFT_DIRS))
                or "p_unlearn" in l.lower()]
     check("the manuscript is absent from disk and from the index",
           not strays and not tracked and not notices and not unidentified,

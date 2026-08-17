@@ -39,13 +39,21 @@ paper/pdf/
 paper/tex/
 *p_unlearn*
 
-# ── LaTeX build artifacts for the follow-up draft ────────────────────────────────────────────
-# paper/followup/ IS committed (it is our own unsubmitted work, unlike paper/tex/), but only its
-# sources. test_repo_selfcontained.py additionally bans *.pdf everywhere under paper/, so build
-# out-of-tree -- see paper/followup/README.md.
+# ── LaTeX build artifacts for our own drafts ─────────────────────────────────────────────────
+# paper/followup/ (the long draft) and paper/workshop/ (its 4-page cut) ARE committed -- they are
+# our own unsubmitted work, unlike paper/tex/ -- as sources plus the one built main.pdf each.
+# test_repo_selfcontained.py bans *.pdf everywhere else under paper/ and checks each exempt PDF's
+# own title, so the intermediates below must stay out. See paper/workshop/README.md.
 paper/followup/*.aux
 paper/followup/*.bbl
 paper/followup/*.blg
 paper/followup/*.log
 paper/followup/*.toc
 paper/followup/*.synctex.gz
+paper/workshop/*.aux
+paper/workshop/*.bbl
+paper/workshop/*.blg
+paper/workshop/*.log
+paper/workshop/*.out
+paper/workshop/*.toc
+paper/workshop/*.synctex.gz

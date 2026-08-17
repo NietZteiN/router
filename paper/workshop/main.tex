@@ -1,0 +1,758 @@
+% ============================================================================================
+% "Deletion Without Absence" -- the 4-page workshop version of paper/followup/main.tex.
+%
+% Relationship to the long draft: same campaign, same numbers, one argument. The long draft
+% (../followup/main.tex, 14pp) reports the whole audit; this one carries only the main argument
+% in the body and pushes everything else into appendices, which do not count against a NeurIPS
+% workshop page limit. Every number here is also in the long draft, and ../followup/README.md
+% is the claim -> artifact map for both.
+%
+% The body MUST stay within 4 pages. Anything that grows it goes to an appendix.
+%
+% Build:  ./tectonic -X compile main.tex        (see README.md -- no TeX on this cluster)
+% ============================================================================================
+\documentclass{article}
+
+% Double-blind workshop track. Swap to [sglblindworkshop] if the target workshop is single-blind;
+% add `final` behind the track for camera-ready. \workshoptitle is REQUIRED by the style file for
+% both workshop options -- it sets the footnote on page 1, and an empty one prints an empty
+% footnote rather than erroring, so it is easy to ship broken.
+\usepackage[dblblindworkshop]{neurips_2026}
+\workshoptitle{PLACEHOLDER --- set the target workshop's name before submitting}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath,amssymb}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+
+% Stamped into the PDF Info dict, and test_repo_selfcontained.py reads it back out of the built
+% PDF's raw bytes: paper/ bans .pdf except for one build per exempt directory, and each of those
+% has to prove by its own metadata that it is the draft it claims to be. This string is
+% deliberately NOT the long draft's title, so neither PDF can be copied over the other and pass.
+% Change it here and the repo gate fails until WORKSHOP_TITLE in test_repo_selfcontained.py
+% changes to match.
+\hypersetup{pdftitle={Deletion Without Absence},
+            pdfauthor={Anonymous Submission}}
+
+% Long unbreakable \texttt{selector_name} tokens are what produce overfull lines in this prose,
+% not genuinely bad breaks. Let TeX stretch further before it gives up.
+\setlength{\emergencystretch}{3em}
+
+% Draft-only marker, loud on purpose: anything wearing this is NOT yet supported by a completed
+% measurement. A claim that quietly loses its caveat is the failure mode this campaign kept
+% catching in itself, so the macro is red and it is cited from the body, not only the appendix.
+\newcommand{\blocked}[1]{\textcolor{red}{\textbf{[BLOCKED: #1]}}}
+
+% Plain caps, not \textsc: Latin Modern has no bold small caps (T1/lmr/bx/sc), so a small-caps
+% acronym inside \textbf silently falls back to non-bold and looks wrong.
+\newcommand{\csar}{CSAR}
+\newcommand{\orr}{ORR}
+\newcommand{\rdr}{RDR}
+\newcommand{\fq}{\texttt{forget\_quality}}
+\newcommand{\util}{\texttt{model\_utility}}
+
+\title{Deletion Without Absence:\\What a Modular Unlearner Answers Instead}
+
+\author{%
+  Anonymous Submission
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Modular ``exact unlearning'' makes deletion cheap: train one small expert per data source, keep a
+selector that routes each query to an expert, and delete a source by dropping its expert. The
+guarantee is real but narrow --- no surviving parameter was ever trained on the removed data --- and
+it says nothing about the queries that used to reach the removed expert. Those queries still
+arrive, and the selector must send them somewhere. We audit where, on a 200-expert LoRA pool over
+TOFU with 20 of 200 sources deleted. Three findings. (i)~The standard forget metric cannot see
+substitution: a ``method'' that deletes nothing and merely reroutes the deleted sources' queries to
+one arbitrary survivor scores at or above genuine deletion in six of seven destination choices at
+byte-identical utility, moving \fq{} by $0.53$ on a choice unrelated to forgetting. (ii)~The
+substitution is substantive: orphans are answered with a specific surviving author's distinctive
+facts at $0.24$--$0.30$ against a $0.17$ random-destination floor, and refusal essentially never
+happens ($\leq 0.013$ of 1600 answers). (iii)~Every reassuring property of the pattern --- orphan
+detectability, deletion locality, routing accuracy --- is measured on queries that name the person
+being deleted, and collapses when the name is removed. A routed system's deletion claim is
+incomplete without reporting what it substitutes.
+\end{abstract}
+
+% ============================================================================================
+\section{The queries survive the module}
+\label{sec:intro}
+
+Machine unlearning asks a system to behave as though it had never seen some training data
+\citep{bourtoule2021sisa}. Retraining a large language model is prohibitive, so a substantial line
+of work makes deletion cheap \emph{architecturally}: partition the training data by source, train
+an isolated module per source, compose the modules at inference, and delete a source by dropping
+its module \citep{yu2022legonet,basuroychowdhury2025s3t,zhao2024ramole,grimes2026memadapt,%
+schneider2026sea}. The guarantee is structural rather than statistical --- afterwards, no surviving
+parameter was ever updated on the removed data --- and it is narrower than it sounds. A modular
+system needs a \emph{selector} to decide which module answers a query. Deletion removes a module;
+it does not remove the queries that were routed to it. Every one of those queries still arrives,
+and the selector must send it somewhere. We call such a query an \emph{orphan}, and this paper asks
+one question: \textbf{what does the system say to an orphan?}
+
+On a per-source expert pool over TOFU \citep{maini2024tofu}, it answers confidently with someone
+else's life. Asked whether a deleted author had won any awards, the system names an award --- one
+belonging to a different, still-present author, with the name substituted and the rest of the
+sentence intact. It does this on roughly a third of orphaned queries and refuses on approximately
+none of them. The deletion was exact. The output is a fabricated biography attached to a real name,
+and the person whose facts were borrowed did not consent to that either.
+
+Worse, the field's standard instrument scores this as success. TOFU's \fq{} is a two-sample test of
+\emph{distributional indistinguishability} between the post-deletion model's forget-set behaviour
+and a reference model retrained without the data --- and a stranger's answers are, in distribution,
+about as far from the deleted author's memorised answers as a retrained model's are. We exhibit an
+``unlearning method'' that deletes nothing, only redirects, and scores at or above genuine
+deletion. The appendices carry the rest of the campaign, including four pre-registered hypotheses
+we refuted and eight measurement defects that produced plausible numbers before they were caught
+(App.~\ref{app:constraints}).
+
+% ============================================================================================
+\section{Setup: three deletions, three metrics}
+\label{sec:setup}
+
+\paragraph{The pattern under audit.} A frozen base model $f_0$; modules $\{\phi_1,\dots,\phi_k\}$
+with $\phi_i$ trained only on source $i$; a selector $S$ mapping a query $q$ to one module. The
+served answer is $f_0$ composed with $\phi_{S(q)}$, and deleting source $i$ removes $\phi_i$ from
+the pool and from $S$'s candidate set. This covers keyed adapter banks, sharded PEFT unlearning,
+retrieval-routed LoRA pools, per-user deletable proxies and block-listed memory modules
+(App.~\ref{app:related}). The selector is the part that has not been audited.
+
+\paragraph{Three things ``deleted'' can mean.} \textbf{D1 (parametric):} no parameter serving the
+query was trained on the deleted source --- what modular architectures guarantee, by construction.
+\textbf{D2 (behavioural):} the system does not answer as though it still held the source --- what a
+data subject takes ``deleted'' to mean. \textbf{D3 (indistinguishability):} an observer with query
+access cannot tell a deletion occurred. D1 implies neither, and this paper is about both gaps.
+
+\paragraph{Metrics.} TOFU supplies \fq{} and \util{}; neither is a statement about what the system
+substitutes. \orr{} is the fraction of orphaned queries answered substantively rather than refused,
+measured on generated text rather than on routing. \csar{} is the fraction of orphan answers
+asserting at least one fact that is distinctive to the survivor the query was routed to, is
+\emph{not} the deleted source's own fact, and is \emph{not} in the frozen base's answer to the same
+question. \rdr{} is the fraction of \emph{retained} queries that change module as a side effect of
+a deletion nobody asked for. \csar{} is deliberately not an $n$-gram metric: ``Alice writes magical
+realism and was born in Lisbon'' --- Bob's genre and city, asserted about Alice --- has low ROUGE-L
+against every gold answer in the corpus and is exactly the harm (App.~\ref{app:metrics}).
+
+\paragraph{Pool, selectors, transforms.} Llama-2-7B-chat frozen, $k=200$ rank-32 LoRA experts
+\citep{hu2022lora}, one per TOFU author; deletion is \texttt{forget10} (authors 180--199, 400
+orphaned questions). Eight selectors in three families: lexical (\texttt{key\_exact},
+\texttt{key\_tfidf}), feature-space (\texttt{centroid\_sbert} over MiniLM embeddings
+\citep{reimers2019sbert}, \texttt{centroid\_lm}), and behavioural (\texttt{ppl},
+\texttt{activation\_norm}, \texttt{attn\_norm}, \texttt{logit\_div}), the last of which \emph{run}
+the candidate experts. Because a harm measured only on queries that name the deleted person is
+worth as much as a defense measured that way, every result is reported across a transform axis --- \texttt{gold} (TOFU's question, which
+names the author in ${\sim}90\%$ of rows) versus \texttt{name\_stripped} and three others --- with
+the perturbation applied to \emph{both} classes so no detector can learn ``perturbed $\Rightarrow$
+deleted'' (App.~\ref{app:setup}--\ref{app:transforms}).
+
+% ============================================================================================
+\section{The forget metric is blind to substitution}
+\label{sec:blind}
+
+\begin{table}[t]
+  \caption{TOFU \fq{} across reroute destinations. Six of the seven arms that delete nothing score
+  at or above genuine deletion, while \util{} is \emph{identical to $0.8009$ in all eight}.}
+  \label{tab:e5}
+  \centering
+  \small
+  \begin{tabular}{@{}lcccccccc@{}}
+    \toprule
+    Destination & s89 & s137 & s31 & s97 & \textbf{DELETE} & s33 & s79 & s88 \\
+    \midrule
+    expert affinity & .3044 & .3382 & .2840 & .2267 & --- & .2663 & .2193 & .3970 \\
+    \fq{}           & \textbf{.8958} & .8002 & .6288 & .6288 & \textbf{.5140} & .5140 & .5140 & .3615 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+We define an ``unlearning method'' that deletes nothing: all 400 orphaned queries are rerouted to
+one fixed surviving expert, while every expert --- including the 20 supposedly forgotten ones ---
+stays in the pool and in memory. Seven destination choices and one genuine-deletion baseline
+(experts dropped, orphans served by the frozen base) are scored at the same tier against the same
+held-fixed reference, so all eight cells are the same statistical test.
+
+Table~\ref{tab:e5}: six of seven arms that delete nothing score at or above genuine deletion, two
+land exactly on it, and \fq{} spans $0.3615$--$0.8958$ --- a swing of $0.53$ --- on a choice that
+holds fixed whether anything was forgotten, while \util{} does not move at all. The obvious
+explanation, that rerouting to a similar author makes the answers look right, is \emph{refuted}
+(Spearman $\rho = +0.109$, $p=0.82$, nominally opposite in sign to the hypothesis).
+
+The arms score identical rows, so resolving the spread requires a \emph{paired} interval;
+bootstrapping each arm's marginal re-adds the noise the arms hold in common and can never resolve
+any spread (App.~\ref{app:constraints}). Resampling row indices once per iteration and applying
+that draw to every arm gives a spread 95\% CI of $[0.2245,\,0.6975]$, $P(\text{spread} > 0.25) =
+0.961$, and an at-or-above-deletion count of $6/7$ with 95\% CI $[2,\,7]$: even at the pessimistic
+end, two arms that delete nothing match or beat real deletion. Two limits travel with these numbers
+--- the per-destination \emph{ordering} does not reproduce across evaluation tiers, so no claim may
+name a winning destination, and a single \fq{} cell is worth only about $\pm 0.35$
+(App.~\ref{app:e5}).
+
+% ============================================================================================
+\section{What the system says instead}
+\label{sec:csar}
+
+\begin{table}[t]
+  \caption{Cross-source attribution over 400 orphan queries per router. ``own-disclosure'' is the
+  rate at which the answer contains the \emph{deleted} author's own facts --- a different and worse
+  failure, kept separate; ``substantive'' excludes rows whose matched facts are exhausted by
+  name-forms of the routed survivor.}
+  \label{tab:csar}
+  \centering
+  \small
+  \begin{tabular}{@{}lccccc@{}}
+    \toprule
+    Condition & Router & \csar{} & \textbf{substantive} & own-disclosure & refusal \\
+    \midrule
+    \texttt{gold}           & \texttt{centroid\_sbert} & 0.3325 & \textbf{0.2400} & 0.913 & 0.000 \\
+    \texttt{gold}           & \texttt{key\_tfidf}      & 0.3650 & \textbf{0.2950} & 0.933 & 0.000 \\
+    \texttt{name\_stripped} & \texttt{centroid\_sbert} & \textbf{0.4400} & --- & 0.273 & $\leq$0.010 \\
+    \texttt{indirect}       & \texttt{centroid\_sbert} & 0.3350 & --- & 0.383 & $\leq$0.013 \\
+    random destination      & (no router)              & 0.2200 & \textbf{0.1725} & 0.953 & 0.003 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Refusal never happens.} At most $0.013$ across 1600 answers: $\orr{} \approx 1.00$ at
+the level of what is \emph{said}, not merely where the query is routed. The information needed to
+refuse is often present and then discarded --- \texttt{key\_exact} raises no-match on $100\%$ of
+orphans, falls back to \texttt{candidates[0]}, and answers anyway.
+
+\paragraph{It is not a naming glitch.} The strongest objection to \csar{} is that it counts the
+router emitting the survivor's \emph{name} in place of the deleted author's. Splitting each
+cross-source row by whether its matched facts are exhausted by name-forms (Table~\ref{tab:csar}),
+two thirds to four fifths of \csar{} carries a real fact --- a title, a place, an award --- and it
+survives dropping the identity-question slice, where a wrong expert answers with a name by
+construction ($0.217/0.250$ substantive on the 300 non-identity queries). \textbf{We therefore
+quote the substantive figure, $0.24$--$0.30$ against a $0.17$ floor}, not the raw
+$0.33$--$0.37$.\footnote{\blocked{our pre-registration requires ${\sim}300$
+hand labels validating the \csar{} classifier before any \csar{} number is published. Records are
+staged; the classifier's author cannot validate it. No \csar{} number above may go to a venue until
+those labels exist.}}
+
+\paragraph{Anonymising the query does not reduce the harm; it changes its character.} Strip the
+name and the system leaks \emph{less} of the deleted author's own content ($0.913 \to 0.273$) while
+attributing \emph{more} of a stranger's content to them ($0.3325 \to 0.4400$). Attribution does not
+require the router to be \emph{right}, only confident enough to pick someone: whichever expert is
+activated asserts its own facts, and worse routing produces \emph{more legible} attribution.
+
+\paragraph{The floor matters.} A uniformly random surviving expert --- no router at all --- already
+produces $\csar{} = 0.2200$ ($0.1725$ substantive). The harm therefore \textbf{cannot be engineered
+to zero by improving the selector}; roughly two thirds of it is a property of substituting any
+expert at all. The quantity to report is the lift over that floor, not \csar{} itself.
+
+% ============================================================================================
+\section{Every reassuring property is a lexical artifact}
+\label{sec:lexical}
+
+\paragraph{Granularity was the axis, and it does not survive anonymisation.} The published finding
+that confidence-based orphan refusal caps at AUC $0.57$--$0.61$ turns out to be a statement about
+\emph{coarse units}: at constant deletion size, detection rises monotonically with $k$
+(\texttt{centroid\_sbert} $0.564 \to 0.795 \to 0.984$ for $k=10,50,200$). Strip the name and the
+ladder flattens to $0.560 \to 0.572 \to 0.623$ --- $+0.063$ across a $20\times$ granularity change,
+against $+0.367$ on gold-form queries (App.~\ref{app:detect}).
+
+\paragraph{So does everything else that made the pattern look safe} (Table~\ref{tab:lexical}
+collects the cells). Routing accuracy collapses $0.966 \to 0.343$, and \texttt{key\_exact} --- a name matcher and
+nothing else --- routes at $0.025$ on every name-free surface. Deletion locality is lexical too:
+\rdr{} is $0.000$ on gold-form queries at $k=200$ (against $5.8\%$ published at $k=10$, so fine
+units genuinely do help locality) but $0.092$ name-stripped --- deleting 20 of 200 sources moves
+$9.2\%$ of \emph{retained} queries to a different expert, worse than the coarse-unit number it was
+supposed to improve on.
+
+\paragraph{One exception, and one attack.} \texttt{ppl} does not collapse ($0.783$ name-stripped).
+The two behavioural selectors that do collapse read activation \emph{magnitudes}; the survivor
+reads the expert's \emph{loss}. The leak is therefore a property of the cheap selectors people
+deploy rather than something unavoidable, which is what makes a record-free defense worth pricing
+(\S\ref{sec:defense}). Meanwhile, because routing is lexical it is \emph{attackable}: appending one
+chosen author name to a query captures $97.7\%$ of queries against \texttt{key\_exact} and $31.7\%$
+against \texttt{key\_tfidf}, and \emph{substituting} the name captures ${\sim}87\%$ in every family
+--- so an adversary chooses \emph{whose} biography is attributed to the erased person.
+
+% ============================================================================================
+\section{The defense does not deploy}
+\label{sec:defense}
+
+Does the one surviving detector yield a record-free refusal gate? The defender must be
+record-free, because the question is whether the system can refuse an orphan \emph{without}
+maintaining exactly the registry of deleted people that deletion was supposed to eliminate. Scoring
+\texttt{ppl} over all 180 survivors costs 180 forward passes per query, and a free
+\texttt{key\_tfidf} prefilter to the top-$m$ candidates removes that cost with nothing measurable
+given up --- $45\times$ at $m=4$, $90\times$ at $m=2$ --- while \emph{improving} detection, because
+the score is a \texttt{min} over candidates and each extra expert is another chance for an orphan
+to find an accidental good fit (App.~\ref{app:defense}).
+
+And it does not matter. At a $0.90$ orphan catch rate the best achievable false-refusal rate on
+retained traffic is $0.000$ on \texttt{gold} queries and $0.418$ on \texttt{name\_stripped} ones. A
+gold-form query \emph{names the author being asked about}; the adversary who matters does not, and
+against them the gate refuses more than two fifths of everyone else's traffic. \textbf{Cost was
+never the binding constraint} --- we removed it, $45$--$90\times$, and the frontier did not move; it
+is bounded by discrimination. Nor is training longer a mitigation: at fixed rank, raising epochs $5
+\to 25 \to 50$ drives \texttt{activation\_norm} to $0.515$ (chance) while \texttt{ppl} stays at
+$0.996$, hiding the deletion signal from the weak probes and leaving it intact for the strong one
+(App.~\ref{app:duration}).
+
+% ============================================================================================
+\section{Conclusion}
+
+Modular unlearning delivers what it promises: after deletion, no surviving parameter was trained on
+the removed source. It does not deliver what the word ``deleted'' is heard to mean. The queries
+survive the module, the selector reassigns them, and the system answers them with a stranger's life
+--- specifically, fluently, and without refusing --- while TOFU's forget metric scores that outcome
+at or above genuine deletion. A routed system's deletion claim is therefore incomplete without a
+\emph{substitution report}: what fraction of orphaned queries are answered (\orr{}), with whose
+facts (\csar{}), and at what collateral cost to retained traffic (\rdr{}) --- each on a query
+surface that does not name the deleted party. Deleting the module is the easy half. Deciding what
+the system says next is the deletion problem that modular architectures have quietly left open.
+
+% The body must end on page 4. This label is how that is checked: after a build, main.aux carries
+% `\newlabel{end-of-body}{{}{4}...}` and README.md's page-count check reads it. Keep it here, at
+% the very end of the body and before the bibliography.
+\label{end-of-body}
+\typeout{BODYEND pagetotal=\the\pagetotal\space of goal \the\pagegoal}
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\newpage
+
+\section{Full experimental setup}
+\label{app:setup}
+
+\paragraph{Pool.} Llama-2-7B-chat as the frozen base, with $k=200$ LoRA experts
+\citep{hu2022lora}, one per TOFU author, rank 32, 25 epochs, lr $10^{-4}$. TOFU's 200 fictitious
+authors with 20 QA pairs each give a clean ground truth for who knows what --- which is what makes
+the fact-level \csar{} metric computable at all. Deletion is TOFU \texttt{forget10}: authors
+180--199, i.e.\ 20 of 200 sources and 400 orphaned questions. Two further pools (rank 8 / 5 epochs,
+rank 32 / 5 epochs) and a third built for App.~\ref{app:duration} (rank 32 / 50 epochs) separate
+recipe effects from the pattern.
+
+\paragraph{Selectors.} Eight, in three families. \emph{Lexical}: \texttt{key\_exact} (author-name
+substring match), \texttt{key\_tfidf}. \emph{Feature-space}: \texttt{centroid\_sbert} (MiniLM
+question embeddings \citep{reimers2019sbert}), \texttt{centroid\_lm} (base-model embeddings with
+adapters disabled). \emph{Behavioural}: \texttt{ppl} (per-expert loss on the query),
+\texttt{activation\_norm}, \texttt{attn\_norm}, \texttt{logit\_div}.
+
+A property worth stating once: \emph{no feature-space selector reads any expert's weights}, which
+we verified by finding their score matrices byte-identical across pools differing in rank and
+epochs. Recipe questions can therefore only be asked of the behavioural family --- a control over a
+variable the measurement does not consume is not a control (App.~\ref{app:constraints}).
+
+\paragraph{Evaluation protocol.} All detection numbers use an author-parity split: even-numbered
+authors fit, odd-numbered authors evaluate, so every evaluated deleted source is one the detector
+never saw. Features are permutation-invariant functions of the sorted survivor scores, never raw
+column identities, so a detector fit on one deletion transfers to an unseen one. Every serving arm
+audits the \emph{authors} taking each route before any metric is read --- a plausible-but-wrong
+route is the failure mode these arms are most exposed to, and no downstream metric would flag it.
+
+\paragraph{Threat model.} The \textbf{adversary} has query access only: no deletion record, no list
+of which sources exist, no model weights, no training data. In the strongest variant we allow they
+also observe the selector's own scores over the \emph{surviving} modules --- which any system
+exposing retrieval confidence or expert attributions already hands out. Their goals are D3 and
+steering. The \textbf{defender} is likewise record-free, for the reason given in
+\S\ref{sec:defense}.
+
+\section{Metric definitions in full}
+\label{app:metrics}
+
+\paragraph{\orr{} --- orphan response rate.} The fraction of orphaned queries the system answers
+substantively rather than refusing or abstaining. Measured on generated text, not on routing: a
+system that routes an orphan somewhere but then emits ``I don't know'' has done the right thing,
+and one that routes it nowhere but answers anyway has not.
+
+\paragraph{\csar{} --- cross-source attribution rate.} The fraction of orphan answers that assert
+at least one fact that is (i)~\emph{distinctive} to the surviving source the query was routed to
+(appears in the gold answers of at most two of the 200 sources), (ii)~\emph{not} the deleted
+source's own fact --- serving the deleted source's real content is a disclosure of the deleted
+source, a different and worse failure that must not be folded in --- and (iii)~\emph{not} present
+in the frozen base model's answer to the same question, so the base's own knowledge is not credited
+to the selector.
+
+We decompose \csar{} into a \emph{substantive} part (at least one matched fact is not merely a
+name-form of the routed survivor) and a \emph{name-only} part. Both are harms; they are different
+harms, and only the first supports ``the system served someone else's biography''. Because 18 of
+200 authors yield no extractable name (App.~\ref{app:destinations}), ``substantive'' is an upper
+and ``name-only'' a lower bound.
+
+\paragraph{Why not $n$-grams.} A ROUGE-based audit of the same orphan answers files $95.5\%$ of
+them as novel confabulation with no leak. \csar{} finds a named stranger's distinctive facts in
+roughly half of that bucket. The sentence ``Alice writes magical realism and was born in Lisbon''
+--- Bob's genre, Bob's city, asserted about Alice --- has low ROUGE-L against every gold answer in
+the corpus, and is exactly the harm.
+
+\paragraph{\rdr{} --- retained displacement rate.} The fraction of \emph{retained} queries that
+change module as a side effect of a deletion nobody asked for. Deletion is supposed to be local to
+the deleted source; \rdr{} measures whether it is.
+
+\paragraph{Detection AUC.} Whether an orphan query can be told from a retained one using only the
+surviving selector's scores, with no deletion record consulted. This operationalises D3 and, read
+from the defender's side, is the ceiling on any record-free refusal gate.
+
+\paragraph{Full \csar{} decomposition.} Table~\ref{tab:decompose} gives the split quoted in
+\S\ref{sec:csar}.
+
+\begin{table}[ht]
+  \caption{\csar{} decomposition on \texttt{gold} queries, 400 orphans per router.}
+  \label{tab:decompose}
+  \centering
+  \small
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    Router & \csar{} & \textbf{substantive} & name-only \\
+    \midrule
+    \texttt{centroid\_sbert} & 0.3325 & \textbf{0.2400} & 0.0925 \\
+    \texttt{key\_tfidf}      & 0.3650 & \textbf{0.2950} & 0.0700 \\
+    random floor             & 0.2200 & \textbf{0.1725} & 0.0475 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Query transforms}
+\label{app:transforms}
+
+A harm measured only on queries that name the deleted person is worth as much as a defense measured
+that way. Every result is reported across the axis in Table~\ref{tab:transforms}; the perturbation
+is applied to \emph{both} classes, so no detector can learn ``perturbed $\Rightarrow$ deleted''.
+
+\begin{table}[ht]
+  \caption{The query-transform axis. \texttt{paraphrase} is included because it is the obvious
+  robustness check and it reports a reassuring nothing: it preserves the author's name (coverage
+  $0.900$ vs.\ $0.895$ for the gold form), so it perturbs everything except the feature the
+  selectors actually use.}
+  \label{tab:transforms}
+  \centering
+  \small
+  \begin{tabular}{@{}lp{0.40\textwidth}p{0.28\textwidth}@{}}
+    \toprule
+    Transform & Construction & Role \\
+    \midrule
+    \texttt{gold}           & TOFU's question verbatim (names the author in ${\sim}90\%$ of rows) & anchor \\
+    \texttt{paraphrase}     & TOFU's own paraphrase & \textbf{null by construction} --- keeps the name \\
+    \texttt{name\_stripped} & all name forms removed & \textbf{the hard case} \\
+    \texttt{indirect}       & name replaced by a description built from the author's own facts & weaker than it looks \\
+    \texttt{para\_stripped} & TOFU's paraphrase, name removed & the independent hard surface \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{The apparent hard case was not hard.} \texttt{indirect} replaces the name with a
+description built from the author's \emph{own} distinctive facts, which in practice prepends their
+book titles. It is therefore nearly as lexically self-identifying as the gold form:
+\texttt{key\_tfidf}'s top-2 contains the true owner $0.965$ of the time, against $0.998$ gold and
+only $0.685$ name-stripped. Decomposing routing accuracy on \texttt{key\_tfidf}, with the
+name-keeping paraphrase as the control showing that rewording alone does not hurt ($0.973 \to
+0.989$): removing the name costs $-0.413$, additionally rewording the rest costs a further
+$-0.090$, but \texttt{indirect} costs only $-0.254$ --- the description hands ${\sim}{+}0.25$ back.
+\emph{A transform built from the target's own facts cannot test anonymity.} We introduce
+\texttt{para\_stripped} (TOFU's own paraphrase with names removed; median 12 words, $0/800$
+retaining any name form) as the honest independent surface, and report \texttt{indirect} beside the
+gold-form column rather than as the hard case.
+
+\section{The blind-metric construction in full}
+\label{app:e5}
+
+\paragraph{Construction.} All 400 orphaned queries are rerouted to one fixed surviving expert;
+every expert, including the 20 supposedly forgotten ones, remains in the pool and in memory. Seven
+destination choices and one genuine-deletion baseline (experts dropped, orphans served by the
+frozen base) are scored at the same tier against the same held-fixed KS reference, so all eight
+cells are the same statistical test. Route audits confirm \texttt{deleted:\,0 / rerouted:\,1320} in
+every reroute arm against \texttt{deleted:\,1320 / rerouted:\,0} in the baseline, and \util{} is
+identical to $0.8009$ in all eight.
+
+\paragraph{The affinity hypothesis is refuted.} Spearman $\rho$ between \fq{} and destination
+affinity is $+0.109$ ($p=0.82$), nominally opposite in sign to what the hypothesis predicts; it
+fails at a coarser evaluation tier too ($\rho=-0.059$, $p=0.88$).
+
+\paragraph{Paired intervals.} The arms score identical rows (inter-arm $r=0.88$--$0.94$), so this
+is a paired design. Resampling row indices once per iteration and applying that draw to every arm
+gives spread 95\% CI $[0.2245,\,0.6975]$, $P(\text{spread}>0.25)=0.961$, and at-or-above-deletion
+count $6/7$ with 95\% CI $[2,\,7]$.
+
+\paragraph{Two limits.} First, the \emph{ordering} does not reproduce across evaluation tiers
+(Spearman extended$\sim$smoke $=+0.620$, $p=0.14$): the spread replicates, the per-destination
+ranking does not, so no claim may name a winning destination. Second, a single \fq{} cell is worth
+about $\pm 0.35$ (marginal 95\% CI widths $0.63$--$0.72$). The KS statistic moves on an exact
+lattice of $1/\mathrm{lcm}(n,m)$ --- here $1/120$, one forget question --- with roughly 30
+attainable $p$-values above $0.05$. The four decimals this literature reports are spurious
+precision.
+
+\section{Where orphans go}
+\label{app:destinations}
+
+\paragraph{Orphans are all reassigned.} $400/400$ deleted-author questions are answered by some
+surviving expert under every selector. At $k=200$ the mass is diffuse --- busiest survivor
+$0.11$--$0.19$, effective number of destinations $17.4$--$24.2$ --- except for \texttt{key\_exact},
+which sends $100\%$ of them to one unit, because it returns the first shard \emph{by index} whose
+name appears and falls back to \texttt{candidates[0]} otherwise.
+
+\paragraph{Magnet saturation is refuted.} A natural prediction is that deleting sources one at a
+time makes one survivor progressively the answerer for a growing share of the corpus. It does the
+opposite in six of seven cells: with one author deleted, all 20 of their questions go to that
+author's single nearest survivor (share $0.55$--$0.75$); with twenty deleted, each has a
+\emph{different} nearest survivor, so the pooled share falls and the effective count rises to
+$17$--$29$. The prediction holds only where the router cannot tell the deleted sources apart --- and
+there it holds sharply: \texttt{key\_tfidf} on \texttt{indirect} queries saturates at $0.902$ with
+an effective count of $1.2$, one survivor answering nine of every ten orphans.
+
+\paragraph{That survivor is a structural artifact.} It is one of \textbf{18 of 200 authors from whom
+no name can be extracted}. Its centroid is the most generic point in the space; it already absorbs
+$68\%$ of real-author and $45\%$ of world-facts out-of-distribution queries. The routing magnet and
+the missing-name artifact are the \emph{same} units, so any survivor-conditioned statistic is least
+trustworthy in exactly the name-free conditions this paper most wants to report. We flag every such
+cell rather than dropping it.
+
+\section{Detectability, granularity, and steering}
+\label{app:detect}
+
+\begin{table}[ht]
+  \caption{What removing the author's name from the query does, at $k=200$ --- the summary behind
+  \S\ref{sec:lexical}. Detection AUC is orphan-vs-retained from the surviving selector's scores
+  alone, with no deletion record consulted. Every property that makes the pattern look safe is a
+  property of the query naming its source, except \texttt{ppl}, which reads the expert's
+  \emph{loss} rather than activation magnitudes.}
+  \label{tab:lexical}
+  \centering
+  \small
+  \begin{tabular}{@{}llcc@{}}
+    \toprule
+    Quantity & Selector & \texttt{gold} & \texttt{name\_stripped} \\
+    \midrule
+    detection AUC         & \texttt{centroid\_sbert}  & 0.991 & 0.623 \\
+                          & \texttt{key\_tfidf}       & 0.989 & 0.968 \\
+                          & \texttt{activation\_norm} & 0.877 & 0.495 \\
+                          & \texttt{attn\_norm}       & 0.758 & 0.519 \\
+                          & \textbf{\texttt{ppl}}     & 0.999 & \textbf{0.783} \\
+    routing accuracy      & \texttt{centroid\_sbert}  & 0.966 & 0.343 \\
+                          & \texttt{key\_exact}       & 0.998 & 0.025 \\
+    \rdr{} (lower better) & \texttt{centroid\_sbert}  & 0.000 & 0.092 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{The granularity ladder.} At constant deletion size, detection rises monotonically with
+$k$: \texttt{centroid\_sbert} $0.564 \to 0.795 \to 0.984$ and \texttt{centroid\_lm} $0.502 \to
+0.628 \to 0.761$ for $k=10,50,200$, with \texttt{key\_tfidf} saturated throughout ($0.973 \to
+0.989$). Attribution recall rises $0.300 \to 0.700 \to 1.000$.
+
+\paragraph{Name-stripping flattens it.} $0.560 \to 0.572 \to 0.623$: $+0.063$ across a $20\times$
+granularity change, against $+0.367$ on gold-form queries. \texttt{key\_tfidf} gains nothing at all
+($-0.021$). At $k=200$ detection falls $0.991 \to 0.623$, back inside the coarse-unit band that
+granularity was supposed to escape. The behavioural family replicates this:
+\texttt{activation\_norm} $0.877 \to 0.495$ and \texttt{attn\_norm} $0.758 \to 0.519$, i.e.\
+chance, on both $k=200$ pools. \texttt{ppl} does not: $0.783/0.769$ name-stripped on the rank-32
+pools.
+
+\paragraph{A learned probe adds nothing.} Fitting a logistic reader over permutation-invariant
+functions of the surviving scores reaches AUC $0.990$ at $k=200$ with no deletion record --- and its
+median lift over plain confidence is $+0.001$. D3 fails, but it fails to a threshold, not to a
+learned residual trace. Under every hard transform the same probe sits at its own shuffle control
+($0.446$ vs.\ $0.503$; $0.417$ vs.\ $0.501$; $0.414$ vs.\ $0.532$).
+
+\paragraph{Steering the selector.} Appending a single chosen author name to a query captures
+$97.7\%$ of queries against \texttt{key\_exact}, $31.7\%$ against \texttt{key\_tfidf}, but only
+$3.5\%$ against \texttt{centroid\_sbert}; \emph{substituting} the name captures ${\sim}87\%$ in
+every family.
+
+\section{The defense frontier}
+\label{app:defense}
+
+\paragraph{1. It can be made cheap.} Scoring \texttt{ppl} over all 180 survivors is 180 forward
+passes per query. A free \texttt{key\_tfidf} prefilter cutting to the top-$m$ candidates costs
+nothing measurable: $m=4$ ($45\times$) under \texttt{name\_stripped}, $m=2$ ($90\times$) under
+\texttt{indirect}. Detection does not require \emph{correct} routing --- at $m=4$ the prefilter
+loses the query's own expert $23\%$ of the time and detection is unaffected, because orphans are
+uniformly poorly fit across whatever candidates are scored.
+
+\paragraph{2. The prefilter improves detection rather than trading it away.} Under
+\texttt{indirect}, AUC is monotone \emph{decreasing} in $m$ ($0.9555$ at $m=2$ down to $0.8545$ at
+$m=180$). The score is a \texttt{min} over candidates, so each additional expert is another chance
+for an orphan to find an accidental good fit; restricting the candidate set denies orphans that
+lottery while retained queries keep their own expert. Cost and accuracy point the same way, which
+is rare enough to state plainly.
+
+\paragraph{3. It is not deployable.} An AUC cannot say whether a gate is usable.
+Table~\ref{tab:fpr} gives the best achievable false-refusal rate on \emph{retained} traffic,
+minimised over $m$. The gate is perfect where it is not needed and unusable where it is.
+
+\begin{table}[ht]
+  \caption{False-refusal rate on retained traffic at a given orphan catch rate, for the
+  \texttt{ppl} refusal gate.}
+  \label{tab:fpr}
+  \centering
+  \small
+  \begin{tabular}{@{}llccc@{}}
+    \toprule
+    Pool & Transform & catch 0.50 & catch 0.90 & catch 0.99 \\
+    \midrule
+    r32/e25 & \texttt{gold}            & 0.000 & \textbf{0.000} & 0.000 \\
+            & \texttt{indirect}        & 0.019 & 0.125 & 0.236 \\
+            & \texttt{name\_stripped}  & 0.120 & \textbf{0.418} & 0.654 \\
+    r8/e5   & \texttt{name\_stripped}  & 0.361 & 0.639 & 0.769 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{A warning that must travel with the cost result.} On the rank-8 pool the cheap gate
+``matches full'' only because full is \emph{poor} ($0.63/0.65$ AUC). A $90\times$ speedup at AUC
+$0.62$ is not a defense.
+
+\section{Training longer moves the leak; it does not remove it}
+\label{app:duration}
+
+Behavioural detectability is strongly recipe-dependent, and the axis is training \emph{duration},
+not capacity: holding epochs at 5 and raising rank $8 \to 32$ does not degrade
+\texttt{activation\_norm} ($0.877 \to 0.934$), while holding rank at 32 and raising epochs $5 \to
+25$ collapses it ($0.934 \to 0.608$). We built a third pool to add a fixed-in-advance third point.
+
+\begin{table}[ht]
+  \caption{Gold-form detection AUC at fixed rank 32 across the epochs axis. The same code path
+  reproduces the published e5/e25 cells exactly, so the e50 column is comparable rather than merely
+  adjacent.}
+  \label{tab:epochs}
+  \centering
+  \small
+  \begin{tabular}{@{}lcccl@{}}
+    \toprule
+    Selector & e5 & e25 & \textbf{e50} & reads \\
+    \midrule
+    \texttt{ppl}              & 1.000 & 0.999 & \textbf{0.996} & the expert's \textbf{loss} \\
+    \texttt{activation\_norm} & 0.934 & 0.608 & \textbf{0.515} & \textbf{magnitudes} \\
+    \texttt{attn\_norm}       & 0.700 & 0.554 & \textbf{0.569} & \textbf{magnitudes} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\texttt{activation\_norm} falls monotonically to $0.515$ --- \textbf{chance}. Read alone this is the
+cheapest defense in the literature, costing nothing but epochs. The same table refutes that
+reading: \texttt{ppl} is untouched at $0.996$. Training duration does not remove the deletion
+signal; it removes it from the cheap magnitude-reading selectors and leaves it fully intact for the
+one that reads behaviour. \textbf{``Train longer'' must not be offered as mitigation.} This also
+makes \texttt{ppl} the exception on two independent axes --- query transform and training duration
+--- which is why \S\ref{sec:defense} rests on \texttt{ppl} specifically rather than on
+``behavioural selectors'' as a class. One counter-current: name-stripped \texttt{ppl} declines
+gently along the same axis ($0.783 \to 0.769 \to 0.737$), so the exception is far more robust, not
+immune.
+
+\section{Measurement constraints}
+\label{app:constraints}
+
+Each constraint below invalidated a reading we had already written down. We state them because they
+generalise to anyone auditing a routed system.
+
+\begin{enumerate}
+  \item \textbf{A paired quantity needs a paired interval.} The destination arms score identical
+        rows (inter-arm $r=0.88$--$0.94$). Bootstrapping each arm's marginal re-adds their
+        \emph{shared} question noise once per arm and declares any spread unresolvable. Our own
+        first verdict on \S\ref{sec:blind} made exactly this error, and it flipped on the paired
+        test.
+  \item \textbf{Quote the exact resolution, not a sampled one.} The ``achievable $p$-values'' of a
+        two-sample KS test, enumerated by random draw, grow with the draw count ($73 \to 88$
+        between 2k and 60k draws, unconverged) --- so such a count states nothing. Every attainable
+        $D$ is a multiple of $1/\mathrm{lcm}(n,m)$; use that.
+  \item \textbf{Structural holes in the corpus concentrate in the conditions you most want to
+        report.} The 18 name-free authors distorted three separate results, and they are the same
+        units that act as routing magnets. Flag or exclude them in any per-survivor statistic.
+  \item \textbf{A transform built from the target's own facts cannot test anonymity}
+        (App.~\ref{app:transforms}).
+  \item \textbf{A sub-chance AUC means nothing without its own shuffle control.} Two apparent
+        systematic sign flips were noise; the control spans $0.336$--$0.532$ here, so differences
+        below ${\sim}0.1$ are not resolvable and must not be quoted as values.
+  \item \textbf{A control over a variable the measurement does not consume is not a control.} Our
+        first recipe ablation was vacuous by construction: feature-space selectors read no expert
+        weights, so three pools returned byte-identical matrices.
+\end{enumerate}
+
+\paragraph{Defects that produced plausible numbers.} Eight, all recorded in the campaign log rather
+than quietly fixed, because every one of them yielded output that looked right: a lazy adapter
+cache that silently scored non-resident experts as exactly $0.0$; a route audit whose assertion ran
+\emph{before} the artifact was written, destroying the arm it audited; a cache race that let a
+sibling arm read a 0-byte file; a consolidator that paired results with the wrong generation dump;
+an entire query condition made unreproducible by \texttt{sorted(set, key=len)} under hash
+randomisation; and the two statistical errors above. The countermeasure that kept working was
+computing the same quantity a second way.
+
+\section{Extended related work}
+\label{app:related}
+
+\paragraph{Exact unlearning by construction.} SISA \citep{bourtoule2021sisa} converts deletion into
+bounded retraining by sharding; LegoNet \citep{yu2022legonet}, S3T
+\citep{basuroychowdhury2025s3t}, FedSGT \citep{zhang2025fedsgt} and continual-learning forgetting
+services \citep{huang2025forgetting} carry the recipe --- isolation plus bounded recomputation ---
+into adapters, PEFT slices, federated rounds and analytic classifiers. Merging-based variants
+\citep{ilharco2023task,yu2024dare,kuo2025sift} make deletion an exact subtraction, and a parallel
+line moves the adapted knowledge out of the weights entirely, into context that can be edited
+\citep{pawelczyk2024icul} or removed exactly \citep{muresanu2024fastexact}. All of these guarantee
+D1. None of them, to our knowledge, reports what the composition does with the queries that used to
+be served by the removed component --- and the in-context variants inherit the same open question,
+since a retriever is a selector.
+
+\paragraph{Routing and serving many experts.} RAMoLE \citep{zhao2024ramole} retrieves and composes
+uploaded LoRA experts; Compress-then-Serve \citep{gabrielsson2025compress} makes thousands of
+adapters servable; SEA \citep{schneider2026sea} makes deletion an artifact drop; memory adapters
+\citep{grimes2026memadapt} make it a block-list entry; SEUF \citep{zhuang2024seuf} asks whether
+editing one MoE expert suffices, and finds the gate itself is the obstacle. Our results say the
+selector is not only an obstacle to unlearning \emph{inside} a module but the component that
+determines what a deleted source's queries are answered \emph{with}.
+
+\paragraph{Localization.} \citet{maini2023localized} show memorization is localizable but not
+layer-confined; gradient routing \citep{cloud2024gradrouting}, MemSinks
+\citep{ghosal2025memsinks} and capability-removal-by-localization \citep{shilov2025beyond} engineer
+localization so that a component can be removed. This paper is orthogonal and complementary: it
+grants perfect localization and asks what the surrounding system does afterwards.
+
+\paragraph{Benchmarks and attacks.} TOFU \citep{maini2024tofu} is the yardstick, and
+\S\ref{sec:blind} is a negative result about it in the routed setting specifically.
+\citet{wu2025unlearned} show that exact unlearning of the final model does not prevent extraction
+from the broader pipeline; our failure is complementary and requires no pipeline access at all ---
+the deployed system emits it in the normal course of answering.
+
+\section{Limitations and what we do not claim}
+\label{app:limits}
+
+\begin{itemize}
+  \item \textbf{One benchmark, one base model, one deletion size.} TOFU's fictitious authors give
+        clean ground truth about who knows what, which is exactly why the fact-level \csar{} metric
+        is computable at all; they are also uniform, synthetic and English. We deliberately do not
+        claim these rates transfer to a heterogeneous production corpus.
+  \item \textbf{We do not claim any destination is better or worse than another.} The
+        per-destination ordering does not reproduce across evaluation tiers, only the spread does.
+  \item \textbf{\csar{} is not yet validated.} \blocked{${\sim}300$ hand labels outstanding.} The
+        decomposition into substantive and name-only inherits the classifier's errors, and because
+        18 authors yield no extractable name, ``substantive'' is an upper and ``name-only'' a lower
+        bound.
+  \item \textbf{We do not claim no record-free defense is possible.} App.~\ref{app:defense} bounds
+        \texttt{ppl}-as-refusal-gate at $k=200$ on three pools under one transform family.
+  \item \textbf{We do not claim training duration mitigates anything} --- App.~\ref{app:duration}
+        is a warning against precisely that reading.
+  \item \textbf{The privacy/MIA column is withheld.} In one wave every arm reported byte-identical
+        attack AUCs while serving different models, which we attribute to all queries falling to
+        the out-of-distribution path; rather than publish a number we cannot explain, we report its
+        absence.
+  \item \textbf{The behavioural family has not been run under \texttt{para\_stripped}}, the honest
+        independent hard surface (App.~\ref{app:transforms}); \S\ref{sec:defense}'s frontier is
+        therefore stated on \texttt{name\_stripped}.
+\end{itemize}
+
+\paragraph{Reproducibility.} Every number in this paper is produced by a CPU-gated analysis over
+score matrices and generations that are committed alongside the code, with a per-claim map from
+each number to the artifact that produced it. The anonymized artifact URL will be inserted at
+submission time.
+
+% NeurIPS workshop tracks do not require the checklist, so it is not part of this build --- but
+% checklist.tex is kept in this directory. If the target workshop does require it, uncomment:
+% \newpage
+% \input{checklist.tex}
+
+\end{document}

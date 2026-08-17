@@ -81,7 +81,11 @@ for d in dupes:
 for i, ln in enumerate(stripped, 1):
     scrub = re.sub(r"\$[^$]*\$", "", ln)                 # math
     scrub = re.sub(r"\\texttt\{[^}]*\}", "", scrub)      # texttt bodies still need escaping, but
-    scrub = re.sub(r"\\(?:label|ref|cite[a-z]*|input|bibliography|newcommand|renewcommand)\{[^}]*\}", "", scrub)
+    # Arguments that are identifiers rather than prose: a file or package name may carry a bare
+    # underscore (neurips_2026), and escaping it there is what would actually break the build.
+    scrub = re.sub(r"\\(?:label|ref|cite[a-z]*|input|bibliography|bibliographystyle|newcommand"
+                   r"|renewcommand|usepackage|RequirePackage|documentclass|includegraphics)"
+                   r"(?:\[[^\]]*\])?\{[^}]*\}", "", scrub)
     for m in re.finditer(r"(?<!\\)_", scrub):
         problems.append(f"line {i}: unescaped underscore -> {ln.strip()[:80]}")
 
