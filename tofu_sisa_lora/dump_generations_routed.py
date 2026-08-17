@@ -79,12 +79,39 @@ def _query_transform(args, data_full):
     if mode == "none":
         return lambda q, a: q
 
-    from analyze_router_shift import strip_names, indirect_reference
+    from analyze_router_shift import (strip_names, indirect_reference, inject_name, swap_name)
     from router import _extract_author_names
     names = {a: _extract_author_names([data_full[a * 20 + w]["question"] for w in range(20)])
              for a in range(200)}
     if mode == "name_stripped":
         return lambda q, a: strip_names(q, names[a])
+    if mode == "para_stripped":
+        # TOFU's own paraphrase with the names removed. The paraphrase is a property of the ROW,
+        # not of (question, author), so it is keyed by the original question text -- TOFU
+        # questions are unique, and this keeps the (q, author) transform signature every other
+        # mode and the CPU gate rely on. Rows outside the 800 paraphrase-covered ones fall back
+        # to plain stripping rather than silently serving an un-stripped question.
+        from analyze_router_shift import build_eval_rows
+        _f, _rows, _auth, _paras = build_eval_rows(args.hf_home)
+        para_of = {_f[int(r)]["question"]: p for r, p in zip(_rows, _paras)}
+
+        def _para_stripped(q, a):
+            src = para_of.get(q)
+            return strip_names(src if src is not None else q, names[a])
+        return _para_stripped
+    if mode in ("name_injected", "name_swapped"):
+        # The finding-5 attacks, served rather than merely routed. analyze_router_shift measures
+        # which UNIT the attack captures; serving the same query says what the system then SAYS,
+        # which is the only criterion a routerless baseline can also be scored on.
+        atk = int(getattr(args, "attacker_id", 0) or 0)
+        attacker_name = (names[atk] or [f"Author {atk}"])[0]
+        if not names[atk]:
+            # 18 of the 200 authors yield no name. An attacker without one makes capture
+            # unreadable rather than zero, so refuse instead of measuring nothing.
+            raise SystemExit(f"--attacker_id {atk} has no extractable name; pick another")
+        if mode == "name_injected":
+            return lambda q, a: inject_name(q, attacker_name)
+        return lambda q, a: swap_name(q, names[a], attacker_name)
     if mode == "indirect":
         sa = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                           "selector_audit")
@@ -181,6 +208,27 @@ def run_per_strategy(args):
     forget_rows = _forget_rows(forget_authors, args.questions_per_author, args.max_questions,
                                sample=getattr(args, "question_sample", "head"),
                                seed=args.seed)
+    # `--serve_rows shift800` replaces the forget-only row set with analyze_router_shift's 800
+    # rows (400 forget + 400 RETAIN). Deletion is unchanged -- the same units are excluded from
+    # every router -- so a retain row is simply a query whose own expert survives, which is what
+    # makes retain-side answer quality measurable at all. Without this the routed arm has no
+    # retain cell to compare a routerless baseline against, because this script has only ever
+    # served the orphans.
+    if getattr(args, "serve_rows", "forget") == "shift800":
+        from analyze_router_shift import build_eval_rows
+        _f, _rows, _a, _p = build_eval_rows(args.hf_home)
+        forget_rows = [int(r) for r in _rows]
+    shard_i, shard_n = 0, 1
+    if getattr(args, "row_shard", None):
+        shard_i, shard_n = (int(x) for x in args.row_shard.split("/"))
+        if not (0 <= shard_i < shard_n):
+            raise SystemExit(f"--row_shard {args.row_shard!r}: need 0 <= i < n")
+        # Strided, not contiguous: every shard then holds a mix of forget and retain rows, so a
+        # shard that dies removes a slice of both classes rather than one class entirely.
+        forget_rows = forget_rows[shard_i::shard_n]
+    print(f"[content_audit/per_strategy] serving {len(forget_rows)} rows "
+          f"(serve_rows={getattr(args, 'serve_rows', 'forget')}, shard {shard_i}/{shard_n})",
+          flush=True)
     shard_rows = {j: [a * 20 + w for a in get_author_shard(args.k, j) for w in range(20)]
                   for j in range(args.k)}
     per_shard = 200 // args.k
@@ -264,6 +312,9 @@ def run_per_strategy(args):
             sib_gen = _gen_for(sib)
             per_strategy[strat].append({
                 "row": int(ridx), "author": int(author), "own_shard": int(own_shard),
+                # With --serve_rows shift800 the set is mixed, so whether this row's own unit was
+                # deleted has to be recorded per row rather than assumed for the whole file.
+                "is_forget": bool(own_shard in forget_shards),
                 "sibling_shard": sib,
                 "sibling_vs_gold": _rouge(sib_gen, gold),
                 "own_vs_gold": _rouge(own_gen, gold),
@@ -338,11 +389,27 @@ def main():
                          "over q0-4 vs 0.290/0.333 over q5-19). Prefer `random` for new "
                          "subsampled runs; `head` only to reproduce an existing one.")
     ap.add_argument("--query_transform", default="none",
-                    choices=["none", "name_stripped", "indirect"],
+                    choices=["none", "name_stripped", "indirect",
+                             "para_stripped", "name_injected", "name_swapped"],
                     help="Transform the SERVED query (routing and generation both see it). "
                          "`none` leaves every existing arm byte-identical. The others ask "
                          "whether the CSAR harm, like the H3 defence before it, is an artifact "
-                         "of TOFU questions naming their author in ~90%% of rows.")
+                         "of TOFU questions naming their author in ~90%% of rows. "
+                         "name_injected/name_swapped are finding 5's attacks, SERVED rather "
+                         "than merely routed, so a routerless baseline can be scored on the "
+                         "same content criterion.")
+    ap.add_argument("--attacker_id", type=int, default=0,
+                    help="Attacker author for name_injected/name_swapped. Must match the value "
+                         "finding 5 used (analyze_router_shift's default, author 0) or the "
+                         "capture numbers are not comparable.")
+    ap.add_argument("--serve_rows", default="forget", choices=["forget", "shift800"],
+                    help="`forget` (default) serves only the deleted authors' questions, as "
+                         "every existing arm does. `shift800` serves analyze_router_shift's 800 "
+                         "rows (400 forget + 400 retain), which is what makes a retain-side "
+                         "cell exist to compare a routerless baseline against.")
+    ap.add_argument("--row_shard", default=None, metavar="i/N",
+                    help="Serve only rows i, i+N, i+2N, ... Strided so each shard holds a mix "
+                         "of forget and retain rows.")
     ap.add_argument("--questions_per_author", type=int, default=None,
                     help="Sample the first N questions of EVERY deleted author instead of a head "
                          "slice of the whole set. Across 20 authors --max_questions 40 would "
