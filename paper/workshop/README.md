@@ -75,11 +75,12 @@ python3 ../followup/tools/check_tex.py main.tex refs.bib
 
 ## Conventions that are not decoration
 
-- **`\blocked{...}` renders in red.** It marks a claim not yet supported by a completed
-  measurement. There is one, and it gates every CSAR number: the ~300 hand labels validating the
-  CSAR classifier. **No CSAR number may go to a venue until those labels exist.** In this draft it
-  is a *footnote in §4*, not only an appendix line, precisely so it cannot quietly fall off during
-  editing — the exact failure mode the campaign kept catching in itself.
+- **The long draft's red `\blocked{...}` marker is not used here** — dropped deliberately, so this
+  draft has no loud in-text warning. The claim it guarded is unchanged and still binding: **the
+  ~300 hand labels validating the CSAR classifier are outstanding, and no CSAR number should go to
+  a venue until they exist.** In this draft that survives only as one plain-prose line in the
+  limitations appendix, so it is easy to lose track of — check it before submitting.
+  [`../followup/main.tex`](../followup/main.tex) still carries the loud version.
 - **The title is load-bearing for the repo gate.** `\hypersetup{pdftitle={Deletion Without
   Absence}}` is read back out of the built PDF's bytes by `test_repo_selfcontained.py`, which
   allows exactly one PDF per draft directory and only if its own metadata agrees. It is a

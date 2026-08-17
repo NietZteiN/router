@@ -44,10 +44,10 @@
 % not genuinely bad breaks. Let TeX stretch further before it gives up.
 \setlength{\emergencystretch}{3em}
 
-% Draft-only marker, loud on purpose: anything wearing this is NOT yet supported by a completed
-% measurement. A claim that quietly loses its caveat is the failure mode this campaign kept
-% catching in itself, so the macro is red and it is cited from the body, not only the appendix.
-\newcommand{\blocked}[1]{\textcolor{red}{\textbf{[BLOCKED: #1]}}}
+% NOTE: the long draft's red \blocked{...} marker is deliberately absent here. The one claim it
+% guarded -- that the ~300 hand labels validating the CSAR classifier are still outstanding --
+% survives as plain prose in the limitations appendix, and it is the reason no CSAR number should
+% go to a venue before those labels exist. ../followup/main.tex still carries the loud version.
 
 % Plain caps, not \textsc: Latin Modern has no bold small caps (T1/lmr/bx/sc), so a small-caps
 % acronym inside \textbf silently falls back to non-bold and looks wrong.
@@ -235,10 +235,7 @@ two thirds to four fifths of \csar{} carries a real fact --- a title, a place, a
 survives dropping the identity-question slice, where a wrong expert answers with a name by
 construction ($0.217/0.250$ substantive on the 300 non-identity queries). \textbf{We therefore
 quote the substantive figure, $0.24$--$0.30$ against a $0.17$ floor}, not the raw
-$0.33$--$0.37$.\footnote{\blocked{our pre-registration requires ${\sim}300$
-hand labels validating the \csar{} classifier before any \csar{} number is published. Records are
-staged; the classifier's author cannot validate it. No \csar{} number above may go to a venue until
-those labels exist.}}
+$0.33$--$0.37$.
 
 \paragraph{Anonymising the query does not reduce the harm; it changes its character.} Strip the
 name and the system leaks \emph{less} of the deleted author's own content ($0.913 \to 0.273$) while
@@ -728,7 +725,7 @@ the deployed system emits it in the normal course of answering.
         claim these rates transfer to a heterogeneous production corpus.
   \item \textbf{We do not claim any destination is better or worse than another.} The
         per-destination ordering does not reproduce across evaluation tiers, only the spread does.
-  \item \textbf{\csar{} is not yet validated.} \blocked{${\sim}300$ hand labels outstanding.} The
+  \item \textbf{\csar{} is not yet validated}: ${\sim}300$ hand labels are outstanding. The
         decomposition into substantive and name-only inherits the classifier's errors, and because
         18 authors yield no extractable name, ``substantive'' is an upper and ``name-only'' a lower
         bound.
