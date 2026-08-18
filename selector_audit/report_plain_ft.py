@@ -92,9 +92,13 @@ def load_plain(out_dir: str, tag: str):
 
 # ── the routed arms ──────────────────────────────────────────────────────────────
 
-def load_routed(out_dir: str, qt: str, strategy: str):
-    """{row: record} for one routed transform × strategy, or (None, why)."""
-    shards = _load_shards(os.path.join(out_dir, f"routed_{qt}_shard*_of_*.json"))
+def load_routed(out_dir: str, qt: str, strategy: str, tag: str = ""):
+    """{row: record} for one routed transform × strategy, or (None, why).
+
+    `tag` selects a deletion-size rung: "" is the audit's size (20 authors), "_d5" is the 5-author
+    rung written by `FORGET=180-184 submit_routed_shift.sh`.
+    """
+    shards = _load_shards(os.path.join(out_dir, f"routed_{qt}{tag}_shard*_of_*.json"))
     ok, msg = _complete(shards, qt)
     if not ok:
         return None, msg
@@ -357,6 +361,100 @@ def main() -> int:
                   f"**{worst:.6f}**"
                   + ("  — an exact reproduction." if worst < 5e-4 else
                      "  — **INVESTIGATE before trusting any cell above.**"), ""]
+
+    # ── the deletion-size ladder, on the SERVING metrics ──────────────────────
+    # Deletion size is a dial for the routed system only: the plain fine-tune deleted nothing, so
+    # it is a flat reference line, printed once rather than repeated down the column.
+    SIZES = [(1, "_d1"), (5, "_d5"), (10, "_d10"), (20, "")]
+    lad = {}
+    for cond in ("none", "name_stripped", "name_swapped"):
+        rungs = []
+        for d, tag in SIZES:
+            rr, msg = load_routed(args.routed_dir, cond, args.strategy, tag)
+            res["provenance"][f"ladder_{cond}_d{d}"] = msg
+            if not rr:
+                continue
+            row = {"n_deleted": d}
+            f, nf, t, nt = _split(rr, "sibling_vs_gold")
+            row.update(orphan_rouge=f, retain_rouge=t, n_orphan=nf, n_retain=nt)
+            if cond == "name_swapped":
+                rbase = {k: {"gen_sibling": v.get("gen_base", "")} for k, v in rr.items()}
+                row["attacker_fact_rate"] = attacker_hit_rate(
+                    rr, rbase, index, args.attacker_id)["attacker_fact_rate"]
+                row["routing_capture"] = float(np.mean(
+                    [1.0 if int(r["sibling_shard"]) == args.attacker_id else 0.0
+                     for r in rr.values()]))
+            rungs.append(row)
+        if rungs:
+            lad[cond] = rungs
+    res["ladder"] = lad
+
+    if lad:
+        L += ["## Metrics vs number of sources deleted", "",
+              "Deletion size is a dial for the **routed system only** — the plain fine-tune "
+              "deleted nothing, so it is a flat reference line rather than a column. Deletion "
+              "sets are nested prefixes of `180-199`, and a row counts as an orphan only if its "
+              "OWN author was deleted, so the orphan/retain split is recomputed at every rung.",
+              ""]
+        for cond, rungs in lad.items():
+            nice = {"none": "gold-form questions", "name_stripped": "name-stripped questions",
+                    "name_swapped": "name-swapped (attack)"}[cond]
+            L += [f"### Served answer quality — {nice}", "",
+                  "| authors deleted | orphan rows | routed · orphan | routed · retain |"
+                  + (" attacker fact rate | routing capture |" if cond == "name_swapped" else ""),
+                  "|---|---|---|---|" + ("---|---|" if cond == "name_swapped" else "")]
+            for r in rungs:
+                extra = ""
+                if cond == "name_swapped":
+                    extra = (f" {_fmt(r.get('attacker_fact_rate'))} |"
+                             f" {_fmt(r.get('routing_capture'))} |")
+                L.append(f"| {r['n_deleted']} | {r['n_orphan']} | {_fmt(r['orphan_rouge'])} "
+                         f"| {_fmt(r['retain_rouge'])} |{extra}")
+            ft_ref = _cell("original" if cond == "none" else "name_stripped", "ft_retain")
+            if ft_ref is not None and cond in ("none", "name_stripped"):
+                L += ["", f"Plain FT reference on the same rows (nothing deleted, so flat across "
+                          f"the ladder): **{ft_ref:.4f}**.", ""]
+            else:
+                L.append("")
+        ns = lad.get("name_stripped") or []
+        gf = lad.get("none") or []
+        if len(ns) >= 2 and len(gf) >= 2:
+            ns0, ns1 = ns[0], ns[-1]
+            gf0, gf1 = gf[0], gf[-1]
+            ft_ns = _cell("name_stripped", "ft_retain")
+            L += ["### Reading", "",
+                  "The orphan column is flat everywhere — how much a deleted source's own "
+                  "queries degrade does not depend on how many OTHER sources were deleted. "
+                  "The movement is in the **retain** column, and only without names:", "",
+                  f"- gold-form retain: {gf0['retain_rouge']:.4f} (d={gf0['n_deleted']}) -> "
+                  f"{gf1['retain_rouge']:.4f} (d={gf1['n_deleted']})  "
+                  f"— flat, delta {gf1['retain_rouge'] - gf0['retain_rouge']:+.4f}",
+                  f"- name-stripped retain: {ns0['retain_rouge']:.4f} (d={ns0['n_deleted']}) -> "
+                  f"{ns1['retain_rouge']:.4f} (d={ns1['n_deleted']})  "
+                  f"— **delta {ns1['retain_rouge'] - ns0['retain_rouge']:+.4f}**", ""]
+            if ft_ns is not None:
+                L += [f"At one deletion the routed system's anonymised retain quality "
+                      f"({ns0['retain_rouge']:.4f}) is level with the routerless model "
+                      f"({ft_ns:.4f}) — deleting one source costs retained users nothing. By "
+                      f"twenty it has fallen to {ns1['retain_rouge']:.4f}, "
+                      f"{100 * (ft_ns - ns1['retain_rouge']) / ft_ns:.0f}% below that reference. "
+                      "**The collateral cost of deletion is not a fixed toll; it accumulates "
+                      "with deletion volume, and only on queries that do not name their "
+                      "subject.** This is the serving-level counterpart of the RDR curve "
+                      "(0.0000 -> 0.0925 over the same rungs) in the routing ladder.", ""]
+        sw = lad.get("name_swapped") or []
+        if len(sw) >= 2:
+            L += [f"The attack ladder is flat by contrast (attacker fact rate "
+                  f"{sw[0]['attacker_fact_rate']:.4f} -> {sw[-1]['attacker_fact_rate']:.4f}): the "
+                  "attacker's own expert always survives, so how much else was deleted does not "
+                  "change what the attack achieves.", ""]
+
+        L += ["Routing-level metrics on the same ladder — routing accuracy, orphan detection AUC, "
+              "RDR, attacker capture and orphan destination concentration, for all three "
+              "feature-space routers and a denser set of rungs — are in "
+              "`tofu_sisa_lora/reports/deletion_size_ladder.md`. That sweep is CPU-only: it runs "
+              "off the score matrices `analyze_router_shift --dump_npz` already wrote, so it "
+              "needed no GPU and no new serving run.", ""]
 
     L += ["## Caveats that travel with these numbers", "",
           "1. **`name_stripped` does not fully anonymise.** 31.2% of the 800 rows still carry a "

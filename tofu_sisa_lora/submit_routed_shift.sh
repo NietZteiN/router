@@ -31,7 +31,16 @@ CKPT="${TOFU_CKPT_ROOT}"
 
 MODEL="meta-llama/Llama-2-7B-chat-hf"
 E25="${CKPT}/Llama-2-7B-chat-hf_k200_r32_e25_lr1e4"
-FORGET="180-199"
+# Deletion size is a DIAL. `180-199` (20 authors = TOFU forget10) is the audit's size and the
+# default; smaller prefixes of the same order give the deletion-size ladder. The size is stamped
+# into the output name, because two ladder points differ ONLY by this and would otherwise
+# silently "skip existing" onto each other.
+FORGET="${FORGET:-180-199}"
+NDEL="$(${TOFU_PYTHON:-python3} -c "
+import sys; sys.path.insert(0,'${SCRIPT_DIR}')
+from shard_utils import parse_author_ids
+print(len(parse_author_ids('${FORGET}')))")"
+TAG=""; [ "${FORGET}" = "180-199" ] || TAG="_d${NDEL}"
 # Feature-space routers only, matching the CSAR arms: the behavioural family scores by running
 # EVERY candidate expert on EVERY query, which is impractical at k=200 and adds nothing here.
 STRATS="${STRATS:-centroid_sbert,key_tfidf}"
@@ -45,10 +54,10 @@ OUT_DIR="${E25}/results/routed_shift"
 mkdir -p "${LOG_DIR}" "${OUT_DIR}"
 
 case "${STAGE}" in
-  qa)  CONDS="none name_stripped para_stripped" ;;
-  qb)  CONDS="name_injected name_swapped" ;;
-  all) CONDS="none name_stripped para_stripped name_injected name_swapped" ;;
-  *)   echo "usage: $0 [qa|qb|all]" >&2; exit 2 ;;
+  qa)  CONDS="${CONDS:-none name_stripped para_stripped}" ;;
+  qb)  CONDS="${CONDS:-name_injected name_swapped}" ;;
+  all) CONDS="${CONDS:-none name_stripped para_stripped name_injected name_swapped}" ;;
+  *)   echo "usage: $0 [qa|qb|all]      # CONDS='...' overrides the set" >&2; exit 2 ;;
 esac
 
 submit() {
@@ -66,12 +75,12 @@ arm_body() {
   local qt="$1"
   cat <<EOF
 #!/bin/bash
-#SBATCH --job-name=rsh-${qt}
+#SBATCH --job-name=rsh${TAG}-${qt}
 #SBATCH --array=0-$((SHARDS - 1))%${TOFU_ARRAY_CAP}
 $(tofu_sbatch_resources 1 8 48G)
 #SBATCH --time=06:00:00
-#SBATCH --output=${LOG_DIR}/${qt}_%A_%a.log
-#SBATCH --error=${LOG_DIR}/${qt}_%A_%a.log
+#SBATCH --output=${LOG_DIR}/${qt}${TAG}_%A_%a.log
+#SBATCH --error=${LOG_DIR}/${qt}${TAG}_%A_%a.log
 set -eo pipefail
 export PYTHONUNBUFFERED=1
 export HF_HOME="${HF_HOME}"
@@ -79,8 +88,8 @@ if [ -z "\${HF_TOKEN:-}" ] && [ -f "${HF_HOME}/token" ]; then export HF_TOKEN="\
 export HUGGING_FACE_HUB_TOKEN="\${HUGGING_FACE_HUB_TOKEN:-\${HF_TOKEN:-}}"
 export TOFU_METRICS_CACHE="${HF_HOME}/metrics_cache/\${SLURM_JOB_ID}"
 mkdir -p "\${TOFU_METRICS_CACHE}"
-OUT="${OUT_DIR}/routed_${qt}_shard\${SLURM_ARRAY_TASK_ID}_of_${SHARDS}.json"
-echo "=== routed shift800: transform=${qt}, shard \${SLURM_ARRAY_TASK_ID}/${SHARDS} ==="
+OUT="${OUT_DIR}/routed_${qt}${TAG}_shard\${SLURM_ARRAY_TASK_ID}_of_${SHARDS}.json"
+echo "=== routed shift800: transform=${qt}, delete=${FORGET} (${NDEL}), shard \${SLURM_ARRAY_TASK_ID}/${SHARDS} ==="
 date
 [ -f "\${OUT}" ] && { echo "skip existing \${OUT}"; exit 0; }
 for i in \$(seq 0 199); do

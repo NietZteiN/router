@@ -55,6 +55,54 @@ The routing-capture column is finding 5's own criterion and is shown only for or
 
 The `none` arm's 400 forget rows are the same 400 orphans the published `sibling_content_k200_f10_qpa20` arm scored (identical row set: **True**), so serving the 800-row set must not have changed them. Largest disagreement across `own_vs_gold`, `sibling_vs_gold`, `base_vs_gold`, `sibling_vs_basegen`: **0.000000**  — an exact reproduction.
 
+## Metrics vs number of sources deleted
+
+Deletion size is a dial for the **routed system only** — the plain fine-tune deleted nothing, so it is a flat reference line rather than a column. Deletion sets are nested prefixes of `180-199`, and a row counts as an orphan only if its OWN author was deleted, so the orphan/retain split is recomputed at every rung.
+
+### Served answer quality — gold-form questions
+
+| authors deleted | orphan rows | routed · orphan | routed · retain |
+|---|---|---|---|
+| 1 | 20 | 0.2803 | 0.7925 |
+| 5 | 100 | 0.2969 | 0.7867 |
+| 10 | 200 | 0.2854 | 0.7906 |
+| 20 | 400 | 0.2877 | 0.7852 |
+
+Plain FT reference on the same rows (nothing deleted, so flat across the ladder): **0.8736**.
+
+### Served answer quality — name-stripped questions
+
+| authors deleted | orphan rows | routed · orphan | routed · retain |
+|---|---|---|---|
+| 1 | 20 | 0.2325 | 0.3745 |
+| 5 | 100 | 0.2466 | 0.3733 |
+| 10 | 200 | 0.2513 | 0.3464 |
+| 20 | 400 | 0.2449 | 0.3001 |
+
+Plain FT reference on the same rows (nothing deleted, so flat across the ladder): **0.3774**.
+
+### Served answer quality — name-swapped (attack)
+
+| authors deleted | orphan rows | routed · orphan | routed · retain | attacker fact rate | routing capture |
+|---|---|---|---|---|---|
+| 1 | 20 | 0.2026 | 0.2765 | 0.4412 | 0.8488 |
+| 5 | 100 | 0.2216 | 0.2798 | 0.4425 | 0.8512 |
+| 10 | 200 | 0.2283 | 0.2672 | 0.4450 | 0.8600 |
+| 20 | 400 | 0.2168 | 0.2768 | 0.4487 | 0.8725 |
+
+### Reading
+
+The orphan column is flat everywhere — how much a deleted source's own queries degrade does not depend on how many OTHER sources were deleted. The movement is in the **retain** column, and only without names:
+
+- gold-form retain: 0.7925 (d=1) -> 0.7852 (d=20)  — flat, delta -0.0074
+- name-stripped retain: 0.3745 (d=1) -> 0.3001 (d=20)  — **delta -0.0743**
+
+At one deletion the routed system's anonymised retain quality (0.3745) is level with the routerless model (0.3774) — deleting one source costs retained users nothing. By twenty it has fallen to 0.3001, 20% below that reference. **The collateral cost of deletion is not a fixed toll; it accumulates with deletion volume, and only on queries that do not name their subject.** This is the serving-level counterpart of the RDR curve (0.0000 -> 0.0925 over the same rungs) in the routing ladder.
+
+The attack ladder is flat by contrast (attacker fact rate 0.4412 -> 0.4487): the attacker's own expert always survives, so how much else was deleted does not change what the attack achieves.
+
+Routing-level metrics on the same ladder — routing accuracy, orphan detection AUC, RDR, attacker capture and orphan destination concentration, for all three feature-space routers and a denser set of rungs — are in `tofu_sisa_lora/reports/deletion_size_ladder.md`. That sweep is CPU-only: it runs off the score matrices `analyze_router_shift --dump_npz` already wrote, so it needed no GPU and no new serving run.
+
 ## Caveats that travel with these numbers
 
 1. **`name_stripped` does not fully anonymise.** 31.2% of the 800 rows still carry a name — 12.2% unchanged (no extractable name) and 19.0% left with a surname fragment, because `router._extract_author_names` splits hyphenated names (`"Aisha Al"` for *Aisha Al-Hamad*, leaving `-Hamad`). `para_stripped` inherits it (30.6%). Both systems get the identical corrupted queries, so the **comparison** is sound, but every absolute anonymised number here is an upper bound. See `outputs/anonymized_examples.md`.
