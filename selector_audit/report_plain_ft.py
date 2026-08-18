@@ -222,8 +222,13 @@ def main() -> int:
             row["routed"] = attacker_hit_rate(rr, rbase, index, args.attacker_id)
             # At k=200 one author per unit, so the routed shard id IS the author id and
             # "captured by the attacker" is a plain equality. This would be wrong at k<200.
+            # Rows ABOUT the attacker are excluded from the denominator, matching how
+            # analyze_router_shift.analyze() defines attacker_capture -- otherwise the attacker's
+            # own 20 correctly-routed rows are scored as successful captures. NB this is still a
+            # POST-deletion route (survivors only), where h30's is pre-deletion, so the two are
+            # close but not the same quantity.
             cap = [1.0 if int(r["sibling_shard"]) == args.attacker_id else 0.0
-                   for r in rr.values()]
+                   for r in rr.values() if int(r["author"]) != args.attacker_id]
             row["routed"]["routing_capture_rate"] = float(np.mean(cap)) if cap else float("nan")
             row["routed"]["rouge_vs_true_subject"] = float(
                 np.mean([r["sibling_vs_gold"] for r in rr.values()]))
@@ -383,7 +388,7 @@ def main() -> int:
                     rr, rbase, index, args.attacker_id)["attacker_fact_rate"]
                 row["routing_capture"] = float(np.mean(
                     [1.0 if int(r["sibling_shard"]) == args.attacker_id else 0.0
-                     for r in rr.values()]))
+                     for r in rr.values() if int(r["author"]) != args.attacker_id]))
             rungs.append(row)
         if rungs:
             lad[cond] = rungs

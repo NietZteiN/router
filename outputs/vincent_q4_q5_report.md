@@ -40,14 +40,14 @@ The `forget` column is not comparable across systems: the routed pool has those 
 
 | attack | plain FT · attacker fact rate | routed · attacker fact rate | routed · routing capture |
 |---|---|---|---|
-| `name_injected` | 0.0550 | 0.2288 | 0.0912 |
-| `name_swapped` | 0.2050 | 0.4487 | 0.8725 |
+| `name_injected` | 0.0550 | 0.2288 | 0.0692 |
+| `name_swapped` | 0.2050 | 0.4487 | 0.8705 |
 
 ### Reading
 
 On the shared content criterion the routed system is about 4.2× the plain model on append (0.2288 vs 0.0550) and 2.2× on substitute (0.4487 vs 0.2050). So **the attack is not specific to routing — a routerless TOFU fine-tune already follows an injected name — but routing amplifies it 2.2–4.2×.** Finding 5 should be framed as an amplification over that floor, not as a routing-only failure.
 
-Note the append row: the attacker's facts appear in 0.2288 of answers while the router only sent 0.0912 of queries to the attacker's expert. **Content contamination exceeds routing capture**, so the served expert is echoing the injected name rather than the router alone being steered — which is exactly the mechanism the plain-FT floor exposes.
+Note the append row: the attacker's facts appear in 0.2288 of answers while the router only sent 0.0692 of queries to the attacker's expert. **Content contamination exceeds routing capture**, so the served expert is echoing the injected name rather than the router alone being steered — which is exactly the mechanism the plain-FT floor exposes.
 
 The routing-capture column is finding 5's own criterion and is shown only for orientation; it answers a different question from the two columns beside it.
 
@@ -85,10 +85,10 @@ Plain FT reference on the same rows (nothing deleted, so flat across the ladder)
 
 | authors deleted | orphan rows | routed · orphan | routed · retain | attacker fact rate | routing capture |
 |---|---|---|---|---|---|
-| 1 | 20 | 0.2026 | 0.2765 | 0.4412 | 0.8488 |
-| 5 | 100 | 0.2216 | 0.2798 | 0.4425 | 0.8512 |
-| 10 | 200 | 0.2283 | 0.2672 | 0.4450 | 0.8600 |
-| 20 | 400 | 0.2168 | 0.2768 | 0.4487 | 0.8725 |
+| 1 | 20 | 0.2026 | 0.2765 | 0.4412 | 0.8462 |
+| 5 | 100 | 0.2216 | 0.2798 | 0.4425 | 0.8487 |
+| 10 | 200 | 0.2283 | 0.2672 | 0.4450 | 0.8577 |
+| 20 | 400 | 0.2168 | 0.2768 | 0.4487 | 0.8705 |
 
 ### Reading
 

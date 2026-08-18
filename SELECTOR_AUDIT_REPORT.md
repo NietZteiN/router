@@ -140,6 +140,13 @@ collapse. Orphan detection falls from 0.991 to 0.623 on a scale where 0.5 is a c
 accuracy falls from 0.966 to 0.343. Deletion starts silently displacing **9.2%** of *other* people's
 questions onto different experts. This holds for every router we tested but one.
 
+**Qualified 2026-08-18 ([§14.8](#148-a-plain-fine-tuned-model-collapses-just-as-much)).** A plain
+fine-tuned model with no router loses **the same amount** of answer quality to name removal
+(−0.4962, against our −0.4850). So the *answering* half of this finding is largely TOFU's questions
+being unanswerable without the name, not our architecture. What stays ours is the routing half —
+detection, locality and routing accuracy — and the fact that a single model has no orphans to
+misroute in the first place.
+
 ### 4. The exception does not give you a defense → [§16](#16-finding-6-the-one-defense-that-survives-is-not-deployable), [§17](#17-finding-7-training-longer-moves-the-leak-instead-of-removing-it)
 
 One router survives both name removal and longer training: the one that runs each candidate expert
@@ -1085,6 +1092,71 @@ Slightly *higher*, despite much worse routing. That is not a contradiction: dete
 routing, for the same reason the prefilter in [§16.2](#162-the-prefilter-improves-detection-rather-than-trading-it-away)
 works. Orphans fit *whatever* candidates you happen to score, badly.
 
+> **Correction (2026-08-18).** The **0 of 800** above is true only against the *extractor's own*
+> name list, and that list is short. `router._extract_author_names` splits hyphenated names — it
+> returns `"Aisha Al"` for *Aisha Al-Hamad*, `"Hsiao Yun"` for *Hsiao Yun-Hwa*, `"Yeon Park"` for
+> *Ji-Yeon Park* — so stripping removes exactly what it was handed and leaves `-Hamad`, `-Hwa`,
+> `Ji-` sitting in the question. `-Hamad` is a complete surname.
+>
+> Measured over the same 800 rows: `name_stripped` leaves **98 rows unchanged** (12.2%, the
+> nameless authors) and **152 rows carrying a fragment** (19.0%) — **31.2% not anonymised**.
+> `para_stripped` is no better: 91 unchanged + 154 fragments = **30.6%**. So `para_stripped` is
+> the more independent surface, but it is not the *clean* one this section claims.
+>
+> Two consequences. Every name-free number in [§14](#14-finding-4-orphans-are-only-detectable-because-of-the-name)
+> and [§16](#16-finding-6-the-one-defense-that-survives-is-not-deployable) is an **upper bound** —
+> residual signal is still helping the selector. And stripping leaves ungrammatical stubs
+> (`"Are the details of 's birth documented?"`) that models complete arbitrarily; the frozen base
+> answers that one about *Jesus'* birth, so part of the measured drop is broken grammar rather
+> than lost identity.
+>
+> **Not fixed here, deliberately**: repairing the extractor moves every name-free cell in this
+> report. Reproduce with `selector_audit/dump_anonymized_examples.py`; twenty worked examples are
+> in `outputs/anonymized_examples.md`.
+
+### 14.8 A plain fine-tuned model collapses just as much
+
+*(added 2026-08-18, in response to a reviewer question: is this routing, or is it TOFU?)*
+
+Everything above measures **our** system. It does not say whether a model with no router would do
+better. So we ran the obvious control: `locuslab/tofu_ft_llama2-7b`, the official full fine-tune of
+the same base — one model, no experts, no router, nothing deleted — over the identical 800 rows and
+the identical `strip_names` transform.
+
+Answer quality, ROUGE-L recall against each row's own gold answer, on the **retain** half (the only
+surface where nothing is deleted for either system, so the comparison is like-for-like):
+
+| system | questions name the author | name removed | drop |
+|---|---|---|---|
+| plain fine-tune, no router | 0.8736 | 0.3774 | **−0.4962** |
+| our routed system | 0.7852 | 0.3001 | **−0.4850** |
+| frozen base model | 0.3875 | 0.3138 | −0.0737 |
+
+> **How to read this table.** Every row is the same 400 retained questions. The last column is what
+> removing the name costs. The frozen base is there as a floor: it never learned these authors, so
+> it has little to lose.
+
+**The two drops differ by 0.0112.** A model with no router at all loses essentially as much as the
+routed system does. So the collapse documented in [§14.2](#142-the-whole-ladder-is-a-lexical-artifact)
+is mostly a property of **TOFU questions being unanswerable once the name is gone**, not a property
+of routing. Routing's own cost is the *level* gap in the first column — 0.87 versus 0.79 — not extra
+sensitivity to anonymisation.
+
+On `para_stripped` the point sharpens: the fine-tune scores **0.2765** and the frozen base
+**0.2841** on the same rows. On a name-free surface the fine-tune is worth **nothing** — it is
+indistinguishable from a model that never saw TOFU.
+
+**What this does and does not change.** It does not touch [§11](#11-finding-1-the-benchmark-cannot-tell-deletion-from-substitution)
+or [§12](#12-finding-2-what-the-system-actually-says-to-an-orphan) — substitution, and the
+benchmark's blindness to it, are still properties of the routed pattern and have no routerless
+analogue. It does mean **Finding 4 must not be stated as "routing collapses without the name"**
+without also stating that a single fine-tuned model collapses by the same amount. The defensible
+claim is narrower: detectability, locality and routing accuracy are lexical, *and so is the
+benchmark itself*.
+
+Harness: `selector_audit/eval_plain_ft.py`, driver `tofu_sisa_lora/submit_plain_ft_baseline.sh`,
+report `outputs/vincent_q4_q5_report.md`.
+
 ## 15. Finding 5: a router that reads names can be steered by an attacker
 
 *(plan §4.4)*
@@ -1119,6 +1191,44 @@ an adversary facing a word-based router gets to choose **which stranger**.
 `key_exact`'s fallback shard, so "capture" was free) and author 88 (one of the 18 nameless authors,
 which is a sink for unrelated reasons — [§13.3](#133-the-one-saturating-cell-is-an-artifact-and-it-is-the-same-artifact-as-before)).
 Both were caught because their numbers looked too clean.
+
+### 15.1 The attack is not specific to routing either
+
+*(added 2026-08-18, same control as [§14.8](#148-a-plain-fine-tuned-model-collapses-just-as-much))*
+
+The capture rates above are a **routing** criterion — which expert the query reaches. A model with
+no router has no expert to reach, so that number cannot be computed for it at all. To compare the
+two at all, both systems have to be scored on the thing they both produce: **what the served answer
+says**. We reuse [§12](#12-finding-2-what-the-system-actually-says-to-an-orphan)'s own fact matcher
+unchanged, asking whether the answer asserts a fact distinctive to the *injected* author, excluding
+the true subject's own facts and anything the frozen base already says.
+
+| attack | plain fine-tune, no router | our routed system | ratio |
+|---|---|---|---|
+| name **appended** | 0.0550 | 0.2288 | 4.2× |
+| name **substituted** | 0.2050 | 0.4487 | 2.2× |
+
+> **How to read this table.** Fraction of served answers that carry the attacker's distinctive
+> facts. This is *not* the capture rate in the table above — it is content, measured identically
+> for both systems, which is the only way a routerless model can appear in this comparison.
+
+**A routerless TOFU fine-tune already follows an injected name.** One answer in twenty on append,
+one in five on substitution, with no selector anywhere in the system. Routing amplifies that by
+roughly two to four times; it does not cause it. Finding 5 should therefore be stated as an
+**amplification over a model-level floor**, not as a routing-only failure.
+
+One further detail the routing-only number cannot show. On the append attack the attacker's facts
+reach **0.2288** of answers while the router sent only **0.0692** of queries to the attacker's
+expert. **Content contamination exceeds routing capture** — the expert that *does* answer is
+following the name it can see in the prompt, exactly as the routerless model does.
+
+> ⚠ **Attacker choice, and why these do not sit beside the 97.7% table.** The headline table above
+> discards author 0 as degenerate (it is `key_exact`'s fallback shard). These runs *use* author 0,
+> because it is `analyze_router_shift.py`'s default and therefore what the `h30` query-shift sweep
+> and this baseline share — the comparison between the two systems is internally consistent, but
+> the capture column here is **not** the 97.7 / 31.7 / 3.5 row and must not be quoted as if it
+> were. It is also a *post*-deletion route where h30's is pre-deletion. `centroid_sbert` is the
+> router shown throughout.
 
 ## 16. Finding 6: the one defense that survives is not deployable
 
