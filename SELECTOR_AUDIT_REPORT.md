@@ -49,7 +49,7 @@ meant to read it front to back.
 | to know what a specific number means | **nothing — every table in Part III defines its own columns in a box directly underneath it.** [Part II](#part-ii--how-we-measure) is the fuller reference if you want it |
 | one specific finding in full | its section in [Part III](#part-iii--what-we-found) — each is self-contained |
 | to judge how much to trust this | [Part IV](#part-iv--how-much-to-trust-this) — the caveats, the bugs we found in ourselves, the full ledger |
-| to re-run it | [§22](#22-reproducing) |
+| to re-run it | [§23](#23-reproducing) |
 
 **A note on names.** The literature calls the component that picks a module a *selector*; this repo's
 filenames say the same. Everywhere below it is called the **router**, because that is what it does.
@@ -92,13 +92,15 @@ are cross-referencing; they carry no meaning here.
 16. [**Finding 6.** The one defense that survives is not deployable](#16-finding-6-the-one-defense-that-survives-is-not-deployable)
 17. [**Finding 7.** Training longer moves the leak instead of removing it](#17-finding-7-training-longer-moves-the-leak-instead-of-removing-it)
 
+18. [**The baseline control.** Is this failure routing, or is it TOFU?](#18-the-baseline-control-is-this-failure-routing-or-is-it-tofu)
+
 **[Part IV — How much to trust this](#part-iv--how-much-to-trust-this)**
 
-18. [Eight rules about reading these numbers](#18-eight-rules-about-reading-these-numbers)
-19. [Defect record: eight things we got wrong](#19-defect-record-eight-things-we-got-wrong)
-20. [Every hypothesis we filed](#20-every-hypothesis-we-filed)
-21. [Status: settled, blocked, not claimed](#21-status-settled-blocked-not-claimed)
-22. [Reproducing](#22-reproducing)
+19. [Eight rules about reading these numbers](#19-eight-rules-about-reading-these-numbers)
+20. [Defect record: eight things we got wrong](#20-defect-record-eight-things-we-got-wrong)
+21. [Every hypothesis we filed](#21-every-hypothesis-we-filed)
+22. [Status: settled, blocked, not claimed](#22-status-settled-blocked-not-claimed)
+23. [Reproducing](#23-reproducing)
 
 ---
 
@@ -273,7 +275,7 @@ returns True on the full 4000×200 matrices).
 So any table showing meaning-based numbers "per training recipe" is one column copy-pasted several
 times. **Questions about training recipe can only be asked of the reaction-based routers.** A control
 over a variable that the measurement does not consume is not a control — it is a coincidence with a
-column header. See defect #5 in [§19](#19-defect-record-eight-things-we-got-wrong).
+column header. See defect #5 in [§20](#20-defect-record-eight-things-we-got-wrong).
 
 ---
 
@@ -323,7 +325,7 @@ Everything defined once, in one place. Metrics get their own sections after this
 | **false-refusal rate** | Of all *legitimate* questions, the fraction a detector wrongly flags — i.e. real users turned away. |
 | **shuffle control** | Re-run the same analysis with the labels randomly shuffled. It should score ~0.5. If it does not, the analysis is picking up an artifact. |
 | **out-of-distribution (OOD)** | A question about nobody the system holds — a real-world fact, a general query. |
-| **MIA** | Membership-inference attack: guessing whether a specific example was in training. A standard privacy probe. Ours failed; see [§21](#21-status-settled-blocked-not-claimed). |
+| **MIA** | Membership-inference attack: guessing whether a specific example was in training. A standard privacy probe. Ours failed; see [§22](#22-status-settled-blocked-not-claimed). |
 
 ## 6. The measuring stick almost everything uses: AUC
 
@@ -343,7 +345,7 @@ That is all it is. It gives you a scale that does not depend on where you set th
 | **0.7–0.8** | A real but weak signal. |
 | **0.9** | Strong. |
 | **1.0** | Perfect separation. |
-| **below 0.5** | Usually noise, *not* a reversed signal — see rule 5 in [§18](#18-eight-rules-about-reading-these-numbers). |
+| **below 0.5** | Usually noise, *not* a reversed signal — see rule 5 in [§19](#19-eight-rules-about-reading-these-numbers). |
 
 **Two things AUC does not tell you, both of which matter here.**
 
@@ -1434,9 +1436,131 @@ here and evidently does not propagate to these functional measurements.
 
 ---
 
+## 18. The baseline control: is this failure routing, or is it TOFU?
+
+*(added 2026-08-18, answering two questions put to the campaign after Findings 4 and 5 were
+written up)*
+
+> **In one sentence.** Findings 4 and 5 were both measured only on our own routed system, and when
+> the same manipulations are applied to an ordinary fine-tuned model with no router at all, most of
+> Finding 4 and a large part of Finding 5 turn out to reproduce there too.
+
+Everything in Part III measures **our** system. That answers "does this system fail?" but not "does
+it fail *because* it routes?" — and those are different claims. Two questions were put to us:
+
+1. **Question 4.** When the author's name is stripped from the question, how much of the
+   degradation is *the router needing the name to route*, and how much is *the model needing the
+   name to answer at all*? If a plain fine-tune falls apart on the same questions, Finding 4 is
+   partly about TOFU, not about our architecture.
+2. **Question 5.** Does appending a chosen author's name steer an ordinary fine-tuned model too? If
+   any TOFU-trained model follows the name, the framing of Finding 5 changes.
+
+### 18.1 What makes the two systems comparable
+
+The control is `locuslab/tofu_ft_llama2-7b` — the official full fine-tune of the same Llama-2-7B
+base. One model, no experts, no router, and **nothing deleted**. Four things are held fixed so the
+comparison is about the architecture and not about the setup:
+
+- **The same rows.** Both systems see `analyze_router_shift.build_eval_rows`'s 800 rows — 400
+  forget-side, 400 retain-side — not a fresh sample.
+- **The same transforms and the same attacker.** Imported from `build_conditions`, not
+  reimplemented, so the queries are byte-for-byte the ones Findings 4 and 5 were measured on.
+- **The same prompt.** `eval_ft_minimal.build_prompt` and `eval_tofu._build_qa_prompt` emit an
+  identical string (`Question: {q}\nAnswer:`). This was checked rather than assumed — a prompt
+  difference between the two arms would quietly have become the result.
+- **A criterion both systems can have.** Finding 5's capture rate is a *routing* measurement and a
+  routerless model has no route, so both are scored on what the served answer **says**, using
+  [§12](#12-finding-2-what-the-system-actually-says-to-an-orphan)'s fact matcher unchanged.
+
+The routed side also needed something that had never been run: every previous arm served only the
+deleted authors' questions, so there was no **retained-user** side to compare a routerless model
+against. Serving those is what makes the retain column below exist.
+
+### 18.2 Question 4 — the collapse is mostly not ours
+
+Full detail in [§14.8](#148-a-plain-fine-tuned-model-collapses-just-as-much). On the retain half —
+the only surface where nothing is deleted for either system:
+
+| system | names the author | name removed | drop |
+|---|---|---|---|
+| plain fine-tune, no router | 0.8736 | 0.3774 | **−0.4962** |
+| our routed system | 0.7852 | 0.3001 | **−0.4850** |
+| frozen base model | 0.3875 | 0.3138 | −0.0737 |
+
+The drops differ by **0.0112**. On `para_stripped` the fine-tune scores **0.2765** against the
+frozen base's **0.2841** — on a name-free surface it is worth nothing.
+
+**Answer to Question 4:** almost all of it is the model needing the name to answer. Routing's own
+cost is the level gap in the first column (0.87 vs 0.79), not extra sensitivity to anonymisation.
+
+### 18.3 Question 5 — the attack has a model-level floor
+
+Full detail in [§15.1](#151-the-attack-is-not-specific-to-routing-either). Fraction of served
+answers carrying the *injected* author's distinctive facts:
+
+| attack | plain fine-tune | our routed system | ratio |
+|---|---|---|---|
+| name **appended** | 0.0550 | 0.2288 | 4.2× |
+| name **substituted** | 0.2050 | 0.4487 | 2.2× |
+
+**Answer to Question 5:** a routerless TOFU fine-tune already follows an injected name. Routing
+amplifies it two- to four-fold; it does not create it. On the append attack the attacker's facts
+reach 0.2288 of answers while the router sent only 0.0692 of queries to the attacker — the
+answering expert is following the name itself.
+
+### 18.4 A third result the control made possible: deletion volume
+
+Every number in this report is measured at **one** deletion size (20 of 200). Having a retain-side
+serving arm made it cheap to vary it. Deleting 1, 5, 10 and 20 authors:
+
+| authors deleted | RDR (named) | RDR (name-stripped) | retain quality (name-stripped) |
+|---|---|---|---|
+| 1 | 0.0000 | 0.0000 | 0.3745 |
+| 5 | 0.0014 | 0.0286 | 0.3733 |
+| 10 | 0.0017 | 0.0383 | 0.3464 |
+| 20 | 0.0000 | **0.0925** | **0.3001** |
+
+How badly a deleted source's *own* queries degrade does not depend on how many others went with it
+— that column is flat across the ladder. What moves is the **collateral cost to everyone else**,
+and only on questions that do not name their subject. At one deletion the routed system is level
+with the routerless model for retained users (0.3745 vs 0.3774); by twenty it is about a fifth
+below it, and three independent measurements (RDR, retained routing accuracy, served quality)
+agree.
+
+So [§13.4](#134-deletion-is-local-only-when-the-question-names-the-person)'s finding is sharper than
+stated: **deletion locality does not merely fail without the name — it decays with deletion
+volume.** That matters because a deployed system processes deletion requests continuously rather
+than once. Full ladder, over three routers and four phrasings:
+`tofu_sisa_lora/reports/deletion_size_ladder.md`.
+
+### 18.5 What this changes, and what it does not
+
+**Changed.** Finding 4 must not be stated as "routing collapses without the name" without also
+saying that a single fine-tuned model collapses by the same amount. Finding 5 must be stated as an
+amplification over a model-level floor rather than as a routing-only failure.
+
+**Unchanged.** [§11](#11-finding-1-the-benchmark-cannot-tell-deletion-from-substitution) and
+[§12](#12-finding-2-what-the-system-actually-says-to-an-orphan) are untouched. Substitution — a
+deleted person's questions being answered with a *specific surviving person's* real facts — has no
+routerless analogue at all, because a single model has no expert to reassign the query to. The
+benchmark's inability to tell that apart from deletion is likewise a property of the routed
+pattern. Those remain the campaign's load-bearing results.
+
+**A defect this work surfaced.** Building the worked examples showed that `name_stripped` does not
+fully anonymise: **31.2%** of the 800 rows still carry a name, because the extractor splits
+hyphenated names and stripping leaves the other half behind. `para_stripped` inherits it (30.6%).
+Both systems receive identical corrupted queries so the comparisons above hold, but every absolute
+name-free number in this report is an **upper bound** — see the correction in
+[§14.7](#147-para_stripped-the-honest-surface).
+
+**Reproducing.** `selector_audit/eval_plain_ft.py` (serving), `report_plain_ft.py` (tables),
+`dump_anonymized_examples.py` (the transform audit), `tofu_sisa_lora/analyze_deletion_size.py` (the
+ladder); drivers `submit_plain_ft_baseline.sh` and `submit_routed_shift.sh`; CPU gate
+`selector_audit/test_plain_ft.py`. Assembled report: `outputs/vincent_q4_q5_report.md`.
+
 # Part IV — How much to trust this
 
-## 18. Eight rules about reading these numbers
+## 19. Eight rules about reading these numbers
 
 Every one of these invalidated a reading that had already been written down as a result.
 
@@ -1477,7 +1601,7 @@ against question counts is off by however many passes the metric suite happens t
 **8. Parallelism is a test.** Packing several arms into one job surfaced both a cache race and a dead
 experiment design within five minutes, neither of which would have appeared in serial runs.
 
-## 19. Defect record: eight things we got wrong
+## 20. Defect record: eight things we got wrong
 
 Six numbered defects plus two self-corrections. **Every single one produced plausible numbers** — that
 is why they are recorded here rather than quietly fixed. A bug that crashes costs an hour; a bug that
@@ -1508,7 +1632,7 @@ on one node, while sibling arms finished in 23–27 minutes elsewhere. SLURM sti
 **The pattern in all ten:** a number that looks precise, is cheap to check, and was not checked. The
 countermeasure that keeps working is **computing the same thing a second way**.
 
-## 20. Every hypothesis we filed
+## 21. Every hypothesis we filed
 
 31 filed: **28 adjudicated**, H8 retired by H17, H19 still open, H31 filed and never triggered. Each
 decision rule was written into [`log/selector_audit/`](log/selector_audit/) **before** the run, not
@@ -1547,7 +1671,7 @@ chosen after the numbers landed. Four are refutations of our own predictions.
 | H30 | `indirect` is easier than name-stripping, and a harder surface exists | ✓ supported | name −0.413, rewording −0.090, `indirect` −0.254 |
 | H31 | Per-system variance, not duration, drives the epochs axis | **filed, not triggered** | trigger was "the 50-epoch point lands anomalously"; it landed monotone |
 
-## 21. Status: settled, blocked, not claimed
+## 22. Status: settled, blocked, not claimed
 
 **Settled.** [§11](#11-finding-1-the-benchmark-cannot-tell-deletion-from-substitution) (metric
 blindness, with intervals) · [§12](#12-finding-2-what-the-system-actually-says-to-an-orphan) (the
@@ -1584,7 +1708,7 @@ blocked on anything.
   and English — which is exactly what makes fact-level ground truth available at all. That trade is
   the price of measuring this quantity, and it is a real limitation.
 
-## 22. Reproducing
+## 23. Reproducing
 
 ```bash
 export TOFU_SITE=cispa TOFU_CKPT_STORE=<.../jack_stuff>
