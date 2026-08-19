@@ -101,6 +101,35 @@ At one deletion the routed system's anonymised retain quality (0.3745) is level 
 
 The attack ladder is flat by contrast (attacker fact rate 0.4412 -> 0.4487): the attacker's own expert always survives, so how much else was deleted does not change what the attack achieves.
 
+
+#### Figures
+
+![RDR vs deletions](../tofu_sisa_lora/reports/figures/deletion_size/fig1_rdr_vs_deletion_size.png)
+
+*Collateral displacement of retained traffic. Flat on the floor for named queries at every deletion size; climbing steadily once the name is gone.*
+
+![retained quality vs deletions](../tofu_sisa_lora/reports/figures/deletion_size/fig3_retained_quality_vs_deletion_size.png)
+
+*The same effect in what retained users receive. Horizontal lines are the routerless control, which deletes nothing and so cannot move with the ladder.*
+
+![routing accuracy vs deletions](../tofu_sisa_lora/reports/figures/deletion_size/fig2_routing_accuracy_vs_deletion_size.png)
+
+*The mechanism: retained queries being routed to the wrong expert.*
+
+![orphan dispersal vs deletions](../tofu_sisa_lora/reports/figures/deletion_size/fig4_orphan_dispersal_vs_deletion_size.png)
+
+*Orphans disperse as deletions accumulate rather than concentrating on one magnet expert.*
+
+![detection AUC vs deletions](../tofu_sisa_lora/reports/figures/deletion_size/fig5_detection_auc_vs_deletion_size.png)
+
+*Detectability is set by phrasing, not by deletion size — both series flat.*
+
+![attack vs deletions](../tofu_sisa_lora/reports/figures/deletion_size/fig6_attack_vs_deletion_size.png)
+
+*The attack is size-independent: the attacker's expert always survives. Deletion volume is a dial for collateral damage, not for adversarial exposure.*
+
+Regenerate with `$TOFU_PLOT_PYTHON tofu_sisa_lora/plot_deletion_size.py`; it reads only the committed JSONs, so the figures cannot drift from the tables above. Figures stop at 20 deletions because the evaluation set covers authors 0-19 and 180-199 only.
+
 Routing-level metrics on the same ladder — routing accuracy, orphan detection AUC, RDR, attacker capture and orphan destination concentration, for all three feature-space routers and a denser set of rungs — are in `tofu_sisa_lora/reports/deletion_size_ladder.md`. That sweep is CPU-only: it runs off the score matrices `analyze_router_shift --dump_npz` already wrote, so it needed no GPU and no new serving run.
 
 ## Caveats that travel with these numbers

@@ -1530,8 +1530,60 @@ agree.
 So [§13.4](#134-deletion-is-local-only-when-the-question-names-the-person)'s finding is sharper than
 stated: **deletion locality does not merely fail without the name — it decays with deletion
 volume.** That matters because a deployed system processes deletion requests continuously rather
-than once. Full ladder, over three routers and four phrasings:
-`tofu_sisa_lora/reports/deletion_size_ladder.md`.
+than once.
+
+![RDR versus number of authors deleted](tofu_sisa_lora/reports/figures/deletion_size/fig1_rdr_vs_deletion_size.png)
+
+**Figure 1 — the headline.** Blue is flat on the floor: on questions that name their author,
+deleting twenty sources displaces no retained traffic at all. Orange climbs steadily. Deletion is
+perfectly local right up until you stop saying the name, and then its cost compounds.
+
+![Served answer quality for retained users versus deletions](tofu_sisa_lora/reports/figures/deletion_size/fig3_retained_quality_vs_deletion_size.png)
+
+**Figure 2 — the same thing, in what users receive.** Horizontal lines are the routerless control,
+which deletes nothing and therefore cannot move. At one deletion the anonymised routed system sits
+*on* its reference — routing costs retained users nothing. By twenty it has pulled away. The named
+series holds a constant gap instead: that gap is routing's fixed price, and it does not grow.
+
+![Retained routing accuracy versus deletions](tofu_sisa_lora/reports/figures/deletion_size/fig2_routing_accuracy_vs_deletion_size.png)
+
+**Figure 3 — the mechanism.** The quality loss in Figure 2 is retained queries being sent to the
+wrong expert. Named queries keep reaching their own unit no matter how much is deleted; anonymous
+ones lose ground as the survivor pool thins.
+
+![Orphan destination dispersal versus deletions](tofu_sisa_lora/reports/figures/deletion_size/fig4_orphan_dispersal_vs_deletion_size.png)
+
+**Figure 4 — the magnet prediction, refuted as a curve.** One deletion sends all twenty of that
+author's questions to their single nearest survivor. Twenty deletions do not concentrate on one
+magnet; each deleted author has a *different* nearest survivor, so orphans spread across roughly
+23–29 destinations. This is [§13.2](#132-the-magnet-prediction--refuted) measured continuously
+rather than at one point.
+
+![Orphan detection AUC versus deletions](tofu_sisa_lora/reports/figures/deletion_size/fig5_detection_auc_vs_deletion_size.png)
+
+**Figure 5 — detectability is size-independent.** Both series are flat. Whether a deletion can be
+spotted from the surviving scores is set by the phrasing, not by how much was deleted — the two
+bands never approach each other, and the anonymous one never approaches chance either. The
+smallest rungs are absent because the held-out half of the author-parity split contains too few
+orphans to score.
+
+![Attack rate versus deletions](tofu_sisa_lora/reports/figures/deletion_size/fig6_attack_vs_deletion_size.png)
+
+**Figure 6 — the attack does not scale with deletion.** Flat on both criteria, because the
+attacker's own expert always survives; how much else was removed is irrelevant to them. Read
+against Figure 1, the contrast is the point: **deletion volume is a dial for collateral damage,
+not for adversarial exposure.**
+
+> **Where the ladder stops, and why.** The figures end at twenty deletions because the 800-row
+> evaluation set covers authors 0–19 and 180–199 only — past twenty, the extra deleted authors
+> contribute no rows, so orphan-side series would flatten for a reason that has nothing to do with
+> deletion size. `RDR` and routing accuracy stay meaningful further out and the ladder file carries
+> them to eighty (RDR reaches **0.345** anonymised), flagged there rather than plotted here.
+
+Full ladder — three routers, four phrasings, every rung:
+`tofu_sisa_lora/reports/deletion_size_ladder.md`. Figures regenerate with
+`$TOFU_PLOT_PYTHON tofu_sisa_lora/plot_deletion_size.py`, which reads only the two committed JSONs
+so they cannot drift from the tables above.
 
 ### 18.5 What this changes, and what it does not
 
