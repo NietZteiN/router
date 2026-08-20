@@ -97,7 +97,7 @@ are cross-referencing; they carry no meaning here.
 **[Part IV — How much to trust this](#part-iv--how-much-to-trust-this)**
 
 19. [Eight rules about reading these numbers](#19-eight-rules-about-reading-these-numbers)
-20. [Defect record: eight things we got wrong](#20-defect-record-eight-things-we-got-wrong)
+20. [Defect record: nine things we got wrong](#20-defect-record-nine-things-we-got-wrong)
 21. [Every hypothesis we filed](#21-every-hypothesis-we-filed)
 22. [Status: settled, blocked, not claimed](#22-status-settled-blocked-not-claimed)
 23. [Reproducing](#23-reproducing)
@@ -275,7 +275,7 @@ returns True on the full 4000×200 matrices).
 So any table showing meaning-based numbers "per training recipe" is one column copy-pasted several
 times. **Questions about training recipe can only be asked of the reaction-based routers.** A control
 over a variable that the measurement does not consume is not a control — it is a coincidence with a
-column header. See defect #5 in [§20](#20-defect-record-eight-things-we-got-wrong).
+column header. See defect #5 in [§20](#20-defect-record-nine-things-we-got-wrong).
 
 ---
 
@@ -1653,9 +1653,9 @@ against question counts is off by however many passes the metric suite happens t
 **8. Parallelism is a test.** Packing several arms into one job surfaced both a cache race and a dead
 experiment design within five minutes, neither of which would have appeared in serial runs.
 
-## 20. Defect record: eight things we got wrong
+## 20. Defect record: nine things we got wrong
 
-Six numbered defects plus two self-corrections. **Every single one produced plausible numbers** — that
+Seven numbered defects plus two self-corrections. **Every single one produced plausible numbers** — that
 is why they are recorded here rather than quietly fixed. A bug that crashes costs an hour; a bug that
 returns a believable table costs a paper.
 
@@ -1669,6 +1669,7 @@ returns a believable table costs a paper.
 | 6 | The entire `indirect` condition was unreproducible: `sorted(set, key=len)` under hash randomisation | matrices differing by 0.27 where every other pair agreed to 0.0 |
 | 7 | *(self)* An unpaired bootstrap declared the destination spread unresolvable | cells reproducing to <5e-4 while showing ±0.35 of "noise" |
 | 8 | *(self)* A sampled grid size published as if it were a count | checking its stability across draw counts |
+| 9 | `name_stripped` **does not anonymise 31.2% of its rows** — the name extractor splits hyphenated names, so stripping removes half and leaves a whole surname (`-Hamad`) | dumping twenty examples and *reading* them |
 
 **Two near-misses worth the same weight.**
 
@@ -1681,8 +1682,23 @@ A 4-hour TIMEOUT that looked like a bug was **a dead GPU**: zero forward passes 
 on one node, while sibling arms finished in 23–27 minutes elsewhere. SLURM still reported that node as
 `idle`.
 
-**The pattern in all ten:** a number that looks precise, is cheap to check, and was not checked. The
-countermeasure that keeps working is **computing the same thing a second way**.
+**Defect #9 deserves separate comment, because it breaks this section's own pattern.** The other
+eight were caught by *computing something a second way* — a self-check, a byte comparison, a
+stability sweep. #9 could not have been. Every automated check it would have faced, it passes: the
+transform runs, it removes every name form the extractor reports, and it returns a different string
+than it was given. The measurement was self-consistent and wrong, because the *extractor* and the
+*stripper* shared an assumption, so computing it twice computes the same error twice.
+
+It surfaced only when twenty rows were dumped for a human to read, for an unrelated reason — a
+reviewer asked to see what the anonymised questions looked like — and the very first example on the
+page read `"What major themes can readers find in -Hwa's leadership books?"`. Nothing in the
+pipeline was ever going to say that.
+
+**The pattern in all eleven:** a number that looks precise, is cheap to check, and was not checked.
+The countermeasure that keeps working is **computing the same thing a second way** — but #9 marks
+its limit. When a bug lives in a *definition* shared by both computations, no amount of recomputing
+finds it, and the only thing that does is looking at the data with your own eyes. Both belong in the
+toolkit; they catch disjoint classes of error.
 
 ## 21. Every hypothesis we filed
 
