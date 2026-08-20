@@ -32,6 +32,7 @@ nltk==3.9.4
 sentence-transformers==3.4.1
 
 nevergrad==1.0.12      # lorahub merge only
+optuna==4.9.0          # hyperparameter search only; pulls in sqlalchemy/alembic. Added 2026-08-20.
 bitsandbytes==0.49.2   # optional (8-bit)
 tqdm==4.67.3
 rich                   # undeclared transitive dep of trl 0.9.6 (trl/trainer/utils.py imports it);
