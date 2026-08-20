@@ -87,12 +87,34 @@ DEFAULT_ENCODER = "sentence-transformers/all-MiniLM-L6-v2"
 
 # ── query transforms ─────────────────────────────────────────────────────────────
 
-def strip_names(q: str, names: list) -> str:
+def strip_names(q: str, names: list, hyphen_aware: bool = False) -> str:
     """Remove an author's extracted names from their question, longest first so that a full
-    name goes before its parts and does not leave a dangling surname."""
+    name goes before its parts and does not leave a dangling surname.
+
+    `hyphen_aware=False` is the ORIGINAL behaviour and the default, because every published
+    name-free cell was measured with it and flipping the default would silently move all of them.
+
+    Why the flag exists (defect #9). `router._extract_author_names` matches `[A-Z][a-zA-Z]+`,
+    which stops at a hyphen: it reports "Hsiao Yun" for *Hsiao Yun-Hwa*, "Aisha Al" for *Aisha
+    Al-Hamad*, "Yeon Park" for *Ji-Yeon Park*. Removing exactly those leaves `-Hwa`, `-Hamad`,
+    `Ji-` in the question -- and `-Hamad` is a complete surname. Measured over the 800-row set,
+    19.0% of rows keep such a fragment, so "no extracted name form remains" was never the same
+    claim as "no name remains".
+
+    With `hyphen_aware=True` each match is first extended through adjacent hyphen-joined letters,
+    so the WHOLE surface name goes. The extractor is deliberately NOT changed: it also feeds
+    `build_key_index`, so touching it would move `key_exact`/`key_tfidf` routing at the same time
+    and confound "residual name signal" with "different router".
+    """
     for nm in sorted(names, key=len, reverse=True):
-        if nm:
+        if not nm:
+            continue
+        if not hyphen_aware:
             q = re.sub(re.escape(nm), "", q, flags=re.IGNORECASE)
+            continue
+        # Extend each occurrence through hyphen-joined letters on both sides before deleting.
+        pat = re.compile(r"[A-Za-z-]*" + re.escape(nm) + r"[A-Za-z-]*", flags=re.IGNORECASE)
+        q = pat.sub("", q)
     return re.sub(r"\s{2,}", " ", q).strip()
 
 
